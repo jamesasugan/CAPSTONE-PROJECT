@@ -1,5 +1,5 @@
 var swiper = new Swiper(".mySwiper", {
-  spaceBetween: 30,
+  spaceBetween: 0,
   loop: true,
   autoplay: {
     delay: 2500,
@@ -9,4 +9,5 @@ var swiper = new Swiper(".mySwiper", {
     el: ".swiper-pagination",
     clickable: true,
   },
+  speed: 2000,
 });

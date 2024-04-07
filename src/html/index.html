@@ -132,7 +132,7 @@
                         <i class="fa-solid fa-user text-3xl"></i>
                       </summary>
                       <ul
-                        class="p-2 bg-gray-200 dark:bg-neutral rounded-t-none z-10 w-36 sm:right-1 translate-x-7 custom-dropdown-menu"
+                        class="p-2 bg-gray-200 dark:bg-gray-700 rounded-t-none z-10 w-36 sm:right-1 translate-x-7 custom-dropdown-menu"
                       >
                         <li>
                           <!-- light and dark mode -->
@@ -222,29 +222,31 @@
         </div>
 
         <!-- Mobile menu, toggle classes based on menu state. -->
-        <div class="hidden sm:hidden" id="mobile-menu">
+        <div
+          class="hidden sm:hidden bg-gray-200 dark:bg-neutral"
+          id="mobile-menu"
+        >
           <div
             class="px-2 pt-2 pb-3 space-y-1 text-neutral dark:text-gray-200 uppercase"
           >
-            <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
             <a
               href="#"
-              class="hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
-              >Book appointment</a
+              class="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-700 hover:text-white border-b border-slate-800 dark:border-slate-300"
+              >Book Appointment</a
             >
             <a
               href="#"
-              class="hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
+              class="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-700 hover:text-white border-b border-slate-800 dark:border-slate-300"
               >Doctor's Schedule</a
             >
             <a
               href="#"
-              class="hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
+              class="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-700 hover:text-white border-b border-slate-800 dark:border-slate-300"
               >Our Services</a
             >
             <a
               href="#"
-              class="hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
+              class="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-700 hover:text-white border-b border-slate-800 dark:border-slate-300"
               >Contact Us</a
             >
           </div>
@@ -252,7 +254,7 @@
       </nav>
     </header>
 
-    <section class="land-page relative">
+    <section class="land-page relative bg-white">
       <div class="swiper mySwiper">
         <div class="swiper-wrapper">
           <div class="swiper-slide">

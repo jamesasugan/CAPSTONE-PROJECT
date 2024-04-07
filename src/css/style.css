@@ -38,11 +38,6 @@ body {
 }
 */
 @media (max-width: 768px) {
-  /* Target screens smaller than 768px */
-  .nav-links {
-    background-color: white;
-    color: #2a323c;
-  }
   .custom-dropdown-menu {
     right: 0; /* Aligns the dropdown to the right edge of its container */
     transform: translateX(
