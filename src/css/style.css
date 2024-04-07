@@ -1,0 +1,52 @@
+body {
+  font-family: "montserrat", sans-serif;
+}
+.land-page {
+  height: calc(102vh - 100px);
+  margin: 0;
+  padding: 0;
+}
+
+.swiper {
+  width: 100%;
+  height: 100%;
+}
+
+.swiper-slide {
+  text-align: center;
+  font-size: 18px;
+  background: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.swiper-slide img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+/*  
+@media (min-width: 1024px) {
+  .custom-dropdown-menu {
+    right: 0;
+    transform: translateX(
+      10%
+    ); 
+  }
+}
+*/
+@media (max-width: 768px) {
+  /* Target screens smaller than 768px */
+  .nav-links {
+    background-color: white;
+    color: #2a323c;
+  }
+  .custom-dropdown-menu {
+    right: 0; /* Aligns the dropdown to the right edge of its container */
+    transform: translateX(
+      10%
+    ); /* Shifts the dropdown to the left to prevent overflow */
+  }
+}
