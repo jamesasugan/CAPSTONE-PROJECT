@@ -24,20 +24,23 @@
       href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
     />
   </head>
-  <body class="min-h-screen">
+  <body class="min-h-screen bg-[#ebf0f4] dark:bg-[#0b1014] text-[#0e1011] dark:text-[#eef0f1]">
        <!-- max-w-screen-xl pinakaimportant -->
 
 
        <!-- landing page -->
 
-    <?php 
-      include("navbar-main.php");
-    ?>
-    <?php
-      include("../html/landpage-swiper.html");
-    ?>
+    <?php include 'navbar-main.php'; ?>
+    <?php include '../html/landpage-swiper.html'; ?>
 
     <!-- landing page end -->
+
+    <?php include '../html/patient-dashboard.html'; ?>
+    
+
+
+
+    
 
     
 

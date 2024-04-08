@@ -1,8 +1,8 @@
-<header
-      class="header-main bg-white dark:bg-neutral text-neutral dark:text-gray-200"
+<section
+      class="header-main fixed w-full z-50 bg-white dark:bg-neutral text-neutral dark:text-gray-200 border-b border-gray-400 dark:border-gray-600"
     >
       <nav>
-        <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+        <div class=" mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
           <div class="relative flex h-20 items-center justify-between">
             <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
               <!-- Mobile menu button-->
@@ -47,11 +47,11 @@
             </div>
 
             <div
-              class="flex-1 flex items-center justify-center sm:items-stretch"
+              class="flex-1 flex items-center justify-center sm:items-stretch content-center"
             >
-              <div class="flex-shrink-0">
+              <div class="logo-main flex-shrink-0 ">
                 <img
-                  class="block h-8 md:h-16 w-auto dark:mix-blend-plus-lighter"
+                  class="block h-10 lg:h-16 w-auto dark:mix-blend-plus-lighter"
                   src="../images/HCMC logo.png"
                   alt="logo"
                 />
@@ -59,7 +59,7 @@
               <div
                 class="hidden sm:block sm:ml-6 text-neutral dark:text-gray-100 content-center"
               >
-                <div class="flex justify-center flex-grow">
+                <div class="nav-text flex justify-center flex-grow">
                   <div
                     class="flex space-x-4 uppercase font-bold text-xs md:text-xs lg:text-lg"
                   >
@@ -96,7 +96,7 @@
               class="absolute inset-y-0 right-0 flex items-center sm:static sm:inset-auto sm:ml-6 sm:pr-0"
             >
               <!-- Profile dropdown -->
-              <div class="ml-3 relative">
+              <div class="profile-dropdown relative">
                 <ul class="menu menu-horizontal">
                   <li>
                     <details>
@@ -195,7 +195,7 @@
 
         <!-- Mobile menu, toggle classes based on menu state. -->
         <div
-          class="hidden sm:hidden bg-gray-200 dark:bg-neutral"
+          class="hidden sm:hidden bg-gray-200 dark:bg-neutral border-b border-gray-400 dark:border-gray-600"
           id="mobile-menu"
         >
           <div
@@ -224,7 +224,7 @@
           </div>
         </div>
       </nav>
-    </header>
+    </section>
 
        <script>
       // Hamburger menu functionality

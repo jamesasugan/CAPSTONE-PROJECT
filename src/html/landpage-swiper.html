@@ -34,4 +34,19 @@
     </div>
     <div class="swiper-pagination"></div>
   </div>
+  <div id="scrollDown" class="scroll-down-container">
+    <img
+      src="../images/arrowdown.png"
+      class="scroll-down-arrow w-16"
+      alt="Scroll down"
+    />
+  </div>
 </section>
+
+<script>
+  document.getElementById('scrollDown').addEventListener('click', function () {
+    document.getElementById('dashboard').scrollIntoView({
+      behavior: 'smooth',
+    });
+  });
+</script>
