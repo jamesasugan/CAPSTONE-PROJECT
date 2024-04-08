@@ -1,32 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Tailwind</title>
-    <link rel="stylesheet" href="../css/output.css" />
-    <link rel="stylesheet" href="../css/style.css" />
-    <script
-      src="https://kit.fontawesome.com/70df29d299.js"
-      crossorigin="anonymous"
-    ></script>
-    <script src="../js/main.js" defer></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
-      rel="stylesheet"
-    />
-    <script src="https://unpkg.com/ionicons@4.5.10-0/dist/ionicons.js"></script>
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
-    />
-  </head>
-  <body class="min-h-screen">
-    <!-- max-w-screen-xl pinakaimportant -->
-
-    <header
+<header
       class="header-main bg-white dark:bg-neutral text-neutral dark:text-gray-200"
     >
       <nav>
@@ -254,45 +226,7 @@
       </nav>
     </header>
 
-    <section class="land-page relative bg-white">
-      <div class="swiper mySwiper">
-        <div class="swiper-wrapper">
-          <div class="swiper-slide">
-            <img src="../images/s1.png" alt="service1" />
-          </div>
-          <div class="swiper-slide">
-            <img src="../images/s2.png" alt="service2" />
-          </div>
-          <div class="swiper-slide">
-            <img src="../images/s3.png" alt="service3" />
-          </div>
-          <div class="swiper-slide">
-            <img src="../images/s4.png" alt="service4" />
-          </div>
-          <div class="swiper-slide">
-            <img src="../images/s5.png" alt="service5" />
-          </div>
-          <div class="swiper-slide">
-            <img src="../images/s6.png" alt="service6" />
-          </div>
-          <div class="swiper-slide">
-            <img src="../images/s7.png" alt="service7" />
-          </div>
-          <div class="swiper-slide">
-            <img src="../images/s8.png" alt="service8" />
-          </div>
-          <div class="swiper-slide">
-            <img src="../images/s9.png" alt="service9" />
-          </div>
-          <div class="swiper-slide">
-            <img src="../images/s10.png" alt="service10" />
-          </div>
-        </div>
-        <div class="swiper-pagination"></div>
-      </div>
-    </section>
-
-    <script>
+       <script>
       // Hamburger menu functionality
       document
         .querySelector('[aria-controls="mobile-menu"]')
@@ -336,6 +270,3 @@
         document.querySelector(".theme-controller").checked = false;
       });
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-  </body>
-</html>

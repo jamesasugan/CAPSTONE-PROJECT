@@ -3,8 +3,8 @@ module.exports = {
   daisyui: {
     themes: ["light", "dark"],
   },
-  content: ["./src/**/*.{html,js}"],
-  darkMode: "class", // Enable dark mode support and use 'class' strategy.
+  content: ["./src/**/*.{html,js,php}"],
+  darkMode: "class",
   theme: {
     extend: {},
   },
