@@ -25,23 +25,19 @@
     />
   </head>
   <body class=" bg-[#ebf0f4] dark:bg-[#0b1014] text-[#0e1011] dark:text-[#eef0f1]">
-       <!-- max-w-screen-xl pinakaimportant -->
+       
+  <!-- max-w-screen-xl pinakaimportant -->
 
 
-    
     <!-- navigation bar -->
     <?php include 'navbar-main.php'; ?>
-
+    
     <!-- patient welcome page for logged in users only -->
     <?php include '../html/patient-dashboard.html'; ?>
     
     <!-- welcome page for non-logged in users -->
     <?php include '../html/landpage-swiper.html'; ?>
-
   
-
-   
-    
 
 
 
