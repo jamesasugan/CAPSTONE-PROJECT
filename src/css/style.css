@@ -54,6 +54,9 @@ body {
   height: 100vh;
   /* padding-top: 200px; */
 }
+.overlay-content {
+  width: 65%;
+}
 
 /* Keyframes for the floating animation, corrected for centering */
 @keyframes floating {
@@ -88,9 +91,6 @@ body {
   .land-page {
     height: 100vh;
   }
-  .logo-main {
-    margin-left: 10vw;
-  }
   .nav-text a {
     font-size: 1.5vw;
   }
@@ -99,6 +99,9 @@ body {
   }
   .dashboard-page {
     height: 105vh;
+  }
+  .overlay-content {
+    width: 93%;
   }
 }
 
