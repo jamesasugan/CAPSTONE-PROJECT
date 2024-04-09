@@ -50,11 +50,13 @@
               class="flex-1 flex items-center justify-center sm:items-stretch content-center"
             >
               <div class="logo-main flex-shrink-0 ">
+                <a href="#landpage-swiper">
                 <img
                   class="block h-10 lg:h-16 w-auto dark:mix-blend-plus-lighter"
                   src="../images/HCMC logo.png"
                   alt="logo"
                 />
+                </a>
               </div>
               <div
                 class="hidden sm:block sm:ml-6 text-neutral dark:text-gray-100 content-center"
@@ -104,7 +106,7 @@
                         <i class="fa-solid fa-user text-3xl"></i>
                       </summary>
                       <ul
-                        class="p-2 bg-gray-200 dark:bg-gray-700 rounded-t-none z-10 w-36 sm:right-1 translate-x-7 custom-dropdown-menu"
+                        class="dropdown-content p-2 bg-gray-200 dark:bg-gray-700 rounded-t-none z-10 w-36 sm:right-1 translate-x-7 custom-dropdown-menu"
                       >
                         <li>
                           <!-- light and dark mode -->

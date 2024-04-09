@@ -24,18 +24,23 @@
       href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
     />
   </head>
-  <body class="min-h-screen bg-[#ebf0f4] dark:bg-[#0b1014] text-[#0e1011] dark:text-[#eef0f1]">
+  <body class=" bg-[#ebf0f4] dark:bg-[#0b1014] text-[#0e1011] dark:text-[#eef0f1]">
        <!-- max-w-screen-xl pinakaimportant -->
 
 
-       <!-- landing page -->
-
+    
+    <!-- navigation bar -->
     <?php include 'navbar-main.php'; ?>
+
+    <!-- patient welcome page for logged in users only -->
+    <?php include '../html/patient-dashboard.html'; ?>
+    
+    <!-- welcome page for non-logged in users -->
     <?php include '../html/landpage-swiper.html'; ?>
 
-    <!-- landing page end -->
+  
 
-    <?php include '../html/patient-dashboard.html'; ?>
+   
     
 
 

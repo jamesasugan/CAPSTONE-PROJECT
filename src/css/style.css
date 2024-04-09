@@ -32,6 +32,7 @@ body {
   object-fit: cover;
 }
 
+/* arrow para sa slideshow images */
 .scroll-down-arrow {
   position: relative;
   bottom: 150px;
@@ -47,6 +48,11 @@ body {
 
 .card button {
   border-radius: 0px;
+}
+.dashboard-page {
+  width: 100%;
+  height: 100vh;
+  /* padding-top: 200px; */
 }
 
 /* Keyframes for the floating animation, corrected for centering */
@@ -91,6 +97,9 @@ body {
   .profile-dropdown {
     margin-left: 6vw;
   }
+  .dashboard-page {
+    height: 105vh;
+  }
 }
 
 /* iphone SE */
@@ -99,7 +108,7 @@ body {
     height: calc(115vh - 100px);
   }
   .dashboard-page {
-    height: 120vh;
+    height: 140vh;
   }
 }
 
@@ -110,25 +119,38 @@ body {
     width: 110%;
   }
   .dashboard-page {
-    height: 110vh;
-    width: 110%;
+    width: 100%;
+    height: 100vh;
   }
   .logo-main {
     margin-left: 0;
     margin-right: 25px;
   }
-  #dashboard {
-    width: 100%;
-  }
-  .dashboard-page {
-    width: 100%;
-    height: 120vh;
+  .dropdown-content {
+    margin-right: 25px;
   }
 }
 
 /* for tablet devices */
+@media screen and (min-width: 530px) and (max-width: 760px) {
+  .dashboard-page {
+    height: 130vh;
+    padding: 130px;
+  }
+}
+
 @media screen and (min-width: 767px) and (max-width: 1025px) {
   .land-page {
     height: 100vh;
+  }
+  .dashboard-page {
+    padding: 130px;
+  }
+}
+
+/* nest hub */
+@media screen and (max-width: 1025px) and (max-height: 700px) {
+  .dashboard-page {
+    height: 170vh;
   }
 }
