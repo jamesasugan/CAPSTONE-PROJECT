@@ -49,15 +49,23 @@
             <div
               class="flex-1 flex items-center justify-center sm:items-stretch content-center"
             >
-              <div class="logo-main flex-shrink-0 ">
-                <a href="#landpage-swiper">
+            <div class="logo-main flex-shrink-0">
+              <a href="#landpage-swiper">
+                <!-- Light mode logo (Shown in light mode, hidden in dark mode) -->
                 <img
-                  class="block h-10 lg:h-16 w-auto dark:mix-blend-plus-lighter"
-                  src="../images/HCMC logo.png"
+                  class="ml-0 sm:ml-12 block h-10 lg:h-16 w-auto dark:hidden"
+                  src="../images/HCMC-blue.png"
                   alt="logo"
                 />
-                </a>
-              </div>
+                <!-- Dark mode logo (Hidden in light mode, shown in dark mode) -->
+                <img
+                  class="ml-0 md:ml-0 sm:ml-10 dark-img h-36 lg:h-64 w-auto  hidden dark:block"
+                  src="../images/HCMC-white.png"  
+                  alt="logo"
+                />
+              </a>
+          </div>
+
               <div
                 class="hidden sm:block sm:ml-6 text-neutral dark:text-gray-100 content-center"
               >
@@ -67,25 +75,25 @@
                   >
                     <a
                       href="#"
-                      class="hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md transition duration-300 ease-in-out"
+                      class="hover:bg-gray-300 dark:hover:bg-gray-700 dark:hover:text-white px-3 py-2 rounded-md transition duration-300 ease-in-out"
                     >
                       Book appointment
                     </a>
                     <a
                       href="#"
-                      class="hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md transition duration-300 ease-in-out"
+                      class="hover:bg-gray-300 dark:hover:bg-gray-700 dark:hover:text-white px-3 py-2 rounded-md transition duration-300 ease-in-out"
                     >
                       Doctor's Schedule
                     </a>
                     <a
                       href="#"
-                      class="hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md transition duration-300 ease-in-out"
+                      class="hover:bg-gray-300 dark:hover:bg-gray-700 dark:hover:text-white px-3 py-2 rounded-md transition duration-300 ease-in-out"
                     >
                       Our Services
                     </a>
                     <a
                       href="#"
-                      class="hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md transition duration-300 ease-in-out"
+                      class="hover:bg-gray-300 dark:hover:bg-gray-700 dark:hover:text-white px-3 py-2 rounded-md transition duration-300 ease-in-out"
                     >
                       Contact Us
                     </a>
