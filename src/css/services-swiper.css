@@ -1,0 +1,29 @@
+.swiper-wrapper-custom {
+  position: relative;
+  height: 100vh; /* Full viewport height */
+  background: #eee;
+  display: flex;
+  justify-content: center; /* Center swiper horizontally */
+  align-items: center; /* Center swiper vertically */
+}
+
+.custom-swiper {
+  width: 80%; /* Swiper uses 80% of its parent container */
+  height: 50%;
+}
+
+.swiper-slide {
+  text-align: center;
+  font-size: 18px;
+  background: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.swiper-slide img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}

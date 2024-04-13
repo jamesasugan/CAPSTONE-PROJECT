@@ -86,16 +86,16 @@
                       Doctor's Schedule
                     </a>
                     <a
-                      href="#"
+                      href="#services"
                       class="hover:bg-gray-300 dark:hover:bg-gray-700 dark:hover:text-white px-3 py-2 rounded-md transition duration-300 ease-in-out"
                     >
                       Our Services
                     </a>
                     <a
-                      href="#"
+                      href="#about-us"
                       class="hover:bg-gray-300 dark:hover:bg-gray-700 dark:hover:text-white px-3 py-2 rounded-md transition duration-300 ease-in-out"
                     >
-                      Contact Us
+                      About Us
                     </a>
                   </div>
                 </div>
@@ -222,14 +222,14 @@
               >Doctor's Schedule</a
             >
             <a
-              href="#"
+              href="#services"
               class="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-700 hover:text-white border-b border-slate-800 dark:border-slate-300"
               >Our Services</a
             >
             <a
-              href="#"
+              href="#about-us"
               class="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-700 hover:text-white border-b border-slate-800 dark:border-slate-300"
-              >Contact Us</a
+              >About Us</a
             >
           </div>
         </div>

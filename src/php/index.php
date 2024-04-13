@@ -10,7 +10,6 @@
       src="https://kit.fontawesome.com/70df29d299.js"
       crossorigin="anonymous"
     ></script>
-    <script src="../js/main.js" defer></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="icon" type="image/x-icon" href="../images/logosmall.png">
@@ -23,6 +22,9 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
     />
+    <link rel="stylesheet" href="../css/services-swiper.css">
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="../js/main.js" defer></script>
   </head>
   <body class=" bg-[#ebf0f4] dark:bg-[#0b1014] text-[#0e1011] dark:text-[#eef0f1]">
        
@@ -38,14 +40,13 @@
     <!-- welcome page for non-logged in users -->
     <?php include '../html/landpage-swiper.html'; ?>
   
+    <?php include '../html/features.html'; ?>
 
-
-
+    <?php include '../html/footer.html'; ?>
     
 
     
 
  
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
   </body>
 </html>
