@@ -127,6 +127,7 @@
                           >
                             <input
                               type="checkbox"
+                              name="toggle-theme"
                               value="synthwave"
                               class="toggle theme-controller bg-base-content"
                               style="
