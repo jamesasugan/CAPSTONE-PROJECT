@@ -236,47 +236,9 @@
       </nav>
     </section>
 
-       <script>
-      // Hamburger menu functionality
-      document
-        .querySelector('[aria-controls="mobile-menu"]')
-        .addEventListener("click", function () {
-          var target = document.getElementById(
-            this.getAttribute("aria-controls")
-          );
-          if (target.classList.contains("hidden")) {
-            target.classList.remove("hidden");
-            target.classList.add("block");
-          } else {
-            target.classList.remove("block");
-            target.classList.add("hidden");
-          }
-        });
-    </script>
 
-    <!-- script for dark mode/light mode toggle -->
-    <script>
-      function setTheme(theme) {
-        if (theme === "dark") {
-          document.documentElement.classList.add("dark");
-        } else {
-          document.documentElement.classList.remove("dark");
-        }
-      }
 
-      setTheme("light");
 
-      document
-        .querySelector(".theme-controller")
-        .addEventListener("change", function (event) {
-          if (event.target.checked) {
-            setTheme("dark");
-          } else {
-            setTheme("light");
-          }
-        });
 
-      document.addEventListener("DOMContentLoaded", function () {
-        document.querySelector(".theme-controller").checked = false;
-      });
-    </script>
+
+    

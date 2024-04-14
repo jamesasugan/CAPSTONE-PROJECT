@@ -64,6 +64,9 @@ iframe {
   border: 0;
   border-radius: 10px;
 }
+.footer-link:hover {
+  color: #0866ff;
+}
 
 /* Keyframes for the floating animation, corrected for centering */
 @keyframes floating {
