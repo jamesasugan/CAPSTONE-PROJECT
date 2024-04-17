@@ -10,6 +10,11 @@ body {
   margin: 0;
   padding: 0;
 }
+.services {
+  height: calc(110vh - 100px);
+  margin: 0;
+  padding: 0;
+}
 
 .swiper {
   width: 100%;

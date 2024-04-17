@@ -1,29 +1,93 @@
 .swiper-wrapper-custom {
   position: relative;
-  height: 100vh; /* Full viewport height */
-  background: #eee;
-  display: flex;
-  justify-content: center; /* Center swiper horizontally */
-  align-items: center; /* Center swiper vertically */
-}
-
-.custom-swiper {
-  width: 80%; /* Swiper uses 80% of its parent container */
-  height: 50%;
-}
-
-.swiper-slide {
-  text-align: center;
-  font-size: 18px;
-  background: #fff;
+  height: auto; /* Updated from 100vh to auto for more flexibility */
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.swiper-slide img {
+.custom-swiper {
+  width: 80%; /* Maintain width relative to parent */
+  max-width: 1200px; /* Optional max-width for larger screens */
+  margin: auto; /* Center the swiper */
+}
+
+.custom-slide {
+  position: relative;
+  width: 100%;
+  height: 400px; /* Set a fixed height or adjust as needed */
+  overflow: hidden; /* Keeps everything contained */
+}
+
+.custom-slide img {
   display: block;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: cover; /* Ensures the image covers the slide */
+  transition: transform 0.3s ease; /* Smooth transition for zoom effect */
+}
+.custom-slide-title {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* Center the title perfectly */
+  color: white; /* Ensures text is visible on darker images */
+  text-align: center;
+  width: 100%; /* Makes sure text is centered in any case */
+  padding: 0 20px; /* Padding to ensure text doesn't touch the edges */
+  z-index: 10; /* Ensures the title is above the image */
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6); /* Adds text shadow for better readability */
+}
+
+.custom-slide-description {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+  color: white;
+  text-align: center;
+  padding: 10px;
+  transform: translateY(100%); /* Start hidden below the slide */
+  transition:
+    transform 0.3s ease,
+    background-color 0.3s ease; /* Smooth transition for sliding and background */
+}
+
+.custom-slide:hover .custom-slide-description {
+  transform: translateY(0); /* Slide up to show on hover */
+  background-color: rgba(0, 0, 0, 0.8); /* Darker background on hover */
+}
+
+.custom-slide:hover img {
+  transform: scale(1.05); /* Optional: slight zoom on hover */
+}
+
+.custom-slide p {
+  flex-shrink: 0; /* Prevents the text section from shrinking */
+  width: 100%; /* Full width */
+  text-align: center;
+  padding: 0.5rem 1rem; /* Padding for spacing around text */
+}
+
+.swiper-container {
+  position: relative;
+  width: 80%;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.swiper-navigation {
+  position: absolute;
+  top: 50%; /* Center vertically */
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  transform: translateY(-50%);
+  pointer-events: none; /* Allows clicks to pass through to elements below */
+}
+
+.swiper-button-prev,
+.swiper-button-next {
+  pointer-events: auto; /* Enable clicks on buttons */
 }
