@@ -48,6 +48,12 @@
   z-index: 30;
   padding: 0.5em 1em; /* Example padding, adjust as needed */
   margin: 0; /* Reset margin */
+  transition: 0.15s;
+  background-color: #78afe2;
+  color: white;
+}
+.btn-card:hover {
+  background-color: #658eb5;
 }
 
 .custom-slide:hover img {

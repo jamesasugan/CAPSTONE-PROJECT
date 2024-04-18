@@ -2498,6 +2498,26 @@ html {
   background-color: rgb(96 165 250 / var(--tw-bg-opacity));
 }
 
+.bg-slate-500 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(100 116 139 / var(--tw-bg-opacity));
+}
+
+.bg-gray-500 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(107 114 128 / var(--tw-bg-opacity));
+}
+
+.bg-slate-50 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(248 250 252 / var(--tw-bg-opacity));
+}
+
+.bg-\[\#537390\] {
+  --tw-bg-opacity: 1;
+  background-color: rgb(83 115 144 / var(--tw-bg-opacity));
+}
+
 .bg-opacity-80 {
   --tw-bg-opacity: 0.8;
 }
@@ -2764,6 +2784,16 @@ html {
 .hover\:bg-blue-500:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(59 130 246 / var(--tw-bg-opacity));
+}
+
+.hover\:bg-\[\#78afe2\]:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(120 175 226 / var(--tw-bg-opacity));
+}
+
+.hover\:bg-\[\#658eb5\]:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(101 142 181 / var(--tw-bg-opacity));
 }
 
 .hover\:font-bold:hover {
