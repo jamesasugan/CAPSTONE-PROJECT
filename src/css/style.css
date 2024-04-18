@@ -51,7 +51,7 @@ body {
   z-index: 40;
 }
 
-.card button {
+.card-button {
   border-radius: 0px;
 }
 .dashboard-page {

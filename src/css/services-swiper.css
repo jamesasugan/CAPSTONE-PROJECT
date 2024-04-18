@@ -26,36 +26,28 @@
   object-fit: cover; /* Ensures the image covers the slide */
   transition: transform 0.3s ease; /* Smooth transition for zoom effect */
 }
+
 .custom-slide-title {
   position: absolute;
-  top: 50%;
+  top: 30%;
   left: 50%;
   transform: translate(-50%, -50%); /* Center the title perfectly */
   color: white; /* Ensures text is visible on darker images */
   text-align: center;
   width: 100%; /* Makes sure text is centered in any case */
   padding: 0 20px; /* Padding to ensure text doesn't touch the edges */
-  z-index: 10; /* Ensures the title is above the image */
+  z-index: 20; /* Ensures the title is above the image */
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6); /* Adds text shadow for better readability */
 }
 
-.custom-slide-description {
+.btn-card {
   position: absolute;
-  bottom: 0;
-  width: 100%;
-  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
-  color: white;
-  text-align: center;
-  padding: 10px;
-  transform: translateY(100%); /* Start hidden below the slide */
-  transition:
-    transform 0.3s ease,
-    background-color 0.3s ease; /* Smooth transition for sliding and background */
-}
-
-.custom-slide:hover .custom-slide-description {
-  transform: translateY(0); /* Slide up to show on hover */
-  background-color: rgba(0, 0, 0, 0.8); /* Darker background on hover */
+  bottom: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 30;
+  padding: 0.5em 1em; /* Example padding, adjust as needed */
+  margin: 0; /* Reset margin */
 }
 
 .custom-slide:hover img {
