@@ -25,13 +25,105 @@
       nomodule=""
       src="https://unpkg.com/ionicons@4.5.10-0/dist/ionicons/ionicons.js"
     ></script>
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
-    />
-    <link rel="stylesheet" href="../css/services-swiper.css" />
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-    <script src="../js/main.js" defer></script>
+    <script src="../js/login.js" defer></script>
   </head>
-  <body></body>
+  <body>
+    <div class="main-signin flex flex-row">
+      <!-- Form Section -->
+      <div class="w-full lg:w-2/5 flex flex-col justify-center bg-white">
+        <!-- Minimum width added -->
+        <div class="mx-auto w-full max-w-md px-6 py-12 lg:px-8">
+          <div class="logo-signin">
+            <img
+              class="mx-auto"
+              src="../images/HCMC-blue.png"
+              alt="Your Company"
+            />
+          </div>
+
+          <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
+            Sign in
+          </h2>
+          <div class="mt-8">
+            <div class="form-box py-8 px-4 sm:rounded-lg sm:px-10">
+              <form class="space-y-6" action="#" method="POST">
+                <div class="login-form">
+                  <label
+                    for="email"
+                    class="block text-sm font-medium text-gray-700"
+                  >
+                    Email address
+                  </label>
+                  <input
+                    id="email"
+                    name="email"
+                    type="email"
+                    autocomplete="email"
+                    required
+                    placeholder="Email"
+                    class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none sm:text-sm bg-white text-black"
+                  />
+                </div>
+
+                <div class="login-form">
+                  <label
+                    for="password"
+                    class="block text-sm font-medium text-gray-700"
+                  >
+                    Password
+                  </label>
+                  <div class="relative">
+                    <input
+                      id="password"
+                      name="password"
+                      type="password"
+                      autocomplete="current-password"
+                      required
+                      placeholder="Password"
+                      class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none sm:text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 bg-white text-black"
+                    />
+
+                    <button
+                      type="button"
+                      class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5"
+                      onclick="togglePasswordVisibility()"
+                    >
+                      <span id="password-icon" class="fas fa-eye"></span>
+                    </button>
+                  </div>
+                  <div class="flex justify-end mt-2">
+                    <a href="#" class="text-sm text-black">
+                      Forgot password?
+                    </a>
+                  </div>
+                </div>
+
+                <div class="signup-btn">
+                  <button
+                    type="submit"
+                    class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white focus:outline-none focus:ring-2 focus:ring-offset-2 mb-3"
+                  >
+                    Sign in
+                  </button>
+                </div>
+              </form>
+              <p class="text-center text-sm text-black">
+                Don't have an account yet?<br />
+                <a href="#" class="font-semibold leading-6">Create account.</a>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Image Section -->
+      <div class="hidden lg:block relative w-0 flex-1 lg:w-2/3">
+        <img
+          class="absolute inset-0 h-full w-full object-cover"
+          src="../images/family medicine.png"
+          alt="Background"
+        />
+      </div>
+    </div>
+  </body>
 </html>

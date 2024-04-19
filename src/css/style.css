@@ -72,6 +72,25 @@ iframe {
 .footer-link:hover {
   color: #0866ff;
 }
+.signup-btn {
+  background-color: #78afe2;
+  transition: 0.15s;
+  border-radius: 5px;
+}
+.signup-btn:hover {
+  background-color: #6190bc;
+}
+
+.form-box {
+  background-color: rgb(240, 240, 240);
+}
+.logo-signin img {
+  width: 15rem;
+}
+.main-signin {
+  width: 100%;
+  height: 100vh;
+}
 
 /* Keyframes for the floating animation, corrected for centering */
 @keyframes floating {
