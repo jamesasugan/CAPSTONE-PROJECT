@@ -3082,6 +3082,10 @@ html {
     margin-left: 0px;
   }
 
+  .md\:w-2\/5 {
+    width: 40%;
+  }
+
   .md\:text-xs {
     font-size: 0.75rem;
     line-height: 1rem;
@@ -3127,6 +3131,10 @@ html {
 
   .lg\:w-2\/4 {
     width: 50%;
+  }
+
+  .lg\:w-2\/6 {
+    width: 33.333333%;
   }
 
   .lg\:flex-nowrap {
