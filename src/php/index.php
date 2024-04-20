@@ -40,7 +40,9 @@
     
     <!-- welcome page pag walang account -->
     <?php include '../html/landpage-swiper.html'; ?>
-  
+
+    <?php include 'bookappointment.html'; ?>
+
     <?php include '../html/features.html'; ?>
 
     <?php include '../html/footer.html'; ?>

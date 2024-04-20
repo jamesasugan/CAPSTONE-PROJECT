@@ -74,7 +74,7 @@
                     class="flex space-x-4 uppercase font-bold text-xs md:text-xs lg:text-lg"
                   >
                     <a
-                      href="#"
+                      href="#booking"
                       class="hover:bg-gray-300 dark:hover:bg-gray-700 dark:hover:text-white px-3 py-2 rounded-md transition duration-300 ease-in-out"
                     >
                       Book appointment
@@ -219,7 +219,7 @@
             class="px-2 pt-2 pb-3 space-y-1 text-neutral dark:text-gray-200 uppercase"
           >
             <a
-              href="#"
+              href="bookappointment.php"
               class="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-700 hover:text-white border-b border-slate-800 dark:border-slate-300"
               >Book Appointment</a
             >
