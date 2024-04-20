@@ -65,13 +65,12 @@
                   />
                 </div>
 
-                <div class="login-form">
+                <div class="login-form relative">
                   <label
                     for="password"
                     class="block text-base font-medium text-gray-700"
+                    >Password</label
                   >
-                    Password
-                  </label>
                   <div class="relative">
                     <input
                       id="password"
@@ -82,11 +81,10 @@
                       placeholder="Password"
                       class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none sm:text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 bg-white text-black"
                     />
-
                     <button
                       type="button"
                       class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5"
-                      onclick="togglePasswordVisibility()"
+                      onclick="togglePasswordVisibility('password', 'password-icon')"
                     >
                       <span id="password-icon" class="fas fa-eye"></span>
                     </button>
@@ -95,9 +93,8 @@
                     <a
                       href="forgot.html"
                       class="text-sm text-black hover:text-gray-800-"
+                      >Forgot password?</a
                     >
-                      Forgot password?
-                    </a>
                   </div>
                 </div>
 

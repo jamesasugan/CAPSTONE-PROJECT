@@ -1,13 +1,13 @@
 // for eye password icon
-function togglePasswordVisibility() {
-  var passwordInput = document.getElementById('password');
-  var passwordIcon = document.getElementById('password-icon');
+function togglePasswordVisibility(passwordId, iconId) {
+  const passwordInput = document.getElementById(passwordId);
+  const icon = document.getElementById(iconId);
   if (passwordInput.type === 'password') {
     passwordInput.type = 'text';
-    passwordIcon.className = 'fas fa-eye-slash';
+    icon.classList.replace('fa-eye', 'fa-eye-slash');
   } else {
     passwordInput.type = 'password';
-    passwordIcon.className = 'fas fa-eye';
+    icon.classList.replace('fa-eye-slash', 'fa-eye');
   }
 }
 
@@ -21,6 +21,7 @@ const requirements = [
   { regex: /.{8,}/, index: 0 },
   { regex: /[0-9]/, index: 1 },
   { regex: /[A-Z]/, index: 2 },
+  { regex: /^[a-zA-Z0-9]*$/, index: 3 }, // Regex to disallow special characters
 ];
 
 function updateRequirements() {
