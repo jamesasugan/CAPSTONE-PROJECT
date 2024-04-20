@@ -35,10 +35,10 @@
     <!-- navigation bar -->
     <?php include 'navbar-main.php'; ?>
     
-    <!-- patient welcome page for logged in users only -->
+    <!-- patient welcome page pag may account lang -->
     <?php include '../html/patient-dashboard.html'; ?>
     
-    <!-- welcome page for non-logged in users -->
+    <!-- welcome page pag walang account -->
     <?php include '../html/landpage-swiper.html'; ?>
   
     <?php include '../html/features.html'; ?>
