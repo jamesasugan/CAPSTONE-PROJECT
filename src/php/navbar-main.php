@@ -105,7 +105,7 @@
             <div
               class="absolute inset-y-0 right-0 flex items-center sm:static sm:inset-auto sm:ml-6 sm:pr-0"
             >
-              <!-- Profile dropdown -->
+              <!-- Profile dropdown. Pag di naka log in, wala dapat to -->
               <div class="profile-dropdown relative">
                 <ul class="menu menu-horizontal">
                   <li>
@@ -117,7 +117,7 @@
                         class="dropdown-content p-2 bg-gray-200 dark:bg-gray-700 rounded-t-none z-10 w-36 sm:right-1 translate-x-7 custom-dropdown-menu"
                       >
                         <li>
-                          <!-- light and dark mode -->
+                        
                           <label
                             class="cursor-pointer grid place-items-center gap-2"
                             style="
@@ -136,7 +136,7 @@
                                 z-index: 1;
                               "
                             />
-                            <!-- Ensure SVGs are properly sized and aligned within the grid -->
+                           
                             <svg
                               class="stroke-base-100 fill-base-100"
                               style="
@@ -183,6 +183,8 @@
                           </label>
                         </li>
 
+
+                      
                         <li>
                           <a
                             class="hover:bg-gray-300 dark:hover:bg-gray-600 hover:font-bold text-lg transition duration-300 ease-in-out"
@@ -194,15 +196,19 @@
                             class="hover:bg-gray-300 dark:hover:bg-gray-600 hover:font-bold text-lg transition duration-300 ease-in-out"
                             >Log Out</a
                           >
-                        </li>
+                        </li>                   
                       </ul>
                     </details>
                   </li>
                 </ul>
               </div>
+               <!-- Profile dropdown end -->
+
             </div>
           </div>
         </div>
+
+        
 
         <!-- Mobile menu, toggle classes based on menu state. -->
         <div
