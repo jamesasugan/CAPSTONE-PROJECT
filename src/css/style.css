@@ -73,12 +73,15 @@ iframe {
   color: #0866ff;
 }
 .signup-btn {
-  background-color: #78afe2;
+  background-color: #0b6c95;
   transition: 0.15s;
   border-radius: 5px;
 }
 .signup-btn:hover {
-  background-color: #6190bc;
+  background-color: #186384;
+}
+.signup-btn:active {
+  background-color: #11485f;
 }
 
 .form-box {
@@ -90,6 +93,27 @@ iframe {
 .main-signin {
   width: 100%;
   height: 100vh;
+}
+.login-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; /* Aligns items to the start of the flex container */
+}
+
+.login-form label {
+  white-space: nowrap; /* Prevents the label from wrapping */
+  overflow: hidden; /* Keeps text from spilling over */
+  text-overflow: ellipsis; /* Adds an ellipsis if the text is too long */
+}
+
+.requirement-list li {
+  list-style-type: none; /* Removes bullet points */
+  color: red; /* Default color for unmet requirements */
+}
+
+.requirement-list li.valid,
+.requirement-list li.valid i {
+  color: green; /* Color for met requirements */
 }
 
 /* Keyframes for the floating animation, corrected for centering */
