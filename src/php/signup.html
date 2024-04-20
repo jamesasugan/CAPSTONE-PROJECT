@@ -25,10 +25,6 @@
       nomodule=""
       src="https://unpkg.com/ionicons@4.5.10-0/dist/ionicons/ionicons.js"
     ></script>
-    <script
-      src="https://kit.fontawesome.com/70df29d299.js"
-      crossorigin="anonymous"
-    ></script>
     <script src="../js/login.js" defer></script>
   </head>
   <body>
@@ -68,6 +64,7 @@
                       id="first-name"
                       name="first-name"
                       type="text"
+                      autocomplete="off"
                       required
                       placeholder="First Name"
                       class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none sm:text-sm bg-white text-black"
@@ -85,6 +82,7 @@
                       id="middle-name"
                       name="middle-name"
                       type="text"
+                      autocomplete="off"
                       required
                       placeholder="Middle Name"
                       class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none sm:text-sm bg-white text-black"
@@ -102,6 +100,7 @@
                       id="last-name"
                       name="last-name"
                       type="text"
+                      autocomplete="off"
                       required
                       placeholder="Last Name"
                       class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none sm:text-sm bg-white text-black"
@@ -120,6 +119,7 @@
                       name="contact-number"
                       type="tel"
                       required
+                      autocomplete="off"
                       placeholder="Contact Number"
                       pattern="[0-9]{1,11}"
                       minlength="11"
@@ -139,6 +139,7 @@
                     id="email"
                     name="email"
                     type="email"
+                    autocomplete="email"
                     required
                     placeholder="Email"
                     class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none sm:text-sm bg-white text-black"
@@ -156,6 +157,7 @@
                         id="password"
                         type="password"
                         required
+                        autocomplete="off"
                         placeholder="Password"
                         class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:outline-none sm:text-sm bg-white text-black"
                       />
@@ -180,6 +182,7 @@
                         id="confirm-password"
                         type="password"
                         required
+                        autocomplete="off"
                         placeholder="Confirm Password"
                         class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:outline-none sm:text-sm bg-white text-black"
                       />

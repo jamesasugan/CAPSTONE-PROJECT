@@ -2,12 +2,15 @@
 function togglePasswordVisibility(passwordId, iconId) {
   const passwordInput = document.getElementById(passwordId);
   const icon = document.getElementById(iconId);
-  if (passwordInput.type === 'password') {
-    passwordInput.type = 'text';
-    icon.classList.replace('fa-eye', 'fa-eye-slash');
-  } else {
-    passwordInput.type = 'password';
-    icon.classList.replace('fa-eye-slash', 'fa-eye');
+  if (passwordInput && icon) {
+    // Check if elements exist
+    if (passwordInput.type === 'password') {
+      passwordInput.type = 'text';
+      icon.classList.replace('fa-eye', 'fa-eye-slash');
+    } else {
+      passwordInput.type = 'password';
+      icon.classList.replace('fa-eye-slash', 'fa-eye');
+    }
   }
 }
 
@@ -25,6 +28,8 @@ const requirements = [
 ];
 
 function updateRequirements() {
+  if (!passwordInput || !requirementList.length) return; // Guard clause if elements are missing
+
   let allValid = true;
   requirements.forEach((item) => {
     const isValid = item.regex.test(passwordInput.value);
@@ -40,13 +45,22 @@ function updateRequirements() {
     }
   });
 
-  // Check if confirm password matches
-  const passwordsMatch = passwordInput.value === confirmPasswordInput.value;
-  confirmPasswordInput.style.borderColor = passwordsMatch ? 'green' : 'red';
+  if (confirmPasswordInput) {
+    // Check if confirm password matches only if confirm password input exists
+    const passwordsMatch = passwordInput.value === confirmPasswordInput.value;
+    confirmPasswordInput.style.borderColor = passwordsMatch ? 'green' : 'red';
 
-  // Enable or disable submit button based on validations and match
-  submitButton.disabled = !allValid || !passwordsMatch;
+    // Enable or disable submit button based on validations and match
+    submitButton.disabled = !allValid || !passwordsMatch;
+  } else if (submitButton) {
+    // Enable or disable submit button based only on validations if confirm password does not exist
+    submitButton.disabled = !allValid;
+  }
 }
 
-passwordInput.addEventListener('input', updateRequirements);
-confirmPasswordInput.addEventListener('input', updateRequirements);
+if (passwordInput) {
+  passwordInput.addEventListener('input', updateRequirements);
+}
+if (confirmPasswordInput) {
+  confirmPasswordInput.addEventListener('input', updateRequirements);
+}
