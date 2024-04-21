@@ -50,7 +50,7 @@
               class="flex-1 flex items-center justify-center sm:items-stretch content-center"
             >
             <div class="logo-main flex-shrink-0">
-              <a href="#landpage-swiper">
+              <a href="index.php?page=#landpage-swiper">
                 <!-- Light mode logo (Shown in light mode, hidden in dark mode) -->
                 <img
                   class="ml-0 sm:ml-12 block h-10 lg:h-16 w-auto dark:hidden"
@@ -74,7 +74,7 @@
                     class="flex space-x-4 uppercase font-bold text-xs md:text-xs lg:text-lg"
                   >
                     <a
-                      href="#booking"
+                      href="bookappointment.php"
                       class="hover:bg-gray-300 dark:hover:bg-gray-700 dark:hover:text-white px-3 py-2 rounded-md transition duration-300 ease-in-out"
                     >
                       Book appointment
@@ -86,13 +86,13 @@
                       Doctor's Schedule
                     </a>
                     <a
-                      href="#services"
+                      href="index.php?page=#services"
                       class="hover:bg-gray-300 dark:hover:bg-gray-700 dark:hover:text-white px-3 py-2 rounded-md transition duration-300 ease-in-out"
                     >
                       Our Services
                     </a>
                     <a
-                      href="#about-us"
+                      href="index.php?page=#about-us"
                       class="hover:bg-gray-300 dark:hover:bg-gray-700 dark:hover:text-white px-3 py-2 rounded-md transition duration-300 ease-in-out"
                     >
                       About Us
@@ -105,7 +105,8 @@
             <div
               class="absolute inset-y-0 right-0 flex items-center sm:static sm:inset-auto sm:ml-6 sm:pr-0"
             >
-              <!-- Profile dropdown. Pag di naka log in, wala dapat to -->
+              <!-- Profile dropdown. Pag di naka log in, wala dapat to, palitan mo ng "Log In" -->
+
               <div class="profile-dropdown relative">
                 <ul class="menu menu-horizontal">
                   <li>
@@ -183,8 +184,16 @@
                           </label>
                         </li>
 
-
-                      
+                        <!-- labas mo to pag di naka log in -->
+                        <!-- <li>
+                          <a
+                            class="hover:bg-gray-300 dark:hover:bg-gray-600 hover:font-bold text-lg transition duration-300 ease-in-out"
+                            >Log In</a
+                          >
+                        </li>     -->
+                        <!-- labas mo to pag di naka log in end --> 
+                        
+                        <!-- ito nakalabas pag naka log in -->
                         <li>
                           <a
                             class="hover:bg-gray-300 dark:hover:bg-gray-600 hover:font-bold text-lg transition duration-300 ease-in-out"
@@ -196,7 +205,9 @@
                             class="hover:bg-gray-300 dark:hover:bg-gray-600 hover:font-bold text-lg transition duration-300 ease-in-out"
                             >Log Out</a
                           >
-                        </li>                   
+                        </li>  
+                        <!-- ito nakalabas pag naka log in end -->   
+
                       </ul>
                     </details>
                   </li>

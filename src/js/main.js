@@ -113,3 +113,20 @@ document
 document.addEventListener('DOMContentLoaded', function () {
   document.querySelector('.theme-controller').checked = false;
 });
+
+// for appointment date and time and date of birth only
+document.addEventListener('DOMContentLoaded', function () {
+  var input = document.getElementById('appointment-time');
+  var now = new Date();
+  var localDateTime = new Date(now.getTime() - now.getTimezoneOffset() * 60000)
+    .toISOString()
+    .slice(0, 16);
+  input.min = localDateTime;
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+  var input = document.getElementById('dob');
+  var today = new Date();
+  var maxDate = today.toISOString().split('T')[0]; // format yyyy-mm-dd
+  input.max = maxDate;
+});

@@ -115,6 +115,9 @@ iframe {
 .requirement-list li.valid i {
   color: green; /* Color for met requirements */
 }
+.form-checkbox {
+  border-width: 3px;
+}
 
 /* Keyframes for the floating animation, corrected for centering */
 @keyframes floating {
