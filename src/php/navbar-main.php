@@ -59,7 +59,7 @@
                 />
                 <!-- Dark mode logo (Hidden in light mode, shown in dark mode) -->
                 <img
-                  class="ml-0 md:ml-0 sm:ml-10 dark-img h-36 lg:h-64 w-auto  hidden dark:block"
+                  class="ml-0 sm:ml-12 h-10 lg:h-16 w-auto dark-img hidden dark:block"
                   src="../images/HCMC-white.png"  
                   alt="logo"
                 />
