@@ -1,0 +1,23 @@
+.calendar-day-cell {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100px; /* fixed width */
+    height: 80px; /* fixed height */
+    overflow: hidden; /* Prevents content from spilling out */
+}
+
+.calendar-day-cell span {
+    text-align: center;
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap; /* Keeps the text on a single line */
+}
+
+.calendar-day-cell .date-info {
+    font-size: 0.75rem; /* smaller font size for the additional info */
+    color: #1a73e8; /* Example color for schedule info */
+    margin-top: 4px;
+}

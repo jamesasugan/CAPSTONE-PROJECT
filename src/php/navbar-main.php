@@ -80,7 +80,7 @@
                       Book appointment
                     </a>
                     <a
-                      href="#"
+                      href="doctorschedule.php"
                       class="hover:bg-gray-300 dark:hover:bg-gray-700 dark:hover:text-white px-3 py-2 rounded-md transition duration-300 ease-in-out"
                     >
                       Doctor's Schedule
@@ -235,17 +235,17 @@
               >Book Appointment</a
             >
             <a
-              href="#"
+              href="doctorschedule.php"
               class="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-700 hover:text-white border-b border-slate-800 dark:border-slate-300"
               >Doctor's Schedule</a
             >
             <a
-              href="#services"
+              href="index.php?page=#services"
               class="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-700 hover:text-white border-b border-slate-800 dark:border-slate-300"
               >Our Services</a
             >
             <a
-              href="#about-us"
+              href="index.php?page=#about-us"
               class="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-700 hover:text-white border-b border-slate-800 dark:border-slate-300"
               >About Us</a
             >
