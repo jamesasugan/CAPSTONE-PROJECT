@@ -117,16 +117,16 @@ document.addEventListener('DOMContentLoaded', function () {
 // for appointment date and time and date of birth only
 document.addEventListener('DOMContentLoaded', function () {
   var input = document.getElementById('appointment-time');
-  var now = new Date();
-  var localDateTime = new Date(now.getTime() - now.getTimezoneOffset() * 60000)
-    .toISOString()
-    .slice(0, 16);
-  input.min = localDateTime;
-});
+  if (input) { // Check if the element exists
+    var now = new Date();
+    var localDateTime = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+    input.min = localDateTime;
+  }
 
-document.addEventListener('DOMContentLoaded', function () {
-  var input = document.getElementById('dob');
-  var today = new Date();
-  var maxDate = today.toISOString().split('T')[0]; // format yyyy-mm-dd
-  input.max = maxDate;
+  var inputDob = document.getElementById('dob');
+  if (inputDob) { // Check if the element exists
+    var today = new Date();
+    var maxDate = today.toISOString().split('T')[0]; // format yyyy-mm-dd
+    inputDob.max = maxDate;
+  }
 });

@@ -185,12 +185,12 @@
                         </li>
 
                         <!-- labas mo to pag di naka log in -->
-                        <!-- <li>
+                        <li>
                           <a href="login.html"
                             class="hover:bg-gray-300 dark:hover:bg-gray-600 hover:font-bold text-lg transition duration-300 ease-in-out"
                             >Log In</a
                           >
-                        </li>     -->
+                        </li>    
                         <!-- labas mo to pag di naka log in end --> 
                         
                         <!-- ito nakalabas pag naka log in -->
