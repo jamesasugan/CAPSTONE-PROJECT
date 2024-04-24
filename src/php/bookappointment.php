@@ -52,6 +52,7 @@
           Kindly answer the form to set a face-to-face appointment for
           consultation, test, or procedure in our clinic. <br>View <a href="#" target="_blank" class="link text-blue-700 font-bold">Doctor's Schedule</a> for more information about the schedules.
         </p>
+        <p><span>Note:</span> The selection of Doctor will depend if the selected doctor is available on the set appointment date and time</p>
 
         <form action="#" method="GET">
         <fieldset class="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -88,7 +89,7 @@
               <select
                 id="service-type"
                 required
-                class="select select-bordered text-lg w-full p-2 bg-gray-200 dark:bg-gray-600"
+                class="select select-bordered text-base sm:text-lg w-full p-2 bg-gray-200 dark:bg-gray-600"
                 name="service-type"
               >
                 <option value="" disabled selected>Select service type...</option>
@@ -97,7 +98,37 @@
                 <option value="Internal Medicine">Internal Medicine</option>
               </select>
           </div>
-      </fieldset>
+          <div class="w-full md:w-auto md:col-span-1">
+            <label for="appointment-time" class="block text-base sm:text-lg font-medium">
+              Appointment Date and Time
+            </label>
+            <input
+              type="datetime-local"
+              id="appointment-time"
+              name="appointment-time"
+              required
+              class="input input-bordered w-full p-2 bg-gray-200 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark]"
+            />
+          </div>
+
+          <!-- Dapat kung anong pinili sa service, automatic maffilter out yung mga di sakop ng doctor na yon -->
+          <div class="w-full md:w-auto md:col-span-1">
+            <label for="doctor" class="block text-base sm:text-lg font-medium">
+              Choose Doctor
+            </label>
+            <select
+              id="doctor"
+              name="doctor"
+              required
+              class="select select-bordered w-full p-2 text-base sm:text-lg bg-gray-200 dark:bg-gray-600"
+            >
+              <option value="" disabled selected>Select a doctor...</option>
+              <option value="Dr. Smith">Dr. Smith</option>
+              <option value="Dr. Johnson">Dr. Johnson</option>
+              <option value="Dr. Williams">Dr. Williams</option>
+            </select>
+          </div>
+        </fieldset>
 
 
 
@@ -220,18 +251,7 @@
                 class="input input-bordered w-full p-2 bg-gray-200 dark:bg-gray-600"
               />
             </div>
-            <div>
-              <label for="appointment-time" class="block text-base sm:text-lg font-medium">
-                Appointment Date and Time
-              </label>
-              <input
-                type="datetime-local"
-                id="appointment-time"
-                name="appointment-time"
-                required
-                class="input input-bordered w-full p-2 bg-gray-200 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark]"
-              />
-            </div>
+            
           </div>
 
           <h3 class="text-xl font-bold mb-2">Data Privacy Note</h3>
