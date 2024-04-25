@@ -192,6 +192,35 @@
                 class="input input-bordered w-full p-2 bg-gray-200 dark:bg-gray-600"
               />
             </div>
+
+            <!-- New fields for Vaccination Status -->
+            <div>
+              <label for="vaccinated" class="block text-base sm:text-lg font-medium">Are you vaccinated?</label>
+              <div class="flex items-center space-x-4 p-2 bg-gray-200 dark:bg-gray-600 rounded">
+                <label class="flex items-center">
+                  <input type="radio" name="vaccinated" value="yes" class="radio radio-primary" required>
+                  <span class="ml-2">Yes</span>
+                </label>
+                <label class="flex items-center">
+                  <input type="radio" name="vaccinated" value="no" class="radio radio-primary" required>
+                  <span class="ml-2">No</span>
+                </label>
+              </div>
+            </div>
+            <div>
+              <label for="vaccine-type" class="block text-base sm:text-lg font-medium">If yes,</label>
+              <select
+                id="vaccine-type"
+                name="vaccine-type"
+                class="select select-bordered w-full p-2 bg-gray-200 dark:bg-gray-600"
+                disabled
+              >
+                <option value="" disabled selected>Select vaccine stage...</option>
+                <option value="1st dose">1st Dose</option>
+                <option value="2nd dose">2nd Dose</option>
+                <option value="Booster">Booster</option>
+              </select>
+            </div>
           </div>
 
           <div class="mb-4">
@@ -251,7 +280,6 @@
                 class="input input-bordered w-full p-2 bg-gray-200 dark:bg-gray-600"
               />
             </div>
-            
           </div>
 
           <h3 class="text-xl font-bold mb-2">Data Privacy Note</h3>

@@ -117,16 +117,34 @@ document.addEventListener('DOMContentLoaded', function () {
 // for appointment date and time and date of birth only
 document.addEventListener('DOMContentLoaded', function () {
   var input = document.getElementById('appointment-time');
-  if (input) { // Check if the element exists
+  if (input) {
+    // Check if the element exists
     var now = new Date();
-    var localDateTime = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+    var localDateTime = new Date(
+      now.getTime() - now.getTimezoneOffset() * 60000,
+    )
+      .toISOString()
+      .slice(0, 16);
     input.min = localDateTime;
   }
 
   var inputDob = document.getElementById('dob');
-  if (inputDob) { // Check if the element exists
+  if (inputDob) {
+    // Check if the element exists
     var today = new Date();
     var maxDate = today.toISOString().split('T')[0]; // format yyyy-mm-dd
     inputDob.max = maxDate;
   }
+});
+
+// for vaccine stage
+document.addEventListener('DOMContentLoaded', function () {
+  const radios = document.querySelectorAll('input[name="vaccinated"]');
+  const vaccineTypeSelect = document.getElementById('vaccine-type');
+
+  radios.forEach((radio) => {
+    radio.addEventListener('change', function () {
+      vaccineTypeSelect.disabled = this.value !== 'yes';
+    });
+  });
 });

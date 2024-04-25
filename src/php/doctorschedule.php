@@ -33,21 +33,21 @@
 
     <?php include 'navbar-main.php'; ?>
     
-    <section class="w-full min-h-screen">
-    <div class="mx-auto bg-white shadow-lg p-5 pt-28 w-full max-w-full">
-        <div class="title text-black flex text-center justify-center font-bold">
+    <section class="w-full min-h-screen bg-[#ebf0f4] dark:bg-[#0b1014] text-[#0e1011] dark:text-[#eef0f1]">
+    <div class="mx-auto bg-white dark:bg-[#222f3a] shadow-lg p-5 pt-28 w-full max-w-full">
+        <div class="title flex text-center justify-center font-bold">
             <h1 class="text-3xl mb-2">Doctor's Schedule</h1>
         </div>
-        <div class="flex flex-col md:flex-row justify-between items-center border-t border-t-black px-2 py-2 border-x border-x-black">
-            <div class="text-xs sm:text-base md:text-lg">
-                <button id="prevMonth" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                    Prev Month
+        <div class="flex flex-col md:flex-row justify-between items-center border-t border-t-black dark:border-t-white dark:border-x-white px-2 py-2 border-x border-x-black">
+            <div class="calendar-btn text-xs sm:text-base md:text-lg">
+                <button id="prevMonth" class="font-bold py-2 px-4 rounded">
+                <i class="fa-sharp fa-solid fa-arrow-left text-white"></i>
                 </button>
-                <button id="nextMonth" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                    Next Month
+                <button id="nextMonth" class="font-bold py-2 px-4 rounded">
+                <i class="fa-sharp fa-solid fa-arrow-right text-white"></i>
                 </button>
             </div>
-            <div id="currentMonth" class="text-lg font-bold my-2 md:my-0 text-black"></div>
+            <div id="currentMonth" class="text-lg sm:text-2xl font-bold my-2 md:my-0 ml-0 sm:ml-32 "></div>
             <div class="text-xs sm:text-base md:text-lg">
                 <button id="dayView" class="bg-gray-200 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded">
                     Day
@@ -74,7 +74,7 @@
                     <p id="modalContent" class="text-sm text-gray-500"></p>
                 </div>
                 <div class="items-center px-4 py-3">
-                    <button id="closeModal" class="px-4 py-2 bg-blue-500 text-white text-base font-medium rounded-md w-1/2 shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <button id="closeModal" class="px-4 py-2 bg-[#0b6c95] hover:bg-[#11485f] text-white text-base font-medium rounded-md w-1/2 shadow-sm  focus:outline-none focus:ring-2">
                         Close
                     </button>
                 </div>

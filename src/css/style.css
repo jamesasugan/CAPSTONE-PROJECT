@@ -119,6 +119,12 @@ iframe {
 .form-checkbox {
   border-width: 3px;
 }
+.calendar-btn button {
+  background-color: #0b6c95;
+}
+.calendar-btn button:hover {
+  background-color: #11485f;
+}
 
 /* Keyframes for the floating animation, corrected for centering */
 @keyframes floating {
