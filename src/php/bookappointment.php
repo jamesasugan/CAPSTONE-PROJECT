@@ -50,7 +50,7 @@
         <h2 class="text-2xl font-bold mb-2">Set an Appointment</h2>
         <p class="mb-4">
           Kindly answer the form to set a face-to-face appointment for
-          consultation, test, or procedure in our clinic. <br>View <a href="#" target="_blank" class="link text-blue-700 font-bold">Doctor's Schedule</a> for more information about the schedules.
+          consultation, test, or procedure in our clinic. <br>View <a href="doctorschedule.php" target="_blank" class="link text-blue-700 font-bold">Doctor's Schedule</a> for more information about the schedules.
         </p>
         <p><span>Note:</span> The selection of Doctor will depend if the selected doctor is available on the set appointment date and time</p>
 
@@ -195,31 +195,31 @@
 
             <!-- New fields for Vaccination Status -->
             <div>
-              <label for="vaccinated" class="block text-base sm:text-lg font-medium">Are you vaccinated?</label>
-              <div class="flex items-center space-x-4 p-2 bg-gray-200 dark:bg-gray-600 rounded">
-                <label class="flex items-center">
-                  <input type="radio" name="vaccinated" value="yes" class="radio radio-primary" required>
-                  <span class="ml-2">Yes</span>
-                </label>
-                <label class="flex items-center">
-                  <input type="radio" name="vaccinated" value="no" class="radio radio-primary" required>
-                  <span class="ml-2">No</span>
-                </label>
-              </div>
+            <div class="block text-base sm:text-lg font-medium mb-1">Are you vaccinated?</div>
+                <div class="flex items-center space-x-4 p-2 bg-gray-200 dark:bg-gray-600 rounded">
+                    <label class="flex items-center">
+                        <input type="radio" name="vaccinated" value="yes" class="radio radio-primary" required>
+                        <span class="ml-2">Yes</span>
+                    </label>
+                    <label class="flex items-center">
+                        <input type="radio" name="vaccinated" value="no" class="radio radio-primary" required>
+                        <span class="ml-2">No</span>
+                    </label>
+                </div>
             </div>
             <div>
-              <label for="vaccine-type" class="block text-base sm:text-lg font-medium">If yes,</label>
-              <select
-                id="vaccine-type"
-                name="vaccine-type"
-                class="select select-bordered w-full p-2 bg-gray-200 dark:bg-gray-600"
-                disabled
-              >
-                <option value="" disabled selected>Select vaccine stage...</option>
-                <option value="1st dose">1st Dose</option>
-                <option value="2nd dose">2nd Dose</option>
-                <option value="Booster">Booster</option>
-              </select>
+                <label for="vaccine-type" class="block text-base sm:text-lg font-medium">If yes,</label>
+                <select
+                    id="vaccine-type"
+                    name="vaccine-type"
+                    class="select select-bordered w-full p-2 bg-gray-200 dark:bg-gray-600"
+                    disabled
+                >
+                    <option value="" disabled selected>Select vaccine stage...</option>
+                    <option value="1st dose">1st Dose</option>
+                    <option value="2nd dose">2nd Dose</option>
+                    <option value="Booster">Booster</option>
+                </select>
             </div>
           </div>
 
@@ -306,6 +306,18 @@
           </div>
 
         </form>
+
+        <!-- pashow nito pagnasubmit -->
+        <div class="flex justify-center">
+            <div role="alert" class="inline-flex items-center bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative">
+                <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span>Appointment has been booked!</span>
+            </div>
+        </div>
+
+
       </div>
     </section>
   </body>
