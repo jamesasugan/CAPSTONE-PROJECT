@@ -212,7 +212,7 @@
                 <select
                     id="vaccine-type"
                     name="vaccine-type"
-                    class="select select-bordered w-full p-2 bg-gray-200 dark:bg-gray-600"
+                    class="select select-bordered w-full p-2 text-base sm:text-lg bg-gray-200 dark:bg-gray-600"
                     disabled
                 >
                     <option value="" disabled selected>Select vaccine stage...</option>

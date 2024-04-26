@@ -67,7 +67,7 @@
                       autocomplete="off"
                       required
                       placeholder="First Name"
-                      class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none sm:text-sm bg-white text-black"
+                      class="input input-bordered appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none sm:text-sm bg-white text-black"
                     />
                   </div>
 
@@ -85,7 +85,7 @@
                       autocomplete="off"
                       required
                       placeholder="Middle Name"
-                      class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none sm:text-sm bg-white text-black"
+                      class="input input-bordered appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none sm:text-sm bg-white text-black"
                     />
                   </div>
                 </div>
@@ -103,7 +103,7 @@
                       autocomplete="off"
                       required
                       placeholder="Last Name"
-                      class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none sm:text-sm bg-white text-black"
+                      class="input input-bordered appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none sm:text-sm bg-white text-black"
                     />
                   </div>
 
@@ -125,7 +125,56 @@
                       minlength="11"
                       maxlength="11"
                       title="Please enter up to 11 numeric characters."
-                      class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none sm:text-sm bg-white text-black"
+                      class="input input-bordered appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none sm:text-sm bg-white text-black"
+                    />
+                  </div>
+                </div>
+
+                <!-- New Fields: Date of Birth, Sex, and Address -->
+                <div class="grid grid-cols-2 gap-4">
+                  <div class="login-form">
+                    <label for="dob" class="block font-medium text-black">
+                      Date of Birth
+                    </label>
+                    <input
+                      id="dob"
+                      name="dob"
+                      type="date"
+                      required
+                      class="input input-bordered [color-scheme:light] appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none sm:text-sm bg-white text-black"
+                    />
+                  </div>
+
+                  <div class="login-form">
+                    <label for="sex" class="block font-medium text-black">
+                      Sex
+                    </label>
+                    <select
+                      id="sex"
+                      name="sex"
+                      required
+                      class="select select-bordered appearance-none block w-full px-3 border-gray-300 rounded-md shadow-sm focus:outline-none text-base sm:text-lg bg-white text-black"
+                    >
+                      <option value="">Select...</option>
+                      <option value="male">Male</option>
+                      <option value="female">Female</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-1">
+                  <div class="login-form">
+                    <label for="address" class="block font-medium text-black">
+                      Address
+                    </label>
+                    <input
+                      id="address"
+                      name="address"
+                      type="text"
+                      required
+                      autocomplete="off"
+                      placeholder="Address"
+                      class="input input-bordered appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none sm:text-sm bg-white text-black"
                     />
                   </div>
                 </div>
@@ -142,7 +191,7 @@
                     autocomplete="email"
                     required
                     placeholder="Email"
-                    class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none sm:text-sm bg-white text-black"
+                    class="input input-bordered appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none sm:text-sm bg-white text-black"
                   />
                 </div>
 
@@ -159,7 +208,7 @@
                         required
                         autocomplete="off"
                         placeholder="Password"
-                        class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:outline-none sm:text-sm bg-white text-black"
+                        class="input input-bordered appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:outline-none sm:text-sm bg-white text-black"
                       />
                       <button
                         type="button"
@@ -184,7 +233,7 @@
                         required
                         autocomplete="off"
                         placeholder="Confirm Password"
-                        class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:outline-none sm:text-sm bg-white text-black"
+                        class="input input-bordered appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:outline-none sm:text-sm bg-white text-black"
                       />
                       <button
                         type="button"
