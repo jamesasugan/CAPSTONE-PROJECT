@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function () {
   ];
 
   const schedules = {
-    '2024-04-26': {
+    '2024-04-27': {
       availability: 'Dr. Smith available from 10 AM to 4 PM',
       extraInfo: 'Dr. Smith specializes in pediatric care.',
     },
@@ -71,7 +71,9 @@ document.addEventListener('DOMContentLoaded', function () {
       let info = schedules[dateKey]
         ? `<div class="text-xs text-blue-700 font-bold mt-1">${schedules[dateKey].availability}</div>`
         : '';
-      cls += isToday ? ' bg-[#0b6c95] ' : ' text-black dark:text-white';
+      cls += isToday
+        ? ' bg-[#0b6c95] text-white'
+        : ' text-black dark:text-white';
       cls += schedules[dateKey] ? ' bg-yellow-200 ' : '';
       html += `<div class="${cls}" data-date="${dateKey}">${i}${info}</div>`;
     }
@@ -112,7 +114,7 @@ document.addEventListener('DOMContentLoaded', function () {
         : '';
       cls +=
         currentDate.toDateString() === new Date().toDateString()
-          ? ' bg-[#0b6c95]'
+          ? ' bg-[#0b6c95] text-white'
           : '';
       cls +=
         (schedules[dateKey] ? ' bg-yellow-200' : '') +
