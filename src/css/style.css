@@ -137,7 +137,6 @@ iframe {
   border: 3px solid #e0e0e0;
 }
 
-/* Keyframes for the floating animation, corrected for centering */
 @keyframes floating {
   0% {
     transform: translate(-50%, 0px);

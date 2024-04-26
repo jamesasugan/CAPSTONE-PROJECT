@@ -195,7 +195,7 @@
                         
                         <!-- ito nakalabas pag naka log in -->
                         <li>
-                          <a
+                          <a href="patient-profile.php"
                             class="hover:bg-gray-300 dark:hover:bg-gray-600 hover:font-bold text-lg transition duration-300 ease-in-out"
                             >Profile</a
                           >
