@@ -2,7 +2,6 @@ document.addEventListener('DOMContentLoaded', function () {
   const calendarEl = document.getElementById('calendar');
   let currentMonth = new Date().getMonth();
   let currentYear = new Date().getFullYear();
-  let currentView = 'month'; // Default view
   const today = new Date();
   const monthNames = [
     'January',
@@ -19,18 +18,15 @@ document.addEventListener('DOMContentLoaded', function () {
     'December',
   ];
 
+  // dito mo ata lalagay yung mga iinput sa schedule
   const schedules = {
     '2024-04-27': {
-      availability: 'Dr. Smith available from 10 AM to 4 PM',
-      extraInfo: 'Dr. Smith specializes in pediatric care.',
+      availability: 'Dr. Smith available from 10 AM to 4 PM', // ito nakalagay sa date box at sa message
+      extraInfo: 'Dr. Smith specializes in pediatric care.', // ito naman extra message. lagyan mo department
     },
     '2024-04-29': {
-      availability: 'Dr. Smith available from 10 AM to 4 PM',
-      extraInfo: 'Remember to bring your previous medical reports.',
-    },
-    '2024-05-01': {
-      availability: 'Dr. Smith available from 10 AM to 4 PM',
-      extraInfo: 'Remember to bring your previous medical reports.',
+      availability: 'Dr. Smith available from 10 AM to 4 PM', // ito nakalagay sa date box
+      extraInfo: 'Remember to bring your previous medical reports.', // ito naman extra message. lagyan mo department
     },
   };
 
@@ -56,132 +52,73 @@ document.addEventListener('DOMContentLoaded', function () {
       '<div class="grid grid-cols-7 divide-x divide-y border border-gray-500">';
     let emptyDays = firstDay;
     const prevMonthDays = new Date(currentYear, currentMonth, 0).getDate();
-    for (let i = 1; i <= emptyDays; i++) {
-      let day = prevMonthDays - emptyDays + i;
-      html += `<div class="h-20 p-4 text-center cursor-pointer text-gray-400">${day}</div>`;
+    for (let i = 0; i < emptyDays; i++) {
+      html += `<div class="h-20 p-4 text-center text-gray-400 opacity-60">${prevMonthDays - emptyDays + 1 + i}</div>`;
     }
-    let daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-    for (let i = 1; i <= daysInMonth; i++) {
-      let cls = 'h-20 p-4 text-center cursor-pointer';
-      let isToday =
-        i === today.getDate() &&
-        currentMonth === today.getMonth() &&
-        currentYear === today.getFullYear();
-      let dateKey = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
-      let info = schedules[dateKey]
-        ? `<div class="text-xs text-blue-700 font-bold mt-1">${schedules[dateKey].availability}</div>`
-        : '';
-      cls += isToday
-        ? ' bg-[#0b6c95] text-white'
-        : ' text-black dark:text-white';
-      cls += schedules[dateKey] ? ' bg-yellow-200 ' : '';
-      html += `<div class="${cls}" data-date="${dateKey}">${i}${info}</div>`;
-    }
-    let remainingDays = (7 - ((emptyDays + daysInMonth) % 7)) % 7;
-    for (let i = 1; i <= remainingDays; i++) {
-      html += `<div class="h-20 p-4 text-center cursor-pointer text-gray-400">${i}</div>`;
-    }
-    html += '</div>';
-    calendarEl.innerHTML += html;
-  }
 
-  function renderWeek() {
-    calendarEl.innerHTML = '';
-    updateMonthYearDisplay();
-    let headerHtml =
-      '<div class="grid grid-cols-7 divide-x divide-y border text-black dark:text-white border-gray-500">';
-    const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-    daysOfWeek.forEach((day) => {
-      headerHtml += `<div class="font-bold text-xs sm:text-base px-2 py-2 text-center">${day}</div>`;
-    });
-    headerHtml += '</div>';
-    calendarEl.innerHTML += headerHtml;
-
-    let currentDate = new Date(
-      currentYear,
-      currentMonth,
-      today.getDate() - today.getDay(),
-    );
-    let html =
-      '<div class="grid grid-cols-7 divide-x divide-y border border-gray-500">';
-    for (let i = 0; i < 7; i++) {
-      let day = currentDate.getDate();
+    const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+    for (let day = 1; day <= daysInMonth; day++) {
+      const currentDate = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
       let cls =
-        'h-20 p-4 text-center cursor-pointer text-black dark:text-white';
-      let dateKey = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-      let info = schedules[dateKey]
-        ? `<div class="text-xs text-blue-700 mt-1 font-bold">${schedules[dateKey].availability}</div>`
+        'h-20 p-4 text-center cursor-pointer text-black dark:text-white font-bold';
+      let isToday =
+        today.getDate() === day &&
+        today.getMonth() === currentMonth &&
+        today.getFullYear() === currentYear;
+      cls += isToday ? ' bg-[#0b6c95]' : '';
+      let info = schedules[currentDate]
+        ? `<div class="text-xs text-blue-700 mt-1 overflow-hidden whitespace-nowrap text-overflow-ellipsis">${schedules[currentDate].availability}</div>`
         : '';
-      cls +=
-        currentDate.toDateString() === new Date().toDateString()
-          ? ' bg-[#0b6c95] text-white'
-          : '';
-      cls +=
-        (schedules[dateKey] ? ' bg-yellow-200' : '') +
-        (currentDate.getMonth() !== currentMonth ? ' text-gray-400' : '');
-      html += `<div class="${cls}" data-date="${dateKey}">${day}${info}</div>`;
-      currentDate.setDate(currentDate.getDate() + 1);
+      cls += schedules[currentDate] ? ' bg-yellow-200 text-black' : ''; // Change background if there is a schedule
+      html += `<div class="${cls}" data-date="${currentDate}">${day}${info}</div>`;
+    }
+
+    let totalCells = emptyDays + daysInMonth;
+    let nextMonthDaysNeeded = totalCells % 7 !== 0 ? 7 - (totalCells % 7) : 0;
+    for (let i = 0; i < nextMonthDaysNeeded; i++) {
+      html += `<div class="h-20 p-4 text-center text-gray-400 opacity-60">${i + 1}</div>`;
     }
     html += '</div>';
     calendarEl.innerHTML += html;
+
+    document.querySelectorAll('#calendar .cursor-pointer').forEach((cell) => {
+      cell.addEventListener('click', function () {
+        const date = this.getAttribute('data-date');
+        const schedule = schedules[date];
+        if (schedule) {
+          document.getElementById('modalTitle').textContent =
+            `Schedule for ${date}`;
+          document.getElementById('modalContent').textContent =
+            schedule.availability;
+          document.getElementById('modalContent').innerHTML +=
+            `<p class='text-sm text-black dark:text-white mt-2'>${schedule.extraInfo}</p>`; // Add extra info
+          document.getElementById('modal').classList.remove('hidden');
+        }
+      });
+    });
   }
 
-  function renderDay() {
-    calendarEl.innerHTML = '';
-    updateMonthYearDisplay();
-    let cls =
-      'h-64 w-full border border-gray-500 text-center text-black dark:text-white cursor-pointer';
-    let dateKey = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
-    let info = schedules[dateKey]
-      ? `<div class="text-xs text-blue-700  bg-yellow-200 pt-20 pb-[93px] my-10">${schedules[dateKey].availability}</div>`
-      : '<div class="my-10">No events</div>';
-    let isToday =
-      today.getFullYear() === currentYear &&
-      today.getMonth() === currentMonth &&
-      today.getDate() === today.getDate();
-    cls += isToday ? ' text-black font-bold' : '';
-    let html = `<div class="${cls} ">${today.getDate()}${info}</div>`;
-    calendarEl.innerHTML += html;
-  }
-
-  function renderCalendar() {
-    switch (currentView) {
-      case 'month':
-        renderMonth();
-        break;
-      case 'week':
-        renderWeek();
-        break;
-      case 'day':
-        renderDay();
-        break;
-    }
-  }
-
-  document.getElementById('prevMonth').addEventListener('click', function () {
-    if (currentMonth === 0) {
-      currentMonth = 11;
-      currentYear--;
-    } else {
-      currentMonth--;
-    }
-    renderCalendar();
-  });
-
-  document.getElementById('nextMonth').addEventListener('click', function () {
-    if (currentMonth === 11) {
+  document.getElementById('nextMonth').addEventListener('click', () => {
+    currentMonth++;
+    if (currentMonth > 11) {
       currentMonth = 0;
       currentYear++;
-    } else {
-      currentMonth++;
     }
-    renderCalendar();
+    renderMonth();
   });
 
-  document.getElementById('viewSelect').addEventListener('change', function () {
-    currentView = this.value;
-    renderCalendar();
+  document.getElementById('prevMonth').addEventListener('click', () => {
+    currentMonth--;
+    if (currentMonth < 0) {
+      currentMonth = 11;
+      currentYear--;
+    }
+    renderMonth();
   });
 
-  renderCalendar(); // Initial render based on the default view
+  document.getElementById('closeModal').addEventListener('click', () => {
+    document.getElementById('modal').classList.add('hidden');
+  });
+
+  renderMonth();
 });
