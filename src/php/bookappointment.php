@@ -252,17 +252,16 @@
               />
             </div>
             <div>
-              <label for="sex" class="block text-base sm:text-lg font-medium">Gender</label>
+              <label for="sex" class="block text-base sm:text-lg font-medium">Sex</label>
               <select
                 id="sex"
                 required
                 class="select select-bordered w-full p-2 bg-gray-200 dark:bg-gray-600  text-lg"
                 name="sex"
               >
-                <option value="" disabled selected>Select a gender...</option>
+                <option value="" disabled selected>Select...</option>
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
-                <option value="Non-binary">Non-binary</option>
               </select>
             </div>
           </div>

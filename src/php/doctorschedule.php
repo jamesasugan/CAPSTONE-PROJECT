@@ -38,8 +38,8 @@
                 <div class="title flex text-center justify-center font-bold">
                     <h1 class="text-3xl mb-2">Doctor's Schedule</h1>
                 </div>
-                <div class="instructions-tab text-center text-base">
-                    <p>The days with the yellow background are the available schedules of the doctor. Click the yellow box for more info.</p>
+                <div class="instructions-tab text-center text-base font-medium mb-2">
+                    <p><span class="font-bold">Note:</span> Yellow Color Coded dates indicates that the date has a scheduled doctor. Click "View Schedule" to view the details.</p>
                 </div>
                 <div class="flex flex-col md:flex-row justify-between items-center border-t border-t-black dark:border-t-white dark:border-x-white px-2 py-2 border-x border-x-black">     
                     <div class="ml-20"></div>              
@@ -61,20 +61,21 @@
 
             <!-- Modal -->
             <div id="modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 mt-5 hidden overflow-y-auto h-full w-full">
-                <div class="relative top-20 mx-auto p-5  w-full max-w-md lg:max-w-lg shadow-lg rounded-md bg-white dark:bg-[#222f3a]">
+                <div class="relative top-20 mx-auto p-5 w-full max-w-md lg:max-w-lg shadow-lg rounded-md bg-white dark:bg-[#222f3a]">
                     <div class="mt-3 text-center">
-                        <h3 id="modalTitle" class="text-lg leading-6 text-black dark:text-white font-bold"></h3>
+                        <h3 id="modalTitle" class="text-lg leading-6 font-bold text-black dark:text-white"></h3>
                         <div class="mt-2 px-7 py-3">
-                            <p id="modalContent" class="text-sm text-black dark:text-white"></p>
+                            <p id="modalContent" class="max-h-[400px] overflow-y-auto text-sm text-black dark:text-white scrollbar"></p>
                         </div>
                         <div class="items-center px-4 py-3">
-                            <button id="closeModal" class="px-4 py-2 bg-[#0b6c95] hover:bg-[#11485f] text-white text-base font-medium rounded-md w-1/2 shadow-sm  focus:outline-none focus:ring-2">
+                            <button id="closeModal" class="px-4 py-2 bg-[#0b6c95] hover:bg-[#11485f] text-white text-base font-medium rounded-md w-1/2 shadow-sm focus:outline-none focus:ring-2">
                                 Close
                             </button>
                         </div>
                     </div>
                 </div>
             </div>
+
         </section>
 
 

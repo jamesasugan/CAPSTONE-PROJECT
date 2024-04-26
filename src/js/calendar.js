@@ -18,16 +18,21 @@ document.addEventListener('DOMContentLoaded', function () {
     'December',
   ];
 
-  // dito mo ata lalagay yung mga iinput sa schedule
+  // dito schedules. ikaw na bahala sa names, surname lang ata dapat tas yung dr. depende kung anong level nila, baka mamaw na yung iba kaya di na doctor tawag eh kaya dapat maiiba mo
   const schedules = {
-    '2024-04-27': {
-      availability: 'Dr. Smith available from 10 AM to 4 PM', // ito nakalagay sa date box at sa message
-      extraInfo: 'Dr. Smith specializes in pediatric care.', // ito naman extra message. lagyan mo department
-    },
-    '2024-04-29': {
-      availability: 'Dr. Smith available from 10 AM to 4 PM', // ito nakalagay sa date box
-      extraInfo: 'Remember to bring your previous medical reports.', // ito naman extra message. lagyan mo department
-    },
+    '2024-04-27': [
+      { department: 'Pediatrics', doctor: 'Dr. Smith', times: '10 AM to 3 PM' },
+      { department: 'X-ray', doctor: 'Dr. Asugan', times: '8 AM to 1 PM' },
+      { department: 'X-ray', doctor: 'Dr. Asugan', times: '8 AM to 1 PM' },
+      { department: 'X-ray', doctor: 'Dr. Asugan', times: '8 AM to 1 PM' },
+      { department: 'X-ray', doctor: 'Dr. Asugan', times: '8 AM to 1 PM' },
+      { department: 'X-ray', doctor: 'Dr. Asugan', times: '8 AM to 1 PM' },
+      { department: 'X-ray', doctor: 'Dr. Asugan', times: '8 AM to 1 PM' },
+    ],
+    '2024-05-01': [
+      { department: 'Pediatrics', doctor: 'Dr. Smith', times: '10 AM to 3 PM' },
+      { department: 'X-ray', doctor: 'Dr. Asugan', times: '8 AM to 1 PM' },
+    ],
   };
 
   function updateMonthYearDisplay() {
@@ -66,10 +71,11 @@ document.addEventListener('DOMContentLoaded', function () {
         today.getMonth() === currentMonth &&
         today.getFullYear() === currentYear;
       cls += isToday ? ' bg-[#0b6c95]' : '';
-      let info = schedules[currentDate]
-        ? `<div class="text-xs text-blue-700 mt-1 overflow-hidden whitespace-nowrap text-overflow-ellipsis">${schedules[currentDate].availability}</div>`
+      let dayHasSchedule = schedules[currentDate];
+      let info = dayHasSchedule
+        ? `<div class="text-xs text-blue-700 mt-1 overflow-hidden whitespace-nowrap text-overflow-ellipsis">View Schedules</div>`
         : '';
-      cls += schedules[currentDate] ? ' bg-yellow-200 text-black' : ''; // Change background if there is a schedule
+      cls += dayHasSchedule ? ' bg-yellow-200' : ''; // Change background if there is a schedule
       html += `<div class="${cls}" data-date="${currentDate}">${day}${info}</div>`;
     }
 
@@ -81,42 +87,55 @@ document.addEventListener('DOMContentLoaded', function () {
     html += '</div>';
     calendarEl.innerHTML += html;
 
-    document.querySelectorAll('#calendar .cursor-pointer').forEach((cell) => {
-      cell.addEventListener('click', function () {
+    document.querySelectorAll('#calendar .cursor-pointer').forEach((day) => {
+      day.addEventListener('click', function () {
         const date = this.getAttribute('data-date');
-        const schedule = schedules[date];
-        if (schedule) {
-          document.getElementById('modalTitle').textContent =
-            `Schedule for ${date}`;
-          document.getElementById('modalContent').textContent =
-            schedule.availability;
-          document.getElementById('modalContent').innerHTML +=
-            `<p class='text-sm text-black dark:text-white mt-2'>${schedule.extraInfo}</p>`; // Add extra info
-          document.getElementById('modal').classList.remove('hidden');
+        if (schedules[date]) {
+          showModal(date, schedules[date]);
         }
       });
     });
   }
 
-  document.getElementById('nextMonth').addEventListener('click', () => {
-    currentMonth++;
-    if (currentMonth > 11) {
-      currentMonth = 0;
-      currentYear++;
-    }
-    renderMonth();
-  });
+  function showModal(date, daySchedules) {
+    const modal = document.getElementById('modal');
+    const titleEl = document.getElementById('modalTitle');
+    const contentEl = document.getElementById('modalContent');
+    titleEl.textContent = `Schedule/s for ${date}`;
+    contentEl.innerHTML = daySchedules
+      .map(
+        (schedule) => `
+            <div class="p-4">
+                <h3 class="font-bold text-xl sm:text-2xl text-blue-800 dark:text-blue-200 mb-1">${schedule.department}</h3>
+                <p class="text-black dark:text-white text-base sm:text-lg">${schedule.doctor} - ${schedule.times}</p>
+            </div>
+        `,
+      )
+      .join('');
+    modal.classList.remove('hidden');
+  }
 
-  document.getElementById('prevMonth').addEventListener('click', () => {
-    currentMonth--;
-    if (currentMonth < 0) {
+  document.getElementById('prevMonth').addEventListener('click', function () {
+    if (currentMonth === 0) {
       currentMonth = 11;
-      currentYear--;
+      currentYear -= 1;
+    } else {
+      currentMonth -= 1;
     }
     renderMonth();
   });
 
-  document.getElementById('closeModal').addEventListener('click', () => {
+  document.getElementById('nextMonth').addEventListener('click', function () {
+    if (currentMonth === 11) {
+      currentMonth = 0;
+      currentYear += 1;
+    } else {
+      currentMonth += 1;
+    }
+    renderMonth();
+  });
+
+  document.getElementById('closeModal').addEventListener('click', function () {
     document.getElementById('modal').classList.add('hidden');
   });
 
