@@ -101,7 +101,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const modal = document.getElementById('modal');
     const titleEl = document.getElementById('modalTitle');
     const contentEl = document.getElementById('modalContent');
-    titleEl.textContent = `Schedule/s for ${date}`;
+    titleEl.textContent = `Schedule for ${date}`;
     contentEl.innerHTML = daySchedules
       .map(
         (schedule) => `

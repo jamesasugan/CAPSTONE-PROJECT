@@ -85,19 +85,41 @@
           </div>
 
           <div class="w-full">
-              <label for="service-type" class="block text-lg font-medium mb-1">What type of service?</label>
-              <select
+            <label for="service-type" class="block text-lg font-medium mb-1">What type of service?</label>
+            <select
                 id="service-type"
                 required
-                class="select select-bordered text-base sm:text-lg w-full p-2 bg-gray-200 dark:bg-gray-600"
+                class="select select-bordered w-full bg-gray-200 dark:bg-gray-600 text-base sm:text-lg lg:text-xl focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 "
                 name="service-type"
-              >
+            >
                 <option value="" disabled selected>Select service type...</option>
                 <option value="OB-Gyne">OB-Gyne</option>
+                <option value="Pregnancy Testing">Pregnancy Testing</option>
+                <option value="Dengue Test">Dengue Test</option>
+                <option value="Covid-19 Rapid Testing">Covid-19 Rapid Testing</option>
                 <option value="Family Medicine">Family Medicine</option>
                 <option value="Internal Medicine">Internal Medicine</option>
-              </select>
-          </div>
+                <option value="Medical Consultation">Medical Consultation</option>
+                <option value="Vaccination">Vaccination</option>
+                <option value="BP Monitoring">BP Monitoring</option>
+                <option value="Blood Glucose Determination">Blood Glucose Determination</option>
+                <option value="Nebulization">Nebulization</option>  
+                <option value="Complete Blood Count (CBC)">Complete Blood Count (CBC)</option>
+                <option value="Fecalysis">Fecalysis</option>
+                <option value="Electrocardiogram (ECG)">Electrocardiogram (ECG)</option>
+                <option value="X-RAY">X-RAY</option>
+                <option value="Pre-Employment Package">Pre-Employment Package</option>
+                <option value="Annual Physical Examination">Annual Physical Examination</option>
+                <option value="FBS">FBS</option>
+                <option value="Lipid Profile">Lipid Profile</option>
+                <option value="AST/ALT">AST/ALT</option>
+                <option value="Uric Acid">Uric Acid</option>
+                <option value="Blood Typing">Blood Typing</option>
+                <option value="Electrolytes">Electrolytes</option>
+                <option value="FT4/TSH">FT4/TSH</option>
+            </select>
+        </div>
+
           <div class="w-full md:w-auto md:col-span-1">
             <label for="appointment-time" class="block text-base sm:text-lg font-medium">
               Appointment Date and Time
@@ -312,7 +334,7 @@
                 <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                <span>Appointment has been booked!</span>
+                <span>Appointment has been booked! Please wait for confirmation message.</span>
             </div>
         </div>
 

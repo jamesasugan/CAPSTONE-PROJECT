@@ -90,29 +90,33 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 // Toggle theme
+document.addEventListener('DOMContentLoaded', function () {
+  const themeCheckbox = document.querySelector('.theme-controller');
+  if (themeCheckbox) {
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    setTheme(savedTheme);
+    themeCheckbox.checked = savedTheme === 'dark';
+
+    themeCheckbox.addEventListener('change', function (event) {
+      if (event.target.checked) {
+        setTheme('dark');
+      } else {
+        setTheme('light');
+      }
+    });
+  } else {
+    console.log('Theme controller element not found.');
+  }
+});
+
 function setTheme(theme) {
+  localStorage.setItem('theme', theme);
   if (theme === 'dark') {
     document.documentElement.classList.add('dark');
   } else {
     document.documentElement.classList.remove('dark');
   }
 }
-
-setTheme('light');
-
-document
-  .querySelector('.theme-controller')
-  .addEventListener('change', function (event) {
-    if (event.target.checked) {
-      setTheme('dark');
-    } else {
-      setTheme('light');
-    }
-  });
-
-document.addEventListener('DOMContentLoaded', function () {
-  document.querySelector('.theme-controller').checked = false;
-});
 
 // for appointment date and time and date of birth only
 document.addEventListener('DOMContentLoaded', function () {
@@ -148,28 +152,3 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 });
-
-// for patient-profile
-let editing = false;
-
-document.getElementById('editButton').addEventListener('click', () => {
-  toggleEdit(!editing);
-});
-
-function toggleEdit(enable) {
-  editing = enable;
-  document
-    .querySelectorAll('#personal-info input, #personal-info select')
-    .forEach((input) => {
-      input.disabled = !enable;
-    });
-  if (enable) {
-    document.getElementById('editButton').classList.add('hidden');
-    document.getElementById('updateButton').classList.remove('hidden');
-    document.getElementById('cancelButton').classList.remove('hidden');
-  } else {
-    document.getElementById('editButton').classList.remove('hidden');
-    document.getElementById('updateButton').classList.add('hidden');
-    document.getElementById('cancelButton').classList.add('hidden');
-  }
-}
