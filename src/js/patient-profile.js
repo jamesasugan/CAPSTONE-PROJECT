@@ -1,9 +1,19 @@
 // For passwword validation
 // Toggle password visibility
-function togglePasswordVisibility(passwordId, iconId) {
+document.addEventListener('DOMContentLoaded', function () {
+  setupPasswordToggle('password', 'password-icon');
+  setupPasswordToggle('confirm-password', 'confirm-password-icon');
+  initializeSecurityForm();
+});
+
+function setupPasswordToggle(passwordId, iconId) {
   const passwordInput = document.getElementById(passwordId);
   const icon = document.getElementById(iconId);
-  if (passwordInput && icon) {
+  const button = icon.closest('button');
+
+  updateButtonDisplay(passwordInput, button);
+
+  button.addEventListener('click', function () {
     if (passwordInput.type === 'password') {
       passwordInput.type = 'text';
       icon.classList.replace('fa-eye', 'fa-eye-slash');
@@ -11,10 +21,93 @@ function togglePasswordVisibility(passwordId, iconId) {
       passwordInput.type = 'password';
       icon.classList.replace('fa-eye-slash', 'fa-eye');
     }
-  }
+  });
+
+  observeAttributeChanges(passwordInput, 'disabled', function () {
+    updateButtonDisplay(passwordInput, button);
+  });
 }
 
-// Initialize elements
+function updateButtonDisplay(passwordInput, button) {
+  button.style.display = passwordInput.disabled ? 'none' : 'flex';
+}
+
+function observeAttributeChanges(element, attribute, callback) {
+  const observer = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+      if (
+        mutation.type === 'attributes' &&
+        mutation.attributeName === attribute
+      ) {
+        callback();
+      }
+    });
+  });
+  observer.observe(element, { attributes: true, attributeFilter: [attribute] });
+}
+
+function initializeSecurityForm() {
+  const passwordInput = document.getElementById('password');
+  const confirmPasswordInput = document.getElementById('confirm-password');
+
+  // Save initial values
+  passwordInput.dataset.initialValue = passwordInput.value;
+  confirmPasswordInput.dataset.initialValue = confirmPasswordInput.value;
+
+  document
+    .getElementById('cancelSecurityBtn')
+    .addEventListener('click', function () {
+      resetForm();
+    });
+}
+
+function resetForm() {
+  const passwordInput = document.getElementById('password');
+  const confirmPasswordInput = document.getElementById('confirm-password');
+
+  // Reset values to initial
+  passwordInput.value = passwordInput.dataset.initialValue;
+  confirmPasswordInput.value = confirmPasswordInput.dataset.initialValue;
+
+  // Reset visibility of password fields
+  resetVisibility('password', 'password-icon');
+  resetVisibility('confirm-password', 'confirm-password-icon');
+
+  // Reset UI elements and validate
+  resetUI();
+  validatePasswords();
+  resetPasswordIndicators(); // Add this line to reset indicators
+}
+
+function resetVisibility(inputId, iconId) {
+  const input = document.getElementById(inputId);
+  const icon = document.getElementById(iconId);
+  input.type = 'password';
+  icon.classList.remove('fa-eye-slash');
+  icon.classList.add('fa-eye');
+}
+
+function validatePasswords() {
+  const passwordInput = document.getElementById('password');
+  const confirmPasswordInput = document.getElementById('confirm-password');
+  const passwordsMatch = confirmPasswordInput.value === passwordInput.value;
+  confirmPasswordInput.style.borderColor = passwordsMatch ? 'green' : 'red';
+  const submitButton = document.getElementById('updateSecurityBtn');
+  submitButton.disabled = !passwordsMatch || passwordInput.value === '';
+}
+
+function resetUI() {
+  const confirmPasswordInput = document.getElementById('confirm-password');
+  confirmPasswordInput.style.borderColor = ''; // Reset border color to default
+}
+function resetPasswordIndicators() {
+  requirementList.forEach((item) => {
+    item.firstElementChild.className = 'fa-solid fa-circle';
+    item.classList.remove('valid');
+  });
+}
+
+// for password validation
 const passwordInput = document.getElementById('password');
 const confirmPasswordInput = document.getElementById('confirm-password');
 const submitButton = document.getElementById('updateSecurityBtn');

@@ -257,9 +257,12 @@
                                   autocomplete="off" 
                                   placeholder="Password" 
                                   class="input input-bordered w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:outline-none sm:text-sm bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400 disabled:border-gray-300"/>
-                              <button type="button" class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5" onclick="togglePasswordVisibility('password', 'password-icon')">
-                                  <span id="password-icon" class="fas fa-eye"></span>
-                              </button>
+                                  <button 
+                                  type="button" 
+                                  class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5">
+                                    <span id="password-icon" class="fas fa-eye"></span>
+                                </button>
+
                           </div>
                       </div>
 
@@ -275,7 +278,9 @@
                       autocomplete="off" 
                       placeholder="Confirm Password" 
                       class="input input-bordered w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:outline-none sm:text-sm bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400 disabled:border-gray-300"/>
-                      <button type="button" class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5" onclick="togglePasswordVisibility('confirm-password', 'confirm-password-icon')">
+                      <button 
+                      type="button" 
+                      class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5">
                         <span id="confirm-password-icon" class="fas fa-eye"></span>
                       </button>
                     </div>
@@ -289,33 +294,6 @@
                   <li><i class="fa-solid fa-circle"></i> At least one UPPERCASE letter</li>
                   <li><i class="fa-solid fa-circle"></i> No special characters</li>
                 </div>
-
-
-                <!-- <button class="btn btn-error text-white" onclick="my_modal_1.showModal()">Delete Account</button>
-
-                <dialog id="my_modal_1" class="modal">
-                <div class="modal-box bg-gray-200 dark:bg-gray-700">
-                  <h3 class="font-bold text-lg text-black dark:text-white"><i class="fa-solid fa-triangle-exclamation text-red-500"></i>  Delete Account</h3>
-
-                  <p class="py-4 text-black dark:text-white">Are you sure you want to delete your account?
-                    <br><span class="font-bold text-red-400"> This action is permanent and cannot be undone.</span> </p>
-
-                  <div class="form-group mb-4">
-                    <label for="confirm-password" class="block font-medium text-black dark:text-white">Confirm Password</label>
-                    <div class="relative">
-                      <input id="dlt-confirmpass" type="password" required autocomplete="off" placeholder="Enter your password" class="input input-bordered w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:outline-none sm:text-sm bg-white dark:bg-gray-600 text-black dark:text-white">
-                      <button type="button" class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5" onclick="togglePasswordVisibility('confirm-password', 'confirm-password-icon')">
-                        <span id="confirm-password-icon" class="fas fa-eye"></span>
-                      </button>
-                    </div>
-                  </div>
-                  <div class="flex justify-end space-x-2">
-                    <button class="btn btn-error hover:bg-red-700 text-white font-bold border-none px-7" type="submit">Delete Account</button>
-                    <button type="button" class="btn bg-white text-black hover:bg-gray-400 border-none" onclick="my_modal_1.close()">Cancel</button>
-                  </div>
-                </div>
-              </dialog> -->
-
 
                 <!-- Action Buttons -->
                 <div class="flex justify-end space-x-2">
@@ -348,3 +326,29 @@
       
   </body>
 </html>
+
+<!-- delete button only -->
+<!-- <button class="btn btn-error text-white" onclick="my_modal_1.showModal()">Delete Account</button>
+
+                <dialog id="my_modal_1" class="modal">
+                <div class="modal-box bg-gray-200 dark:bg-gray-700">
+                  <h3 class="font-bold text-lg text-black dark:text-white"><i class="fa-solid fa-triangle-exclamation text-red-500"></i>  Delete Account</h3>
+
+                  <p class="py-4 text-black dark:text-white">Are you sure you want to delete your account?
+                    <br><span class="font-bold text-red-400"> This action is permanent and cannot be undone.</span> </p>
+
+                  <div class="form-group mb-4">
+                    <label for="confirm-password" class="block font-medium text-black dark:text-white">Confirm Password</label>
+                    <div class="relative">
+                      <input id="dlt-confirmpass" type="password" required autocomplete="off" placeholder="Enter your password" class="input input-bordered w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:outline-none sm:text-sm bg-white dark:bg-gray-600 text-black dark:text-white">
+                      <button type="button" class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5" onclick="togglePasswordVisibility('confirm-password', 'confirm-password-icon')">
+                        <span id="confirm-password-icon" class="fas fa-eye"></span>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="flex justify-end space-x-2">
+                    <button class="btn btn-error hover:bg-red-700 text-white font-bold border-none px-7" type="submit">Delete Account</button>
+                    <button type="button" class="btn bg-white text-black hover:bg-gray-400 border-none" onclick="my_modal_1.close()">Cancel</button>
+                  </div>
+                </div>
+              </dialog> -->
