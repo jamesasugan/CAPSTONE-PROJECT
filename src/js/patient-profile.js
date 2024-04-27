@@ -86,23 +86,21 @@ document
   .getElementById('personalInfoTab')
   .addEventListener('click', function () {
     document.getElementById('personalInfo').classList.remove('hidden');
-    document.getElementById('securityPrivacy').classList.add('hidden');
+    document.getElementById('passwordSection').classList.add('hidden');
     document.getElementById('appointmentHistory').classList.add('hidden');
   });
 
-document
-  .getElementById('securityPrivacyTab')
-  .addEventListener('click', function () {
-    document.getElementById('personalInfo').classList.add('hidden');
-    document.getElementById('securityPrivacy').classList.remove('hidden');
-    document.getElementById('appointmentHistory').classList.add('hidden');
-  });
+document.getElementById('passwordTab').addEventListener('click', function () {
+  document.getElementById('personalInfo').classList.add('hidden');
+  document.getElementById('passwordSection').classList.remove('hidden');
+  document.getElementById('appointmentHistory').classList.add('hidden');
+});
 
 document
   .getElementById('appointmentHistoryTab')
   .addEventListener('click', function () {
     document.getElementById('personalInfo').classList.add('hidden');
-    document.getElementById('securityPrivacy').classList.add('hidden');
+    document.getElementById('passwordSection').classList.add('hidden');
     document.getElementById('appointmentHistory').classList.remove('hidden');
   });
 
@@ -122,7 +120,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
   // Set initial active state
-  document.getElementById('personalInfo').click();
+  document.getElementById('personalInfoTab').click();
 });
 
 // for patient-profile

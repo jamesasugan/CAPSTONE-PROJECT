@@ -50,8 +50,8 @@
                     <li id="personalInfoTab" class="sidebar-item cursor-pointer text-black dark:text-white py-2 px-4 transition-colors duration-200">
                         Personal Information
                     </li>
-                    <li id="securityPrivacyTab" class="sidebar-item cursor-pointer text-black dark:text-white py-2 px-4 transition-colors duration-200">
-                        Security and Privacy
+                    <li id="passwordTab" class="sidebar-item cursor-pointer text-black dark:text-white py-2 px-4 transition-colors duration-200">
+                        Password
                     </li>
                     <li id="appointmentHistoryTab" class="sidebar-item cursor-pointer text-black dark:text-white py-2 px-4 transition-colors duration-200">
                         Appointment History
@@ -237,74 +237,110 @@
             </div>
           </div>
 
-          <!-- security and privacy -->
-          <div id="securityPrivacy" class="flex-1 p-10 hidden">
+          <!-- Password tab -->
+          <div id="passwordSection" class="flex-1 p-10 hidden">
           <div class="bg-gray-200 dark:bg-gray-700 p-5 rounded-lg h-full">
-            <h3 class="text-xl font-bold text-black dark:text-white mb-4">
-              Security and Privacy
-            </h3>
-            <form id="security-form" class="space-y-6">
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <!-- Password Field -->
-                <div class="form-group col-span-2">
-                  <label for="password" class="block font-medium text-black dark:text-white">Password</label>
-                  <div class="relative">
-                    <input id="password" 
-                    type="password" 
-                    required 
-                    value="Passwordko1"
-                    disabled
-                    autocomplete="off" 
-                    placeholder="Password" 
-                    class="input input-bordered w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:outline-none sm:text-sm bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400 disabled:border-gray-300"/>
-                    <button type="button" class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5" onclick="togglePasswordVisibility('password', 'password-icon')">
-                      <span id="password-icon" class="fas fa-eye"></span>
-                    </button>
+              <h3 class="text-xl font-bold text-black dark:text-white mb-4">
+                  Password
+              </h3>
+              <form id="security-form" class="space-y-6">
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <!-- Password Field -->
+                      <div class="form-group">
+                          <label for="password" class="block font-medium text-black dark:text-white">Password</label>
+                          <div class="relative">
+                              <input id="password" 
+                                  type="password" 
+                                  required 
+                                  value="Passwordko1"
+                                  disabled
+                                  autocomplete="off" 
+                                  placeholder="Password" 
+                                  class="input input-bordered w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:outline-none sm:text-sm bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400 disabled:border-gray-300"/>
+                              <button type="button" class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5" onclick="togglePasswordVisibility('password', 'password-icon')">
+                                  <span id="password-icon" class="fas fa-eye"></span>
+                              </button>
+                          </div>
+                      </div>
+
+                      <!-- Confirm Password Field -->
+                <div class="form-group">
+                    <label for="confirm-password" class="block font-medium text-black dark:text-white">Confirm Password</label>
+                    <div class="relative">
+                      <input id="confirm-password" 
+                      type="password" 
+                      value="Passwordko1"
+                      required 
+                      disabled
+                      autocomplete="off" 
+                      placeholder="Confirm Password" 
+                      class="input input-bordered w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:outline-none sm:text-sm bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400 disabled:border-gray-300"/>
+                      <button type="button" class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5" onclick="togglePasswordVisibility('confirm-password', 'confirm-password-icon')">
+                        <span id="confirm-password-icon" class="fas fa-eye"></span>
+                      </button>
+                    </div>
                   </div>
                 </div>
 
-                <!-- Confirm Password Field -->
-                <div class="form-group col-span-2">
-                  <label for="confirm-password" class="block font-medium text-black dark:text-white">Confirm Password</label>
-                  <div class="relative">
-                    <input id="confirm-password" 
-                    type="password" 
-                    value="Passwordko1"
-                    required 
-                    disabled
-                    autocomplete="off" 
-                    placeholder="Confirm Password" 
-                    class="input input-bordered w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:outline-none sm:text-sm bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400 disabled:border-gray-300"/>
-                    <button type="button" class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5" onclick="togglePasswordVisibility('confirm-password', 'confirm-password-icon')">
-                      <span id="confirm-password-icon" class="fas fa-eye"></span>
-                    </button>
+                <!-- Requirements List (only displayed during password change) -->
+                <div class="requirement-list hidden">
+                  <li><i class="fa-solid fa-circle"></i> At least 8 characters</li>
+                  <li><i class="fa-solid fa-circle"></i> At least one digit</li>
+                  <li><i class="fa-solid fa-circle"></i> At least one UPPERCASE letter</li>
+                  <li><i class="fa-solid fa-circle"></i> No special characters</li>
+                </div>
+
+
+                <!-- <button class="btn btn-error text-white" onclick="my_modal_1.showModal()">Delete Account</button>
+
+                <dialog id="my_modal_1" class="modal">
+                <div class="modal-box bg-gray-200 dark:bg-gray-700">
+                  <h3 class="font-bold text-lg text-black dark:text-white"><i class="fa-solid fa-triangle-exclamation text-red-500"></i>  Delete Account</h3>
+
+                  <p class="py-4 text-black dark:text-white">Are you sure you want to delete your account?
+                    <br><span class="font-bold text-red-400"> This action is permanent and cannot be undone.</span> </p>
+
+                  <div class="form-group mb-4">
+                    <label for="confirm-password" class="block font-medium text-black dark:text-white">Confirm Password</label>
+                    <div class="relative">
+                      <input id="dlt-confirmpass" type="password" required autocomplete="off" placeholder="Enter your password" class="input input-bordered w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:outline-none sm:text-sm bg-white dark:bg-gray-600 text-black dark:text-white">
+                      <button type="button" class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5" onclick="togglePasswordVisibility('confirm-password', 'confirm-password-icon')">
+                        <span id="confirm-password-icon" class="fas fa-eye"></span>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="flex justify-end space-x-2">
+                    <button class="btn btn-error hover:bg-red-700 text-white font-bold border-none px-7" type="submit">Delete Account</button>
+                    <button type="button" class="btn bg-white text-black hover:bg-gray-400 border-none" onclick="my_modal_1.close()">Cancel</button>
                   </div>
                 </div>
-              </div>
+              </dialog> -->
 
-              <!-- Requirements List (only displayed during password change) -->
-              <div class="requirement-list hidden">
-                <li><i class="fa-solid fa-circle"></i> At least 8 characters</li>
-                <li><i class="fa-solid fa-circle"></i> At least one digit</li>
-                <li><i class="fa-solid fa-circle"></i> At least one UPPERCASE letter</li>
-                <li><i class="fa-solid fa-circle"></i> No special characters</li>
-              </div>
 
-              <!-- Action Buttons -->
-              <div class="flex justify-end space-x-2">
-                <button id="editSecurityBtn" type="button" class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none px-7" onclick="toggleSecurityEdit(true)">
-                    Edit
-                </button>
-
-                  <input id="updateSecurityBtn" type="submit" value="Update" class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none hidden" onclick="toggleSecurityEdit(true)">
-                  <button id="cancelSecurityBtn" type="button" class="btn bg-white text-black hover:bg-gray-400 border-none hidden" onclick="toggleSecurityEdit(false)">
-                      Cancel
+                <!-- Action Buttons -->
+                <div class="flex justify-end space-x-2">
+                  <button id="editSecurityBtn" type="button" class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none px-7" onclick="toggleSecurityEdit(true)">
+                      Edit
                   </button>
-              </div>
-            </form>
+
+                    <input id="updateSecurityBtn" type="submit" value="Update" class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none hidden" onclick="toggleSecurityEdit(true)">
+                    <button id="cancelSecurityBtn" type="button" class="btn bg-white text-black hover:bg-gray-400 border-none hidden" onclick="toggleSecurityEdit(false)">
+                        Cancel
+                    </button>
+                </div>
+              </form>
           </div>
         </div>
 
+        <!-- Appointment Tab -->
+        <div id="appointmentHistory" class="flex-1 p-10 hidden">
+          <div class="bg-gray-200 dark:bg-gray-700 p-5 rounded-lg h-full">
+              <h3 class="text-xl font-bold text-black dark:text-white mb-4">
+                  Appointment History
+              </h3>
+
+          </div>
+        </div>
 
         </div>
       </div>
