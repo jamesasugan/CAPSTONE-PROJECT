@@ -38,15 +38,15 @@
 
     <?php include 'navbar-main.php'; ?>
 
-    <div class="flex flex-col sm:flex-row justify-center items-center min-h-screen w-full">
-    <div class="bg-white dark:bg-gray-800 p-5 shadow-lg rounded-lg w-full sm:w-3/4 mt-14">
+    <div class="flex flex-col sm:flex-row justify-center items-center">
+    <div class="bg-white dark:bg-gray-800 p-5 w-full min-h-screen pt-10 sm:pt-20">
         <!-- Responsive Sidebar for profile settings -->
         <div class="flex flex-col sm:flex-row">
-            <div class="w-full sm:w-64 p-5 border-b sm:border-b-0 sm:border-r">
-                <h2 class="text-lg font-bold text-black dark:text-white">
-                    Profile
+            <div class="w-full sm:w-80 p-5 border-b sm:border-b-0 sm:border-r mt-10">
+                <h2 class="text-2xl sm:text-3xl font-bold text-black dark:text-white mt-5 sm:mt-0">
+                    Profile Settings
                 </h2>
-                <ul class="mt-5">
+                <ul class="mt-5 text-lg sm:text-xl">
                     <li class="text-black dark:text-white font-semibold">
                         Personal Information
                     </li>
@@ -60,7 +60,7 @@
             </div>
           <!-- Main content area -->
           <div class="flex-1 p-10">
-            <div class="bg-white dark:bg-gray-700 p-5 rounded-lg">
+            <div class="bg-white dark:bg-gray-700 p-5 rounded-lg h-full">
               <h3 class="text-xl font-bold text-black dark:text-white mb-4">
                 Personal Information
               </h3>
@@ -221,35 +221,19 @@
                   </div>
                 </div>
                 <div class="flex justify-end space-x-2">
-                  <button
-                    type="button"
-                    class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none"
-                    onclick="toggleEdit(true)"
-                  >
-                    Update
-                  </button>
-                  <button
-                    type="button"
-                    class="btn bg-gray-300 text-black hover:bg-gray-400 border-none"
-                    onclick="toggleEdit(false)"
-                  >
-                    Cancel
-                  </button>
-                </div>
+                        <button id="editButton" type="button" class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none px-7">
+                            Edit
+                        </button>
+                        <input id="updateButton" type="submit" value="Update" class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none hidden" onclick="toggleEdit(true)">               
+                        <button id="cancelButton" type="button" class="btn bg-gray-300 text-black hover:bg-gray-400 border-none hidden" onclick="toggleEdit(false)">
+                            Cancel
+                        </button>
+                    </div>
               </form>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <script>
-      function toggleEdit(enable) {
-        document
-          .querySelectorAll('#personal-info input, #personal-info select')
-          .forEach((input) => {
-            input.disabled = !enable;
-          });
-      }
-    </script>
   </body>
 </html>

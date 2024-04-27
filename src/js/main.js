@@ -148,3 +148,28 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 });
+
+// for patient-profile
+let editing = false;
+
+document.getElementById('editButton').addEventListener('click', () => {
+  toggleEdit(!editing);
+});
+
+function toggleEdit(enable) {
+  editing = enable;
+  document
+    .querySelectorAll('#personal-info input, #personal-info select')
+    .forEach((input) => {
+      input.disabled = !enable;
+    });
+  if (enable) {
+    document.getElementById('editButton').classList.add('hidden');
+    document.getElementById('updateButton').classList.remove('hidden');
+    document.getElementById('cancelButton').classList.remove('hidden');
+  } else {
+    document.getElementById('editButton').classList.remove('hidden');
+    document.getElementById('updateButton').classList.add('hidden');
+    document.getElementById('cancelButton').classList.add('hidden');
+  }
+}
