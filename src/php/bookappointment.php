@@ -38,6 +38,9 @@
 
     <?php include 'navbar-main.php'; ?>
 
+    <?php $selectedService = isset($_GET['service'])
+        ? $_GET['service']
+        : null; ?>
 
     <section
       id="booking"
@@ -58,7 +61,7 @@
         <fieldset class="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
           <legend class="text-xl font-bold mb-2 col-span-full">Service:</legend>
           <div class="flex flex-col w-full">           
-            <ul class="w-full text-lg font-medium text-gray-900 bg-gray-200 dark:bg-gray-600 border border-gray-200 rounded-lg dark:border-gray-600 dark:text-white">
+            <ul class="w-full text-lg font-medium text-gray-900 bg-gray-300 dark:bg-gray-600 border border-gray-200 rounded-lg dark:border-gray-600 dark:text-white">
               <li class="border-b border-gray-400 dark:border-slate-300">
                 <label class="flex items-center pl-3 w-full cursor-pointer">
                   <input id="horizontal-list-radio-license" 
@@ -87,37 +90,50 @@
           <div class="w-full">
             <label for="service-type" class="block text-lg font-medium mb-1">What type of service?</label>
             <select
-                id="service-type"
-                required
-                class="select select-bordered w-full bg-gray-200 dark:bg-gray-600 text-base sm:text-lg lg:text-xl focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 "
-                name="service-type"
-            >
-                <option value="" disabled selected>Select service type...</option>
-                <option value="OB-Gyne">OB-Gyne</option>
-                <option value="Pregnancy Testing">Pregnancy Testing</option>
-                <option value="Dengue Test">Dengue Test</option>
-                <option value="Covid-19 Rapid Testing">Covid-19 Rapid Testing</option>
-                <option value="Family Medicine">Family Medicine</option>
-                <option value="Internal Medicine">Internal Medicine</option>
-                <option value="Medical Consultation">Medical Consultation</option>
-                <option value="Vaccination">Vaccination</option>
-                <option value="BP Monitoring">BP Monitoring</option>
-                <option value="Blood Glucose Determination">Blood Glucose Determination</option>
-                <option value="Nebulization">Nebulization</option>  
-                <option value="Complete Blood Count (CBC)">Complete Blood Count (CBC)</option>
-                <option value="Fecalysis">Fecalysis</option>
-                <option value="Electrocardiogram (ECG)">Electrocardiogram (ECG)</option>
-                <option value="X-RAY">X-RAY</option>
-                <option value="Pre-Employment Package">Pre-Employment Package</option>
-                <option value="Annual Physical Examination">Annual Physical Examination</option>
-                <option value="FBS">FBS</option>
-                <option value="Lipid Profile">Lipid Profile</option>
-                <option value="AST/ALT">AST/ALT</option>
-                <option value="Uric Acid">Uric Acid</option>
-                <option value="Blood Typing">Blood Typing</option>
-                <option value="Electrolytes">Electrolytes</option>
-                <option value="FT4/TSH">FT4/TSH</option>
-            </select>
+              id="service-type"
+              required
+              class="select select-bordered w-full bg-gray-300 dark:bg-gray-600 text-base sm:text-lg lg:text-xl focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
+              name="service-type"
+          >
+              <option value="" disabled <?php echo is_null($selectedService)
+                  ? 'selected'
+                  : ''; ?>>Select service type...</option>
+              <?php
+              $services = [
+                  'OB-Gyne',
+                  'Pregnancy Testing',
+                  'Dengue Test',
+                  'Covid-19 Rapid Testing',
+                  'Family Medicine',
+                  'Internal Medicine',
+                  'Medical Consultation',
+                  'Vaccination',
+                  'BP Monitoring',
+                  'Blood Glucose Determination',
+                  'Nebulization',
+                  'Complete Blood Count (CBC)',
+                  'Fecalysis',
+                  'Electrocardiogram (ECG)',
+                  'X-RAY',
+                  'Pre-Employment Package',
+                  'Annual Physical Examination',
+                  'FBS',
+                  'Lipid Profile',
+                  'AST/ALT',
+                  'Uric Acid',
+                  'Blood Typing',
+                  'Electrolytes',
+                  'FT4/TSH',
+              ];
+              foreach ($services as $service) {
+                  echo "<option value=\"$service\" " .
+                      ($selectedService === $service ? 'selected' : '') .
+                      ">$service</option>";
+              }
+              ?>
+          </select>
+
+
         </div>
 
         <div class="w-full md:w-auto md:col-span-1">
@@ -129,7 +145,7 @@
             id="appointment-date"
             name="appointment-date"
             required
-            class="input input-bordered w-full p-2 bg-gray-200 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark]"
+            class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark]"
           />
         </div>
         <div class="w-full md:w-auto md:col-span-1">
@@ -141,9 +157,13 @@
             id="appointment-time"
             name="appointment-time"
             required
-            class="input input-bordered w-full p-2 bg-gray-200 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark]"
+            min="08:00"
+            max="17:00"
+            class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark]"
           />
         </div>
+
+
 
 
           <!-- Dapat kung anong pinili sa service, automatic yun na yung doctor na kung sino man sa service na yon -->
@@ -155,9 +175,9 @@
               id="doctor"
               name="doctor"
               required
-              class="select select-bordered w-full p-2 text-base sm:text-lg bg-gray-200 dark:bg-gray-600"
+              class="select select-bordered w-full p-2 text-base sm:text-lg bg-gray-300 dark:bg-gray-600"
             >
-              <option value="" disabled selected>Select a doctor...</option>
+              <option value="" disabled selected>...</option>
               <option value="Dr. Smith">Dr. Smith</option>
               <option value="Dr. Johnson">Dr. Johnson</option>
               <option value="Dr. Williams">Dr. Williams</option>
@@ -180,7 +200,7 @@
                 autocomplete="off"
                 placeholder="First Name"
                 required
-                class="input input-bordered w-full p-2 bg-gray-200 dark:bg-gray-600"
+                class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600"
               />
             </div>
             <div>
@@ -193,7 +213,7 @@
                 name="middle-name"
                 placeholder="Middle Name"
                 required
-                class="input input-bordered w-full p-2 bg-gray-200 dark:bg-gray-600"
+                class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600"
               />
             </div>
             <div>
@@ -206,7 +226,7 @@
                 name="last-name"
                 placeholder="Last Name"
                 required
-                class="input input-bordered w-full p-2 bg-gray-200 dark:bg-gray-600"
+                class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600"
               />
             </div>
             <div>
@@ -224,14 +244,14 @@
                 minlength="11"
                 maxlength="11"
                 title="Please enter up to 11 numeric characters."
-                class="input input-bordered w-full p-2 bg-gray-200 dark:bg-gray-600"
+                class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600"
               />
             </div>
 
             <!-- New fields for Vaccination Status -->
             <div>
             <div class="block text-base sm:text-lg font-medium mb-1">Are you vaccinated?</div>
-                <div class="flex items-center space-x-4 p-2 bg-gray-200 dark:bg-gray-600 rounded">
+                <div class="flex items-center space-x-4 p-2 bg-gray-300 dark:bg-gray-600 rounded">
                     <label class="flex items-center">
                         <input type="radio" name="vaccinated" value="yes" class="radio radio-primary" required>
                         <span class="ml-2">Yes</span>
@@ -247,7 +267,7 @@
                 <select
                     id="vaccine-type"
                     name="vaccine-type"
-                    class="select select-bordered w-full p-2 text-base sm:text-lg bg-gray-200 dark:bg-gray-600"
+                    class="select select-bordered w-full p-2 text-base sm:text-lg bg-gray-300 dark:bg-gray-600"
                     disabled
                 >
                     <option value="" disabled selected>Select vaccine stage...</option>
@@ -269,7 +289,7 @@
               autocomplete="off"
               placeholder="Address"
               required
-              class="input input-bordered w-full p-2 bg-gray-200 dark:bg-gray-600"
+              class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600"
             />
           </div>
 
@@ -283,7 +303,7 @@
                 id="dob"
                 name="dob"
                 required
-                class="input input-bordered w-full p-2 bg-gray-200 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark]"
+                class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark]"
               />
             </div>
             <div>
@@ -291,7 +311,7 @@
               <select
                 id="sex"
                 required
-                class="select select-bordered w-full p-2 bg-gray-200 dark:bg-gray-600  text-lg"
+                class="select select-bordered w-full p-2 bg-gray-300 dark:bg-gray-600  text-lg"
                 name="sex"
               >
                 <option value="" disabled selected>Select...</option>
@@ -311,7 +331,7 @@
                 autocomplete="email"
                 placeholder="Email"
                 required
-                class="input input-bordered w-full p-2 bg-gray-200 dark:bg-gray-600"
+                class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600"
               />
             </div>
           </div>

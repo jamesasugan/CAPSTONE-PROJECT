@@ -65,10 +65,10 @@
           <!-- Personal Information -->
           <div id="personalInfo" class="flex-1 p-10 ">
             <div class="bg-gray-200 dark:bg-gray-700 p-5 rounded-lg h-full">
-              <h3 class="text-xl font-bold text-black dark:text-white mb-4">
+              <h3 class="text-2xl font-bold text-black dark:text-white mb-4">
                 Personal Information
               </h3>
-              <form id="personal-info" class="space-y-6">
+              <form id="personal-info" action="#" method="POST" class="space-y-6">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                   
                   <div class="form-group">
@@ -233,6 +233,17 @@
                             Cancel
                         </button>
                     </div>
+
+                    <!-- pashow nito pag nag update info patient -->
+                    <div class="flex justify-center">
+                        <div role="alert" class="inline-flex items-center bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <span>Information Updated</span>
+                        </div>
+                    </div>
+                 
               </form>
             </div>
           </div>
@@ -240,10 +251,10 @@
           <!-- Password tab -->
           <div id="passwordSection" class="flex-1 p-10 hidden">
           <div class="bg-gray-200 dark:bg-gray-700 p-5 rounded-lg h-full">
-              <h3 class="text-xl font-bold text-black dark:text-white mb-4">
+              <h3 class="text-2xl font-bold text-black dark:text-white mb-4">
                   Password
               </h3>
-              <form id="security-form" class="space-y-6">
+              <form id="security-form" action="#" method="POST" class="space-y-6">
                   <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <!-- Password Field -->
                       <div class="form-group">
@@ -306,6 +317,17 @@
                         Cancel
                     </button>
                 </div>
+
+                <!-- pashow nito pag nag update password patient -->
+                <div class="flex justify-center">
+                        <div role="alert" class="inline-flex items-center bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <span>Password Updated</span>
+                        </div>
+                    </div>
+                    
               </form>
           </div>
         </div>
@@ -313,41 +335,85 @@
         <!-- Appointment Tab -->
         <div id="appointmentHistory" class="flex-1 p-10 hidden">
           <div class="bg-gray-200 dark:bg-gray-700 p-5 rounded-lg h-full">
-              <h3 class="text-xl font-bold text-black dark:text-white mb-4">
+              <h3 class="text-2xl font-bold text-black dark:text-white mb-4">
                   Appointment History
               </h3>
               <div class="overflow-x-auto">
                 <table class="table">
                   <!-- head -->
                   <thead>
-                    <tr>
+                    <tr class="font-bold text-black dark:text-white text-base sm:text-lg">
                       <th>Name</th>
                       <th>Service</th>
                       <th>Date </th>
                       <th>Time</th>
+                      <th>Status</th>
+                      <th>Action</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <!-- row 1 -->
-                    <tr class="hover">               
+                    <!-- kapag pending text-yellow-500 -->
+                    <tr class="text-base hover:bg-gray-300  dark:hover:bg-gray-600 font-medium text-black dark:text-white">               
                       <td>Cy Ganderton</td>
                       <td>Consultation</td>
                       <td>21/05/2024</td>
                       <td>12:00</td>
+                      <td class="font-bold text-yellow-500 dark:text-yellow-300 ">Pending</td> 
+
+                      <!-- ito yung modal. hindi maoopen yung mga sumunod na modal kapag yung "cancel_modal" name parehas, dapat magkaiba. ex: cancel_modal2..3..4..5 sa mga susunod. ikaw na bahala hackerman -->
+                      <td class="pl-9"> 
+                        <button onclick="cancel_modal.showModal()"><i class="fa-solid fa-pen-to-square"></i></button>
+                        <form action="#" method="POST">
+                          <dialog id="cancel_modal" class="modal">
+                          <div class="modal-box bg-gray-200 dark:bg-gray-700">
+                            <h3 class="font-bold text-xl text-black dark:text-white mb-2">Cancel Appointment?</h3>
+
+                            <p class="text-black dark:text-white">Are you sure you want to cancel your appointment?
+                              <br><span class="font-bold text-red-400"> This action is permanent and cannot be undone.</span> </p>
+                              <p class="py-4 text-black dark:text-white">Please enter your password to avoid accidentally cancelling your Appointment</p>
+
+                            <div class="form-group mb-4">
+                              
+                              <label for="dlt-password" class="block font-medium text-black dark:text-white">Confirm Password</label>
+                              <div class="relative">
+                                <input id="dlt-password" type="password" required autocomplete="off" placeholder="Enter your password" class="input input-bordered w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:outline-none sm:text-sm bg-white dark:bg-gray-600 text-black dark:text-white">
+                              </div>
+                            </div>
+                            <div class="flex justify-end space-x-2">
+                              <input type="submit" value="Submit" class="btn btn-error hover:bg-red-700 text-white font-bold border-none px-7">
+                              <button type="button" class="btn bg-white text-black hover:bg-gray-400 border-none" onclick="cancel_modal.close()">Cancel</button>
+                            </div>                 
+                          </div>
+                        </dialog>
+                        </form>
+                      </td>
                     </tr>
-                    <!-- row 2 -->
-                    <tr class="hover">
+                    <!-- kapag completed text-green-500 -->
+                    <tr class="text-base hover:bg-gray-300 dark:hover:bg-gray-600 font-medium text-black dark:text-white">
                       <td>Hart Hagerty</td>
                       <td>Test/Procedure</td>
                       <td>02/05/2024</td>
                       <td>09:00</td>
+                      <td class="font-bold text-green-500">Completed</td>
+                      <td class="pl-9"><a href="#"><i class="fa-solid fa-pen-to-square"></i></a></td>
                     </tr>
-                    <!-- row 3 -->
-                    <tr class="hover">
+                    <!-- kapag approved text-blue-500 -->
+                    <tr class="text-base hover:bg-gray-300 dark:hover:bg-gray-600 font-medium text-black dark:text-white">
                       <td>Brice Swyre</td>
                       <td>Consultation</td>
                       <td>14/05/2024</td>
                       <td>05:00</td>
+                      <td class="font-bold text-blue-500">Approved</td>
+                      <td class="pl-9"><a href="#"><i class="fa-solid fa-pen-to-square"></i></a></td>
+                    </tr>
+                    <!-- kapag cancelled text-red-500 -->
+                    <tr class="text-base hover:bg-gray-300 dark:hover:bg-gray-600 font-medium text-black dark:text-white">
+                      <td>John Edward Dionisio</td>
+                      <td>Test/Procedure</td>
+                      <td>04/15/2024</td>
+                      <td>03:00</td>
+                      <td class="font-bold text-red-500">Cancelled</td>
+                      <td class="pl-9"><a href="#"><i class="fa-solid fa-pen-to-square"></i></a></td>
                     </tr>
                   </tbody>
                 </table>
@@ -363,28 +429,4 @@
   </body>
 </html>
 
-<!-- delete button only -->
-<!-- <button class="btn btn-error text-white" onclick="my_modal_1.showModal()">Delete Account</button>
-
-                <dialog id="my_modal_1" class="modal">
-                <div class="modal-box bg-gray-200 dark:bg-gray-700">
-                  <h3 class="font-bold text-lg text-black dark:text-white"><i class="fa-solid fa-triangle-exclamation text-red-500"></i>  Delete Account</h3>
-
-                  <p class="py-4 text-black dark:text-white">Are you sure you want to delete your account?
-                    <br><span class="font-bold text-red-400"> This action is permanent and cannot be undone.</span> </p>
-
-                  <div class="form-group mb-4">
-                    <label for="confirm-password" class="block font-medium text-black dark:text-white">Confirm Password</label>
-                    <div class="relative">
-                      <input id="dlt-confirmpass" type="password" required autocomplete="off" placeholder="Enter your password" class="input input-bordered w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:outline-none sm:text-sm bg-white dark:bg-gray-600 text-black dark:text-white">
-                      <button type="button" class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5" onclick="togglePasswordVisibility('confirm-password', 'confirm-password-icon')">
-                        <span id="confirm-password-icon" class="fas fa-eye"></span>
-                      </button>
-                    </div>
-                  </div>
-                  <div class="flex justify-end space-x-2">
-                    <button class="btn btn-error hover:bg-red-700 text-white font-bold border-none px-7" type="submit">Delete Account</button>
-                    <button type="button" class="btn bg-white text-black hover:bg-gray-400 border-none" onclick="my_modal_1.close()">Cancel</button>
-                  </div>
-                </div>
-              </dialog> -->
+              

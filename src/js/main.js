@@ -118,20 +118,26 @@ function setTheme(theme) {
   }
 }
 
-// for appointment date and time and date of birth only
+// for appointment date and time
 document.addEventListener('DOMContentLoaded', function () {
-  var input = document.getElementById('appointment-time');
-  if (input) {
-    // Check if the element exists
-    var now = new Date();
-    var localDateTime = new Date(
-      now.getTime() - now.getTimezoneOffset() * 60000,
-    )
-      .toISOString()
-      .slice(0, 16);
-    input.min = localDateTime;
+  var inputDate = document.getElementById('appointment-date');
+  if (inputDate) {
+    var today = new Date();
+    var todayDate = today.toISOString().slice(0, 10);
+    inputDate.min = todayDate;
   }
 
+  var inputTime = document.getElementById('appointment-time');
+  if (inputTime) {
+    adjustTimeAvailability();
+    inputDate.addEventListener('change', adjustTimeAvailability); // Adjust time options when date changes
+  }
+
+  // do not change this
+});
+
+// for date of birth only
+document.addEventListener('DOMContentLoaded', function () {
   var inputDob = document.getElementById('dob');
   if (inputDob) {
     // Check if the element exists

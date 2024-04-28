@@ -339,5 +339,17 @@
         </div>
       </div>
     </section>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        var inputDob = document.getElementById('dob');
+        if (inputDob) {
+          // Check if the element exists
+          var today = new Date();
+          var maxDate = today.toISOString().split('T')[0]; // format yyyy-mm-dd
+          inputDob.max = maxDate;
+        }
+      });
+    </script>
   </body>
 </html>
