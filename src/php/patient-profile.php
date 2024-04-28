@@ -39,7 +39,7 @@
     <?php include 'navbar-main.php'; ?>
 
     <div class="flex flex-col sm:flex-row justify-center items-center">
-    <div class="bg-white dark:bg-gray-800 p-5 w-full min-h-screen pt-10 sm:pt-20">
+    <div class="bg-white dark:bg-[#17222a] p-5 w-full min-h-screen pt-10 sm:pt-20">
         <!-- Responsive Sidebar for profile settings -->
         <div class="flex flex-col sm:flex-row">
         <div class="w-full sm:w-80 p-5 border-b sm:border-b-0 sm:border-r mt-10">
@@ -316,6 +316,42 @@
               <h3 class="text-xl font-bold text-black dark:text-white mb-4">
                   Appointment History
               </h3>
+              <div class="overflow-x-auto">
+                <table class="table">
+                  <!-- head -->
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Service</th>
+                      <th>Date </th>
+                      <th>Time</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- row 1 -->
+                    <tr class="hover">               
+                      <td>Cy Ganderton</td>
+                      <td>Consultation</td>
+                      <td>21/05/2024</td>
+                      <td>12:00</td>
+                    </tr>
+                    <!-- row 2 -->
+                    <tr class="hover">
+                      <td>Hart Hagerty</td>
+                      <td>Test/Procedure</td>
+                      <td>02/05/2024</td>
+                      <td>09:00</td>
+                    </tr>
+                    <!-- row 3 -->
+                    <tr class="hover">
+                      <td>Brice Swyre</td>
+                      <td>Consultation</td>
+                      <td>14/05/2024</td>
+                      <td>05:00</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
 
           </div>
         </div>

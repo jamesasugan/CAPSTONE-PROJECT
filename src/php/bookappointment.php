@@ -45,12 +45,12 @@
       bg-white dark:bg-[#17222a]"
     >
       <div
-        class="book-form w-full max-w-7xl mx-auto p-4 rounded-lg shadow-lg bg-[#ebf0f4] dark:bg-[#0b1014] text-[#0e1011] dark:text-[#eef0f1]"
+        class="book-form w-full max-w-7xl mx-auto p-4 rounded-lg shadow-lg bg-gray-200 dark:bg-gray-700 text-[#0e1011] dark:text-[#eef0f1]"
       >
         <h2 class="text-2xl font-bold mb-2">Set an Appointment</h2>
         <p class="mb-4">
           Kindly answer the form to set a face-to-face appointment for
-          consultation, test, or procedure in our clinic. <br>View <a href="doctorschedule.php" target="_blank" class="link text-blue-700 font-bold">Doctor's Schedule</a> for more information about the schedules.
+          consultation, test, or procedure in our clinic. <br>View <a href="doctorschedule.php" target="_blank" class="link text-blue-400 font-bold">Doctor's Schedule</a> for more information about the schedules.
         </p>
         <p><span>Note:</span> The selection of Doctor will depend if the selected doctor is available on the set appointment date and time</p>
 
@@ -120,23 +120,36 @@
             </select>
         </div>
 
-          <div class="w-full md:w-auto md:col-span-1">
-            <label for="appointment-time" class="block text-base sm:text-lg font-medium">
-              Appointment Date and Time
-            </label>
-            <input
-              type="datetime-local"
-              id="appointment-time"
-              name="appointment-time"
-              required
-              class="input input-bordered w-full p-2 bg-gray-200 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark]"
-            />
-          </div>
+        <div class="w-full md:w-auto md:col-span-1">
+          <label for="appointment-date" class="block text-base sm:text-lg font-medium">
+            Appointment Date
+          </label>
+          <input
+            type="date"
+            id="appointment-date"
+            name="appointment-date"
+            required
+            class="input input-bordered w-full p-2 bg-gray-200 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark]"
+          />
+        </div>
+        <div class="w-full md:w-auto md:col-span-1">
+          <label for="appointment-time" class="block text-base sm:text-lg font-medium">
+            Appointment Time
+          </label>
+          <input
+            type="time"
+            id="appointment-time"
+            name="appointment-time"
+            required
+            class="input input-bordered w-full p-2 bg-gray-200 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark]"
+          />
+        </div>
 
-          <!-- Dapat kung anong pinili sa service, automatic maffilter out yung mga di sakop ng doctor na yon -->
+
+          <!-- Dapat kung anong pinili sa service, automatic yun na yung doctor na kung sino man sa service na yon -->
           <div class="w-full md:w-auto md:col-span-1">
             <label for="doctor" class="block text-base sm:text-lg font-medium">
-              Choose Doctor
+              Your Doctor will be:
             </label>
             <select
               id="doctor"
@@ -337,7 +350,6 @@
                 <span>Appointment has been booked! Please wait for confirmation message.</span>
             </div>
         </div>
-
 
       </div>
     </section>

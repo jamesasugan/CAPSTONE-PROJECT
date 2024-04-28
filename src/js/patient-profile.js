@@ -90,10 +90,12 @@ function resetVisibility(inputId, iconId) {
 function validatePasswords() {
   const passwordInput = document.getElementById('password');
   const confirmPasswordInput = document.getElementById('confirm-password');
-  const passwordsMatch = confirmPasswordInput.value === passwordInput.value;
-  confirmPasswordInput.style.borderColor = passwordsMatch ? 'green' : 'red';
-  const submitButton = document.getElementById('updateSecurityBtn');
-  submitButton.disabled = !passwordsMatch || passwordInput.value === '';
+  if (!passwordInput.disabled) {
+    const passwordsMatch = confirmPasswordInput.value === passwordInput.value;
+    confirmPasswordInput.style.borderColor = passwordsMatch ? 'green' : 'red';
+    const submitButton = document.getElementById('updateSecurityBtn');
+    submitButton.disabled = !passwordsMatch || passwordInput.value === '';
+  }
 }
 
 function resetUI() {
@@ -181,12 +183,14 @@ document
     document.getElementById('personalInfo').classList.remove('hidden');
     document.getElementById('passwordSection').classList.add('hidden');
     document.getElementById('appointmentHistory').classList.add('hidden');
+    resetSecurityEditState(); // Reset the password tab when leaving it
   });
 
 document.getElementById('passwordTab').addEventListener('click', function () {
   document.getElementById('personalInfo').classList.add('hidden');
   document.getElementById('passwordSection').classList.remove('hidden');
   document.getElementById('appointmentHistory').classList.add('hidden');
+  resetPersonalInfoEditState(); // Reset the personal info tab when leaving it
 });
 
 document
@@ -195,6 +199,8 @@ document
     document.getElementById('personalInfo').classList.add('hidden');
     document.getElementById('passwordSection').classList.add('hidden');
     document.getElementById('appointmentHistory').classList.remove('hidden');
+    resetPersonalInfoEditState(); // Reset the personal info tab when leaving it
+    resetSecurityEditState(); // Also reset the password tab when leaving it
   });
 
 // for active links sidebar
@@ -216,7 +222,7 @@ document.addEventListener('DOMContentLoaded', function () {
   document.getElementById('personalInfoTab').click();
 });
 
-// for patient-profile
+// for patient-profile information
 let editing = false;
 
 document.getElementById('editButton').addEventListener('click', () => {
@@ -225,11 +231,13 @@ document.getElementById('editButton').addEventListener('click', () => {
 
 function toggleEdit(enable) {
   editing = enable;
+  const form = document.getElementById('personal-info');
   document
     .querySelectorAll('#personal-info input, #personal-info select')
     .forEach((input) => {
       input.disabled = !enable;
     });
+
   if (enable) {
     document.getElementById('editButton').classList.add('hidden');
     document.getElementById('updateButton').classList.remove('hidden');
@@ -238,5 +246,30 @@ function toggleEdit(enable) {
     document.getElementById('editButton').classList.remove('hidden');
     document.getElementById('updateButton').classList.add('hidden');
     document.getElementById('cancelButton').classList.add('hidden');
+    form.reset();
   }
+}
+
+// for resetting when other link is clicked
+function resetPersonalInfoEditState() {
+  editing = false;
+  document.getElementById('editButton').classList.remove('hidden');
+  document.getElementById('updateButton').classList.add('hidden');
+  document.getElementById('cancelButton').classList.add('hidden');
+  document
+    .querySelectorAll('#personal-info input, #personal-info select')
+    .forEach((input) => {
+      input.disabled = true;
+    });
+  document.getElementById('personal-info').reset();
+}
+
+function resetSecurityEditState() {
+  document.getElementById('editSecurityBtn').classList.remove('hidden');
+  document.getElementById('updateSecurityBtn').classList.add('hidden');
+  document.getElementById('cancelSecurityBtn').classList.add('hidden');
+  document.getElementById('password').disabled = true;
+  document.getElementById('confirm-password').disabled = true;
+  document.querySelector('.requirement-list').classList.add('hidden');
+  resetForm();
 }

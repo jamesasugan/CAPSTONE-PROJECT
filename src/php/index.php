@@ -27,7 +27,7 @@
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script src="../js/main.js" defer></script>
   </head>
-  <body class=" bg-[#ebf0f4] dark:bg-[#0b1014] text-[#0e1011] dark:text-[#eef0f1]">
+  <body class=" bg-[#ebf0f4] dark:bg-[#17222a] text-[#0e1011] dark:text-[#eef0f1]">
        
   <!-- max-w-screen-xl pinakaimportant -->
 

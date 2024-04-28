@@ -108,7 +108,7 @@ iframe {
 
 .requirement-list li {
   list-style-type: none;
-  color: red;
+  color: rgb(197, 37, 37);
 }
 
 .requirement-list li.valid,
