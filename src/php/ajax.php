@@ -102,7 +102,7 @@ if ($action == 'getDoctorSched'){
             $date = $row['Date'];
             $department = $row['Specialty'];
             $doctor = "Dr. " . $row['DoctorLastName'];
-            $times = $row['StartTime'] . " to " . $row['EndTime'];
+            $times = date('h:i A', strtotime($row['StartTime'])) . " to " . date('h:i A', strtotime($row['EndTime']));
 
             $schedule_item = array(
                 'department' => $department,
