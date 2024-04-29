@@ -1,3 +1,10 @@
+<?php
+session_start();
+if (isset($_SESSION['user_type'])){
+    header("Location: index.php");
+}
+?>
+
 <!doctype html>
 <html lang="en">
   <head>
@@ -6,6 +13,7 @@
     <title>Sign Up</title>
     <link rel="stylesheet" href="../css/output.css" />
     <link rel="stylesheet" href="../css/style.css" />
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script
       src="https://kit.fontawesome.com/70df29d299.js"
       crossorigin="anonymous"
@@ -36,7 +44,7 @@
         <!-- Minimum width added -->
         <div class="mx-auto w-full max-w-xl px-6 lg:px-8 mt-5">
           <div class="logo-signin">
-            <a href="login.html">
+            <a href="login.php">
               <img
                 class="mx-auto"
                 src="../images/HCMC-blue.png"
@@ -44,13 +52,12 @@
               />
             </a>
           </div>
-
           <h2 class="mt-3 text-center text-3xl font-extrabold text-gray-900">
             Sign Up
           </h2>
           <div class="mt-4">
             <div class="form-box mb-5 py-4 px-4 sm:rounded-lg sm:px-10">
-              <form class="space-y-6" action="#" method="GET">
+              <form id="signUp" class="space-y-6"  >
                 <!-- First Name & Middle Initial -->
                 <div class="grid grid-cols-2 gap-4">
                   <div class="login-form">
@@ -62,7 +69,7 @@
                     </label>
                     <input
                       id="first-name"
-                      name="first-name"
+                      name="first_name"
                       type="text"
                       autocomplete="off"
                       required
@@ -80,7 +87,7 @@
                     </label>
                     <input
                       id="middle-name"
-                      name="middle-name"
+                      name="middle_name"
                       type="text"
                       autocomplete="off"
                       required
@@ -98,7 +105,7 @@
                     </label>
                     <input
                       id="last-name"
-                      name="last-name"
+                      name="last_name"
                       type="text"
                       autocomplete="off"
                       required
@@ -116,7 +123,7 @@
                     </label>
                     <input
                       id="contact-number"
-                      name="contact-number"
+                      name="contact_number"
                       type="tel"
                       required
                       autocomplete="off"
@@ -205,6 +212,7 @@
                         id="password"
                         type="password"
                         required
+                        name="password"
                         autocomplete="off"
                         placeholder="Password"
                         class="input input-bordered appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:outline-none sm:text-sm bg-white text-black"
@@ -229,6 +237,7 @@
                       <input
                         id="confirm-password"
                         type="password"
+                        name="conf_password"
                         required
                         autocomplete="off"
                         placeholder="Confirm Password"
@@ -276,7 +285,7 @@
               </form>
               <p class="text-center text-black">
                 Already have an Account?
-                <a href="login.html" class="underline text-blue-700 font-bold"
+                <a href="login.php" class="underline text-blue-700 font-bold"
                   >Sign In.</a
                 >
               </p>
@@ -284,8 +293,8 @@
           </div>
 
           <!-- eto notif pag nacreate account  -->
-          <div class="alertnotif pb-10">
-            <div role="alert" class="alert alert-success mt-2">
+          <div id="notif" class=" pb-10 hidden">
+            <div id="alert" role="alert" class="alert  mt-2">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 class="stroke-current shrink-0 h-6 w-6"
@@ -299,7 +308,7 @@
                   d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
                 />
               </svg>
-              <span class="text-center">Account Created!</span>
+              <span class="text-center" id='alert_text'></span>
             </div>
           </div>
           <!-- eto notif pag nacreate account  -->
@@ -341,6 +350,58 @@
     </section>
 
     <script>
+      function toggle_signUp_notif(notification_type){
+        let notification = document.getElementById('notif');
+        let notif_type = document.getElementById('alert');
+        let notif_text = document.getElementById('alert_text');
+        if (notification_type === 1){
+          notif_type.classList.add('alert-success');
+          notif_text.innerHTML = 'Account Created'
+        }
+        if (notification_type === 2 || notification_type === 3 || notification_type === 4){
+          notif_type.classList.add('alert-error');
+          if (notification_type === 2){
+            notif_text.innerHTML = 'Please Fill up the form';
+          }else if (notification_type === 3){
+            notif_text.innerHTML = 'Password do not match';
+          }else{
+            notif_text.innerHTML = 'Email already existing';
+          }
+
+        }
+        if (notification.classList.contains('hidden')) {
+          notification.classList.remove('hidden');
+        } else {
+          notification.classList.add('hidden');
+        }
+      }
+
+      document.getElementById('signUp').addEventListener('submit', function(e){
+        e.preventDefault();
+
+        let form_data = new FormData(e.target)
+        $.ajax({
+          url: 'ajax.php?action=signup&type=patient',
+          type: 'POST',
+          data: form_data,
+          processData: false,
+          contentType: false,
+          success: function(response) {
+            if (response == 1) {
+              toggle_signUp_notif(parseInt(response));
+            } else {
+              toggle_signUp_notif(parseInt(response));
+            }
+            console.log(response);
+            e.target.reset();
+          },
+        })
+
+
+      })
+
+
+
       document.addEventListener('DOMContentLoaded', function () {
         var inputDob = document.getElementById('dob');
         if (inputDob) {

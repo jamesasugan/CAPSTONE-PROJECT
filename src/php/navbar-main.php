@@ -183,16 +183,17 @@
                             </svg>
                           </label>
                         </li>
-
+                        <?php if (!isset($_SESSION['user_id'])):?>
                         <!-- labas mo to pag di naka log in -->
                         <li>
-                          <a href="login.html"
+                          <a href="login.php"
                             class="hover:bg-gray-300 dark:hover:bg-gray-600 hover:font-bold text-lg transition duration-300 ease-in-out"
                             >Log In</a
                           >
                         </li>    
-                        <!-- labas mo to pag di naka log in end --> 
-                        
+                        <!-- labas mo to pag di naka log in end -->
+                        <?php
+                        else:?>
                         <!-- ito nakalabas pag naka log in -->
                         <li>
                           <a href="patient-profile.php"
@@ -201,13 +202,14 @@
                           >
                         </li>
                         <li>
-                          <a
+                          <a href='logout.php'
                             class="hover:bg-gray-300 dark:hover:bg-gray-600 hover:font-bold text-lg transition duration-300 ease-in-out"
                             >Log Out</a
                           >
                         </li>  
                         <!-- ito nakalabas pag naka log in end -->   
-
+                      <?php
+                      endif;?>
                       </ul>
                     </details>
                   </li>

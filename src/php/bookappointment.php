@@ -6,6 +6,7 @@
     <title>Book Appointment</title>
     <link rel="stylesheet" href="../css/output.css" />
     <link rel="stylesheet" href="../css/style.css" />
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script
       src="https://kit.fontawesome.com/70df29d299.js"
       crossorigin="anonymous"
@@ -95,9 +96,7 @@
               class="select select-bordered w-full bg-gray-300 dark:bg-gray-600 text-base sm:text-lg lg:text-xl focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
               name="service-type"
           >
-              <option value="" disabled <?php echo is_null($selectedService)
-                  ? 'selected'
-                  : ''; ?>>Select service type...</option>
+              <option value="" disabled <?php echo is_null($selectedService) ? 'selected' : ''; ?>>Select service type...</option>
               <?php
               $services = [
                   'OB-Gyne',

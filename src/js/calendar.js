@@ -18,8 +18,12 @@ document.addEventListener('DOMContentLoaded', function () {
     'December',
   ];
 
-  // dito schedules. ikaw na bahala sa names, surname lang ata dapat tas yung dr. depende kung anong level nila, baka mamaw na yung iba kaya di na doctor tawag eh kaya dapat maiiba mo
-  const schedules = {
+  // dito schedules. ikaw na bahala sa names, surname lang ata dapat tas yung dr. depende kung anong level nila, baka mamaw na yung iba kaya di
+  // na doctor tawag eh kaya dapat maiiba mo
+
+
+  /*
+  let schedules = {
     '2024-04-27': [
       { department: 'Pediatrics', doctor: 'Dr. Smith', times: '10 AM to 3 PM' },
       { department: 'X-ray', doctor: 'Dr. Asugan', times: '8 AM to 1 PM' },
@@ -34,6 +38,9 @@ document.addEventListener('DOMContentLoaded', function () {
       { department: 'X-ray', doctor: 'Dr. Asugan', times: '8 AM to 1 PM' },
     ],
   };
+
+   */
+  let schedules = getDoctorSchedule();
 
   function updateMonthYearDisplay() {
     const monthYearEl = document.getElementById('currentMonth');
@@ -141,3 +148,25 @@ document.addEventListener('DOMContentLoaded', function () {
 
   renderMonth();
 });
+
+
+function getDoctorSchedule() {
+  let schedule;
+  $.ajax({
+    url: 'ajax.php?action=getDoctorSched',
+    method: 'GET',
+    dataType: 'json',
+    async: false, // Set async to false to ensure the function waits for the response
+    success: function(response) {
+      schedule = response;
+    },
+    error: function(xhr, status, error) {
+      console.error('Error fetching schedule:', error);
+    }
+  });
+  return schedule;
+}
+
+
+
+

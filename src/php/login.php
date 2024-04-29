@@ -1,3 +1,10 @@
+<?php
+session_start();
+if (isset($_SESSION['user_type'])){
+  header("Location: index.php");
+}
+?>
+
 <!doctype html>
 <html lang="en">
   <head>
@@ -6,6 +13,7 @@
     <title>Log In</title>
     <link rel="stylesheet" href="../css/output.css" />
     <link rel="stylesheet" href="../css/style.css" />
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script
       src="https://kit.fontawesome.com/70df29d299.js"
       crossorigin="anonymous"
@@ -48,7 +56,7 @@
           </h2>
           <div class="mt-8">
             <div class="form-box py-8 px-4 sm:rounded-lg sm:px-10">
-              <form class="space-y-6" action="#" method="POST">
+              <form id='login_form' class="space-y-6" >
                 <div class="login-form">
                   <label
                     for="email"
@@ -112,7 +120,7 @@
               <p class="text-center text-sm text-black">
                 Don't have an account yet?<br />
                 <a
-                  href="signup.html"
+                  href='signup.php'
                   class="font-semibold leading-6 underline text-blue-700"
                   >Create account.</a
                 >
@@ -156,4 +164,30 @@
       </div>
     </section>
   </body>
+  <script>
+    document.getElementById('login_form').addEventListener('submit', function(e){
+      e.preventDefault();
+      let form_data = new FormData(e.target)
+      $.ajax({
+        url: 'ajax.php?action=login',
+        type: 'POST',
+        data: form_data,
+        processData: false,
+        contentType: false,
+        success: function(response) {
+          console.log(response);
+          if (response === '1') {
+            window.location.href = 'index.php'; // Redirect to index.php
+          } else if (response === '2') {
+            alert('Invalid password');
+          } else if (response === '3') {
+            alert('Invalid email');
+          } else {
+            alert('Unknown error occurred');
+          }
+          e.target.reset();
+        },
+      });
+    });
+  </script>
 </html>

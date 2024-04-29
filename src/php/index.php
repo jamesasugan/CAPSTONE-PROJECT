@@ -1,3 +1,10 @@
+<?php
+session_start();
+include_once '../Database/database_conn.php';
+
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -34,10 +41,13 @@
 
     <!-- navigation bar -->
     <?php include 'navbar-main.php'; ?>
-    
+    <?php
+    if (isset($_SESSION['user_type']) and $_SESSION['user_type'] == 'Patient'):
+    ?>
     <!-- patient welcome page pag may account lang -->
-    <?php include '../html/patient-dashboard.html'; ?>
-    
+    <?php include 'patient-dashboard.php'; ?>
+
+    <?php endif;?>
     <!-- welcome page pag walang account -->
     <?php include '../html/landpage-swiper.html'; ?>
 
