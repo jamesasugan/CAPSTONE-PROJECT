@@ -42,7 +42,7 @@ include_once '../Database/database_conn.php';
     <!-- navigation bar -->
     <?php include 'navbar-main.php'; ?>
     <?php
-    if (isset($_SESSION['user_type']) and $_SESSION['user_type'] == 'Patient'):
+    if (isset($_SESSION['user_type']) and $_SESSION['user_type'] == 'patient'):
     ?>
     <!-- patient welcome page pag may account lang -->
     <?php include 'patient-dashboard.php'; ?>
