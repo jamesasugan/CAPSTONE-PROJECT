@@ -126,7 +126,7 @@ if (isset($_SESSION['user_type'])) {
                 >
               </p>
 
-              <div class="flex justify-center mt-1">
+              <div id='login_alert' class="flex justify-center mt-1 hidden">
                 <div role="alert" class="inline-flex items-center bg-red-500 border border-red-400 text-black px-4 py-3 rounded relative">
                     <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -135,14 +135,7 @@ if (isset($_SESSION['user_type'])) {
                 </div>
               </div>
 
-              <div class="flex justify-center mt-1">
-                <div role="alert" class="inline-flex items-center bg-red-500 border border-red-400 text-black px-4 py-3 rounded relative">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <span>Invalid Email</span>
-                </div>
-              </div>
+
 
 
             </div>
@@ -185,6 +178,26 @@ if (isset($_SESSION['user_type'])) {
     </section>
   </body>
   <script>
+    function toggleAlert(response) {
+      // Select the alert container
+      const alertContainer = document.getElementById('login_alert');
+
+      // Select the alert message element
+      const alertMessage = alertContainer.querySelector('span');
+
+      // Remove the 'hidden' class from the alert container
+      alertContainer.classList.remove('hidden');
+
+      // Depending on the response, update the alert message
+      if (response === 2) {
+        // Set the alert message for incorrect password
+        alertMessage.textContent = 'Incorrect Password';
+      } else if (response === 3) {
+        // Set the alert message for invalid email
+        alertMessage.textContent = 'Invalid Email';
+      }
+    }
+
     document.getElementById('login_form').addEventListener('submit', function(e){
       e.preventDefault();
       let form_data = new FormData(e.target)
@@ -199,9 +212,9 @@ if (isset($_SESSION['user_type'])) {
           if (response === '1') {
             window.location.href = 'index.php'; // Redirect to index.php
           } else if (response === '2') {
-            alert('Invalid password');
+            toggleAlert(parseInt(response));
           } else if (response === '3') {
-            alert('Invalid email');
+            toggleAlert(parseInt(response));
           } else {
             alert('Unknown error occurred');
           }

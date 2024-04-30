@@ -1,7 +1,7 @@
 <?php
 $first_name = '';
 $last_name = '';
-if (isset($_SESSION['user_type']) && $_SESSION['user_type'] == 'Patient'){
+if (isset($_SESSION['user_type']) && $_SESSION['user_type'] == 'patient'){
     $sql = "SELECT * FROM account_user_info WHERE User_id = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("i", $_SESSION['user_id']);
@@ -21,7 +21,7 @@ if (isset($_SESSION['user_type']) && $_SESSION['user_type'] == 'Patient'){
   <div class="title mb-0 sm:mb-10 w-full px-4">
     <h1 class="text-3xl sm:text-6xl font-bold text-center break-words mb-5">
       Welcome,
-      <span><?php echo isset($_SESSION['user_type']) && $_SESSION['user_type'] == 'Patient' ? $first_name.' '. $last_name : '' ?>. </span>
+      <span><?php echo isset($_SESSION['user_type']) && $_SESSION['user_type'] == 'patient' ? $first_name.' '. $last_name : '' ?>. </span>
     </h1>
   </div>
 
