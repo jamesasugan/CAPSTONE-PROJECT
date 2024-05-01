@@ -149,16 +149,15 @@ iframe {
   }
 }
 
-/*  
-@media (min-width: 1024px) {
+@media (max-width: 1024px) {
   .custom-dropdown-menu {
     right: 0;
-    transform: translateX(
-      10%
-    ); 
+    transform: translateX(10%);
+  }
+  .nav-text a {
+    font-size: 1.8vw;
   }
 }
-*/
 
 @media (max-width: 769px) {
   .custom-dropdown-menu {
@@ -169,10 +168,7 @@ iframe {
     height: 100vh;
   }
   .nav-text a {
-    font-size: 1.5vw;
-  }
-  .profile-dropdown {
-    margin-left: 6vw;
+    font-size: 1.3vw;
   }
   .dashboard-page {
     height: 105vh;

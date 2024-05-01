@@ -46,56 +46,53 @@
               </button>
             </div>
 
-            <div
-              class="flex-1 flex items-center justify-center sm:items-stretch content-center"
-            >
-            <div class="logo-main flex-shrink-0">
-              <a href="index.php?page=#landpage-swiper">
+            <div class="logo-main flex justify-center lg:justify-start w-full sm:w-auto">
+              <a href="#">
                 <!-- Light mode logo (Shown in light mode, hidden in dark mode) -->
                 <img
-                  class="ml-0 sm:ml-12 block h-10 lg:h-16 w-auto dark:hidden"
+                  class="block mx-auto h-10 lg:h-16 w-auto dark:hidden"
                   src="../images/HCMC-blue.png"
                   alt="logo"
                 />
                 <!-- Dark mode logo (Hidden in light mode, shown in dark mode) -->
                 <img
-                  class="ml-0 sm:ml-12 h-10 lg:h-16 w-auto dark-img hidden dark:block"
+                  class="mx-auto h-10 lg:h-16 w-auto dark-img hidden dark:block"
                   src="../images/HCMC-white.png"  
                   alt="logo"
                 />
               </a>
-          </div>
+            </div>
+
+            
+
+            <div
+              class="flex-1 flex items-center justify-center sm:items-stretch content-center"
+            >      
 
               <div
                 class="hidden sm:block sm:ml-6 text-neutral dark:text-gray-100 content-center"
               >
                 <div class="nav-text flex justify-center flex-grow">
                   <div
-                    class="flex space-x-4 uppercase font-bold text-xs md:text-xs lg:text-lg"
+                    class="flex space-x-4 uppercase font-bold text-lg"
                   >
                     <a
-                      href="bookappointment.php"
+                      href="#"
                       class="hover:bg-gray-300 dark:hover:bg-gray-700 dark:hover:text-white px-3 py-2 rounded-md transition duration-300 ease-in-out"
                     >
-                      Book appointment
+                      Patient Records
                     </a>
                     <a
-                      href="doctorschedule.php"
+                      href="#"
                       class="hover:bg-gray-300 dark:hover:bg-gray-700 dark:hover:text-white px-3 py-2 rounded-md transition duration-300 ease-in-out"
                     >
-                      Doctor's Schedule
+                      Schedule
                     </a>
                     <a
-                      href="index.php?page=#services"
+                      href="#"
                       class="hover:bg-gray-300 dark:hover:bg-gray-700 dark:hover:text-white px-3 py-2 rounded-md transition duration-300 ease-in-out"
                     >
-                      Our Services
-                    </a>
-                    <a
-                      href="index.php?page=#about-us"
-                      class="hover:bg-gray-300 dark:hover:bg-gray-700 dark:hover:text-white px-3 py-2 rounded-md transition duration-300 ease-in-out"
-                    >
-                      About Us
+                      Appointment
                     </a>
                   </div>
                 </div>
@@ -183,31 +180,30 @@
                             </svg>
                           </label>
                         </li>
-                        <?php if (!isset($_SESSION['user_id'])): ?>
                         <!-- labas mo to pag di naka log in -->
                         <li>
-                          <a href="login.php"
+                          <a href="#"
                             class="hover:bg-gray-300 dark:hover:bg-gray-600 hover:font-bold text-lg transition duration-300 ease-in-out"
                             >Log In</a
                           >
                         </li>    
                         <!-- labas mo to pag di naka log in end -->
-                        <?php else: ?>
+
                         <!-- ito nakalabas pag naka log in -->
                         <li>
-                          <a href="patient-profile.php"
+                          <a href="#"
                             class="hover:bg-gray-300 dark:hover:bg-gray-600 hover:font-bold text-lg transition duration-300 ease-in-out"
                             >Profile</a
                           >
                         </li>
                         <li>
-                          <a href='logout.php'
+                          <a href='#'
                             class="hover:bg-gray-300 dark:hover:bg-gray-600 hover:font-bold text-lg transition duration-300 ease-in-out"
                             >Log Out</a
                           >
                         </li>  
                         <!-- ito nakalabas pag naka log in end -->   
-                      <?php endif; ?>
+
                       </ul>
                     </details>
                   </li>
@@ -232,22 +228,17 @@
             <a
               href="bookappointment.php"
               class="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-700 hover:text-white border-b border-slate-800 dark:border-slate-300"
-              >Book Appointment</a
+              >Patient Records</a
             >
             <a
               href="doctorschedule.php"
               class="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-700 hover:text-white border-b border-slate-800 dark:border-slate-300"
-              >Doctor's Schedule</a
+              >Schedule</a
             >
             <a
               href="index.php?page=#services"
               class="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-700 hover:text-white border-b border-slate-800 dark:border-slate-300"
-              >Our Services</a
-            >
-            <a
-              href="index.php?page=#about-us"
-              class="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-700 hover:text-white border-b border-slate-800 dark:border-slate-300"
-              >About Us</a
+              >Appointment</a
             >
           </div>
         </div>
