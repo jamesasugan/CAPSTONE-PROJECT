@@ -53,7 +53,7 @@
       <div class="flex-grow">
         <div class="card-body">
           <div class="icon flex justify-center">
-            <i class="fa-solid fa-plus text-8xl"></i>
+            <i class="fa-solid fa-hospital-user text-8xl"></i>
           </div>
         </div>
       </div>

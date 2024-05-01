@@ -96,7 +96,9 @@
               class="select select-bordered w-full bg-gray-300 dark:bg-gray-600 text-base sm:text-lg lg:text-xl focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
               name="service-type"
           >
-              <option value="" disabled <?php echo is_null($selectedService) ? 'selected' : ''; ?>>Select service type...</option>
+              <option value="" disabled <?php echo is_null($selectedService)
+                  ? 'selected'
+                  : ''; ?>>Select service type...</option>
               <?php
               $services = [
                   'OB-Gyne',
@@ -122,6 +124,8 @@
                   'Uric Acid',
                   'Blood Typing',
                   'Electrolytes',
+                  'Syphilis Screening',
+                  'Pregnant Screening',
                   'FT4/TSH',
               ];
               foreach ($services as $service) {
