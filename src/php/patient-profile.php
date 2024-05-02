@@ -205,7 +205,7 @@
                     />
                   </div>
                   <!-- Email -->
-                  <div class="form-group col-span-1 sm:col-span-">
+                  <div class="form-group col-span-1 sm:col-span-1">
                     <label
                       for="email"
                       class="block font-medium text-black dark:text-white text-base sm:text-lg overflow-hidden whitespace-nowrap text-overflow-ellipsis"
@@ -376,7 +376,8 @@
                               
                               <label for="dlt-password" class="block font-medium text-black dark:text-white">Confirm Password</label>
                               <div class="relative">
-                                <input id="dlt-password" type="password" required autocomplete="off" placeholder="Enter your password" class="input input-bordered w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:outline-none sm:text-sm bg-white dark:bg-gray-600 text-black dark:text-white">
+                                <input id="dlt-password" type="password" required autocomplete="off" placeholder="Enter your password" 
+                                class="input input-bordered w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:outline-none sm:text-sm bg-white dark:bg-gray-600 text-black dark:text-white">
                               </div>
                             </div>
                             <div class="flex justify-end space-x-2">

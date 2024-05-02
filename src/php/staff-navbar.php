@@ -77,7 +77,7 @@
                     class="flex space-x-4 uppercase font-bold text-lg"
                   >
                     <a
-                      href="#"
+                      href="staff-patientsRecord.php"
                       class="hover:bg-gray-300 dark:hover:bg-gray-700 dark:hover:text-white px-3 py-2 rounded-md transition duration-300 ease-in-out"
                     >
                       Patient Records
@@ -226,17 +226,17 @@
             class="px-2 pt-2 pb-3 space-y-1 text-neutral dark:text-gray-200 uppercase"
           >
             <a
-              href="bookappointment.php"
+              href="staff-patientsRecord.php"
               class="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-700 hover:text-white border-b border-slate-800 dark:border-slate-300"
               >Patient Records</a
             >
             <a
-              href="doctorschedule.php"
+              href="#"
               class="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-700 hover:text-white border-b border-slate-800 dark:border-slate-300"
               >Schedule</a
             >
             <a
-              href="index.php?page=#services"
+              href="#"
               class="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-700 hover:text-white border-b border-slate-800 dark:border-slate-300"
               >Appointment</a
             >

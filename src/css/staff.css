@@ -16,6 +16,27 @@ body {
   padding: 0;
 }
 
+/*
+wag muna
+@media print {
+  #patient-content {
+    display: none;
+    overflow: hidden;
+  }
+  input {
+    border: none;
+    margin: 0;
+    padding: 0;
+    width: 0;
+  }
+  #patient-content button {
+    display: none;
+  }
+  #patient-content {
+    display: block;
+  }
+} */
+
 .swiper {
   width: 100%;
   height: 100%;
