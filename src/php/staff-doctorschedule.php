@@ -153,16 +153,99 @@
                                     <p>Selecting "No" means the schedule is set only for the selected week.<br>To continue the same schedule into subsequent weeks, you will need to manually set it again for each week.</p>
                                 </div>
                             </div>
+                            
                             <div class="flex justify-end space-x-2">
                                 <button id="editSchedule" type="button" class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none px-7">
-                                    Edit
+                                    Edit Schedule
                                 </button>
                                 <input id="updateSchedule" type="submit" value="Update" class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none hidden">
                                 <button id="cancelSchedule" type="button" class="btn bg-white text-black hover:bg-gray-400 border-none hidden">
                                     Cancel
                                 </button>
                             </div>
+
                         </form>
+
+                        <!-- Delete Schedule -->
+                        <button id="deleteButton" class="btn btn-error mt-5" onclick="deleteSched.showModal()">Delete Schedule</button>                   
+                        <dialog id="deleteSched" class="modal">
+                            <div class="modal-box w-11/12 max-w-5xl bg-gray-200 dark:bg-gray-700 text-[#0e1011] dark:text-[#eef0f1]">
+                                <h3 class="font-bold text-xl sm:text-3xl">Delete/Reset Schedule</h3>
+                                <p class="py-4 text-lg sm:text-xl font-medium">How do you want to delete your schedule?</p>
+                                
+                                <form action="#" method="GET" class="space-y-4">
+                                    <!-- Radio Buttons for Deletion Options -->
+                                    <ul class="items-center w-full text-lg font-medium text-gray-900 bg-white border border-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white rounded-lg sm:flex">
+                                        <li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
+                                            <div class="flex items-center ps-3">
+                                                <input id="deleteAll" type="radio" required name="list-radio" class="radio radio-info" value="deleteAll">
+                                                <label for="deleteAll" class="w-full py-3 ms-2">Delete All</label>
+                                            </div>
+                                        </li>
+                                        <li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
+                                            <div class="flex items-center ps-3">
+                                                <input id="deleteDay" type="radio" required name="list-radio" class="radio radio-info" value="deleteDay">
+                                                <label for="deleteDay" class="w-full py-3 ms-2">Delete Day</label>
+                                            </div>
+                                        </li>
+                                        <li class="w-full dark:border-gray-600">
+                                            <div class="flex items-center ps-3">
+                                                <input id="customDelete" type="radio" required name="list-radio" class="radio radio-info" value="customDelete">
+                                                <label for="customDelete" class="w-full py-3 ms-2">Custom Delete Range</label>
+                                            </div>
+                                        </li>
+                                    </ul>
+
+                                    <!-- Delete all -->
+                                    <div id="deleteAllNote" class="note font-medium text-gray-700 dark:text-white text-lg" style="display: none;">
+                                        <p><span class="font-bold text-blue-500">NOTE:</span> This will delete all your set schedules and you will need to set it all again.</p>
+                                    </div>
+
+                                    <!-- Delete Day -->
+                                    <div id="deleteDayNote" class="note font-medium text-gray-700 dark:text-white text-lg" style="display: none;">
+                                        <p><span class="font-bold text-blue-500 mb-1">NOTE:</span> This will delete your selected date. This is best when you are not available on the set schedule.</p>
+                                        <label for="deleteDayDate">Select Date:</label>
+                                        <input type="date" id="deleteDayDate" name="delete-dayDate" class="input input-bordered w-full bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark]">
+                                    </div>
+
+                                    <!-- Delete Range -->
+                                    <div id="customDeleteNote" class="note font-medium text-gray-700 dark:text-white text-lg" style="display: none;">
+                                        <p><span class="font-bold text-blue-500">NOTE:</span> This will delete all your selected date from the selected starting date to ending date.</p>
+                                        <p class="mb-1">Please select a starting date to ending date.</p>
+                                        <label for="startDate">Select Starting Date:</label>
+                                        <input type="date" id="startDate" name="start-date" class="input input-bordered w-full bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark]">
+                                        <label for="endDate">Select End Date:</label>
+                                        <input type="date" id="endDate" name="end-date" class="input input-bordered w-full bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark]">
+                                    </div>
+
+
+                                    <!-- Confirmation and Password Input -->
+                                    <div class="form-group">  
+                                        <p class="text-black dark:text-white mt-16">Are you sure you want to delete your schedule?
+                                            <br><span class="font-bold text-red-400">This action is permanent and cannot be undone.</span>
+                                        </p>
+                                        <p class="text-black dark:text-white mt-2 mb-1">Please enter your password to avoid accidentally deleting your schedule</p>
+                                        <label for="dlt-password" class="block font-medium text-black dark:text-white">Confirm Password</label>
+                                        <div class="relative">
+                                            <input id="dlt-password" type="password" required autocomplete="off" placeholder="Enter your password" 
+                                            class="input input-bordered w-full border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:outline-none sm:text-sm bg-white dark:bg-gray-600 text-black dark:text-white">
+                                        </div>
+                                    </div>
+                                        
+                                    <!-- Action Buttons -->
+                                    <div class="modal-action">
+                                        <input type="submit" value="Delete" class="btn btn-error">
+                                        <button type="button" onclick="deleteSched.close();" class="btn bg-white text-black hover:bg-gray-400 border-none">Close</button>
+
+                                    </div>
+                                </form>
+                            </div>
+                        </dialog>
+
+
+
+                        
+
                     </div>
                 </div>
 
