@@ -69,7 +69,7 @@
                   type="radio" 
                   value="Consultation" 
                   name="service" 
-                  class="radio radio-info radio-btn " 
+                  class="radio radio-info [color-scheme:light] dark:[color-scheme:dark]" 
                   required>
                   <span class="py-3 ml-2 text-lg font-medium ">Consultation</span>
                 </label>
@@ -80,7 +80,7 @@
                   type="radio" 
                   value="Test/Procedure" 
                   name="service" 
-                  class="radio radio-info radio-btn" 
+                  class="radio radio-info [color-scheme:light] dark:[color-scheme:dark]" 
                   required>
                   <span class="py-3 ml-2 text-lg font-medium ">Test/Procedure</span>
                 </label>
@@ -348,7 +348,7 @@
             <input
               type="checkbox"
               required
-              class="form-checkbox h-5 w-5 rounded-none checkbox checkbox-success"
+              class="form-checkbox h-5 w-5 rounded-none checkbox checkbox-success [color-scheme:light] dark:[color-scheme:dark]"
               name="privacy"
             />
             <span class="ml-2">I understand</span>

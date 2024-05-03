@@ -222,6 +222,16 @@
                   </div>
                   </form>
 
+                  <!-- pashow ulit nito pag nagedit at sinubmit -->
+                  <div class="flex justify-center">
+                        <div role="alert" class="inline-flex items-center bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <span>Patient Information Updated!</span>
+                        </div>
+                    </div>
+
                     <div class="modal-action">
                       <form method="dialog">
                         <button class="btn bg-white text-black hover:bg-gray-400 border-none">Close</button>
@@ -233,6 +243,9 @@
               </td>
             </tr>
             <!-- sample row end -->
+
+
+           
 
           </tbody>
         </table>

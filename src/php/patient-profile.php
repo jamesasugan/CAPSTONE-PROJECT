@@ -39,7 +39,7 @@
     <?php include 'navbar-main.php'; ?>
 
     <div class="flex flex-col sm:flex-row justify-center items-center">
-    <div class="bg-white dark:bg-[#17222a] p-5 w-full min-h-screen pt-10 sm:pt-20">
+    <div class="bg-[#ebf0f4] dark:bg-[#17222a] p-5 w-full min-h-screen pt-10 sm:pt-20">
         <!-- Responsive Sidebar for profile settings -->
         <div class="flex flex-col sm:flex-row">
         <div class="w-full sm:w-80 p-5 border-b sm:border-b-0 sm:border-r mt-10">
@@ -348,6 +348,7 @@
                       <th>Date </th>
                       <th>Time</th>
                       <th>Status</th>
+                      <th>Remarks</th>
                       <th>Action</th>
                     </tr>
                   </thead>
@@ -359,6 +360,7 @@
                       <td>21/05/2024</td>
                       <td>12:00</td>
                       <td class="font-bold text-yellow-500 dark:text-yellow-300 ">Pending</td> 
+                      <td>Your schedule is being process</td>
 
                       <!-- ito yung modal. hindi maoopen yung mga sumunod na modal kapag yung "cancel_modal" name parehas, dapat magkaiba. ex: cancel_modal2..3..4..5 sa mga susunod. ikaw na bahala hackerman -->
                       <td class="pl-9"> 
@@ -396,6 +398,7 @@
                       <td>02/05/2024</td>
                       <td>09:00</td>
                       <td class="font-bold text-green-500">Completed</td>
+                      <td>Appointment completed</td>
                       <td class="pl-9"><a href="#"><i class="fa-solid fa-pen-to-square"></i></a></td>
                     </tr>
                     <!-- kapag approved text-blue-500 -->
@@ -405,6 +408,7 @@
                       <td>14/05/2024</td>
                       <td>05:00</td>
                       <td class="font-bold text-blue-500">Approved</td>
+                      <td>Your appointment is now listed, comply on the set date and time</td>
                       <td class="pl-9"><a href="#"><i class="fa-solid fa-pen-to-square"></i></a></td>
                     </tr>
                     <!-- kapag cancelled text-red-500 -->
@@ -414,6 +418,7 @@
                       <td>04/15/2024</td>
                       <td>03:00</td>
                       <td class="font-bold text-red-500">Cancelled</td>
+                      <td>Your Appointment has been Cancelled due to unforeseen circumstances. <a href="bookappointment.php" class="text-blue-500 underline">Rebook now</a> if you want to continue</td>
                       <td class="pl-9"><a href="#"><i class="fa-solid fa-pen-to-square"></i></a></td>
                     </tr>
                   </tbody>

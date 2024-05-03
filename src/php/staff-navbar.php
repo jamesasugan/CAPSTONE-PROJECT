@@ -83,7 +83,7 @@
                       Patient Records
                     </a>
                     <a
-                      href="#"
+                      href="staff-doctorschedule.php"
                       class="hover:bg-gray-300 dark:hover:bg-gray-700 dark:hover:text-white px-3 py-2 rounded-md transition duration-300 ease-in-out"
                     >
                       Schedule
@@ -231,7 +231,7 @@
               >Patient Records</a
             >
             <a
-              href="#"
+              href="staff-doctorschedule.php"
               class="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-700 hover:text-white border-b border-slate-800 dark:border-slate-300"
               >Schedule</a
             >
