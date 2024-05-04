@@ -126,14 +126,6 @@ document.addEventListener('DOMContentLoaded', function () {
     var todayDate = today.toISOString().slice(0, 10);
     inputDate.min = todayDate;
   }
-
-  var inputTime = document.getElementById('appointment-time');
-  if (inputTime) {
-    adjustTimeAvailability();
-    inputDate.addEventListener('change', adjustTimeAvailability); // Adjust time options when date changes
-  }
-
-  // do not change this
 });
 
 // for date of birth only

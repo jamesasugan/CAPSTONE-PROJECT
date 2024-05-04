@@ -176,7 +176,7 @@
                         </form>
                         
 
-                        <!-- Delete Schedule -->
+                        <!-- Delete Schedule. tatlo may pangalang deleteSched dito ah -->
                         <button id="deleteButton" class="btn btn-error mt-5" onclick="deleteSched.showModal()">Delete Schedule</button>                   
                         <dialog id="deleteSched" class="modal">
                             <div class="modal-box w-11/12 max-w-5xl bg-gray-200 dark:bg-gray-700 text-[#0e1011] dark:text-[#eef0f1]">
@@ -240,15 +240,17 @@
                                             <input id="dlt-password" type="password" required autocomplete="off" placeholder="Enter your password" 
                                             class="input input-bordered w-full border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:outline-none sm:text-sm bg-white dark:bg-gray-600 text-black dark:text-white">
                                         </div>
-                                    </div>
-                                        
-                                    <!-- Action Buttons -->
-                                    <div class="modal-action">
-                                        <input type="submit" value="Delete" class="btn btn-error">
-                                        <button type="button" onclick="deleteSched.close();" class="btn bg-white text-black hover:bg-gray-400 border-none">Cancel</button>
-
-                                    </div>
+                                    </div>                                       
+                                    <!-- delete button -->
+                                    <input type="submit" value="Delete" class="btn btn-error">                        
                                 </form>
+
+                                <!-- close button modal -->
+                                <div class="modal-action">                          
+                                    <form method="dialog">                                    
+                                        <button class="btn bg-white text-black hover:bg-gray-400 border-none">Close</button>
+                                    </form>
+                                </div>
                             </div>
                         </dialog>
 

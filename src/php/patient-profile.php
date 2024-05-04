@@ -353,6 +353,7 @@
                     </tr>
                   </thead>
                   <tbody>
+
                     <!-- kapag pending text-yellow-500 -->
                     <tr class="text-base hover:bg-gray-300  dark:hover:bg-gray-600 font-medium text-black dark:text-white">               
                       <td>Cy Ganderton</td>
@@ -362,8 +363,7 @@
                       <td class="font-bold text-yellow-500 dark:text-yellow-300 ">Pending</td> 
                       <td>Your schedule is being process</td>
 
-                      <!-- ito yung modal. hindi maoopen yung mga sumunod na modal kapag yung "cancel_modal" name parehas, dapat magkaiba. kasama din dapat na kaparehas ng name yung sa close button ng modal sa baba ah, bale
-                      sa isang modal, may tatlong name. lahat ng modal ko na may ganito kaya check mo na lang
+                      <!-- ito yung modal. hindi maoopen yung mga sumunod na modal kapag yung "cancel_modal" name parehas, dapat magkaiba. lahat ng modal ko na may ganito kaya check mo na lang
                       ex: cancel_modal2..3..4..5 sa mga susunod. ikaw na bahala hackerman -->
                       <td class="pl-9"> 
                         <button onclick="cancel_modal.showModal()"><i class="fa-solid fa-pen-to-square"></i></button>
@@ -384,15 +384,21 @@
                                 class="input input-bordered w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:outline-none sm:text-sm bg-white dark:bg-gray-600 text-black dark:text-white">
                               </div>
                             </div>
-                            <div class="flex justify-end space-x-2">
-                              <input type="submit" value="Submit" class="btn btn-error hover:bg-red-700 text-white font-bold border-none px-7">
-                              <button type="button" class="btn bg-white text-black hover:bg-gray-400 border-none" onclick="cancel_modal.close()">Cancel</button>
-                            </div>                 
+                            <!-- submit button -->
+                              <input type="submit" value="Submit" class="btn btn-error hover:bg-red-700 text-white font-bold border-none px-7">                            
+                            </form> 
+
+                               <!-- close button modal -->
+                            <div class="modal-action">
+                              <form method="dialog">                              
+                                <button class="btn">Close</button>
+                              </form>
+                            </div>           
                           </div>
-                        </dialog>
-                        </form>
+                        </dialog>                                             
                       </td>
                     </tr>
+
                     <!-- kapag completed text-green-500 -->
                     <tr class="text-base hover:bg-gray-300 dark:hover:bg-gray-600 font-medium text-black dark:text-white">
                       <td>Hart Hagerty</td>
@@ -403,6 +409,7 @@
                       <td>Appointment completed</td>
                       <td class="pl-9"><a href="#"><i class="fa-solid fa-pen-to-square"></i></a></td>
                     </tr>
+
                     <!-- kapag approved text-blue-500 -->
                     <tr class="text-base hover:bg-gray-300 dark:hover:bg-gray-600 font-medium text-black dark:text-white">
                       <td>Brice Swyre</td>
@@ -413,6 +420,7 @@
                       <td>Your appointment is now listed, comply on the set date and time</td>
                       <td class="pl-9"><a href="#"><i class="fa-solid fa-pen-to-square"></i></a></td>
                     </tr>
+                    
                     <!-- kapag cancelled text-red-500 -->
                     <tr class="text-base hover:bg-gray-300 dark:hover:bg-gray-600 font-medium text-black dark:text-white">
                       <td>John Edward Dionisio</td>

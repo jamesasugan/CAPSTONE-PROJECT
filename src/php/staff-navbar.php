@@ -47,7 +47,7 @@
             </div>
 
             <div class="logo-main flex justify-center lg:justify-start w-full sm:w-auto">
-              <a href="#">
+              <a href="staff-index.php">
                 <!-- Light mode logo (Shown in light mode, hidden in dark mode) -->
                 <img
                   class="block mx-auto h-10 lg:h-16 w-auto dark:hidden"
@@ -89,7 +89,7 @@
                       Schedule
                     </a>
                     <a
-                      href="#"
+                      href="staff-appointments.php"
                       class="hover:bg-gray-300 dark:hover:bg-gray-700 dark:hover:text-white px-3 py-2 rounded-md transition duration-300 ease-in-out"
                     >
                       Appointment
@@ -236,7 +236,7 @@
               >Schedule</a
             >
             <a
-              href="#"
+              href="staff-appointments.php"
               class="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-700 hover:text-white border-b border-slate-800 dark:border-slate-300"
               >Appointment</a
             >
