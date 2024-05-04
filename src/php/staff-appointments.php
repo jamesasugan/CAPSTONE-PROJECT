@@ -190,7 +190,7 @@
                         </div>
                       </div>
 
-                      <div class="mb-3 mt-5">
+                      <div class="mb-3 mt-10">
                         <p><span class="font-bold text-blue-400">NOTE: </span>Remarks is set to default, if you want custom message, you can edit the text directly in the input field provided.</p>
                         <label for="remarks" class="block text-base sm:text-lg font-medium mt-2">
                           Remarks:
@@ -206,7 +206,7 @@
                       </div>
 
                       <p><span class="font-bold text-red-500">NOTE: </span>If you click the submit button, it cannot be undone. Please confirm all the fields before submitting.</p>
-                      <input type="submit" value="Submit" class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none px-7 mb-2">
+                      <input type="submit" value="Submit" class="btn mt-1 bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none px-7 mb-2">
                     </form>
 
                     <!-- pashow ulit nito pag nagedit at sinubmit -->
@@ -237,7 +237,7 @@
                       <form method="dialog">
                         <button
                           id="modalAppointmentbtn"
-                          class="btn bg-gray-400 hover:bg-gray-500  text-black  border-none"
+                          class="btn bg-gray-400 dark:bg-white hover:bg-gray-500 dark:hover:bg-gray-400  text-black  border-none"
                         >
                           Close
                         </button>
@@ -321,28 +321,6 @@
                           class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark] disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300"
                         />
                       </div>
-
-
-
-
-                        <!-- Dapat kung anong pinili sa service, automatic yun na yung doctor na kung sino man sa service na yon
-                        <div class="w-full md:w-auto md:col-span-1">
-                          <label for="doctor" class="block text-base sm:text-lg font-medium">
-                            Your Doctor will be:
-                          </label>
-                          <select
-                            id="doctor"
-                            name="doctor"
-                            required
-                            class="select select-bordered w-full p-2 text-base sm:text-lg bg-gray-300 dark:bg-gray-600"
-                          >
-                            <option value="" disabled selected>...</option>
-                            <option value="Dr. Smith">Dr. Smith</option>
-                            <option value="Dr. Johnson">Dr. Johnson</option>
-                            <option value="Dr. Williams">Dr. Williams</option>
-                          </select>
-                        </div> -->
-
                       </fieldset>
 
 

@@ -363,39 +363,302 @@
                       <td class="font-bold text-yellow-500 dark:text-yellow-300 ">Pending</td> 
                       <td>Your schedule is being process</td>
 
-                      <!-- ito yung modal. hindi maoopen yung mga sumunod na modal kapag yung "cancel_modal" name parehas, dapat magkaiba. lahat ng modal ko na may ganito kaya check mo na lang
-                      ex: cancel_modal2..3..4..5 sa mga susunod. ikaw na bahala hackerman -->
+                      <!-- ito yung modal. hindi maoopen yung mga sumunod na modal kapag yung "viewandCancel" name parehas, dapat magkaiba. lahat ng modal ko na may ganito kaya check mo na lang
+                      ex: viewandCancel2..3..4..5 sa mga susunod. ikaw na bahala hackerman -->
                       <td class="pl-9"> 
-                        <button onclick="cancel_modal.showModal()"><i class="fa-solid fa-pen-to-square"></i></button>
-                        <form action="#" method="POST">
-                          <dialog id="cancel_modal" class="modal">
-                          <div class="modal-box bg-gray-200 dark:bg-gray-700">
-                            <h3 class="font-bold text-xl text-black dark:text-white mb-2">Cancel Appointment?</h3>
+                        <button onclick="viewandCancel.showModal()"><i class="fa-solid fa-pen-to-square"></i></button>                          
+                            <dialog id="viewandCancel" class="modal">
+                            <div class="modal-box w-11/12 max-w-5xl bg-gray-200 dark:bg-gray-700">
 
-                            <p class="text-black dark:text-white">Are you sure you want to cancel your appointment?
-                              <br><span class="font-bold text-red-400"> This action is permanent and cannot be undone.</span> </p>
-                              <p class="py-4 text-black dark:text-white">Please enter your password to avoid accidentally cancelling your Appointment</p>
-
-                            <div class="form-group mb-4">
-                              
-                              <label for="dlt-password" class="block font-medium text-black dark:text-white">Confirm Password</label>
-                              <div class="relative">
-                                <input id="dlt-password" type="password" required autocomplete="off" placeholder="Enter your password" 
-                                class="input input-bordered w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:outline-none sm:text-sm bg-white dark:bg-gray-600 text-black dark:text-white">
+                            <!-- appointment form section -->
+                            <form action="#" method="GET">
+                            <div
+                              class="flex flex-col sm:flex-row justify-between items-center"
+                            >
+                              <div class="order-2 sm:order-1">
+                                <h3
+                                  class="font-bold text-black dark:text-white text-base sm:text-2xl md:text-3xl mb-2 sm:mb-0"
+                                >
+                                  Patient's Appointment Form
+                                </h3>
+                              </div>
+                              <div class="order-1 sm:order-2 mb-2 sm:mb-0">
+                                <!-- Toggle between different logos for light/dark mode -->
+                                <img
+                                  src="../images/HCMC-blue.png"
+                                  class="block h-10 lg:h-16 w-auto dark:hidden"
+                                  alt="logo-light"
+                                />
+                                <img
+                                  src="../images/HCMC-white.png"
+                                  class="h-10 lg:h-16 w-auto hidden dark:block"
+                                  alt="logo-dark"
+                                />
                               </div>
                             </div>
-                            <!-- submit button -->
-                              <input type="submit" value="Submit" class="btn btn-error hover:bg-red-700 text-white font-bold border-none px-7">                            
-                            </form> 
+                            <h1 class="text-base sm:text-xl font-bold mb-2">STATUS: <span class="font-bold text-yellow-500 dark:text-yellow-300">Pending</span></h1>  <!-- ayusin mo rin colors dito ah -->
 
-                               <!-- close button modal -->
+                              <fieldset class="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <legend class="text-xl font-bold mb-2 col-span-full">Service:</legend>
+                                <div class="flex flex-col w-full">           
+                                  <ul class="w-full text-lg font-medium text-gray-900 bg-gray-300 dark:bg-gray-600 border border-gray-200 rounded-lg dark:border-gray-600 dark:text-white">
+                                    <li class="border-b border-gray-400 dark:border-slate-300">
+                                      <label class="flex items-center pl-3 w-full cursor-pointer">
+                                        <input id="horizontal-list-radio-license" 
+                                        type="radio" 
+                                        value="Consultation" 
+                                        name="service" 
+                                        disabled
+                                        class="radio radio-info [color-scheme:light] dark:[color-scheme:dark] disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300" 
+                                        required>
+                                        <span class="py-3 ml-2 text-lg font-medium ">Consultation</span>
+                                      </label>
+                                    </li>
+                                    <li>
+                                      <label class="flex items-center pl-3 w-full cursor-pointer">
+                                        <input id="horizontal-list-radio-id" 
+                                        type="radio" 
+                                        value="Test/Procedure" 
+                                        name="service" 
+                                        disabled
+                                        class="radio radio-info [color-scheme:light] dark:[color-scheme:dark] disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300" 
+                                        required>
+                                        <span class="py-3 ml-2 text-lg font-medium ">Test/Procedure</span>
+                                      </label>
+                                    </li>
+                                  </ul>
+                                </div>
+
+                                <div class="w-full">
+                                  <label for="service-type" class="block text-lg font-medium mb-1">What type of service?</label>
+                                  <select
+                                    id="service-type"
+                                    required
+                                    disabled
+                                    class="select select-bordered w-full bg-gray-300 dark:bg-gray-600 text-base sm:text-lg lg:text-xl focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300"
+                                    name="service-type"
+                                >
+                                    <option value="lagay mo dito magic mo">Service na pinili ni patient dito</option>
+                                </select>
+
+
+                              </div>
+
+                              <div class="w-full md:w-auto md:col-span-1">
+                                <label for="appointment-date" class="block text-base sm:text-lg font-medium">
+                                  Appointment Date
+                                </label>
+                                <input
+                                  type="date"
+                                  id="appointment-date"
+                                  name="appointment-date"
+                                  disabled
+                                  required
+                                  class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark] disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300"
+                                />
+                              </div>
+                              <div class="w-full md:w-auto md:col-span-1">
+                                <label for="appointment-time" class="block text-base sm:text-lg font-medium">
+                                  Appointment Time
+                                </label>
+                                <input
+                                  type="time"
+                                  id="appointment-time"
+                                  name="appointment-time"
+                                  required
+                                  disabled
+                                  min="08:00"
+                                  max="17:00"
+                                  class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark] disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300"
+                                />
+                              </div>
+                              </fieldset>
+
+                                <h3 class="text-xl font-bold mt-5 mb-2">Personal Information</h3>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                                  <div>
+                                    <label for="first-name" class="block text-base sm:text-lg font-medium"
+                                      >First Name</label
+                                    >
+                                    <input
+                                      type="text"
+                                      id="first-name"
+                                      name="first-name"
+                                      disabled
+                                      autocomplete="off"
+                                      placeholder="First Name"
+                                      required
+                                      class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300"
+                                    />
+                                  </div>
+                                  <div>
+                                    <label for="middle-name" class="block text-base sm:text-lg font-medium"
+                                      >Middle Name</label
+                                    >
+                                    <input
+                                      type="text"
+                                      id="middle-name"
+                                      name="middle-name"
+                                      disabled
+                                      placeholder="Middle Name"
+                                      required
+                                      class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300"
+                                    />
+                                  </div>
+                                  <div>
+                                    <label for="last-name" class="block text-base sm:text-lg font-medium"
+                                      >Last Name</label
+                                    >
+                                    <input
+                                      type="text"
+                                      id="last-name"
+                                      name="last-name"
+                                      disabled
+                                      placeholder="Last Name"
+                                      required
+                                      class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300"
+                                    />
+                                  </div>
+                                  <div>
+                                    <label for="contact-number" class="block text-base sm:text-lg font-medium"
+                                      >Contact Number</label
+                                    >
+                                    <input
+                                      id="contact-number"
+                                      name="contact-number"
+                                      type="tel"
+                                      disabled
+                                      required
+                                      autocomplete="off"
+                                      placeholder="Contact Number"
+                                      pattern="[0-9]{1,11}"
+                                      minlength="11"
+                                      maxlength="11"
+                                      title="Please enter up to 11 numeric characters."
+                                      class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300"
+                                    />
+                                  </div>
+
+                                  <!-- New fields for Vaccination Status -->
+                                  <div>
+                                  <div class="block text-base sm:text-lg font-medium mb-1">Are you vaccinated?</div>
+                                      <div class="flex items-center space-x-4 p-2 bg-gray-300 dark:bg-gray-600 rounded">
+                                          <label class="flex items-center">
+                                              <input type="radio" disabled name="vaccinated" value="yes" class="radio radio-primary" required>
+                                              <span class="ml-2">Yes</span>
+                                          </label>
+                                          <label class="flex items-center">
+                                              <input type="radio" disabled name="vaccinated" value="no" class="radio radio-primary" required>
+                                              <span class="ml-2">No</span>
+                                          </label>
+                                      </div>
+                                  </div>
+                                  <div>
+                                      <label for="vaccine-type" class="block text-base sm:text-lg font-medium">If yes,</label>
+                                      <select
+                                          id="vaccine-type"
+                                          name="vaccine-type"                        
+                                          class="select select-bordered w-full p-2 text-base sm:text-lg bg-gray-300 dark:bg-gray-600 disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300"
+                                          disabled
+                                      >
+                                          <option value="" disabled selected>Select vaccine stage...</option>
+                                          <option value="1st dose">1st Dose</option>
+                                          <option value="2nd dose">2nd Dose</option>
+                                          <option value="Booster">Booster</option>
+                                      </select>
+                                  </div>
+                                </div>
+
+                                <div class="mb-4">
+                                  <label for="address" class="block text-base sm:text-lg font-medium"
+                                    >Address</label
+                                  >
+                                  <input
+                                    type="text"
+                                    id="address"
+                                    name="address"
+                                    disabled
+                                    autocomplete="off"
+                                    placeholder="Address"
+                                    required
+                                    class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300"
+                                  />
+                                </div>
+
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                                  <div>
+                                    <label for="dob" class="block text-base sm:text-lg font-medium"
+                                      >Date of Birth</label
+                                    >
+                                    <input
+                                      type="date"
+                                      id="dob"
+                                      name="dob"
+                                      required
+                                      disabled
+                                      class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark] disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300"
+                                    />
+                                  </div>
+                                  <div>
+                                    <label for="sex" class="block text-base sm:text-lg font-medium">Sex</label>
+                                    <select
+                                      id="sex"
+                                      required
+                                      disabled
+                                      class="select select-bordered w-full p-2 bg-gray-300 dark:bg-gray-600  text-lg disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300"
+                                      name="sex"
+                                    >
+                                      <option value="" disabled selected>Select...</option>
+                                      <option value="Male">Male</option>
+                                      <option value="Female">Female</option>
+                                    </select>
+                                  </div>
+                                </div>
+
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                                  <div>
+                                    <label for="email" class="block text-base sm:text-lg font-medium">Email</label>
+                                    <input
+                                      type="email"
+                                      id="email"
+                                      name="email"
+                                      disabled
+                                      autocomplete="email"
+                                      placeholder="Email"
+                                      required
+                                      class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300"
+                                    />
+                                  </div>
+                                </div>
+
+                              </form>
+                        <!-- appointment form section end -->
+
+                            <!-- cancel appointment section -->      
+                              <h3 class="font-bold text-xl text-black dark:text-white">Do you want to Appointment?</h3>
+                              <p class="font-bold text-red-400">This action is permanent and cannot be undone.</p>
+                                <p class="mt-2 text-black dark:text-white">Please enter your password to avoid accidentally cancelling your Appointment</p>
+                            <form action="#" method="POST">
+                                <div class="form-group mb-4">                          
+                                  <label for="dlt-password" class="block font-medium text-black dark:text-white">Confirm Password</label>
+                                  <div class="relative">
+                                    <input id="dlt-password" type="password" required autocomplete="off" placeholder="Enter your password" 
+                                    class="input input-bordered w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:outline-none sm:text-sm bg-white dark:bg-gray-600 text-black dark:text-white">
+                                  </div>
+                                </div>                            
+                                <input type="submit" value="Submit" class="btn btn-error hover:bg-red-700 text-white font-bold border-none px-7">                            
+                            </form> 
+                            <!-- cancel appointment section end -->
+
+                               <!-- close modal button -->
                             <div class="modal-action">
                               <form method="dialog">                              
-                                <button class="btn">Close</button>
+                                <button class="btn bg-gray-400 dark:bg-white hover:bg-gray-500 dark:hover:bg-gray-400  text-black  border-none">Close</button>
                               </form>
                             </div>           
                           </div>
-                        </dialog>                                             
+                        </dialog>    
+
                       </td>
                     </tr>
 
