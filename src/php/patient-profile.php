@@ -370,7 +370,7 @@
                             <dialog id="viewandCancel" class="modal">
                             <div class="modal-box w-11/12 max-w-5xl bg-gray-200 dark:bg-gray-700">
 
-                            <!-- appointment form section -->
+                            <!-- appointment form section. Nilagyan ko lahat ng id ng "History" kase error pag kaparehas sa profile info settings -->
                             <form action="#" method="GET">
                             <div
                               class="flex flex-col sm:flex-row justify-between items-center"
@@ -397,6 +397,7 @@
                               </div>
                             </div>
                             <h1 class="text-base sm:text-xl font-bold mb-2">STATUS: <span class="font-bold text-yellow-500 dark:text-yellow-300">Pending</span></h1>  <!-- ayusin mo rin colors dito ah -->
+                            <p class="mb-2"><span class="font-bold text-blue-400">NOTE: </span>This form is not editable. If you notice any mistake, cancel your appointment immediately and rebook with the correct details. Once your appointment is approved, cancellation is no longer possible.</p>
 
                               <fieldset class="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <legend class="text-xl font-bold mb-2 col-span-full">Service:</legend>
@@ -430,9 +431,9 @@
                                 </div>
 
                                 <div class="w-full">
-                                  <label for="service-type" class="block text-lg font-medium mb-1">What type of service?</label>
+                                  <label for="service-typeHistory" class="block text-lg font-medium mb-1">What type of service?</label>
                                   <select
-                                    id="service-type"
+                                    id="service-typeHistory"
                                     required
                                     disabled
                                     class="select select-bordered w-full bg-gray-300 dark:bg-gray-600 text-base sm:text-lg lg:text-xl focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300"
@@ -445,26 +446,26 @@
                               </div>
 
                               <div class="w-full md:w-auto md:col-span-1">
-                                <label for="appointment-date" class="block text-base sm:text-lg font-medium">
+                                <label for="appointment-dateHistory" class="block text-base sm:text-lg font-medium">
                                   Appointment Date
                                 </label>
                                 <input
                                   type="date"
-                                  id="appointment-date"
-                                  name="appointment-date"
+                                  id="appointment-dateHistory"
+                                  name="appointment-dateHistory"
                                   disabled
                                   required
                                   class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark] disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300"
                                 />
                               </div>
                               <div class="w-full md:w-auto md:col-span-1">
-                                <label for="appointment-time" class="block text-base sm:text-lg font-medium">
+                                <label for="appointment-timeHistory" class="block text-base sm:text-lg font-medium">
                                   Appointment Time
                                 </label>
                                 <input
                                   type="time"
-                                  id="appointment-time"
-                                  name="appointment-time"
+                                  id="appointment-timeHistory"
+                                  name="appointment-timeHistory"
                                   required
                                   disabled
                                   min="08:00"
@@ -477,13 +478,13 @@
                                 <h3 class="text-xl font-bold mt-5 mb-2">Personal Information</h3>
                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                                   <div>
-                                    <label for="first-name" class="block text-base sm:text-lg font-medium"
+                                    <label for="first-nameHistory" class="block text-base sm:text-lg font-medium"
                                       >First Name</label
                                     >
                                     <input
                                       type="text"
-                                      id="first-name"
-                                      name="first-name"
+                                      id="first-nameHistory"
+                                      name="first-nameHistory"
                                       disabled
                                       autocomplete="off"
                                       placeholder="First Name"
@@ -492,13 +493,13 @@
                                     />
                                   </div>
                                   <div>
-                                    <label for="middle-name" class="block text-base sm:text-lg font-medium"
+                                    <label for="middle-nameHistory" class="block text-base sm:text-lg font-medium"
                                       >Middle Name</label
                                     >
                                     <input
                                       type="text"
-                                      id="middle-name"
-                                      name="middle-name"
+                                      id="middle-nameHistory"
+                                      name="middle-nameHistory"
                                       disabled
                                       placeholder="Middle Name"
                                       required
@@ -506,13 +507,13 @@
                                     />
                                   </div>
                                   <div>
-                                    <label for="last-name" class="block text-base sm:text-lg font-medium"
+                                    <label for="last-nameHistory" class="block text-base sm:text-lg font-medium"
                                       >Last Name</label
                                     >
                                     <input
                                       type="text"
-                                      id="last-name"
-                                      name="last-name"
+                                      id="last-nameHistory"
+                                      name="last-nameHistory"
                                       disabled
                                       placeholder="Last Name"
                                       required
@@ -520,12 +521,12 @@
                                     />
                                   </div>
                                   <div>
-                                    <label for="contact-number" class="block text-base sm:text-lg font-medium"
+                                    <label for="contact-numberHistory" class="block text-base sm:text-lg font-medium"
                                       >Contact Number</label
                                     >
                                     <input
-                                      id="contact-number"
-                                      name="contact-number"
+                                      id="contact-numberHistory"
+                                      name="contact-numberHistory"
                                       type="tel"
                                       disabled
                                       required
@@ -544,20 +545,20 @@
                                   <div class="block text-base sm:text-lg font-medium mb-1">Are you vaccinated?</div>
                                       <div class="flex items-center space-x-4 p-2 bg-gray-300 dark:bg-gray-600 rounded">
                                           <label class="flex items-center">
-                                              <input type="radio" disabled name="vaccinated" value="yes" class="radio radio-primary" required>
+                                              <input type="radio" disabled name="vaccinatedHistory" value="yes" class="radio radio-primary" required>
                                               <span class="ml-2">Yes</span>
                                           </label>
                                           <label class="flex items-center">
-                                              <input type="radio" disabled name="vaccinated" value="no" class="radio radio-primary" required>
+                                              <input type="radio" disabled name="vaccinatedHistory" value="no" class="radio radio-primary" required>
                                               <span class="ml-2">No</span>
                                           </label>
                                       </div>
                                   </div>
                                   <div>
-                                      <label for="vaccine-type" class="block text-base sm:text-lg font-medium">If yes,</label>
+                                      <label for="vaccine-typeHistory" class="block text-base sm:text-lg font-medium">If yes,</label>
                                       <select
-                                          id="vaccine-type"
-                                          name="vaccine-type"                        
+                                          id="vaccine-typeHistory"
+                                          name="vaccine-typeHistory"                        
                                           class="select select-bordered w-full p-2 text-base sm:text-lg bg-gray-300 dark:bg-gray-600 disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300"
                                           disabled
                                       >
@@ -570,13 +571,13 @@
                                 </div>
 
                                 <div class="mb-4">
-                                  <label for="address" class="block text-base sm:text-lg font-medium"
+                                  <label for="addressHistory" class="block text-base sm:text-lg font-medium"
                                     >Address</label
                                   >
                                   <input
                                     type="text"
-                                    id="address"
-                                    name="address"
+                                    id="addressHistory"
+                                    name="addressHistory"
                                     disabled
                                     autocomplete="off"
                                     placeholder="Address"
@@ -587,22 +588,22 @@
 
                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                                   <div>
-                                    <label for="dob" class="block text-base sm:text-lg font-medium"
+                                    <label for="dobHistory" class="block text-base sm:text-lg font-medium"
                                       >Date of Birth</label
                                     >
                                     <input
                                       type="date"
-                                      id="dob"
-                                      name="dob"
+                                      id="dobHistory"
+                                      name="dobHistory"
                                       required
                                       disabled
                                       class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark] disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300"
                                     />
                                   </div>
                                   <div>
-                                    <label for="sex" class="block text-base sm:text-lg font-medium">Sex</label>
+                                    <label for="sexHistory" class="block text-base sm:text-lg font-medium">Sex</label>
                                     <select
-                                      id="sex"
+                                      id="sexHistory"
                                       required
                                       disabled
                                       class="select select-bordered w-full p-2 bg-gray-300 dark:bg-gray-600  text-lg disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300"
@@ -617,11 +618,11 @@
 
                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                                   <div>
-                                    <label for="email" class="block text-base sm:text-lg font-medium">Email</label>
+                                    <label for="emailHistory" class="block text-base sm:text-lg font-medium">Email</label>
                                     <input
                                       type="email"
-                                      id="email"
-                                      name="email"
+                                      id="emailHistory"
+                                      name="emailHistory"
                                       disabled
                                       autocomplete="email"
                                       placeholder="Email"
