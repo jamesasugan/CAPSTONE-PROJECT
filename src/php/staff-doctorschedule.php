@@ -96,6 +96,15 @@
                                         </div>
                                     </li>
                                 </ul>
+                                <div id="checkboxAlert" class="flex justify-center hidden mt-2">
+                                    <div role="alert" class="alert alert-info w-auto font-medium">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                        <span>Please select at least one day.</span>
+                                    </div>
+                                </div>
+
                             </fieldset>
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div class="form-group">
@@ -165,6 +174,7 @@
                             </div>
 
                         </form>
+                        
 
                         <!-- Delete Schedule -->
                         <button id="deleteButton" class="btn btn-error mt-5" onclick="deleteSched.showModal()">Delete Schedule</button>                   
@@ -235,7 +245,7 @@
                                     <!-- Action Buttons -->
                                     <div class="modal-action">
                                         <input type="submit" value="Delete" class="btn btn-error">
-                                        <button type="button" onclick="deleteSched.close();" class="btn bg-white text-black hover:bg-gray-400 border-none">Close</button>
+                                        <button type="button" onclick="deleteSched.close();" class="btn bg-white text-black hover:bg-gray-400 border-none">Cancel</button>
 
                                     </div>
                                 </form>

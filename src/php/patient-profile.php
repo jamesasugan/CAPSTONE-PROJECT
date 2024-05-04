@@ -362,7 +362,9 @@
                       <td class="font-bold text-yellow-500 dark:text-yellow-300 ">Pending</td> 
                       <td>Your schedule is being process</td>
 
-                      <!-- ito yung modal. hindi maoopen yung mga sumunod na modal kapag yung "cancel_modal" name parehas, dapat magkaiba. ex: cancel_modal2..3..4..5 sa mga susunod. ikaw na bahala hackerman -->
+                      <!-- ito yung modal. hindi maoopen yung mga sumunod na modal kapag yung "cancel_modal" name parehas, dapat magkaiba. kasama din dapat na kaparehas ng name yung sa close button ng modal sa baba ah, bale
+                      sa isang modal, may tatlong name. lahat ng modal ko na may ganito kaya check mo na lang
+                      ex: cancel_modal2..3..4..5 sa mga susunod. ikaw na bahala hackerman -->
                       <td class="pl-9"> 
                         <button onclick="cancel_modal.showModal()"><i class="fa-solid fa-pen-to-square"></i></button>
                         <form action="#" method="POST">

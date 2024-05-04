@@ -1,5 +1,5 @@
+// main
 document.addEventListener('DOMContentLoaded', function () {
-  // Get button elements
   var editButton = document.getElementById('editSchedule');
   var updateButton = document.getElementById('updateSchedule');
   var cancelButton = document.getElementById('cancelSchedule');
@@ -8,8 +8,8 @@ document.addEventListener('DOMContentLoaded', function () {
     'input[type="checkbox"], input[type="time"], input[type="radio"]',
   );
 
-  var yesNote = document.getElementById('yesNote'); // Get the yes note element
-  var noNote = document.getElementById('noNote'); // Get the no note element
+  var yesNote = document.getElementById('yesNote');
+  var noNote = document.getElementById('noNote');
 
   // Function to enable/disable form fields
   function setFormDisabledState(disabled) {
@@ -33,17 +33,18 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // Click event for Edit button
   editButton.addEventListener('click', function () {
-    setFormDisabledState(false); // Enable all inputs
-    toggleButtons(false); // Show update and cancel buttons
+    setFormDisabledState(false);
+    toggleButtons(false);
   });
 
   // Click event for Cancel button
   cancelButton.addEventListener('click', function () {
-    form.reset(); // Reset form fields to their default values
-    setFormDisabledState(true); // Disable all inputs
-    toggleButtons(true); // Show the edit button
-    yesNote.style.display = 'none'; // Hide yes note
-    noNote.style.display = 'none'; // Hide no note
+    form.reset();
+    setFormDisabledState(true);
+    toggleButtons(true);
+    yesNote.style.display = 'none';
+    noNote.style.display = 'none';
+    document.getElementById('checkboxAlert').classList.add('hidden');
   });
 
   deleteButton.addEventListener('click', function () {
@@ -51,6 +52,9 @@ document.addEventListener('DOMContentLoaded', function () {
     form.reset();
     setFormDisabledState(true);
     toggleButtons(true);
+    document.getElementById('checkboxAlert').classList.add('hidden'); // Hide the alert
+    document.getElementById('yesNote').style.display = 'none';
+    document.getElementById('noNote').style.display = 'none';
   });
 
   // Manage display of notes based on radio button changes
@@ -65,6 +69,39 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 });
 
+// for required on monday to saturday and alert
+document.addEventListener('DOMContentLoaded', function () {
+  const form = document.querySelector('form');
+  const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+  const checkboxAlert = document.getElementById('checkboxAlert');
+
+  function checkCheckboxes() {
+    const isAtLeastOneChecked = Array.from(checkboxes).some(
+      (checkbox) => checkbox.checked,
+    );
+    if (isAtLeastOneChecked) {
+      checkboxAlert.classList.add('hidden');
+    }
+  }
+
+  checkboxes.forEach(function (checkbox) {
+    checkbox.addEventListener('change', checkCheckboxes);
+  });
+
+  form.addEventListener('submit', function (event) {
+    const isAtLeastOneChecked = Array.from(checkboxes).some(
+      (checkbox) => checkbox.checked,
+    );
+    if (!isAtLeastOneChecked) {
+      checkboxAlert.classList.remove('hidden');
+      event.preventDefault();
+    } else {
+      checkboxAlert.classList.add('hidden');
+    }
+  });
+});
+
+// for required on input date
 document.addEventListener('DOMContentLoaded', function () {
   var deleteSched = document.getElementById('deleteSched');
   var radios = document.querySelectorAll('input[name="list-radio"]');
@@ -95,7 +132,6 @@ document.addEventListener('DOMContentLoaded', function () {
       resetModal();
     });
 
-  // Attach event listeners for radio changes
   radios.forEach((radio) => {
     radio.addEventListener('change', function () {
       // Reset display
@@ -122,15 +158,15 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 });
 
+// for disabled dates from delete day and delete range
 document.addEventListener('DOMContentLoaded', function () {
   var today = new Date();
   var dd = String(today.getDate()).padStart(2, '0');
-  var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+  var mm = String(today.getMonth() + 1).padStart(2, '0');
   var yyyy = today.getFullYear();
 
-  var dateStr = yyyy + '-' + mm + '-' + dd; // Manually format to YYYY-MM-DD
+  var dateStr = yyyy + '-' + mm + '-' + dd;
 
-  // Set the minimum date attributes for each relevant input
   var deleteDayDate = document.getElementById('deleteDayDate');
   var startDate = document.getElementById('startDate');
   var endDate = document.getElementById('endDate');
@@ -139,13 +175,12 @@ document.addEventListener('DOMContentLoaded', function () {
   startDate.setAttribute('min', dateStr);
   endDate.setAttribute('min', dateStr);
 
-  // Update endDate's min attribute when startDate changes
   startDate.addEventListener('change', function () {
     var selectedStartDate = new Date(startDate.value);
-    selectedStartDate.setDate(selectedStartDate.getDate() + 1); // Add one day to start date
+    selectedStartDate.setDate(selectedStartDate.getDate() + 1);
 
     var nextDay = new Date(selectedStartDate);
-    var nextDayStr = nextDay.toISOString().split('T')[0]; // Format to YYYY-MM-DD
+    var nextDayStr = nextDay.toISOString().split('T')[0];
 
     endDate.setAttribute('min', nextDayStr);
   });
