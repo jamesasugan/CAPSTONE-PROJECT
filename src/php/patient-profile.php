@@ -379,7 +379,7 @@
                                 <h3
                                   class="font-bold text-black dark:text-white text-base sm:text-2xl md:text-3xl mb-2 sm:mb-0"
                                 >
-                                  Patient's Appointment Form
+                                  Appointment Form
                                 </h3>
                               </div>
                               <div class="order-1 sm:order-2 mb-2 sm:mb-0">
@@ -636,7 +636,7 @@
                         <!-- appointment form section end -->
 
                             <!-- cancel appointment section -->      
-                              <h3 class="font-bold text-xl text-black dark:text-white">Do you want to Appointment?</h3>
+                              <h3 class="font-bold text-xl text-black dark:text-white">Do you want to Cancel your Appointment?</h3>
                               <p class="font-bold text-red-400">This action is permanent and cannot be undone.</p>
                                 <p class="mt-2 text-black dark:text-white">Please enter your password to avoid accidentally cancelling your Appointment</p>
                             <form action="#" method="POST">
