@@ -192,69 +192,40 @@
 
 
           <h3 class="text-xl font-bold mt-5 mb-2">Personal Information</h3>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label for="first-name" class="block text-base sm:text-lg font-medium"
-                >First Name</label
-              >
-              <input
-                type="text"
-                id="first-name"
-                name="first-name"
-                autocomplete="off"
-                placeholder="First Name"
-                required
-                class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600"
-              />
+                <label for="first-name" class="block text-base sm:text-lg font-medium">First Name</label>
+                <input type="text" id="first-name" name="first-name" autocomplete="off" placeholder="First Name" required class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600" />
             </div>
             <div>
-              <label for="middle-name" class="block text-base sm:text-lg font-medium"
-                >Middle Name</label
-              >
-              <input
-                type="text"
-                id="middle-name"
-                name="middle-name"
-                placeholder="Middle Name"
-                required
-                class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600"
-              />
-            </div>
-            <div>
-              <label for="last-name" class="block text-base sm:text-lg font-medium"
-                >Last Name</label
-              >
-              <input
-                type="text"
-                id="last-name"
-                name="last-name"
-                placeholder="Last Name"
-                required
-                class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600"
-              />
-            </div>
-            <div>
-              <label for="contact-number" class="block text-base sm:text-lg font-medium"
-                >Contact Number</label
-              >
-              <input
-                id="contact-number"
-                name="contact-number"
-                type="tel"
-                required
-                autocomplete="off"
-                placeholder="Contact Number"
-                pattern="[0-9]{1,11}"
-                minlength="11"
-                maxlength="11"
-                title="Please enter up to 11 numeric characters."
-                class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600"
-              />
+                <label for="middle-name" class="block text-base sm:text-lg font-medium">Middle Name</label>
+                <input type="text" id="middle-name" name="middle-name" placeholder="Middle Name" required class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600" />
             </div>
 
-            <!-- New fields for Vaccination Status -->
             <div>
-            <div class="block text-base sm:text-lg font-medium mb-1">Are you vaccinated?</div>
+                <label for="last-name" class="block text-base sm:text-lg font-medium">Last Name</label>
+                <input type="text" id="last-name" name="last-name" placeholder="Last Name" required class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600" />
+            </div>
+            <div>
+                <label for="contact-number" class="block text-base sm:text-lg font-medium">Contact Number</label>
+                <input id="contact-number" name="contact-number" type="tel" required autocomplete="off" placeholder="Contact Number" pattern="[0-9]{1,11}" minlength="11" maxlength="11" title="Please enter up to 11 numeric characters." class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600" />
+            </div>
+
+            <div>
+                <label for="sex" class="block text-base sm:text-lg font-medium">Sex</label>
+                <select id="sex" required class="select select-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 text-lg" name="sex">
+                    <option value="" disabled selected>Select...</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                </select>
+            </div>
+            <div>
+                <label for="dob" class="block text-base sm:text-lg font-medium">Date of Birth</label>
+                <input type="date" id="dob" name="dob" required class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark]" />
+            </div>
+
+            <div>
+                <div class="block text-base sm:text-lg font-medium mb-1">Are you vaccinated?</div>
                 <div class="flex items-center space-x-4 p-2 bg-gray-300 dark:bg-gray-600 rounded">
                     <label class="flex items-center">
                         <input type="radio" name="vaccinated" value="yes" class="radio radio-primary" required>
@@ -267,80 +238,14 @@
                 </div>
             </div>
             <div>
-                <label for="vaccine-type" class="block text-base sm:text-lg font-medium">If yes,</label>
-                <select
-                    id="vaccine-type"
-                    name="vaccine-type"
-                    class="select select-bordered w-full p-2 text-base sm:text-lg bg-gray-300 dark:bg-gray-600"
-                    disabled
-                >
-                    <option value="" disabled selected>Select vaccine stage...</option>
-                    <option value="1st dose">1st Dose</option>
-                    <option value="2nd dose">2nd Dose</option>
-                    <option value="Booster">Booster</option>
-                </select>
+                <label for="address" class="block text-base sm:text-lg font-medium">Address</label>
+                <input type="text" id="address" name="address" autocomplete="off" placeholder="Address" required class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600" />
             </div>
-          </div>
+        </div>
 
-          <div class="mb-4">
-            <label for="address" class="block text-base sm:text-lg font-medium"
-              >Address</label
-            >
-            <input
-              type="text"
-              id="address"
-              name="address"
-              autocomplete="off"
-              placeholder="Address"
-              required
-              class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600"
-            />
-          </div>
+          
 
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-            <div>
-              <label for="dob" class="block text-base sm:text-lg font-medium"
-                >Date of Birth</label
-              >
-              <input
-                type="date"
-                id="dob"
-                name="dob"
-                required
-                class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark]"
-              />
-            </div>
-            <div>
-              <label for="sex" class="block text-base sm:text-lg font-medium">Sex</label>
-              <select
-                id="sex"
-                required
-                class="select select-bordered w-full p-2 bg-gray-300 dark:bg-gray-600  text-lg"
-                name="sex"
-              >
-                <option value="" disabled selected>Select...</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-            <div>
-              <label for="email" class="block text-base sm:text-lg font-medium">Email</label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                autocomplete="email"
-                placeholder="Email"
-                required
-                class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600"
-              />
-            </div>
-          </div>
-
-          <h3 class="text-xl font-bold mb-2">Data Privacy Note</h3>
+          <h3 class="text-xl font-bold mb-2 mt-5">Data Privacy Note</h3>
           <p class="mb-4">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
             eiusmod tempor incididunt ut labore et dolore magna aliqua.

@@ -205,7 +205,7 @@
                         />
                       </div>
 
-                      <p><span class="font-bold text-red-500">NOTE: </span>If you click the submit button, it cannot be undone. Please confirm all the fields before submitting.</p>
+                      <p><span class="font-bold text-red-500">NOTE: </span>Once you click the submit button, it cannot be undone. Please confirm all the fields before submitting.</p>
                       <input type="submit" value="Submit" class="btn mt-1 bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none px-7 mb-2">
                     </form>
 
@@ -326,161 +326,56 @@
 
 
                         <h3 class="text-xl font-bold mt-5 mb-2">Personal Information</h3>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-                          <div>
-                            <label for="first-nameHistory" class="block text-base sm:text-lg font-medium"
-                              >First Name</label
-                            >
-                            <input
-                              type="text"
-                              id="first-nameHistory"
-                              name="first-nameHistory"
-                              disabled
-                              autocomplete="off"
-                              placeholder="First Name"
-                              required
-                              class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300"
-                            />
-                          </div>
-                          <div>
-                            <label for="middle-nameHistory" class="block text-base sm:text-lg font-medium"
-                              >Middle Name</label
-                            >
-                            <input
-                              type="text"
-                              id="middle-nameHistory"
-                              name="middle-nameHistory"
-                              disabled
-                              placeholder="Middle Name"
-                              required
-                              class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300"
-                            />
-                          </div>
-                          <div>
-                            <label for="last-nameHistory" class="block text-base sm:text-lg font-medium"
-                              >Last Name</label
-                            >
-                            <input
-                              type="text"
-                              id="last-nameHistory"
-                              name="last-nameHistory"
-                              disabled
-                              placeholder="Last Name"
-                              required
-                              class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300"
-                            />
-                          </div>
-                          <div>
-                            <label for="contact-numberHistory" class="block text-base sm:text-lg font-medium"
-                              >Contact Number</label
-                            >
-                            <input
-                              id="contact-numberHistory"
-                              name="contact-numberHistory"
-                              type="tel"
-                              disabled
-                              required
-                              autocomplete="off"
-                              placeholder="Contact Number"
-                              pattern="[0-9]{1,11}"
-                              minlength="11"
-                              maxlength="11"
-                              title="Please enter up to 11 numeric characters."
-                              class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300"
-                            />
-                          </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                  <div>
+                                      <label for="first-nameHistory" class="block text-base sm:text-lg font-medium">First Name</label>
+                                      <input type="text" id="first-nameHistory" name="first-nameHistory" disabled autocomplete="off" placeholder="First Name" required class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300" />
+                                  </div>
+                                  <div>
+                                      <label for="middle-nameHistory" class="block text-base sm:text-lg font-medium">Middle Name</label>
+                                      <input type="text" id="middle-nameHistory" name="middle-nameHistory" disabled placeholder="Middle Name" required class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300" />
+                                  </div>
 
-                          <!-- New fields for Vaccination Status -->
-                          <div>
-                          <div class="block text-base sm:text-lg font-medium mb-1">Are you vaccinated?</div>
-                              <div class="flex items-center space-x-4 p-2 bg-gray-300 dark:bg-gray-600 rounded">
-                                  <label class="flex items-center">
-                                      <input type="radio" disabled name="vaccinated" value="yes" class="radio radio-primary" required>
-                                      <span class="ml-2">Yes</span>
-                                  </label>
-                                  <label class="flex items-center">
-                                      <input type="radio" disabled name="vaccinated" value="no" class="radio radio-primary" required>
-                                      <span class="ml-2">No</span>
-                                  </label>
+                                  <div>
+                                      <label for="last-nameHistory" class="block text-base sm:text-lg font-medium">Last Name</label>
+                                      <input type="text" id="last-nameHistory" name="last-nameHistory" disabled placeholder="Last Name" required class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300" />
+                                  </div>
+                                  <div>
+                                      <label for="contact-numberHistory" class="block text-base sm:text-lg font-medium">Contact Number</label>
+                                      <input id="contact-numberHistory" name="contact-numberHistory" disabled type="tel" required autocomplete="off" placeholder="Contact Number" pattern="[0-9]{1,11}" minlength="11" maxlength="11" title="Please enter up to 11 numeric characters." class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300" />
+                                  </div>
+
+                                  <div>
+                                      <label for="sexHistory" class="block text-base sm:text-lg font-medium">Sex</label>
+                                      <select id="sexHistory" required class="select select-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 text-lg disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300" name="sexHistory" disabled>
+                                          <option value="" disabled selected>Select...</option>
+                                          <option value="Male">Male</option>
+                                          <option value="Female">Female</option>
+                                      </select>
+                                  </div>
+                                  <div>
+                                      <label for="dobHistory" class="block text-base sm:text-lg font-medium">Date of Birth</label>
+                                      <input type="date" id="dobHistory" name="dobHistory" disabled required class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark] disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300" />
+                                  </div>
+
+                                  <div>
+                                      <div class="block text-base sm:text-lg font-medium mb-1">Are you vaccinated?</div>
+                                      <div class="flex items-center space-x-4 p-2 bg-gray-300 dark:bg-gray-600 rounded">
+                                          <label class="flex items-center">
+                                              <input type="radio" name="vaccinatedHistory" disabled value="yes" class="radio radio-primary disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300 [color-scheme:light] dark:[color-scheme:dark]" required>
+                                              <span class="ml-2">Yes</span>
+                                          </label>
+                                          <label class="flex items-center">
+                                              <input type="radio" name="vaccinatedHistory" disabled value="no" class="radio radio-primary disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300 [color-scheme:light] dark:[color-scheme:dark]" required>
+                                              <span class="ml-2">No</span>
+                                          </label>
+                                      </div>
+                                  </div>
+                                  <div>
+                                      <label for="addressHistory" class="block text-base sm:text-lg font-medium">Address</label>
+                                      <input type="text" id="addressHistory" name="addressHistory" disabled autocomplete="off" placeholder="Address" required class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300" />
+                                  </div>
                               </div>
-                          </div>
-                          <div>
-                              <label for="vaccine-typeHistory" class="block text-base sm:text-lg font-medium">If yes,</label>
-                              <select
-                                  id="vaccine-typeHistory"
-                                  name="vaccine-typeHistory"                        
-                                  class="select select-bordered w-full p-2 text-base sm:text-lg bg-gray-300 dark:bg-gray-600 disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300"
-                                  disabled
-                              >
-                                  <option value="" disabled selected>Select vaccine stage...</option>
-                                  <option value="1st dose">1st Dose</option>
-                                  <option value="2nd dose">2nd Dose</option>
-                                  <option value="Booster">Booster</option>
-                              </select>
-                          </div>
-                        </div>
-
-                        <div class="mb-4">
-                          <label for="addressHistory" class="block text-base sm:text-lg font-medium"
-                            >Address</label
-                          >
-                          <input
-                            type="text"
-                            id="addressHistory"
-                            name="addressHistory"
-                            disabled
-                            autocomplete="off"
-                            placeholder="Address"
-                            required
-                            class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300"
-                          />
-                        </div>
-
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-                          <div>
-                            <label for="dobHistory" class="block text-base sm:text-lg font-medium"
-                              >Date of Birth</label
-                            >
-                            <input
-                              type="date"
-                              id="dobHistory"
-                              name="dobHistory"
-                              required
-                              disabled
-                              class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark] disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300"
-                            />
-                          </div>
-                          <div>
-                            <label for="sexHistory" class="block text-base sm:text-lg font-medium">Sex</label>
-                            <select
-                              id="sexHistory"
-                              required
-                              disabled
-                              class="select select-bordered w-full p-2 bg-gray-300 dark:bg-gray-600  text-lg disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300"
-                              name="sex"
-                            >
-                              <option value="" disabled selected>Select...</option>
-                              <option value="Male">Male</option>
-                              <option value="Female">Female</option>
-                            </select>
-                          </div>
-                        </div>
-
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-                          <div>
-                            <label for="emailHistory" class="block text-base sm:text-lg font-medium">Email</label>
-                            <input
-                              type="email"
-                              id="emailHistory"
-                              name="emailHistory"
-                              disabled
-                              autocomplete="email"
-                              placeholder="Email"
-                              required
-                              class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300"
-                            />
-                          </div>
-                        </div>
 
                       </form>
 
@@ -489,8 +384,10 @@
                   </div>
                 </dialog>
               </td>
+              <!-- ito yung modal end -->
             </tr>
             <!-- sample row end -->
+
           </tbody>
         </table>
       </div>

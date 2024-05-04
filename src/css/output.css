@@ -3731,10 +3731,6 @@ details.collapse summary::-webkit-details-marker {
   min-height: 100vh;
 }
 
-.w-0 {
-  width: 0px;
-}
-
 .w-1\/2 {
   width: 50%;
 }
@@ -3749,10 +3745,6 @@ details.collapse summary::-webkit-details-marker {
 
 .w-2\/3 {
   width: 66.666667%;
-}
-
-.w-32 {
-  width: 8rem;
 }
 
 .w-36 {
@@ -3820,10 +3812,6 @@ details.collapse summary::-webkit-details-marker {
 }
 
 .flex-grow {
-  flex-grow: 1;
-}
-
-.grow {
   flex-grow: 1;
 }
 
@@ -3906,6 +3894,10 @@ details.collapse summary::-webkit-details-marker {
 
 .justify-between {
   justify-content: space-between;
+}
+
+.gap-1 {
+  gap: 0.25rem;
 }
 
 .gap-2 {

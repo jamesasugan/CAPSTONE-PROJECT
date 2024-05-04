@@ -95,107 +95,106 @@
                       </div>
                   </div>
 
-                  <h2 class="text-xl font-semibold mt-5">Patient #<span>1</span></h2>  <!-- ibahin mo to -->
-                  <h2 class="patient-name text-xl font-semibold">Dionisio, John Edward</h2>
+                  
 
                   <!-- <button id="print-content">Print</button> wag muna -->
 
-                  <form id="patientForm" action="#" method="POST" >
-                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                    
-                    <label class="flex items-center gap-2">
-                        Age:
-                        <input type="text" 
-                              name="age" 
-                              value="21" 
-                              required 
-                              disabled
-                              class="w-auto input input-bordered bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400 disabled:border-gray-300" placeholder="Age" />
-                    </label>
-                    
-                    <label class="flex items-center">
-                        Consultation Date: &nbsp; 
-                        <input type="date" 
-                              name="consultation-date" 
-                              required 
-                              disabled 
-                              class="grow input input-bordered w-auto p-2 text-xs sm:text-lg bg-white dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark] text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400 disabled:border-gray-300" placeholder="Consultation Date" />
-                    </label>
+                  <div class="patientInfo mb-10 mt-5">
+                      <h2 class="text-xl sm:text-2xl font-bold mb-1">Patient #1</h2>
 
-                    <label class="flex items-center gap-2">
-                        Sex:
-                        <input type="text" 
-                              name="Sex" 
-                              value="Male" 
-                              required 
-                              disabled
-                              class="w-auto input input-bordered bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400 disabled:border-gray-300" placeholder="Sex" />
-                    </label>
+                      <div class="grid grid-cols-1 md:grid-cols-2 gap-1 text-lg sm:text-xl">
+                          <p><strong>Service:</strong> Consultation</p>
+                          <p><strong>Service Type:</strong> OB-GYNE</p>
 
-                    <label class="flex items-center gap-2">
-                        Consultant:
-                        <input type="text" 
-                              name="consultant-name" 
-                              value="Walter White" 
-                              required 
-                              disabled
-                              class="w-full sm:w-auto input input-bordered bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400 disabled:border-gray-300" placeholder="Consultant Name" />
-                    </label>
-                </div>
+                          <p><strong>Name:</strong> John Edward E. Dionisio</p>
+                          <p><strong>Contact Number:</strong> 099999999999</p>
 
+                          <p><strong>Sex:</strong> Male</p>
+                          <p><strong>Email:</strong> myemail@gmail.com</p>
 
-                  <div class="grid grid-cols-1 gap-4 mb-4">
-                      <label class="flex items-center gap-2">
-                          Temperature (Celsius):
-                          <input type="text" 
-                          name="temperature" 
-                          value="36" 
-                          required 
-                          disabled 
-                          class="w-32 sm:w-auto input input-bordered bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400 disabled:border-gray-300" placeholder="Temperature" />
-                      </label>
+                          <p><strong>Vaccinated:</strong> Yes</p>
 
-                      <label class="flex items-center gap-2">
-                          Blood Pressure:
-                          <input type="text" 
-                          name="blood-pressure" 
-                          value="123/50" 
-                          required 
-                          disabled 
-                          class="w-32 sm:w-auto input input-bordered bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400 disabled:border-gray-300" placeholder="Blood Pressure" />
-                      </label>
-
-                      <label class="flex items-center gap-2">
-                          Saturation:
-                          <input type="text" name="saturation" value="di ko alam basta text" required disabled class="w-full input input-bordered bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400 disabled:border-gray-300" placeholder="Saturation" />
-                      </label>
+                          <p><strong>Address:</strong> 1234 Health Ave, Immunization City</p>
+                          <p><strong>Date of Birth:</strong> June 21, 2024</p>
+                      </div>
                   </div>
 
-                  <div class="grid grid-cols-1 gap-4 mb-4">
-                      <label class="flex items-center gap-2 w-full">
-                          Chief Complaint:
-                          <input type="text" 
-                          name="chief-complaint" 
-                          value="Dinadaing ng patient" 
-                          required 
-                          disabled 
-                          class="grow w-0 sm:w-auto input input-bordered bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400 disabled:border-gray-300" placeholder="Chief Complaint" />
-                      </label>
 
-                      <label class="flex items-center gap-2">
-                          Objective:
-                          <input type="text" name="objective" value="Physical Examination" required disabled class="w-full input input-bordered bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400 disabled:border-gray-300" placeholder="Objective" />
-                      </label>
 
-                      <label class="flex items-center gap-2">
-                          Assessment:
-                          <input type="text" name="Assessment" value="Diagnosis ng doctor sa patient" required disabled class="w-full input input-bordered bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400 disabled:border-gray-300" placeholder="Assessment" />
-                      </label>
-
-                      <label class="flex items-center gap-2">
-                          Treatment Plan:
-                          <input type="text" name="Treatment-plan" value="Treatment plan" required disabled class="grow w-0 sm:w-auto input input-bordered bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400 disabled:border-gray-300" placeholder="Treatment Plan" />
-                      </label>
+                  <form id="patientForm" action="#" method="POST" >
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">                              
+                    <div>
+                        <label class="block">
+                            Consultation Date:
+                            <input type="date" 
+                                name="consultation-date" 
+                                required 
+                                disabled 
+                                class="input input-bordered w-full p-2 bg-white dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark] text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400" />
+                        </label>
+                    </div>
+                    <div>
+                        <label class="block">
+                            Consultant:
+                            <input type="text" 
+                                name="consultant-name" 
+                                value="Walter White" 
+                                required 
+                                disabled
+                                class="input input-bordered w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400" />
+                        </label>
+                    </div>
+                    <div>
+                        <label class="block">
+                            Temperature (Celsius):
+                            <input type="text" 
+                            name="temperature" 
+                            value="36" 
+                            required 
+                            disabled 
+                            class="input input-bordered w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400" />
+                        </label>
+                    </div>
+                    <div>
+                        <label class="block">
+                            Blood Pressure:
+                            <input type="text" 
+                            name="blood-pressure" 
+                            value="123/50" 
+                            required 
+                            disabled 
+                            class="input input-bordered w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400" />
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 gap-4 mb-4">
+                    <label class="block">
+                        Saturation:
+                        <input type="text" name="saturation" value="di ko alam basta text" required disabled class="input input-bordered w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400" />
+                    </label>
+                    <label class="block">
+                        Chief Complaint:
+                        <input type="text" 
+                        name="chief-complaint" 
+                        value="Dinadaing ng patient" 
+                        required 
+                        disabled 
+                        class="input input-bordered w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400" />
+                    </label>
+                    <label class="block">
+                        Objective:
+                        <input type="text" name="objective" value="Physical Examination" required disabled class="input input-bordered w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400" />
+                    </label>
+                    <label class="block">
+                        Assessment:
+                        <input type="text" name="Assessment" value="Diagnosis ng doctor sa patient" required disabled class="input input-bordered w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400" />
+                    </label>
+                    <label class="block">
+                        Treatment Plan:
+                        <input type="text" name="Treatment-plan" value="Treatment plan" required disabled class="input input-bordered w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400" />
+                    </label>
+                </div>
 
                       <!-- Images dito. pag nag upload sa upload file button dito lalabas dapat. kapag kunwari lima inupload na picture dapat lima din tong buong DIV -->
                         <div class="flex justify-center items-center w-full">
@@ -203,13 +202,8 @@
                             src="../images/APE.jpg" 
                             alt="image description">
                         </div>
-                        
-                        
 
-                  </div>
-
-                  <div class="chart-actions text-center my-4">           
-                    
+                  <div class="chart-actions text-center my-4">                             
                       <input type="file" accept="image/*" disabled class="file-input file-input-bordered file-input-info mb-3 w-full max-w-xs bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400 disabled:border-gray-300" />
 
                       <div id="editControls" class="space-x-4">

@@ -138,15 +138,3 @@ document.addEventListener('DOMContentLoaded', function () {
     inputDob.max = maxDate;
   }
 });
-
-// for vaccine stage
-document.addEventListener('DOMContentLoaded', function () {
-  const radios = document.querySelectorAll('input[name="vaccinated"]');
-  const vaccineTypeSelect = document.getElementById('vaccine-type');
-
-  radios.forEach((radio) => {
-    radio.addEventListener('change', function () {
-      vaccineTypeSelect.disabled = this.value !== 'yes';
-    });
-  });
-});

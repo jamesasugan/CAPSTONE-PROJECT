@@ -366,7 +366,7 @@
                       <!-- ito yung modal. hindi maoopen yung mga sumunod na modal kapag yung "viewandCancel" name parehas, dapat magkaiba. lahat ng modal ko na may ganito kaya check mo na lang
                       ex: viewandCancel2..3..4..5 sa mga susunod. ikaw na bahala hackerman -->
                       <td class="pl-9"> 
-                        <button onclick="viewandCancel.showModal()"><i class="fa-solid fa-pen-to-square"></i></button>                          
+                        <button onclick="viewandCancel.showModal()"><i class="fa-regular fa-eye"></i></button>                          
                             <dialog id="viewandCancel" class="modal">
                             <div class="modal-box w-11/12 max-w-5xl bg-gray-200 dark:bg-gray-700">
 
@@ -397,7 +397,7 @@
                               </div>
                             </div>
                             <h1 class="text-base sm:text-xl font-bold mb-2">STATUS: <span class="font-bold text-yellow-500 dark:text-yellow-300">Pending</span></h1>  <!-- ayusin mo rin colors dito ah -->
-                            <p class="mb-2"><span class="font-bold text-blue-400">NOTE: </span>This form is not editable. If you notice any mistake, cancel your appointment immediately and rebook with the correct details. Once your appointment is approved, cancellation is no longer possible.</p>
+                            <p class="mb-2"><span class="font-bold text-blue-400">NOTE: </span>This form is NOT editable. If you notice any mistake, cancel your appointment immediately and rebook with the correct details. Once your appointment is approved, cancellation is no longer possible.</p>
 
                               <fieldset class="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <legend class="text-xl font-bold mb-2 col-span-full">Service:</legend>
@@ -476,167 +476,62 @@
                               </fieldset>
 
                                 <h3 class="text-xl font-bold mt-5 mb-2">Personal Information</h3>
-                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                   <div>
-                                    <label for="first-nameHistory" class="block text-base sm:text-lg font-medium"
-                                      >First Name</label
-                                    >
-                                    <input
-                                      type="text"
-                                      id="first-nameHistory"
-                                      name="first-nameHistory"
-                                      disabled
-                                      autocomplete="off"
-                                      placeholder="First Name"
-                                      required
-                                      class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300"
-                                    />
+                                      <label for="first-nameHistory" class="block text-base sm:text-lg font-medium">First Name</label>
+                                      <input type="text" id="first-nameHistory" name="first-nameHistory" disabled autocomplete="off" placeholder="First Name" required class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300" />
                                   </div>
                                   <div>
-                                    <label for="middle-nameHistory" class="block text-base sm:text-lg font-medium"
-                                      >Middle Name</label
-                                    >
-                                    <input
-                                      type="text"
-                                      id="middle-nameHistory"
-                                      name="middle-nameHistory"
-                                      disabled
-                                      placeholder="Middle Name"
-                                      required
-                                      class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300"
-                                    />
-                                  </div>
-                                  <div>
-                                    <label for="last-nameHistory" class="block text-base sm:text-lg font-medium"
-                                      >Last Name</label
-                                    >
-                                    <input
-                                      type="text"
-                                      id="last-nameHistory"
-                                      name="last-nameHistory"
-                                      disabled
-                                      placeholder="Last Name"
-                                      required
-                                      class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300"
-                                    />
-                                  </div>
-                                  <div>
-                                    <label for="contact-numberHistory" class="block text-base sm:text-lg font-medium"
-                                      >Contact Number</label
-                                    >
-                                    <input
-                                      id="contact-numberHistory"
-                                      name="contact-numberHistory"
-                                      type="tel"
-                                      disabled
-                                      required
-                                      autocomplete="off"
-                                      placeholder="Contact Number"
-                                      pattern="[0-9]{1,11}"
-                                      minlength="11"
-                                      maxlength="11"
-                                      title="Please enter up to 11 numeric characters."
-                                      class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300"
-                                    />
+                                      <label for="middle-nameHistory" class="block text-base sm:text-lg font-medium">Middle Name</label>
+                                      <input type="text" id="middle-nameHistory" name="middle-nameHistory" disabled placeholder="Middle Name" required class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300" />
                                   </div>
 
-                                  <!-- New fields for Vaccination Status -->
                                   <div>
-                                  <div class="block text-base sm:text-lg font-medium mb-1">Are you vaccinated?</div>
+                                      <label for="last-nameHistory" class="block text-base sm:text-lg font-medium">Last Name</label>
+                                      <input type="text" id="last-nameHistory" name="last-nameHistory" disabled placeholder="Last Name" required class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300" />
+                                  </div>
+                                  <div>
+                                      <label for="contact-numberHistory" class="block text-base sm:text-lg font-medium">Contact Number</label>
+                                      <input id="contact-numberHistory" name="contact-numberHistory" disabled type="tel" required autocomplete="off" placeholder="Contact Number" pattern="[0-9]{1,11}" minlength="11" maxlength="11" title="Please enter up to 11 numeric characters." class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300" />
+                                  </div>
+
+                                  <div>
+                                      <label for="sexHistory" class="block text-base sm:text-lg font-medium">Sex</label>
+                                      <select id="sexHistory" required class="select select-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 text-lg disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300" name="sexHistory" disabled>
+                                          <option value="" disabled selected>Select...</option>
+                                          <option value="Male">Male</option>
+                                          <option value="Female">Female</option>
+                                      </select>
+                                  </div>
+                                  <div>
+                                      <label for="dobHistory" class="block text-base sm:text-lg font-medium">Date of Birth</label>
+                                      <input type="date" id="dobHistory" name="dobHistory" disabled required class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark] disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300" />
+                                  </div>
+
+                                  <div>
+                                      <div class="block text-base sm:text-lg font-medium mb-1">Are you vaccinated?</div>
                                       <div class="flex items-center space-x-4 p-2 bg-gray-300 dark:bg-gray-600 rounded">
                                           <label class="flex items-center">
-                                              <input type="radio" disabled name="vaccinatedHistory" value="yes" class="radio radio-primary" required>
+                                              <input type="radio" name="vaccinatedHistory" disabled value="yes" class="radio radio-primary disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300 [color-scheme:light] dark:[color-scheme:dark]" required>
                                               <span class="ml-2">Yes</span>
                                           </label>
                                           <label class="flex items-center">
-                                              <input type="radio" disabled name="vaccinatedHistory" value="no" class="radio radio-primary" required>
+                                              <input type="radio" name="vaccinatedHistory" disabled value="no" class="radio radio-primary disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300 [color-scheme:light] dark:[color-scheme:dark]" required>
                                               <span class="ml-2">No</span>
                                           </label>
                                       </div>
                                   </div>
                                   <div>
-                                      <label for="vaccine-typeHistory" class="block text-base sm:text-lg font-medium">If yes,</label>
-                                      <select
-                                          id="vaccine-typeHistory"
-                                          name="vaccine-typeHistory"                        
-                                          class="select select-bordered w-full p-2 text-base sm:text-lg bg-gray-300 dark:bg-gray-600 disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300"
-                                          disabled
-                                      >
-                                          <option value="" disabled selected>Select vaccine stage...</option>
-                                          <option value="1st dose">1st Dose</option>
-                                          <option value="2nd dose">2nd Dose</option>
-                                          <option value="Booster">Booster</option>
-                                      </select>
+                                      <label for="addressHistory" class="block text-base sm:text-lg font-medium">Address</label>
+                                      <input type="text" id="addressHistory" name="addressHistory" disabled autocomplete="off" placeholder="Address" required class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300" />
                                   </div>
-                                </div>
-
-                                <div class="mb-4">
-                                  <label for="addressHistory" class="block text-base sm:text-lg font-medium"
-                                    >Address</label
-                                  >
-                                  <input
-                                    type="text"
-                                    id="addressHistory"
-                                    name="addressHistory"
-                                    disabled
-                                    autocomplete="off"
-                                    placeholder="Address"
-                                    required
-                                    class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300"
-                                  />
-                                </div>
-
-                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-                                  <div>
-                                    <label for="dobHistory" class="block text-base sm:text-lg font-medium"
-                                      >Date of Birth</label
-                                    >
-                                    <input
-                                      type="date"
-                                      id="dobHistory"
-                                      name="dobHistory"
-                                      required
-                                      disabled
-                                      class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark] disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300"
-                                    />
-                                  </div>
-                                  <div>
-                                    <label for="sexHistory" class="block text-base sm:text-lg font-medium">Sex</label>
-                                    <select
-                                      id="sexHistory"
-                                      required
-                                      disabled
-                                      class="select select-bordered w-full p-2 bg-gray-300 dark:bg-gray-600  text-lg disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300"
-                                      name="sex"
-                                    >
-                                      <option value="" disabled selected>Select...</option>
-                                      <option value="Male">Male</option>
-                                      <option value="Female">Female</option>
-                                    </select>
-                                  </div>
-                                </div>
-
-                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-                                  <div>
-                                    <label for="emailHistory" class="block text-base sm:text-lg font-medium">Email</label>
-                                    <input
-                                      type="email"
-                                      id="emailHistory"
-                                      name="emailHistory"
-                                      disabled
-                                      autocomplete="email"
-                                      placeholder="Email"
-                                      required
-                                      class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300"
-                                    />
-                                  </div>
-                                </div>
+                              </div>
 
                               </form>
                         <!-- appointment form section end -->
 
                             <!-- cancel appointment section -->      
-                              <h3 class="font-bold text-xl text-black dark:text-white">Do you want to Cancel your Appointment?</h3>
+                              <h3 class="font-bold text-xl text-black dark:text-white mt-10">Do you want to Cancel your Appointment?</h3>
                               <p class="font-bold text-red-400">This action is permanent and cannot be undone.</p>
                                 <p class="mt-2 text-black dark:text-white">Please enter your password to avoid accidentally cancelling your Appointment</p>
                             <form action="#" method="POST">
@@ -659,8 +554,8 @@
                             </div>           
                           </div>
                         </dialog>    
-
                       </td>
+                      <!-- ito yung modal end -->
                     </tr>
 
                     <!-- kapag completed text-green-500 -->
@@ -671,7 +566,7 @@
                       <td>09:00</td>
                       <td class="font-bold text-green-500">Completed</td>
                       <td>Appointment completed</td>
-                      <td class="pl-9"><a href="#"><i class="fa-solid fa-pen-to-square"></i></a></td>
+                      <td class="pl-9"><a href="#"><i class="fa-regular fa-eye"></i></a></td>
                     </tr>
 
                     <!-- kapag approved text-blue-500 -->
@@ -682,7 +577,7 @@
                       <td>05:00</td>
                       <td class="font-bold text-blue-500">Approved</td>
                       <td>Your appointment is now listed, comply on the set date and time</td>
-                      <td class="pl-9"><a href="#"><i class="fa-solid fa-pen-to-square"></i></a></td>
+                      <td class="pl-9"><a href="#"><i class="fa-regular fa-eye"></i></a></td>
                     </tr>
                     
                     <!-- kapag cancelled text-red-500 -->
@@ -693,7 +588,7 @@
                       <td>03:00</td>
                       <td class="font-bold text-red-500">Cancelled</td>
                       <td>Your Appointment has been Cancelled due to unforeseen circumstances. <a href="bookappointment.php" class="text-blue-500 underline">Rebook now</a> if you want to continue</td>
-                      <td class="pl-9"><a href="#"><i class="fa-solid fa-pen-to-square"></i></a></td>
+                      <td class="pl-9"><a href="#"><i class="fa-regular fa-eye"></i></a></td>
                     </tr>
                   </tbody>
                 </table>
