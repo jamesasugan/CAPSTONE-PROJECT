@@ -169,7 +169,7 @@
 
 
 
-          <!-- Dapat kung anong pinili sa service, automatic yun na yung doctor na kung sino man sa service na yon -->
+          <!-- Dapat kung anong pinili sa service, automatic yun na yung doctor na kung sino man sa service na yon
           <div class="w-full md:w-auto md:col-span-1">
             <label for="doctor" class="block text-base sm:text-lg font-medium">
               Your Doctor will be:
@@ -185,7 +185,8 @@
               <option value="Dr. Johnson">Dr. Johnson</option>
               <option value="Dr. Williams">Dr. Williams</option>
             </select>
-          </div>
+          </div> -->
+
         </fieldset>
 
 
