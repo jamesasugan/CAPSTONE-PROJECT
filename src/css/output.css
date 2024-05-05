@@ -4213,6 +4213,21 @@ details.collapse summary::-webkit-details-marker {
   background-color: rgb(254 240 138 / var(--tw-bg-opacity));
 }
 
+.bg-\[\#e4e8ec\] {
+  --tw-bg-opacity: 1;
+  background-color: rgb(228 232 236 / var(--tw-bg-opacity));
+}
+
+.bg-\[\#e8ebed\] {
+  --tw-bg-opacity: 1;
+  background-color: rgb(232 235 237 / var(--tw-bg-opacity));
+}
+
+.bg-\[\#f6fafc\] {
+  --tw-bg-opacity: 1;
+  background-color: rgb(246 250 252 / var(--tw-bg-opacity));
+}
+
 .bg-opacity-50 {
   --tw-bg-opacity: 0.5;
 }

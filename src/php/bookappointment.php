@@ -46,7 +46,7 @@
     <section
       id="booking"
       class="book-appointment w-full flex justify-center items-center pt-24 pb-10 p-5
-      bg-white dark:bg-[#17222a]"
+      bg-[#f6fafc] dark:bg-[#17222a]"
     >
       <div
         class="book-form w-full max-w-7xl mx-auto p-4 rounded-lg shadow-lg bg-gray-200 dark:bg-gray-700 text-[#0e1011] dark:text-[#eef0f1]"
