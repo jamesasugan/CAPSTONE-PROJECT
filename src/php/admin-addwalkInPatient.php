@@ -1,62 +1,45 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Book Appointment</title>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Walk In Patient</title>
     <link rel="stylesheet" href="../css/output.css" />
-    <link rel="stylesheet" href="../css/style.css" />
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <link rel="stylesheet" href="../css/staff.css" />
     <script
       src="https://kit.fontawesome.com/70df29d299.js"
       crossorigin="anonymous"
     ></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="icon" type="image/x-icon" href="../images/logosmall.png" />
+    <link rel="icon" type="image/x-icon" href="../images/logosmall.png">
     <link
       href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
       rel="stylesheet"
     />
-    <script
-      type="module"
-      src="https://unpkg.com/ionicons@4.5.10-0/dist/ionicons/ionicons.esm.js"
-    ></script>
-    <script
-      nomodule=""
-      src="https://unpkg.com/ionicons@4.5.10-0/dist/ionicons/ionicons.js"
-    ></script>
+    <script type="module" src="https://unpkg.com/ionicons@4.5.10-0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule="" src="https://unpkg.com/ionicons@4.5.10-0/dist/ionicons/ionicons.js"></script>
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
     />
-    <link rel="stylesheet" href="../css/services-swiper.css" />
+    <link rel="stylesheet" href="../css/services-swiper.css">
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script src="../js/main.js" defer></script>
-  </head>
-  <body>
+</head>
+<body>
 
-
-    <?php include 'navbar-main.php'; ?>
-
-    <?php $selectedService = isset($_GET['service'])
-        ? $_GET['service']
-        : null; ?>
-
+    <?php include 'admin-navbar.php'; ?>
+    
     <section
-      id="booking"
-      class="book-appointment w-full flex justify-center items-center pt-24 pb-10 p-5
+      id="addwalkInPatient"
+      class="w-full min-h-screen flex justify-center items-center pt-28 pb-10 p-5
       bg-[#f6fafc] dark:bg-[#17222a]"
     >
       <div
-        class="book-form w-full max-w-7xl mx-auto p-4 rounded-lg shadow-lg bg-gray-200 dark:bg-gray-700 text-[#0e1011] dark:text-[#eef0f1]"
+        class="w-full max-w-7xl mx-auto p-4 rounded-lg shadow-lg bg-gray-200 dark:bg-gray-700 text-[#0e1011] dark:text-[#eef0f1]"
       >
-        <h2 class="text-2xl font-bold mb-2">Set an Appointment</h2>
-        <p class="mb-4">
-          Kindly answer the form to set a face-to-face appointment for
-          consultation, test, or procedure in our clinic. <br>View <a href="doctorschedule.php" target="_blank" class="link text-blue-400 font-bold">Doctor's Schedule</a> for more information about the schedules.
-        </p>
-        <p><span>Note:</span> The selection of Doctor will depend if the selected doctor is available on the set appointment date and time</p>
+        <h2 class="text-3xl font-bold mb-10">Add Walk In Patient</h2>
 
         <form action="#" method="GET">
         <fieldset class="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -91,102 +74,43 @@
           <div class="w-full">
             <label for="service-type" class="block text-lg font-medium mb-1">What type of service?</label>
             <select
-              id="service-type"
-              required
-              class="select select-bordered w-full bg-gray-300 dark:bg-gray-600 text-base sm:text-lg lg:text-xl focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
-              name="service-type"
-          >
-              <option value="" disabled <?php echo is_null($selectedService)
-                  ? 'selected'
-                  : ''; ?>>Select service type...</option>
-              <?php
-              $services = [
-                  'OB-Gyne',
-                  'Pregnancy Testing',
-                  'Dengue Test',
-                  'Covid-19 Rapid Testing',
-                  'Family Medicine',
-                  'Internal Medicine',
-                  'Medical Consultation',
-                  'Vaccination',
-                  'BP Monitoring',
-                  'Blood Glucose Determination',
-                  'Nebulization',
-                  'Complete Blood Count (CBC)',
-                  'Fecalysis',
-                  'Electrocardiogram (ECG)',
-                  'X-RAY',
-                  'Pre-Employment Package',
-                  'Annual Physical Examination',
-                  'FBS',
-                  'Lipid Profile',
-                  'AST/ALT',
-                  'Uric Acid',
-                  'Blood Typing',
-                  'Electrolytes',
-                  'Syphilis Screening',
-                  'Pregnant Screening',
-                  'FT4/TSH',
-              ];
-              foreach ($services as $service) {
-                  echo "<option value=\"$service\" " .
-                      ($selectedService === $service ? 'selected' : '') .
-                      ">$service</option>";
-              }
-              ?>
-          </select>
-
-
-        </div>
-
-        <div class="w-full md:w-auto md:col-span-1">
-          <label for="appointment-date" class="block text-base sm:text-lg font-medium">
-            Appointment Date
-          </label>
-          <input
-            type="date"
-            id="appointment-date"
-            name="appointment-date"
-            required
-            class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark]"
-          />
-        </div>
-        <div class="w-full md:w-auto md:col-span-1">
-          <label for="appointment-time" class="block text-base sm:text-lg font-medium">
-            Appointment Time
-          </label>
-          <input
-            type="time"
-            id="appointment-time"
-            name="appointment-time"
-            required
-            min="08:00"
-            max="17:00"
-            class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark]"
-          />
-        </div>
-
-
-
-
-          <!-- Dapat kung anong pinili sa service, automatic yun na yung doctor na kung sino man sa service na yon
-          <div class="w-full md:w-auto md:col-span-1">
-            <label for="doctor" class="block text-base sm:text-lg font-medium">
-              Your Doctor will be:
-            </label>
-            <select
-              id="doctor"
-              name="doctor"
-              required
-              class="select select-bordered w-full p-2 text-base sm:text-lg bg-gray-300 dark:bg-gray-600"
+                id="service-type"
+                required
+                class="select select-bordered w-full bg-gray-300 dark:bg-gray-600 text-base sm:text-lg lg:text-xl focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
+                name="service-type"
             >
-              <option value="" disabled selected>...</option>
-              <option value="Dr. Smith">Dr. Smith</option>
-              <option value="Dr. Johnson">Dr. Johnson</option>
-              <option value="Dr. Williams">Dr. Williams</option>
+                <option value="" disabled selected>Select service type...</option>
+                <option value="OB-Gyne">OB-Gyne</option>
+                <option value="Pregnancy Testing">Pregnancy Testing</option>
+                <option value="Dengue Test">Dengue Test</option>
+                <option value="Covid-19 Rapid Testing">Covid-19 Rapid Testing</option>
+                <option value="Family Medicine">Family Medicine</option>
+                <option value="Internal Medicine">Internal Medicine</option>
+                <option value="Medical Consultation">Medical Consultation</option>
+                <option value="Vaccination">Vaccination</option>
+                <option value="BP Monitoring">BP Monitoring</option>
+                <option value="Blood Glucose Determination">Blood Glucose Determination</option>
+                <option value="Nebulization">Nebulization</option>
+                <option value="Complete Blood Count (CBC)">Complete Blood Count (CBC)</option>
+                <option value="Fecalysis">Fecalysis</option>
+                <option value="Electrocardiogram (ECG)">Electrocardiogram (ECG)</option>
+                <option value="X-RAY">X-RAY</option>
+                <option value="Pre-Employment Package">Pre-Employment Package</option>
+                <option value="Annual Physical Examination">Annual Physical Examination</option>
+                <option value="FBS">FBS</option>
+                <option value="Lipid Profile">Lipid Profile</option>
+                <option value="AST/ALT">AST/ALT</option>
+                <option value="Uric Acid">Uric Acid</option>
+                <option value="Blood Typing">Blood Typing</option>
+                <option value="Electrolytes">Electrolytes</option>
+                <option value="Syphilis Screening">Syphilis Screening</option>
+                <option value="Pregnant Screening">Pregnant Screening</option>
+                <option value="FT4/TSH">FT4/TSH</option>
             </select>
-          </div> -->
 
+
+
+        </div>
         </fieldset>
 
 
@@ -234,7 +158,7 @@
             </div>
 
             <div>
-                <div class="block text-base sm:text-lg font-medium mb-1">Are you vaccinated?</div>
+                <div class="block text-base sm:text-lg font-medium mb-1">Is the Patient vaccinated?</div>
                 <div class="flex items-center space-x-4 p-2 bg-gray-300 dark:bg-gray-600 rounded">
                     <label class="flex items-center">
                         <input type="radio" name="vaccinated" value="yes" class="radio radio-primary" required>
@@ -251,24 +175,7 @@
                 <input type="text" id="address" name="address" autocomplete="off" placeholder="Address" required class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600" />
             </div>
         </div>
-
-          
-
-          <h3 class="text-xl font-bold mb-2 mt-5">Data Privacy Note</h3>
-          <p class="mb-4">
-          This policy applies to information acquired from patients of Holistic Choice Multispecialty Clinic who have completed the Book Appointment process and other accompanying forms that are required to administer their requests. Furthermore, this notice will inform you how we process and protect your personal information. By visiting this page or reading this notice, you certify that you have read, understood, and agree to the terms below
-          </p>
-          <p class="mb-4">Information collected and held by HCMC is subject to the Data Privacy Act of 2012, and the clinic respects and supports privacy protection in relation to the information collected. HCMC is committed to complying with the Data Privacy Act (Republic Act No. 10173).</p>
-          <label class="flex items-center mb-4 ">
-            <input
-              type="checkbox"
-              required
-              class="form-checkbox h-5 w-5 rounded-none checkbox checkbox-success [color-scheme:light] dark:[color-scheme:dark]"
-              name="privacy"
-            />
-            <span class="ml-2">I understand</span>
-          </label>
-
+        
           <div class="flex justify-center mt-4 mb-2">
             <input
               type="submit"
@@ -279,17 +186,18 @@
 
         </form>
 
+
         <!-- pashow nito pagnasubmit -->
         <div class="flex justify-center">
             <div role="alert" class="inline-flex items-center bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative">
                 <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                <span>Appointment has been booked! Please wait for confirmation message.</span>
+                <span>Account Created!</span>
             </div>
         </div>
 
       </div>
     </section>
-  </body>
+</body>
 </html>

@@ -47,7 +47,7 @@
             </div>
 
             <div class="logo-main flex justify-center lg:justify-start w-full sm:w-auto">
-              <a href="staff-index.php">
+              <a href="admin-index.php">
                 <!-- Light mode logo (Shown in light mode, hidden in dark mode) -->
                 <img
                   class="block mx-auto h-10 lg:h-16 w-auto dark:hidden"
@@ -77,22 +77,28 @@
                     class="flex space-x-4 uppercase font-bold text-lg"
                   >
                     <a
-                      href="staff-patientsRecord.php"
+                      href="admin-patientRecords.php"
                       class="hover:bg-gray-300 dark:hover:bg-gray-700 dark:hover:text-white px-3 py-2 rounded-md transition duration-300 ease-in-out"
                     >
-                      Patient Records
+                     Records
                     </a>
                     <a
-                      href="staff-doctorschedule.php"
+                      href="admin-doctorSchedule.php"
                       class="hover:bg-gray-300 dark:hover:bg-gray-700 dark:hover:text-white px-3 py-2 rounded-md transition duration-300 ease-in-out"
                     >
-                      Schedule
+                      Schedules
                     </a>
                     <a
-                      href="staff-appointments.php"
+                      href="admin-appointments.php"
                       class="hover:bg-gray-300 dark:hover:bg-gray-700 dark:hover:text-white px-3 py-2 rounded-md transition duration-300 ease-in-out"
                     >
-                      Appointment
+                      Appointments
+                    </a>
+                    <a
+                      href="admin-accounts.php"
+                      class="hover:bg-gray-300 dark:hover:bg-gray-700 dark:hover:text-white px-3 py-2 rounded-md transition duration-300 ease-in-out"
+                    >
+                      Accounts
                     </a>
                   </div>
                 </div>
@@ -191,7 +197,7 @@
 
                         <!-- ito nakalabas pag naka log in -->
                         <li>
-                          <a href="staff-profile.php"
+                          <a href="admin-profile.php"
                             class="hover:bg-gray-300 dark:hover:bg-gray-600 hover:font-bold text-lg transition duration-300 ease-in-out"
                             >Profile</a
                           >
@@ -226,19 +232,24 @@
             class="px-2 pt-2 pb-3 space-y-1 text-neutral dark:text-gray-200 uppercase"
           >
             <a
-              href="staff-patientsRecord.php"
+              href="admin-patientRecords.php"
               class="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-700 hover:text-white border-b border-slate-800 dark:border-slate-300"
-              >Patient Records</a
+              >Records</a
             >
             <a
-              href="staff-doctorschedule.php"
+              href="admin-doctorSchedule.php"
               class="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-700 hover:text-white border-b border-slate-800 dark:border-slate-300"
-              >Schedule</a
+              >Schedules</a
             >
             <a
-              href="staff-appointments.php"
+              href="admin-appointments.php"
               class="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-700 hover:text-white border-b border-slate-800 dark:border-slate-300"
-              >Appointment</a
+              >Appointments</a
+            >
+            <a
+              href="admin-accounts.php"
+              class="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-700 hover:text-white border-b border-slate-800 dark:border-slate-300"
+              >Accounts</a
             >
           </div>
         </div>

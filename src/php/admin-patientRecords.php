@@ -32,13 +32,18 @@
     <link rel="stylesheet" href="../css/services-swiper.css" />
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script src="../js/main.js" defer></script>
-    <script src="../js/staff-patientsRecord.js" defer></script>
   </head>
   <body>
 
-    <?php include 'staff-navbar.php'; ?>
+    <?php include 'admin-navbar.php'; ?>
 
-    <div id="patients-recordTab" class="p-10 pt-32 mx-auto w-full min-h-screen bg-[#ebf0f4] dark:bg-[#17222a]">
+    <div id="patients-recordTab" class="p-10 pt-24 mx-auto w-full min-h-screen bg-[#ebf0f4] dark:bg-[#17222a]">
+
+      <!-- add walk in patient button -->
+      <div class="flex justify-end mb-5">
+            <a href="admin-addwalkInPatient.php" class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold py-2 px-4 rounded cursor-pointer border-none">Add Walk In Patient</a>
+        </div>
+
       <div class="flex flex-col sm:flex-row justify-between items-center bg-gray-200 dark:bg-gray-700 p-5 border-b border-b-black ">
         <h3 class="text-2xl sm:text-4xl font-bold text-black dark:text-white mb-4 sm:mb-0 uppercase">
           Patients
@@ -134,6 +139,12 @@
                       </div>
                   </div>
 
+                  <div class="modal-action">
+                      <form method="dialog">
+                        <button class="btn bg-gray-400 dark:bg-white hover:bg-gray-500 dark:hover:bg-gray-400  text-black  border-none">Close</button>
+                      </form>
+                    </div>
+
 
 
                   <form id="patientForm" action="#" method="POST" >
@@ -145,7 +156,7 @@
                                 name="consultation-date" 
                                 required 
                                 disabled 
-                                class="input input-bordered w-full p-2 bg-white dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark] text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400" />
+                                class="input input-bordered w-full p-2 bg-white dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark] text-black dark:text-white disabled:bg-white disabled:text-black dark:disabled:text-white" />
                         </label>
                     </div>
                     <div>
@@ -157,7 +168,7 @@
                                 required 
                                 disabled
                                 placeholder="Consultant Name"
-                                class="input input-bordered w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400" />
+                                class="input input-bordered w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-black dark:disabled:text-white" />
                         </label>
                     </div>
                     <div>
@@ -169,7 +180,7 @@
                             required 
                             disabled 
                             placeholder="Temperature in Celsius"
-                            class="input input-bordered w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400" />
+                            class="input input-bordered w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-black dark:disabled:text-white" />
                         </label>
                     </div>
                     <div>
@@ -181,7 +192,7 @@
                             required 
                             disabled 
                             placeholder="Blood Pressure"
-                            class="input input-bordered w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400" />
+                            class="input input-bordered w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-black dark:disabled:text-white" />
                         </label>
                     </div>
                 </div>
@@ -189,7 +200,7 @@
                 <div class="grid grid-cols-1 gap-4 mb-14">
                     <label class="block">
                         Saturation:
-                        <input type="text" name="saturation" value="di ko alam basta text" required placeholder="Saturation" disabled class="input input-bordered w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400" />
+                        <input type="text" name="saturation" value="di ko alam basta text" required placeholder="Saturation" disabled class="input input-bordered w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-black dark:disabled:text-white" />
                     </label>
                     <label class="block">
                         Chief Complaint:
@@ -199,19 +210,19 @@
                         required 
                         disabled 
                         placeholder="Chief Complaint"
-                        class="input input-bordered w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400" />
+                        class="input input-bordered w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-black dark:disabled:text-white" />
                     </label>
                     <label class="block">
                         Objective:
-                        <input type="text" name="objective" value="Physical Examination" required placeholder="Objective" disabled class="input input-bordered w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400" />
+                        <input type="text" name="objective" value="Physical Examination" required placeholder="Objective" disabled class="input input-bordered w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-black dark:disabled:text-white" />
                     </label>
                     <label class="block">
                         Assessment:
-                        <input type="text" name="Assessment" value="Diagnosis ng doctor sa patient" required placeholder="Assessment" disabled class="input input-bordered w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400" />
+                        <input type="text" name="Assessment" value="Diagnosis ng doctor sa patient" required placeholder="Assessment" disabled class="input input-bordered w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-black dark:disabled:text-white" />
                     </label>
                     <label class="block">
                         Treatment Plan:
-                        <input type="text" name="Treatment-plan" value="Treatment plan" required placeholder="Treatment Plan" disabled class="input input-bordered w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400" />
+                        <input type="text" name="Treatment-plan" value="Treatment plan" required placeholder="Treatment Plan" disabled class="input input-bordered w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-black dark:disabled:text-white" />
                     </label>
                 </div>
 
@@ -225,34 +236,7 @@
                             alt="image description">
                         </div>
 
-                  <div class="chart-actions text-center my-4">                             
-                      <input type="file" accept="image/*" disabled class="file-input file-input-bordered file-input-info mb-3 w-full max-w-xs bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400 disabled:border-gray-300" />
-
-                      <div id="editControls" class="space-x-4">
-                        <a href="#" id="editBtn" class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none">
-                            <i class="fa-solid fa-pen-to-square"></i> Edit Patient Information
-                        </a>                    
-                        <input id="updateBtn" class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none hidden" type="submit" value="Update">
-                        <button id="cancelBtn" class="btn bg-white text-black hover:bg-gray-400 border-none hidden">Cancel</button>
-                    </div>
-                  </div>
-                  </form>
-
-                  <!-- pashow ulit nito pag nagedit at sinubmit -->
-                  <div class="flex justify-center">
-                        <div role="alert" class="inline-flex items-center bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                            <span>Patient Information Updated!</span>
-                        </div>
-                    </div>
-
-                    <div class="modal-action">
-                      <form method="dialog">
-                        <button class="btn bg-white text-black hover:bg-gray-400 border-none">Close</button>
-                      </form>
-                    </div>
+                  </form>                  
                   </div>
 
                 </dialog>

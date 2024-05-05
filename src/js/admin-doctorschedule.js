@@ -5,9 +5,8 @@ document.addEventListener('DOMContentLoaded', function () {
   var cancelButton = document.getElementById('cancelSchedule');
   var form = document.getElementById('availability-form');
   var inputs = form.querySelectorAll(
-    'input[type="checkbox"], input[type="time"], input[type="radio"]',
+    'input[type="checkbox"], input[type="time"], input[type="radio"], select',
   );
-
   var yesNote = document.getElementById('yesNote');
   var noNote = document.getElementById('noNote');
 

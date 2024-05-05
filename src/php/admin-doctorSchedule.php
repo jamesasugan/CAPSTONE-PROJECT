@@ -28,12 +28,12 @@
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script src="../js/main.js" defer></script>
     <script src="../js/calendar.js" defer></script>
-    <script src="../js/staff-doctorschedule.js" defer></script>
+    <script src="../js/admin-doctorschedule.js" defer></script>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 </head>
 <body>
 
-    <?php include 'staff-navbar.php'; ?>
+    <?php include 'admin-navbar.php'; ?>
     
     <section class="w-full min-h-screen bg-[#ebf0f4] dark:bg-[#17222a] text-[#0e1011] dark:text-[#eef0f1]">
             <div class="mx-auto bg-white dark:bg-[#222f3a] shadow-lg p-5 pt-28 w-full max-w-full">
@@ -44,11 +44,56 @@
                 <div id="set-doctorSchedule" class="flex-1 px-4 sm:px-10 py-10">
                     <div class="bg-gray-200 dark:bg-gray-700 p-5 rounded-lg h-full">
                         <h3 class="text-3xl font-bold text-black dark:text-white mb-4">
-                            Set Your Schedule
+                            Set Doctor's Schedule
                         </h3>
                         <form id="availability-form" action="#" method="GET" class="space-y-6">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div class="form-group">
+                                    <label
+                                    for="DoctorName"
+                                    class="block font-medium text-black dark:text-white text-base sm:text-lg"
+                                    >Doctor's Name:</label
+                                    >
+                                    <select
+                                    id="DoctorName"
+                                    name="DoctorName"
+                                    class="select select-bordered appearance-none block w-full px-3 border-gray-300 rounded-md shadow-sm focus:outline-none text-base sm:text-lg bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400 disabled:border-gray-300"
+                                    required
+                                    disabled
+                                    >
+                                    <option value="">Select a Doctor</option>
+                                    <option value="John Edward Dionisio">John Edward Dionisio</option>
+                                    <option value="Cy Anthony Cruz">Cy Anthony Cruz</option>
+                                    <option value="Clent Juarez">Clent Juarez</option>
+                                    <option value="Walter White Jr.">Walter White Jr.</option>
+                                    </select>
+                                </div>   
+
+                                <div class="form-group">
+                                    <label
+                                    for="department"
+                                    class="block font-medium text-black dark:text-white text-base sm:text-lg"
+                                    >Department:</label
+                                    >
+                                    <select
+                                    id="department"
+                                    name="department"
+                                    class="select select-bordered appearance-none block w-full px-3 border-gray-300 rounded-md shadow-sm focus:outline-none text-base sm:text-lg bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400 disabled:border-gray-300"
+                                    required
+                                    disabled
+                                    >
+                                    <option value="">Select Department</option>
+                                    <option value="Internal Medicine">Internal Medicine</option>
+                                    <option value="OB-GYNE">OB-GYNE</option>
+                                    <option value="Family Medicine">Family Medicine</option>
+                                    <option value="Pediatrics">Pediatrics</option>
+                                    <option value="General Medicine">General Medicine</option>
+                                    </select>
+                                </div>   
+                            </div>
+
                             <fieldset class="mb-4"> 
-                                <legend class="text-xl font-medium mb-2">Select your Days of Schedule in a Week</legend>
+                                <legend class="text-xl font-medium mb-2">Select the Days of Doctor's Schedule in a Week</legend>
                                 <ul class="flex flex-wrap text-base sm:text-lg font-medium text-gray-900 border border-gray-400 rounded-lg dark:border-gray-400 dark:text-white bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:light]">
                                     <!-- Monday Item -->
                                     <li class="flex-grow w-full sm:w-1/2 md:w-1/3 border-b border-r last:border-r-0 last:border-b-0 md:last:border-r sm:last:border-b-0 sm:odd:border-r border-gray-400 dark:border-gray-400">
@@ -109,7 +154,7 @@
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div class="form-group">
                                         <div class="block text-base sm:text-lg font-medium">
-                                            Start Time
+                                            Start Time:
                                         </div>
                                         <input
                                             type="time"
@@ -124,7 +169,7 @@
 
                                     <div class="form-group">
                                         <div class="block text-base sm:text-lg font-medium">
-                                            End Time
+                                            End Time:
                                         </div>
                                         <input
                                             type="time"
@@ -253,10 +298,6 @@
                                 </div>
                             </div>
                         </dialog>
-
-
-
-                        
 
                     </div>
                 </div>
