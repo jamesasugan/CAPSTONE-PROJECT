@@ -360,7 +360,7 @@
                       <td>Consultation</td>
                       <td>21/05/2024</td>
                       <td>12:00</td>
-                      <td class="font-bold text-yellow-500 dark:text-yellow-300 ">Pending</td> 
+                      <td class="font-bold text-yellow-600 dark:text-yellow-300 ">Pending</td> 
                       <td>Your schedule is being process</td>
 
                       <!-- ito yung modal. hindi maoopen yung mga sumunod na modal kapag yung "viewandCancel" name parehas, dapat magkaiba. lahat ng modal ko na may ganito kaya check mo na lang

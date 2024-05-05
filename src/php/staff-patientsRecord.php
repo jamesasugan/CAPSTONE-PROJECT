@@ -65,6 +65,8 @@
               <th>Name</th>
               <th>Age</th>
               <th>Sex</th>
+              <th>Visit Type</th>
+              <th>Status</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -76,8 +78,15 @@
               <td>John Edward Dionisio</td>
               <td>21</td>
               <td>Male</td>
-              <td class="pl-9">
+              <td>Walk In</td>
+              <td class="font-bold text-yellow-600 dark:text-yellow-300">To be Reviewed</td>
+              <!-- Status List
+                   Completed
+                   Waiting for Results
+            -->
 
+              <!-- view information modal -->
+              <td class="pl-9">
               <!-- yung modal name view_info2,3,4,5 dapat sa mga susunod, bawal parehas kase di maoopen -->
                 <button onclick="view_info1.showModal()"><i class="fa-regular fa-eye"></i></button> 
                 <dialog id="view_info1" class="modal">
@@ -102,7 +111,12 @@
                   <div class="patientInfo mb-10 mt-5">
                       <h2 class="text-xl sm:text-2xl font-bold mb-1">Patient #1</h2>
 
+                      
+
                       <div class="grid grid-cols-1 md:grid-cols-2 gap-1 text-lg sm:text-xl">
+                          <h2 class="text-lg sm:text-xl font-bold">Status: <span class="text-yellow-600 dark:text-yellow-300">To be Reviewed</span></h2>
+                          <p><strong>Visit Type:</strong> Walk In</p>
+                          
                           <p><strong>Service:</strong> Consultation</p>
                           <p><strong>Service Type:</strong> OB-GYNE</p>
 
@@ -141,6 +155,7 @@
                                 value="Walter White" 
                                 required 
                                 disabled
+                                placeholder="Consultant Name"
                                 class="input input-bordered w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400" />
                         </label>
                     </div>
@@ -152,6 +167,7 @@
                             value="36" 
                             required 
                             disabled 
+                            placeholder="Temperature in Celsius"
                             class="input input-bordered w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400" />
                         </label>
                     </div>
@@ -163,15 +179,16 @@
                             value="123/50" 
                             required 
                             disabled 
+                            placeholder="Blood Pressure"
                             class="input input-bordered w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400" />
                         </label>
                     </div>
                 </div>
                 
-                <div class="grid grid-cols-1 gap-4 mb-4">
+                <div class="grid grid-cols-1 gap-4 mb-14">
                     <label class="block">
                         Saturation:
-                        <input type="text" name="saturation" value="di ko alam basta text" required disabled class="input input-bordered w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400" />
+                        <input type="text" name="saturation" value="di ko alam basta text" required placeholder="Saturation" disabled class="input input-bordered w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400" />
                     </label>
                     <label class="block">
                         Chief Complaint:
@@ -180,22 +197,26 @@
                         value="Dinadaing ng patient" 
                         required 
                         disabled 
+                        placeholder="Chief Complaint"
                         class="input input-bordered w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400" />
                     </label>
                     <label class="block">
                         Objective:
-                        <input type="text" name="objective" value="Physical Examination" required disabled class="input input-bordered w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400" />
+                        <input type="text" name="objective" value="Physical Examination" required placeholder="Objective" disabled class="input input-bordered w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400" />
                     </label>
                     <label class="block">
                         Assessment:
-                        <input type="text" name="Assessment" value="Diagnosis ng doctor sa patient" required disabled class="input input-bordered w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400" />
+                        <input type="text" name="Assessment" value="Diagnosis ng doctor sa patient" required placeholder="Assessment" disabled class="input input-bordered w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400" />
                     </label>
                     <label class="block">
                         Treatment Plan:
-                        <input type="text" name="Treatment-plan" value="Treatment plan" required disabled class="input input-bordered w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400" />
+                        <input type="text" name="Treatment-plan" value="Treatment plan" required placeholder="Treatment Plan" disabled class="input input-bordered w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400" />
                     </label>
                 </div>
 
+                <div class="border border-gray-400 mb-10"></div>
+
+                <h2 class="text-2xl sm:text-3xl font-bold mb-4 text-center">Laboratory Results</h2>
                       <!-- Images dito. pag nag upload sa upload file button dito lalabas dapat. kapag kunwari lima inupload na picture dapat lima din tong buong DIV -->
                         <div class="flex justify-center items-center w-full">
                             <img class="h-auto max-w-full" 

@@ -95,7 +95,7 @@
               <td>John Edward Dionisio</td>
               <td>May 10, 2024</td>
               <td class="pl-10">10:00 AM</td> <!-- alisin mo yung pl-10 pag nagoverlap yung ilalagay mo -->
-              <td class="font-bold text-yellow-500 dark:text-yellow-300">Pending</td> 
+              <td class="font-bold text-yellow-600 dark:text-yellow-300">Pending</td> 
               <!-- 
               Completed - text-green-500
               Cancelled - text-red-500

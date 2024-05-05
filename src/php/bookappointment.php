@@ -247,9 +247,9 @@
 
           <h3 class="text-xl font-bold mb-2 mt-5">Data Privacy Note</h3>
           <p class="mb-4">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua.
+          This policy applies to information acquired from patients of Holistic Choice Multispecialty Clinic who have completed the Book Appointment process and other accompanying forms that are required to administer their requests. Furthermore, this notice will inform you how we process and protect your personal information. By visiting this page or reading this notice, you certify that you have read, understood, and agree to the terms below
           </p>
+          <p class="mb-4">Information collected and held by HCMC is subject to the Data Privacy Act of 2012, and the clinic respects and supports privacy protection in relation to the information collected. HCMC is committed to complying with the Data Privacy Act (Republic Act No. 10173).</p>
           <label class="flex items-center mb-4 ">
             <input
               type="checkbox"
