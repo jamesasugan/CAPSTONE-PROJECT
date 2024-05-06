@@ -341,6 +341,23 @@
                                       <input type="text" id="last-nameHistory" name="last-nameHistory" disabled placeholder="Last Name" required class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300" />
                                   </div>
                                   <div>
+                                    <label
+                                      for="email"
+                                      class="block font-medium text-black dark:text-white text-base sm:text-lg overflow-hidden whitespace-nowrap text-overflow-ellipsis"
+                                      >Email Address</label
+                                    >
+                                    <input
+                                      id="email"
+                                      name="email"
+                                      type="email"
+                                      disabled
+                                      autocomplete="email"
+                                      required
+                                      placeholder="Email"
+                                      class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300"
+                                    />
+                                  </div>
+                                  <div>
                                       <label for="contact-numberHistory" class="block text-base sm:text-lg font-medium">Contact Number</label>
                                       <input id="contact-numberHistory" name="contact-numberHistory" disabled type="tel" required autocomplete="off" placeholder="Contact Number" pattern="[0-9]{1,11}" minlength="11" maxlength="11" title="Please enter up to 11 numeric characters." class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300" />
                                   </div>
