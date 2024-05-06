@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 29, 2024 at 06:04 PM
+-- Generation Time: May 06, 2024 at 07:16 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.0.28
 
@@ -68,7 +68,7 @@ CREATE TABLE `tbl_accounts` (
 INSERT INTO `tbl_accounts` (`User_ID`, `Email`, `Password`, `userType`) VALUES
 (1, 'sampleEmail@gmail.com', '$2y$10$1rXS6tvbN7GSX6GAVAgc3OaqDH71LJccIb2TYmNFSjxWTiwsv7YOi', 'patient'),
 (2, 'sampleemail0235@gmail.com', '$2y$10$ZnaV1a3UIxaDHITIcHMp2u2Fnf5WUIPKb1jfKpPjgdO9fIu9g0th6', 'patient'),
-(3, 'sampleemail123@gmail.com', '$2y$10$crw.xFf27Mu64.12CD46mO4O5kpQFC4Q5KeWawt6PtqhSdDJtw4w.', 'user'),
+(3, 'sampleemail123@gmail.com', '$2y$10$crw.xFf27Mu64.12CD46mO4O5kpQFC4Q5KeWawt6PtqhSdDJtw4w.', 'patient'),
 (5, 'doctorEmail@gmail.com', '123', 'staff');
 
 -- --------------------------------------------------------
