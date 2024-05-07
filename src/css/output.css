@@ -3707,10 +3707,6 @@ details.collapse summary::-webkit-details-marker {
   height: 5rem;
 }
 
-.h-24 {
-  height: 6rem;
-}
-
 .h-5 {
   height: 1.25rem;
 }
@@ -5091,6 +5087,10 @@ details.collapse summary::-webkit-details-marker {
     margin-top: 0px;
   }
 
+  .sm\:mr-10 {
+    margin-right: 2.5rem;
+  }
+
   .sm\:block {
     display: block;
   }
@@ -5308,6 +5308,11 @@ details.collapse summary::-webkit-details-marker {
   .md\:text-xs {
     font-size: 0.75rem;
     line-height: 1rem;
+  }
+
+  .md\:text-2xl {
+    font-size: 1.5rem;
+    line-height: 2rem;
   }
 
   .md\:last\:border-r:last-child {

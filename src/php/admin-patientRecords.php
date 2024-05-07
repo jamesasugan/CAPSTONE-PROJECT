@@ -45,7 +45,7 @@
         </div>
 
             <div class="flex flex-col sm:flex-row justify-between items-center bg-gray-200 dark:bg-gray-700 p-5 border-b border-b-black">
-                <h3 class="text-2xl sm:text-4xl font-bold text-black dark:text-white mb-4 sm:mb-0 uppercase mr-10">
+                <h3 class="text-2xl sm:text-4xl font-bold text-black dark:text-white mb-4 sm:mb-0 uppercase mr-0 sm:mr-10">
                   Patients
                 </h3>
                 <form action="#" method="POST" class="w-full sm:flex sm:items-center justify-end">
@@ -142,7 +142,7 @@
                       <div class="grid grid-cols-1 md:grid-cols-2 gap-1 text-lg sm:text-xl">
                         <h2 class="text-lg sm:text-xl font-bold">Status: <span class="text-yellow-600 dark:text-yellow-300">To be Seen</span></h2>
                             <p><strong>Appointment Type:</strong> Walk In</p>
-                            
+
                             <p><strong>Service:</strong> Consultation</p>
                             <p><strong>Service Type:</strong> OB-GYNE</p>
 
