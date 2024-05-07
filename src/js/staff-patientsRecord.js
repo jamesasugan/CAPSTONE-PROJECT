@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const updateBtn = document.getElementById('updateBtn');
   const form = document.getElementById('patientForm');
   const inputs = form.querySelectorAll(
-    'input[type=text], input[type=date], input[type=file]',
+    'input[type=text], input[type=date], input[type=file], textarea',
   );
 
   // Enable editing
@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', function () {
 function resetPatientForm() {
   const form = document.getElementById('patientForm');
   const inputs = form.querySelectorAll(
-    'input[type=text], input[type=date], input[type=file]',
+    'input[type=text], input[type=date], input[type=file], textarea',
   );
   const editBtn = document.getElementById('editBtn');
   const updateBtn = document.getElementById('updateBtn');

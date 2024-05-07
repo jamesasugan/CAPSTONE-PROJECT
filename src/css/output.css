@@ -3707,8 +3707,16 @@ details.collapse summary::-webkit-details-marker {
   height: 5rem;
 }
 
+.h-24 {
+  height: 6rem;
+}
+
 .h-5 {
   height: 1.25rem;
+}
+
+.h-52 {
+  height: 13rem;
 }
 
 .h-6 {
@@ -5075,6 +5083,10 @@ details.collapse summary::-webkit-details-marker {
     margin-left: 1.5rem;
   }
 
+  .sm\:mr-4 {
+    margin-right: 1rem;
+  }
+
   .sm\:mt-0 {
     margin-top: 0px;
   }
@@ -5095,6 +5107,10 @@ details.collapse summary::-webkit-details-marker {
     width: 50%;
   }
 
+  .sm\:w-40 {
+    width: 10rem;
+  }
+
   .sm\:w-80 {
     width: 20rem;
   }
@@ -5113,6 +5129,10 @@ details.collapse summary::-webkit-details-marker {
 
   .sm\:flex-row {
     flex-direction: row;
+  }
+
+  .sm\:items-center {
+    align-items: center;
   }
 
   .sm\:items-stretch {

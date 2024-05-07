@@ -78,10 +78,9 @@
             <tr
               class="font-bold text-black dark:text-white text-base sm:text-lg"
             >
-              <th>Patient #</th>
               <th>Name</th>
-              <th>Preffered Date</th>
-              <th>Preferred Time</th>
+              <th>Appointment Date</th>
+              <th>Appointment Time</th>
               <th>Status</th>
               <th>Action</th>
             </tr>
@@ -91,7 +90,6 @@
             <tr
               class="text-base hover:bg-gray-300 dark:hover:bg-gray-600 font-medium text-black dark:text-white"
             >
-              <th>1</th>
               <td>John Edward Dionisio</td>
               <td>May 10, 2024</td>
               <td class="pl-10">10:00 AM</td> <!-- alisin mo yung pl-10 pag nagoverlap yung ilalagay mo -->

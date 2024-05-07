@@ -44,33 +44,57 @@
             <a href="admin-addwalkInPatient.php" class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold py-2 px-4 rounded cursor-pointer border-none">Add Walk In Patient</a>
         </div>
 
-      <div class="flex flex-col sm:flex-row justify-between items-center bg-gray-200 dark:bg-gray-700 p-5 border-b border-b-black ">
-        <h3 class="text-2xl sm:text-4xl font-bold text-black dark:text-white mb-4 sm:mb-0 uppercase">
-          Patients
-        </h3>
-        <form action="#" method="POST" class="flex items-center">
-          <input 
-              type="text" 
-              name="text"
-              class="input input-bordered appearance-none w-full px-3 py-2 rounded-none bg-white dark:bg-gray-600 text-black dark:text-white border border-black border-r-0 dark:border-white" 
-              placeholder="Search"
-          />
-          <button type="submit" class="btn btn-square bg-gray-400 hover:bg-gray-500  rounded-none dark:bg-gray-500 dark:hover:bg-gray-300 border border-black border-l-0 dark:border-white">
-              <i class="fa-solid fa-magnifying-glass text-black dark:text-white"></i>
-          </button>
-        </form>
-      </div>
+            <div class="flex flex-col sm:flex-row justify-between items-center bg-gray-200 dark:bg-gray-700 p-5 border-b border-b-black">
+                <h3 class="text-2xl sm:text-4xl font-bold text-black dark:text-white mb-4 sm:mb-0 uppercase mr-10">
+                  Patients
+                </h3>
+                <form action="#" method="POST" class="w-full sm:flex sm:items-center justify-end">
+                  <select class="select select-bordered text-black dark:text-white w-full sm:w-40 bg-gray-300 dark:bg-gray-600 text-base sm:text-lg lg:text-xl focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 mb-4 sm:mb-0 sm:mr-4">
+                    <option disabled selected>Sort by</option>
+                    <optgroup label="Name">
+                      <option>A-Z</option>
+                      <option>Z-A</option>
+                    </optgroup>
+                    <optgroup label="Visit">
+                      <option>Initial Visit</option>
+                      <option>Follow-up Visit</option>
+                      <option>Clearance Visit</option>
+                    </optgroup>
+                    <optgroup label="Appointment Type">
+                      <option>Walk In</option>
+                      <option>Online</option>
+                    </optgroup>
+                    <optgroup label="Status">
+                      <option>To be Seen</option>
+                      <option>Completed</option>
+                    </optgroup>
+                  </select>
+
+                  <!-- Search Input and Button -->
+                  <div class="flex w-full sm:w-auto">
+                    <input 
+                      type="text" 
+                      name="text"
+                      class="input input-bordered appearance-none w-full px-3 py-2 rounded-none bg-white dark:bg-gray-600 text-black dark:text-white border border-black border-r-0 dark:border-white" 
+                      placeholder="Search"
+                    />
+                    <button type="submit" class="btn btn-square bg-gray-400 hover:bg-gray-500  rounded-none dark:bg-gray-500 dark:hover:bg-gray-300 border border-black border-l-0 dark:border-white">
+                      <i class="fa-solid fa-magnifying-glass text-black dark:text-white"></i>
+                    </button>
+                  </div>
+                </form>
+          </div>
 
       <!-- Table Container with scrolling -->
       <div class="bg-gray-200 dark:bg-gray-700 p-5 overflow-y-auto" style="max-height: calc(80vh - 100px);">
         <table class="table w-full">
           <thead>
             <tr class="font-bold text-black dark:text-white text-base sm:text-lg">
-              <th>Patient #</th>
               <th>Name</th>
               <th>Age</th>
               <th>Sex</th>
-              <th>Visit Type</th>
+              <th>Appointment Type</th>
+              <th>Visit</th>
               <th>Status</th>
               <th>Action</th>
             </tr>
@@ -79,12 +103,12 @@
 
             <!-- sample row -->
             <tr class="text-base hover:bg-gray-300 dark:hover:bg-gray-600 font-medium text-black dark:text-white">
-              <th>1</th>
               <td>John Edward Dionisio</td>
               <td>21</td>
               <td>Male</td>
               <td>Walk In</td>
-              <td class="font-bold text-yellow-600 dark:text-yellow-300">To be Reviewed</td>
+              <td>Follow-up</td>
+              <td class="font-bold text-yellow-600 dark:text-yellow-300">To be Seen</td>
               <!-- Status List
                    Completed = text-green-500
                    Waiting for Results = text-yellow-600 dark:text-yellow-300
@@ -115,27 +139,24 @@
                   <!-- <button id="print-content">Print</button> wag muna -->
 
                   <div class="patientInfo mb-10 mt-5">
-                      <h2 class="text-xl sm:text-2xl font-bold mb-1">Patient #1</h2>
-
-                      
-
                       <div class="grid grid-cols-1 md:grid-cols-2 gap-1 text-lg sm:text-xl">
-                          <h2 class="text-lg sm:text-xl font-bold">Status: <span class="text-yellow-600 dark:text-yellow-300">To be Reviewed</span></h2>
-                          <p><strong>Visit Type:</strong> Walk In</p>
-                          
-                          <p><strong>Service:</strong> Consultation</p>
-                          <p><strong>Service Type:</strong> OB-GYNE</p>
+                        <h2 class="text-lg sm:text-xl font-bold">Status: <span class="text-yellow-600 dark:text-yellow-300">To be Seen</span></h2>
+                            <p><strong>Visit:</strong> Follow-up</p>
 
-                          <p><strong>Name:</strong> John Edward E. Dionisio</p>
-                          <p><strong>Contact Number:</strong> 099999999999</p>
+                            <p><strong>Appointment Type:</strong> Walk In</p>
+                            <p><strong>Service:</strong> Consultation</p>
+                            <p><strong>Service Type:</strong> OB-GYNE</p>
 
-                          <p><strong>Sex:</strong> Male</p>
-                          <p><strong>Email:</strong> myemail@gmail.com</p>
+                            <p><strong>Name:</strong> John Edward E. Dionisio</p>
+                            <p><strong>Contact Number:</strong> 099999999999</p>
 
-                          <p><strong>Vaccinated:</strong> Yes</p>
+                            <p><strong>Sex:</strong> Male</p>
+                            <p><strong>Email:</strong> myemail@gmail.com</p>
 
-                          <p><strong>Address:</strong> 1234 Health Ave, Immunization City</p>
-                          <p><strong>Date of Birth:</strong> June 21, 2024</p>
+                            <p><strong>Vaccinated:</strong> Yes</p>
+
+                            <p><strong>Address:</strong> 1234 Health Ave, Immunization City</p>
+                            <p><strong>Date of Birth:</strong> June 21, 2024</p>
                       </div>
                   </div>
 
@@ -219,11 +240,9 @@
                     <label class="block">
                         Assessment:
                         <input type="text" name="Assessment" value="Diagnosis ng doctor sa patient" required placeholder="Assessment" disabled class="input input-bordered w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-black dark:disabled:text-white" />
-                    </label>
-                    <label class="block">
-                        Treatment Plan:
-                        <input type="text" name="Treatment-plan" value="Treatment plan" required placeholder="Treatment Plan" disabled class="input input-bordered w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-black dark:disabled:text-white" />
-                    </label>
+                    </label>                   
+                    <label class="block">Treatment Plan:</label>
+                    <textarea id="message" rows="4" name="Treatment Plan" disabled class="input input-bordered h-24 w-full bg- white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-black dark:disabled:text-white" placeholder="Treatment Plan"></textarea>
                 </div>
 
                 <div class="border border-gray-400 mb-10"></div>

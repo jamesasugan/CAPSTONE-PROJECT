@@ -53,7 +53,7 @@
       <div class="flex-grow">
         <div class="card-body">
           <div class="icon flex justify-center">
-              <span class="font-bold text-6xl sm:text-7xl mt-2 overflow-hidden whitespace-nowrap text-overflow-ellipsis">45</span>  <!-- total records ng naka "To be Reviewed" na status -->
+              <span class="font-bold text-6xl sm:text-7xl mt-2 overflow-hidden whitespace-nowrap text-overflow-ellipsis">45</span>  <!-- total records ng naka "To be Seen" na status -->
           </div>
         </div>
       </div>
@@ -62,7 +62,7 @@
           href="staff-patientsRecord.php"
           class="btn text-base sm:text-lg rounded-none w-full bg-[#78afe2] dark:bg-[#1C3F61] uppercase text-[#0e1011] dark:text-[#eef0f1] hover:bg-[#224362] hover:text-[#eef0f1] dark:hover:bg-[#9dbedd] dark:hover:text-[#0e1011] border-[#35485a] dark:border-[#8c9caa] overflow-hidden whitespace-nowrap text-overflow-ellipsis"
         >
-          To be Reviewed Patients
+          To be Seen Patients
         </a>
       </div>
     </div>

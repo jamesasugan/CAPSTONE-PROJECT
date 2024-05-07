@@ -53,17 +53,7 @@
                 <option value="doctor">Doctor</option>
                 </select>
             </div>          
-            <div id="departmentDiv">
-                <label for="department" class="block text-base sm:text-lg font-medium">Department</label>
-                <select id="department" required class="select select-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 text-lg" name="department">
-                <option value="" disabled selected>Select...</option>
-                <option value="Internal Medicine">Internal Medicine</option>
-                <option value="OB-GYNE">OB-GYNE</option>
-                <option value="Family Medicine">Family Medicine</option>
-                <option value="Pediatrics">Pediatrics</option>
-                <option value="General Medicine">General Medicine</option>
-                </select>
-            </div>
+
             <div id="specialtyDiv">
                 <label for="specialty" class="block text-base sm:text-lg font-medium">Specialty</label>
                 <select id="specialty" required class="select select-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 text-lg" name="specialty">

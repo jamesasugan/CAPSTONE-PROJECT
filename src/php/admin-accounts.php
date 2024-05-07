@@ -83,9 +83,7 @@
             <tr
               class="font-bold text-black dark:text-white text-base sm:text-lg"
             >
-              <th>Doctor #</th>
               <th>Name</th>
-              <th>Department</th>
               <th>Specialty</th>
               <th>Action</th>
             </tr>
@@ -95,10 +93,8 @@
             <tr
               class="text-base hover:bg-gray-300 dark:hover:bg-gray-600 font-medium text-black dark:text-white"
             >
-              <th>001</th>
               <td>Walter White</td>
               <td>Pediatrics</td>
-              <td>Orthopedic</td>
               <td class="pl-9">
                 <button onclick="viewDoctor.showModal()"><i class="fa-regular fa-eye"></i></button>
                 <dialog id="viewDoctor" class="modal">
@@ -115,15 +111,10 @@
                   </div>
 
                   <div class="patientInfo mb-10 mt-5">
-                      <h2 class="text-xl sm:text-2xl font-bold mb-5">Doctor #001</h2>
-
-                      
-
                       <div class="grid grid-cols-1 md:grid-cols-2 gap-1 text-lg sm:text-xl">
                           <p><strong>Name:</strong> Walter White</p>
-                          <p><strong>Department:</strong> Pediatrics</p>
                           
-                          <p><strong>Specialty:</strong> Orthopedic</p>
+                          <p><strong>Specialty:</strong> Pediatrics</p>
                           <p><strong>Contact Number:</strong> 099999999999</p>
 
                           <p><strong>Email:</strong> myemail@gmail.com</p>
