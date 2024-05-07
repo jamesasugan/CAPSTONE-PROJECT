@@ -141,9 +141,8 @@
                   <div class="patientInfo mb-10 mt-5">
                       <div class="grid grid-cols-1 md:grid-cols-2 gap-1 text-lg sm:text-xl">
                         <h2 class="text-lg sm:text-xl font-bold">Status: <span class="text-yellow-600 dark:text-yellow-300">To be Seen</span></h2>
-                            <p><strong>Visit:</strong> Follow-up</p>
-
                             <p><strong>Appointment Type:</strong> Walk In</p>
+                            
                             <p><strong>Service:</strong> Consultation</p>
                             <p><strong>Service Type:</strong> OB-GYNE</p>
 
