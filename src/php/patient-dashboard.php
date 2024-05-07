@@ -1,4 +1,6 @@
 <?php
+
+
 $first_name = '';
 $last_name = '';
 if (isset($_SESSION['user_type']) && $_SESSION['user_type'] == 'patient'){
@@ -13,6 +15,8 @@ if (isset($_SESSION['user_type']) && $_SESSION['user_type'] == 'patient'){
         $first_name = $row['First_Name'];
         $last_name = $row['Last_Name'];
     }
+}else{
+  header("Location: index.php");
 }
 ?>
 

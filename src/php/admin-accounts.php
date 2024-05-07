@@ -1,3 +1,9 @@
+<?php
+include "../Database/database_conn.php";
+session_start();
+?>
+
+
 <!doctype html>
 <html lang="en">
   <head>
@@ -57,8 +63,9 @@
         </h3>
         <form action="#" method="POST" class="flex items-center">
           <input
+            onclick="handleSearch('SearchInput', 'doctorsList')"
             type="text"
-            name="text"
+            name="SearchInput"
             class="input input-bordered appearance-none w-full px-3 py-2 rounded-none bg-white dark:bg-gray-600 text-black dark:text-white border border-black border-r-0 dark:border-white"
             placeholder="Search"
           />
@@ -78,7 +85,7 @@
         class="bg-gray-200 dark:bg-gray-700 p-5 overflow-y-auto"
         style="max-height: calc(80vh - 100px)"
       >
-        <table class="table w-full">
+        <table id='doctorsList' class="table w-full">
           <thead>
             <tr
               class="font-bold text-black dark:text-white text-base sm:text-lg"
@@ -90,7 +97,11 @@
               <th>Action</th>
             </tr>
           </thead>
-          <tbody class="text-black dark:text-white text-base sm:text-lg">
+          <tbody id='' class="text-black dark:text-white text-base sm:text-lg">
+          <?php
+          $sql = "SELECT";
+
+          ?>
             <!-- sample row -->
             <tr
               class="text-base hover:bg-gray-300 dark:hover:bg-gray-600 font-medium text-black dark:text-white"
@@ -101,47 +112,6 @@
               <td>Orthopedic</td>
               <td class="pl-9">
                 <button onclick="viewDoctor.showModal()"><i class="fa-regular fa-eye"></i></button>
-                <dialog id="viewDoctor" class="modal">
-                <div class="modal-box w-11/12 max-w-7xl bg-gray-200 dark:bg-gray-700">
-
-                <div class="flex flex-col sm:flex-row justify-between items-center">
-                      <div class="order-2 sm:order-1">
-                          <h3 class="font-bold text-black dark:text-white text-2xl sm:text-4xl mb-2 sm:mb-0">Doctor's Information</h3>
-                      </div>
-                      <div class="order-1 sm:order-2 mb-2 sm:mb-0">
-                          <img src="../images/HCMC-blue.png" class="block h-10 lg:h-16 w-auto dark:hidden" alt="logo-light" />
-                          <img src="../images/HCMC-white.png" class="h-10 lg:h-16 w-auto hidden dark:block" alt="logo-dark" />
-                      </div>
-                  </div>
-
-                  <div class="patientInfo mb-10 mt-5">
-                      <h2 class="text-xl sm:text-2xl font-bold mb-5">Doctor #001</h2>
-
-                      
-
-                      <div class="grid grid-cols-1 md:grid-cols-2 gap-1 text-lg sm:text-xl">
-                          <p><strong>Name:</strong> Walter White</p>
-                          <p><strong>Department:</strong> Pediatrics</p>
-                          
-                          <p><strong>Specialty:</strong> Orthopedic</p>
-                          <p><strong>Contact Number:</strong> 099999999999</p>
-
-                          <p><strong>Email:</strong> myemail@gmail.com</p>
-                          <p><strong>Sex:</strong> Male</p>
-                          
-
-                          <p><strong>Address:</strong> 1234 Health Ave, Immunization City</p>
-                          <p><strong>Date of Birth:</strong> June 21, 2024</p>
-                      </div>
-                  </div>
-                    <div class="modal-action">
-                    <form method="dialog">
-                        <!-- if there is a button, it will close the modal -->
-                        <button class="btn bg-gray-400 dark:bg-white hover:bg-gray-500 dark:hover:bg-gray-400  text-black  border-none">Close</button>
-                    </form>
-                    </div>
-                </div>
-                </dialog>
               </td>
             </tr>
             <!-- sample row end -->
@@ -151,5 +121,45 @@
         </table>
       </div>
     </div>
+  <dialog id="viewDoctor" class="modal">
+    <div class="modal-box w-11/12 max-w-7xl bg-gray-200 dark:bg-gray-700">
+      <div class="flex flex-col sm:flex-row justify-between items-center">
+        <div class="order-2 sm:order-1">
+          <h3 class="font-bold text-black dark:text-white text-2xl sm:text-4xl mb-2 sm:mb-0">Doctor's Information</h3>
+        </div>
+        <div class="order-1 sm:order-2 mb-2 sm:mb-0">
+          <img src="../images/HCMC-blue.png" class="block h-10 lg:h-16 w-auto dark:hidden" alt="logo-light" />
+          <img src="../images/HCMC-white.png" class="h-10 lg:h-16 w-auto hidden dark:block" alt="logo-dark" />
+        </div>
+      </div>
+      <div class="patientInfo mb-10 mt-5">
+        <h2 class="text-xl sm:text-2xl font-bold mb-5">Doctor #001</h2>
+
+
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-1 text-lg sm:text-xl">
+          <p><strong>Name:</strong> Walter White</p>
+          <p><strong>Department:</strong> Pediatrics</p>
+
+          <p><strong>Specialty:</strong> Orthopedic</p>
+          <p><strong>Contact Number:</strong> 099999999999</p>
+
+          <p><strong>Email:</strong> myemail@gmail.com</p>
+          <p><strong>Sex:</strong> Male</p>
+
+
+          <p><strong>Address:</strong> 1234 Health Ave, Immunization City</p>
+          <p><strong>Date of Birth:</strong> June 21, 2024</p>
+        </div>
+      </div>
+      <div class="modal-action">
+        <form method="dialog">
+          <!-- if there is a button, it will close the modal -->
+          <button class="btn bg-gray-400 dark:bg-white hover:bg-gray-500 dark:hover:bg-gray-400  text-black  border-none">Close</button>
+        </form>
+      </div>
+    </div>
+  </dialog>
   </body>
+  <script src='../js/SearchTables.js'></script>
 </html>

@@ -272,7 +272,7 @@ if (isset($_SESSION['user_type'])){
                     </li>
                   </ul>
                 </div>
-
+                <input type='hidden' value='patient' name='type'>
                 <!-- Sign Up Button -->
                 <div class="signup-btn">
                   <input
@@ -355,6 +355,7 @@ if (isset($_SESSION['user_type'])){
         let notif_type = document.getElementById('alert');
         let notif_text = document.getElementById('alert_text');
         if (notification_type === 1){
+
           notif_type.classList.add('alert-success');
           notif_text.innerHTML = 'Account Created'
         }
@@ -369,11 +370,8 @@ if (isset($_SESSION['user_type'])){
           }
 
         }
-        if (notification.classList.contains('hidden')) {
-          notification.classList.remove('hidden');
-        } else {
-          notification.classList.add('hidden');
-        }
+        notification.classList.remove('hidden');
+
       }
 
       document.getElementById('signUp').addEventListener('submit', function(e){
@@ -387,12 +385,11 @@ if (isset($_SESSION['user_type'])){
           processData: false,
           contentType: false,
           success: function(response) {
-            if (response == 1) {
+            if (parseInt(response) === 1) {
               toggle_signUp_notif(parseInt(response));
             } else {
               toggle_signUp_notif(parseInt(response));
             }
-            console.log(response);
             e.target.reset();
           },
         })

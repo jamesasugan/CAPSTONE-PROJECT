@@ -1,3 +1,14 @@
+<?php
+session_start();
+
+if (!isset($_SESSION['user_type']) or $_SESSION['user_type'] !== 'patient'){
+  header("Location: index.php");
+
+}
+
+?>
+
+
 <!doctype html>
 <html lang="en">
   <head>
