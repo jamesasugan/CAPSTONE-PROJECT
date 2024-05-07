@@ -169,6 +169,30 @@
 
 
                   <form id="patientForm" action="#" method="POST" >
+
+                  <label class="block font-bold text-lg"> Current Visit Status:
+                  <ul class="items-center w-full text-lg font-medium text-gray-900 bg-white border border-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white rounded-lg sm:flex mb-2">
+                        <li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
+                          <div class="flex items-center ps-3">
+                            <input id="initial" type="radio" disabled required name="list-status" class="radio radio-info" value="initial">
+                            <label for="initial" class="w-full py-3 ms-2">Initial</label>
+                          </div>
+                        </li>
+                        <li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
+                          <div class="flex items-center ps-3">
+                            <input id="followUp" type="radio" disabled required name="list-status" class="radio radio-info" value="followUp">
+                            <label for="followUp" class="w-full py-3 ms-2">Follow-up</label>
+                          </div>
+                        </li>
+                        <li class="w-full dark:border-gray-600">
+                          <div class="flex items-center ps-3">
+                            <input id="clearance" type="radio" disabled required name="list-status" class="radio radio-info" value="clearance">
+                            <label for="clearance" class="w-full py-3 ms-2">Clearance</label>
+                          </div>
+                        </li>
+                      </ul>
+                      </label>
+
                   <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">                              
                     <div>
                         <label class="block">
@@ -223,35 +247,27 @@
                         Saturation:
                         <input type="text" name="saturation" value="di ko alam basta text" required placeholder="Saturation" disabled class="input input-bordered w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-black dark:disabled:text-white" />
                     </label>
-                    <label class="block">
-                        Chief Complaint:
-                        <input type="text" 
-                        name="chief-complaint" 
-                        value="Dinadaing ng patient" 
-                        required 
-                        disabled 
-                        placeholder="Chief Complaint"
-                        class="input input-bordered w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-black dark:disabled:text-white" />
+                    <label class="block">Chief Complaint:
+                    <textarea id="chiefComplaint" rows="4" name="Chief Complaint" disabled class="input input-bordered h-52 w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400" placeholder="Chief Complaint"></textarea>
                     </label>
-                    <label class="block">
-                        Objective:
-                        <input type="text" name="objective" value="Physical Examination" required placeholder="Objective" disabled class="input input-bordered w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-black dark:disabled:text-white" />
+                    <label class="block">Physical Examination:
+                    <textarea id="physicalExamination" rows="4" name="Physical Examination" disabled class="input input-bordered h-52 w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400" placeholder="Physical Examination"></textarea>
                     </label>
-                    <label class="block">
-                        Assessment:
-                        <input type="text" name="Assessment" value="Diagnosis ng doctor sa patient" required placeholder="Assessment" disabled class="input input-bordered w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-black dark:disabled:text-white" />
-                    </label>                   
-                    <label class="block">Treatment Plan:</label>
-                    <textarea id="message" rows="4" name="Treatment Plan" disabled class="input input-bordered h-24 w-full bg- white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-black dark:disabled:text-white" placeholder="Treatment Plan"></textarea>
+                    <label class="block">Assessment:
+                    <textarea id="assessment" rows="4" name="Assessment" disabled class="input input-bordered h-52 w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400" placeholder="Assessment"></textarea>
+                    </label>
+                    <label class="block">Treatment Plan:
+                    <textarea id="treatmentPlan" rows="4" name="Treatment Plan" disabled class="input input-bordered h-52 w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400" placeholder="Treatment Plan"></textarea>
+                    </label>
                 </div>
 
                 <div class="border border-gray-400 mb-10"></div>
 
-                <h2 class="text-2xl sm:text-3xl font-bold mb-4 text-center">Laboratory Results</h2>
+                <h2 class="text-2xl sm:text-3xl font-bold mb-4 text-center"> Results</h2>
                       <!-- Images dito. pag nag upload sa upload file button dito lalabas dapat. kapag kunwari lima inupload na picture dapat lima din tong buong DIV -->
                         <div class="flex justify-center items-center w-full">
                             <img class="h-auto max-w-full" 
-                            src="../images/APE.jpg" 
+                            src="../images/example.jpg" 
                             alt="image description">
                         </div>
 

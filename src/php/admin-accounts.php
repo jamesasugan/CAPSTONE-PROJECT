@@ -133,9 +133,9 @@ session_start();
                           <p><strong>Date of Birth:</strong> June 21, 2024</p>
                       </div>
                   </div>
+                  <!-- modal close btn -->
                     <div class="modal-action">
                     <form method="dialog">
-                        <!-- if there is a button, it will close the modal -->
                         <button class="btn bg-gray-400 dark:bg-white hover:bg-gray-500 dark:hover:bg-gray-400  text-black  border-none">Close</button>
                     </form>
                     </div>

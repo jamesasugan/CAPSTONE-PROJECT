@@ -1,6 +1,5 @@
 <?php
-session_start();
-?>
+session_start(); ?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -92,6 +91,7 @@ session_start();
                                     <option value="Family Medicine">Family Medicine</option>
                                     <option value="Pediatrics">Pediatrics</option>
                                     <option value="General Medicine">General Medicine</option>
+                                    <option value="Surgery">Surgery</option>
                                     </select>
                                 </div>   
                             </div>
