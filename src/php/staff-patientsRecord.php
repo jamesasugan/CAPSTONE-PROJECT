@@ -47,7 +47,7 @@ session_start(); ?>
           Patients
         </h3>
         <form action="#" method="POST" class="w-full sm:flex sm:items-center justify-end">
-          <select class="select select-bordered text-black dark:text-white w-full sm:w-40 bg-gray-300 dark:bg-gray-600 text-base sm:text-lg lg:text-xl focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 mb-4 sm:mb-0 sm:mr-4">
+          <select name="sort" class="select select-bordered text-black dark:text-white w-full sm:w-40 bg-gray-300 dark:bg-gray-600 text-base sm:text-lg lg:text-xl focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 mb-4 sm:mb-0 sm:mr-4">
             <option disabled selected>Sort by</option>
             <optgroup label="Name">
               <option>A-Z</option>

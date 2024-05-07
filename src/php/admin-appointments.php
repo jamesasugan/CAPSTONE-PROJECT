@@ -1,6 +1,5 @@
 <?php
-session_start();
-?>
+session_start(); ?>
 
 <!doctype html>
 <html lang="en">
@@ -46,31 +45,38 @@ session_start();
       id="appointmentRecordsTab"
       class="p-10 pt-32 mx-auto w-full min-h-screen bg-[#ebf0f4] dark:bg-[#17222a]"
     >
-      <div
-        class="flex flex-col sm:flex-row justify-between items-center bg-gray-200 dark:bg-gray-700 p-5 border-b border-b-black"
-      >
-        <h3
-          class="text-2xl sm:text-2xl md:text-4xl font-bold text-black dark:text-white mb-4 sm:mb-0 uppercase"
-        >
-          Appointments
-        </h3>
-        <form action="#" method="POST" class="flex items-center">
-          <input
-            type="text"
-            name="text"
-            class="input input-bordered appearance-none w-full px-3 py-2 rounded-none bg-white dark:bg-gray-600 text-black dark:text-white border border-black border-r-0 dark:border-white"
-            placeholder="Search"
-          />
-          <button
-            type="submit"
-            class="btn btn-square bg-gray-400 hover:bg-gray-500 rounded-none dark:bg-gray-500 dark:hover:bg-gray-300 border border-black border-l-0 dark:border-white"
-          >
-            <i
-              class="fa-solid fa-magnifying-glass text-black dark:text-white"
-            ></i>
-          </button>
-        </form>
-      </div>
+    <div class="flex flex-col sm:flex-row justify-between items-center bg-gray-200 dark:bg-gray-700 p-5 border-b border-b-black">
+                <h3 class="text-2xl sm:text-4xl font-bold text-black dark:text-white mb-4 sm:mb-0 uppercase mr-10">
+                  Appointments
+                </h3>
+                <form action="#" method="POST" class="w-full sm:flex sm:items-center justify-end">
+                  <select name="sort" class="select select-bordered text-black dark:text-white w-full sm:w-40 bg-gray-300 dark:bg-gray-600 text-base sm:text-lg lg:text-xl focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 mb-4 sm:mb-0 sm:mr-4">
+                    <option disabled selected>Sort by</option>
+                    <optgroup label="Name">
+                      <option>A-Z</option>
+                      <option>Z-A</option>
+                    </optgroup>
+                    <optgroup label="Status">
+                      <option>Approved</option>
+                      <option>Pending</option>
+                      <option>Rescheduled</option>
+                    </optgroup>
+                  </select>
+
+                  <!-- Search Input and Button -->
+                  <div class="flex w-full sm:w-auto">
+                    <input 
+                      type="text" 
+                      name="text"
+                      class="input input-bordered appearance-none w-full px-3 py-2 rounded-none bg-white dark:bg-gray-600 text-black dark:text-white border border-black border-r-0 dark:border-white" 
+                      placeholder="Search"
+                    />
+                    <button type="submit" class="btn btn-square bg-gray-400 hover:bg-gray-500  rounded-none dark:bg-gray-500 dark:hover:bg-gray-300 border border-black border-l-0 dark:border-white">
+                      <i class="fa-solid fa-magnifying-glass text-black dark:text-white"></i>
+                    </button>
+                  </div>
+                </form>
+          </div>
 
       <!-- Table Container with scrolling -->
       <div
