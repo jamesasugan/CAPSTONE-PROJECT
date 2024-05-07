@@ -1,3 +1,8 @@
+<?php
+session_start();
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,7 +11,9 @@
     <title>Add New Doctor</title>
     <link rel="stylesheet" href="../css/output.css" />
     <link rel="stylesheet" href="../css/staff.css" />
-    <script
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+  <script
       src="https://kit.fontawesome.com/70df29d299.js"
       crossorigin="anonymous"
     ></script>
@@ -42,12 +49,14 @@
       >
         <h2 class="text-3xl font-bold mb-2">Add a new Staff Member</h2>
 
-        <form action="#" method="GET">   
+        <form id='staffAccount' action="#" method="GET">
           <h3 class="text-2xl font-bold mt-5 mb-2">Role</h3> 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <input type='hidden' name='type' value='staff'>
             <div>
                 <label for="staffType" class="block text-base sm:text-lg font-medium">User Type</label>
-                <select id="staffType" required class="select select-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 text-lg" name="staffType">
+                <select id="staffType" required class="select
+                select-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 text-lg" name="role">
                 <option value="" disabled selected>Select...</option>
                 <option value="admin">Admin</option>
                 <option value="doctor">Doctor</option>
@@ -56,7 +65,9 @@
 
             <div id="specialtyDiv">
                 <label for="specialty" class="block text-base sm:text-lg font-medium">Specialty</label>
-                <select id="specialty" required class="select select-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 text-lg" name="specialty">
+                <select id="specialty"
+                        required class="select select-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 text-lg"
+                        name="specialty">
                 <option value="" disabled selected>Select...</option>
                 <option value="Internal Medicine">Internal Medicine</option>
                 <option value="OB-GYNE">OB-GYNE</option>
@@ -72,16 +83,16 @@
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
                 <label for="first-name" class="block text-base sm:text-lg font-medium">First Name</label>
-                <input type="text" id="first-name" name="first-name" autocomplete="off" placeholder="First Name" required class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600" />
+                <input type="text" id="first-name" name="first_name" autocomplete="off" placeholder="First Name" required class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600" />
             </div>
             <div>
                 <label for="middle-name" class="block text-base sm:text-lg font-medium">Middle Name</label>
-                <input type="text" id="middle-name" name="middle-name" placeholder="Middle Name" required class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600" />
+                <input type="text" id="middle-name" name="middle_name" placeholder="Middle Name" required class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600" />
             </div>
 
             <div>
                 <label for="last-name" class="block text-base sm:text-lg font-medium">Last Name</label>
-                <input type="text" id="last-name" name="last-name" placeholder="Last Name" required class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600" />
+                <input type="text" id="last-name" name="last_name" placeholder="Last Name" required class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600" />
             </div>
             <div>
                 <label
@@ -94,7 +105,7 @@
             </div>
             <div>
                 <label for="contact-number" class="block text-base sm:text-lg font-medium">Contact Number</label>
-                <input id="contact-number" name="contact-number" type="tel" required autocomplete="off" placeholder="Contact Number" pattern="[0-9]{1,11}" minlength="11" maxlength="11" title="Please enter up to 11 numeric characters." class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600" />
+                <input id="contact-number" name="contact_number" type="tel" required autocomplete="off" placeholder="Contact Number" pattern="[0-9]{1,11}" minlength="11" maxlength="11" title="Please enter up to 11 numeric characters." class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600" />
             </div>
 
             <div>
@@ -126,6 +137,7 @@
                     >
                     <div>
                       <input
+                        name='password'
                         id="password"
                         type="password"
                         required
@@ -149,7 +161,7 @@
         </form>
 
         <!-- pashow nito pagnasubmit -->
-        <div class="flex justify-center">
+        <div id='notif' class="flex justify-center hidden">
             <div role="alert" class="inline-flex items-center bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative">
                 <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -160,5 +172,46 @@
 
       </div>
     </section>
+    <script>
+
+      function toggle_successNotif(){
+        let notification = document.getElementById('notif');
+        if (notification.classList.contains('hidden')) {
+          notification.classList.remove('hidden');
+        } else {
+          notification.classList.add('hidden');
+        }
+      }
+
+      document.getElementById('staffAccount').addEventListener('submit', function(e){
+        e.preventDefault();
+
+        let form_data = new FormData(e.target)
+        $.ajax({
+          url: 'ajax.php?action=signup',
+          type: 'POST',
+          data: form_data,
+          processData: false,
+          contentType: false,
+          success: function(response) {
+            if (parseInt(response) === 1) {
+              toggle_successNotif();
+              toggle_signUp_notif();
+              setTimeout(function() {
+                toggle_signUp_notif();
+                setTimeout(function() {
+                  toggle_successNotif();
+                }, 3000); // 3000 milliseconds = 3 seconds
+              }, 3000); // 3000 milliseconds = 3 seconds
+            }
+
+
+            console.log(response);
+            e.target.reset();
+          },
+        })
+      })
+
+    </script>
 </body>
 </html>

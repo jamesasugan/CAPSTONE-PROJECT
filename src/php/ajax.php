@@ -15,6 +15,8 @@ if ($action == 'signup'){
     $sex = filter_input(INPUT_POST, 'sex', FILTER_SANITIZE_STRING);
     $address = filter_input(INPUT_POST, 'address', FILTER_SANITIZE_STRING);
     $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
+
+    $user_type =  filter_input(INPUT_POST, 'type', FILTER_SANITIZE_EMAIL);
     $password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_STRING);
     $conf_password = filter_input(INPUT_POST, 'conf_password', FILTER_SANITIZE_STRING);
 
@@ -32,31 +34,52 @@ if ($action == 'signup'){
         exit();
     }
 
-    if (isset($first_name) || isset($last_name) || isset($contact_number) || isset($date_of_birth) || isset($sex) || isset($address) || isset($email) || isset($password) || isset($conf_password)) {
-        if ($password !== $conf_password) {
-            echo 3; //mismatch password
-        } else {
-            $user_type = isset($_GET['type']) && in_array($_GET['type'], ['Patient', 'Staff', 'Doctor']) ? $_GET['type'] : '';
-            if ($user_type === '') {
-                echo 4;
-                exit();
-            }
+    if (isset($first_name) || isset($last_name) || isset($contact_number) || isset($date_of_birth) || isset($sex) || isset($address) || isset($email) ) {
+        $user_type = isset($_POST['type']) && in_array($_POST['type'], ['patient', 'staff']) ? $_POST['type'] : '';
+        if ($user_type === '') {
+            echo 4;
+            exit();
+        }
 
-            $user_type = isset($_GET['type']) && $_GET['type'] == 'patient'? 'Patient' : 'Staff';
-            $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-            $sql_accounts = "INSERT INTO tbl_accounts (Email, Password, user_Type) VALUES (?, ?, ?)";
-            $stmt_accounts = $conn->prepare($sql_accounts);
-            $stmt_accounts->bind_param("ss", $email, $hashed_password, $user_type);
-            $stmt_accounts->execute();
-            $user_id = $conn->insert_id;
-            //  SMTP for email
+
+
+        $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+        $sql_accounts = "INSERT INTO tbl_accounts (Email, Password, userType) VALUES (?, ?, ?)";
+        $stmt_accounts = $conn->prepare($sql_accounts);
+        $stmt_accounts->bind_param("sss", $email, $hashed_password, $user_type);
+        $stmt_accounts->execute();
+        $user_id = $conn->insert_id;
+        //  SMTP for email
+
+        if ($user_type == 'patient'){
             $sql_patient = "INSERT INTO account_user_info (User_ID, First_Name, Middle_Name, Last_Name, DateofBirth, Sex, Contact_Number, Address) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             $stmt_patient = $conn->prepare($sql_patient);
             $stmt_patient->bind_param("isssssis", $user_id, $first_name, $middle_name, $last_name, $date_of_birth, $sex, $contact_number, $address);
             $stmt_patient->execute();
-            echo 1;
-            exit();
+
+        }else{
+            $role = isset($_POST['role']) ? $_POST['role']: '';
+            $sql_staff = "INSERT INTO tbl_staff (User_ID, First_Name, 
+                       Middle_Name, Last_Name, DateofBirth, Contact_Number,
+                       Sex, Address, Role) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            $stmt_staff = $conn->prepare($sql_staff);
+            $stmt_staff->bind_param("issssisss", $user_id,
+                $first_name, $middle_name, $last_name,
+                $date_of_birth,  $contact_number, $sex, $address, $role);
+            $stmt_staff->execute();
+            if ($role === 'doctor'){
+                $staff_id =$conn->insert_id;
+                $speciality = isset($_POST['speciality'])? $_POST['speciality']: '';
+                $specialityQ = "INSERT INTO tbl_specialty (Specialty, Staff_ID ) VALUES (?, ?)";
+                $speciality_stmt = $conn->prepare($specialityQ);
+                $speciality_stmt->bind_param('si',$speciality,$staff_id );
+                $speciality_stmt->execute();
+            }
+
         }
+        echo 1;
+        exit();
+
     } else {
         echo 2; // may variables null
         exit();

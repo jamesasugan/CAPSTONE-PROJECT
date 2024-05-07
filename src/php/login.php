@@ -130,9 +130,6 @@ if (isset($_SESSION['user_type'])) {
                 <span>Email doesn't exist</span>
               </div>
 
-
-
-
             </div>
           </div>
         </div>
