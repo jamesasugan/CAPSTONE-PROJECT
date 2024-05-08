@@ -91,6 +91,7 @@ session_start(); ?>
               <th>Name</th>
               <th>Appointment Date</th>
               <th>Appointment Time</th>
+              <th>Service</th>
               <th>Status</th>
               <th>Action</th>
             </tr>
@@ -103,6 +104,7 @@ session_start(); ?>
               <td>John Edward Dionisio</td>
               <td>May 10, 2024</td>
               <td class="pl-10">10:00 AM</td> <!-- alisin mo yung pl-10 pag nagoverlap yung ilalagay mo -->
+              <td>OB-GYNE</td>
               <td class="font-bold text-yellow-600 dark:text-yellow-300">Pending</td> 
               <!-- 
               Completed - text-green-500

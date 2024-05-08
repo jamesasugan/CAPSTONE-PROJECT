@@ -97,6 +97,7 @@ session_start(); ?>
               <th>Age</th>
               <th>Sex</th>
               <th>Appointment Type</th>
+              <th>Service</th>
               <th>Visit</th>
               <th>Status</th>
               <th>Action</th>
@@ -110,6 +111,7 @@ session_start(); ?>
               <td>21</td>
               <td>Male</td>
               <td>Walk In</td>
+              <td>OB-GYNE</td>
               <td>Initial Visit</td>
               <!-- 
                 Follow-up Visit
@@ -172,7 +174,7 @@ session_start(); ?>
                   <form id="patientForm" action="#" method="POST" >
 
                   <label class="block font-bold text-lg"> Current Visit Status:
-                  <ul class="items-center w-full text-lg font-medium text-gray-900 bg-white border border-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white rounded-lg sm:flex mb-2">
+                  <ul class="items-center w-full text-lg font-medium text-gray-900 bg-white border border-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white rounded-lg sm:flex mb-5">
                         <li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
                           <div class="flex items-center ps-3">
                             <input id="initial" type="radio" disabled required name="list-status" class="radio radio-info" value="initial">
@@ -194,8 +196,20 @@ session_start(); ?>
                       </ul>
                       </label>
 
+                      <div class="flex flex-col sm:flex-row justify-between sm:items-center">
+                          <select name="sort" class="select select-bordered text-black dark:text-white w-full sm:w-48  bg-gray-300 dark:bg-gray-600 text-base sm:text-lg lg:text-xl focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 mb-4 sm:mb-0 sm:mr-4">
+                              <option disabled selected>Follow Up #</option>                  
+                              <option>First</option>
+                              <option>Second</option>
+                          </select>
+                          <button id="addfollowUp" class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none w-full sm:w-auto">Add another Follow-Up</button>
+                      </div>
 
-                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">                              
+
+                      <h3 class="font-bold text-center text-black dark:text-white text-xl sm:text-2xl mb-5 sm:mb-0">First Follow Up</h3>
+
+
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 mt-5">                              
                     <div>
                         <label class="block">
                             Consultation Date:
