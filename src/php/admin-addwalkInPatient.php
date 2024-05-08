@@ -42,7 +42,7 @@ session_start(); ?>
       <div
         class="w-full max-w-7xl mx-auto p-4 rounded-lg shadow-lg bg-gray-200 dark:bg-gray-700 text-[#0e1011] dark:text-[#eef0f1]"
       >
-        <h2 class="text-3xl font-bold mb-10">Add Walk In Patient</h2>
+        <h2 class="text-3xl font-bold mb-10">Add New Patient</h2>
 
         <form action="#" method="GET">
         <fieldset class="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">

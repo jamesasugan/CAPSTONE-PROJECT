@@ -187,26 +187,19 @@ session_start(); ?>
                             <label for="followUp" class="w-full py-3 ms-2">Follow-up</label>
                           </div>
                         </li>
-                        <li class="w-full dark:border-gray-600">
-                          <div class="flex items-center ps-3">
-                            <input id="clearance" type="radio" disabled required name="list-status" class="radio radio-info" value="clearance">
-                            <label for="clearance" class="w-full py-3 ms-2">Clearance</label>
-                          </div>
-                        </li>
                       </ul>
                       </label>
 
+                       <!-- lalabas lang to sa follow up stage -->
                       <div class="flex flex-col sm:flex-row justify-between sm:items-center">
-                          <select name="sort" class="select select-bordered text-black dark:text-white w-full sm:w-48  bg-gray-300 dark:bg-gray-600 text-base sm:text-lg lg:text-xl focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 mb-4 sm:mb-0 sm:mr-4">
+                          <select name="sort" disabled class="select select-bordered text-black dark:text-white w-full sm:w-48  bg-gray-300 dark:bg-gray-600 text-base sm:text-lg lg:text-xl focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 mb-4 sm:mb-0 sm:mr-4">
                               <option disabled selected>Follow Up #</option>                  
                               <option>First</option>
                               <option>Second</option>
                           </select>
-                          <button id="addfollowUp" class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none w-full sm:w-auto">Add another Follow-Up</button>
                       </div>
-
-
                       <h3 class="font-bold text-center text-black dark:text-white text-xl sm:text-2xl mb-5 sm:mb-0">First Follow Up</h3>
+                       <!-- lalabas lang to sa follow up stage end -->
 
 
                   <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 mt-5">                              
@@ -234,6 +227,30 @@ session_start(); ?>
                     </div>
                     <div>
                         <label class="block">
+                            Weight:
+                            <input type="text" 
+                            name="weight" 
+                            value="36" 
+                            required 
+                            disabled 
+                            placeholder="Weight"
+                            class="input input-bordered w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400" />
+                        </label>
+                    </div>
+                    <div>
+                        <label class="block">
+                            Heart Rate:
+                            <input type="text" 
+                            name="heart-rate" 
+                            value="36" 
+                            required 
+                            disabled 
+                            placeholder="Heart Rate"
+                            class="input input-bordered w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400" />
+                        </label>
+                    </div>
+                    <div>
+                        <label class="block">
                             Temperature (Celsius):
                             <input type="text" 
                             name="temperature" 
@@ -255,26 +272,77 @@ session_start(); ?>
                             placeholder="Blood Pressure"
                             class="input input-bordered w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400" />
                         </label>
-                    </div>
+                    </div>             
                 </div>
                 
                 <div class="grid grid-cols-1 gap-4 mb-14">
                     <label class="block">
                         Saturation:
-                        <input type="text" name="saturation" value="di ko alam basta text" required placeholder="Saturation" disabled class="input input-bordered w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400" />
+                        <input type="text" name="saturation" required placeholder="Saturation" disabled class="input input-bordered w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400" />
                     </label>
+
                     <label class="block">Chief Complaint:
                     <textarea id="chiefComplaint" rows="4" name="Chief Complaint" disabled class="input input-bordered h-52 w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400" placeholder="Chief Complaint"></textarea>
                     </label>
+
                     <label class="block">Physical Examination:
                     <textarea id="physicalExamination" rows="4" name="Physical Examination" disabled class="input input-bordered h-52 w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400" placeholder="Physical Examination"></textarea>
                     </label>
+
                     <label class="block">Assessment:
                     <textarea id="assessment" rows="4" name="Assessment" disabled class="input input-bordered h-52 w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400" placeholder="Assessment"></textarea>
                     </label>
+
                     <label class="block">Treatment Plan:
                     <textarea id="treatmentPlan" rows="4" name="Treatment Plan" disabled class="input input-bordered h-52 w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400" placeholder="Treatment Plan"></textarea>
                     </label>
+
+                    <!-- lalabas to sa initial muna, tas pag nag yes, pwede din lumabas ulit sa follow up check up stage kung need ulit ng follow up -->
+                    <div class="flex flex-col items-center p-4">
+                        <h1 class="text-lg font-semibold mb-2">Does this patient need a follow-up check-up?</h1>
+                        <div class="flex flex-wrap justify-center gap-2">
+                            <div class="flex items-center space-x-2">
+                                <input id="yesFollowUp" type="radio" disabled value="yes" name="followUp-radio" class="radio radio-info">
+                                <label for="yesFollowUp" class="text-black dark:text-white">Yes</label>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <input id="noFollowUp" type="radio" disabled value="no" name="followUp-radio" class="radio radio-info">
+                                <label for="noFollowUp" class="text-black dark:text-white">No</label>
+                            </div>
+                        </div>
+                        <div id="followUpDetails" class="hidden">
+                            <h2 class="text-md mt-4 font-semibold">Schedule the patient for another check up:</h2>
+                            <label for="followUpDate" class="block text-md font-medium">
+                                Follow Up Date:
+                              </label>
+                              <input
+                                type="date"
+                                id="followUpDate"
+                                name="followUpDate"
+                                required
+                                class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark]"
+                              />
+                              <label for="followUpTime" class="block text-md font-medium">
+                                  Follow Up Time:
+                                </label>
+                                <input
+                                  type="time"
+                                  id="followUpTime"
+                                  name="followUpTime"
+                                  required
+                                  min="08:00"
+                                  max="17:00"
+                                  class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark]"
+                                />
+                        </div>
+                        <div id="completedDetails" class="hidden">
+                            <h2 class="text-md mt-4 font-semibold">This patient will be marked as Completed/Solved</h2>
+                        </div>
+                    </div>
+
+
+
+
                 </div>
 
                 <div class="border border-gray-400 mb-10"></div>
@@ -341,6 +409,29 @@ session_start(); ?>
 </script> -->
 
     
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const yesInput = document.getElementById('yesFollowUp');
+    const noInput = document.getElementById('noFollowUp');
+    const followUpDetails = document.getElementById('followUpDetails');
+    const completedDetails = document.getElementById('completedDetails');
+
+    yesInput.addEventListener('change', function() {
+        if (this.checked) {
+            followUpDetails.classList.remove('hidden');
+            completedDetails.classList.add('hidden');
+        }
+    });
+
+    noInput.addEventListener('change', function() {
+        if (this.checked) {
+            completedDetails.classList.remove('hidden');
+            followUpDetails.classList.add('hidden');
+        }
+    });
+});
+
+</script>
 
   </body>
 </html>

@@ -1,10 +1,13 @@
 document.addEventListener('DOMContentLoaded', function () {
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('followUpDate').setAttribute('min', today);
+
   const editBtn = document.getElementById('editBtn');
   const cancelBtn = document.getElementById('cancelBtn');
   const updateBtn = document.getElementById('updateBtn');
   const form = document.getElementById('patientForm');
   const inputs = form.querySelectorAll(
-    'input[type=text], input[type=date], input[type=file], input[type=radio], textarea',
+    'input[type=text], input[type=date], input[type=time], select, input[type=file], input[type=radio], textarea',
   );
 
   // Enable editing
@@ -29,8 +32,11 @@ document.addEventListener('DOMContentLoaded', function () {
 function resetPatientForm() {
   const form = document.getElementById('patientForm');
   const inputs = form.querySelectorAll(
-    'input[type=text], input[type=date], input[type=file], input[type=radio], textarea',
+    'input[type=text], input[type=date], input[type=time], select, input[type=file], input[type=radio], textarea',
   );
+
+  const followUpDetails = document.getElementById('followUpDetails');
+  const completedDetails = document.getElementById('completedDetails');
   const editBtn = document.getElementById('editBtn');
   const updateBtn = document.getElementById('updateBtn');
   const cancelBtn = document.getElementById('cancelBtn');
@@ -40,6 +46,10 @@ function resetPatientForm() {
   inputs.forEach((input) => {
     input.disabled = true; // Disable all inputs
   });
+
+  // Hide the follow-up and completed sections
+  followUpDetails.classList.add('hidden');
+  completedDetails.classList.add('hidden');
 
   // Show/Hide buttons correctly
   editBtn.classList.remove('hidden');

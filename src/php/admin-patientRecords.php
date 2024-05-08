@@ -39,9 +39,9 @@
 
     <div id="patients-recordTab" class="p-10 pt-24 mx-auto w-full min-h-screen bg-[#ebf0f4] dark:bg-[#17222a]">
 
-      <!-- add walk in patient button -->
+      <!-- add New patient button -->
       <div class="flex justify-end mb-5">
-            <a href="admin-addwalkInPatient.php" class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold py-2 px-4 rounded cursor-pointer border-none">Add Walk In Patient</a>
+            <a href="admin-addwalkInPatient.php" class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold py-2 px-4 rounded cursor-pointer border-none">Add New Patient</a>
         </div>
 
             <div class="flex flex-col sm:flex-row justify-between items-center bg-gray-200 dark:bg-gray-700 p-5 border-b border-b-black">
@@ -185,24 +185,19 @@
                             <label for="followUp" class="w-full py-3 ms-2">Follow-up</label>
                           </div>
                         </li>
-                        <li class="w-full dark:border-gray-600">
-                          <div class="flex items-center ps-3">
-                            <input id="clearance" type="radio" disabled required name="list-status" class="radio radio-info" value="clearance">
-                            <label for="clearance" class="w-full py-3 ms-2">Clearance</label>
-                          </div>
-                        </li>
                       </ul>
                       </label>
 
+                      <!-- lalabas lang to sa follow up stage -->
                       <div class="flex flex-col sm:flex-row justify-between sm:items-center">
-                          <select name="sort" class="select select-bordered text-black dark:text-white w-full sm:w-48  bg-gray-300 dark:bg-gray-600 text-base sm:text-lg lg:text-xl focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 mb-4 sm:mb-0 sm:mr-4">
+                          <select name="sort" disabled class="select select-bordered text-black dark:text-white w-full sm:w-48  bg-gray-300 dark:bg-gray-600 text-base sm:text-lg lg:text-xl focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 mb-4 sm:mb-0 sm:mr-4">
                               <option disabled selected>Follow Up #</option>                  
                               <option>First</option>
                               <option>Second</option>
                           </select>
                       </div>
-
                       <h3 class="font-bold text-center text-black dark:text-white text-xl sm:text-2xl mb-5 sm:mb-0">First Follow Up</h3>
+                       <!-- lalabas lang to sa follow up stage end -->
 
                   <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 mt-5">                              
                     <div>
@@ -225,6 +220,30 @@
                                 disabled
                                 placeholder="Consultant Name"
                                 class="input input-bordered w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-black dark:disabled:text-white" />
+                        </label>
+                    </div>
+                    <div>
+                        <label class="block">
+                            Weight:
+                            <input type="text" 
+                            name="weight" 
+                            value="36" 
+                            required 
+                            disabled 
+                            placeholder="Weight"
+                            class="input input-bordered w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400" />
+                        </label>
+                    </div>
+                    <div>
+                        <label class="block">
+                            Heart Rate:
+                            <input type="text" 
+                            name="heart-rate" 
+                            value="36" 
+                            required 
+                            disabled 
+                            placeholder="Heart Rate"
+                            class="input input-bordered w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400" />
                         </label>
                     </div>
                     <div>
@@ -284,7 +303,6 @@
 
                   </form>                  
                   </div>
-
                 </dialog>
               </td>
             </tr>
