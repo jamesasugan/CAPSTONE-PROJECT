@@ -175,7 +175,8 @@ iframe {
     right: 0;
     transform: translateX(10%);
   }
-  .nav-text a {
+  .nav-text a,
+  .nav-text details {
     font-size: 1.8vw;
   }
 }
@@ -188,7 +189,8 @@ iframe {
   .land-page {
     height: 100vh;
   }
-  .nav-text a {
+  .nav-text a,
+  .nav-text details {
     font-size: 1.3vw;
   }
   .dashboard-page {

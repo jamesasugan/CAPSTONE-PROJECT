@@ -27,6 +27,21 @@ document.addEventListener('DOMContentLoaded', function () {
     e.preventDefault();
     resetPatientForm();
   });
+
+  // Radio button change listeners for follow-up decision
+  document
+    .getElementById('yesFollowUp')
+    .addEventListener('change', function () {
+      document.getElementById('followUpDetails').classList.remove('hidden');
+      document.getElementById('followUpDate').required = true;
+      document.getElementById('followUpTime').required = true;
+    });
+
+  document.getElementById('noFollowUp').addEventListener('change', function () {
+    document.getElementById('followUpDetails').classList.add('hidden');
+    document.getElementById('followUpDate').required = false;
+    document.getElementById('followUpTime').required = false;
+  });
 });
 
 function resetPatientForm() {
