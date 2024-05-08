@@ -150,6 +150,24 @@ session_start(); ?>
                     <!-- staff action -->
                     <h1 class="text-base sm:text-xl font-bold">STATUS: <span class="font-bold text-yellow-500 dark:text-yellow-300">Pending</span></h1>  <!-- ayusin mo rin colors dito ah -->
 
+                 
+                    <div class="mt-3 w-full max-w-xs mx-auto">
+                      <label for="browser" class="block mb-1 text-lg font-medium text-black dark:text-white">Choose your browser:</label>
+                      <form action="#" method="POST" class="flex items-center bg-white dark:bg-gray-600 border border-black dark:border-white">
+                        <input list="browsers" name="browser" id="browser" class="flex-1 px-3 py-2 rounded-none bg-transparent text-black dark:text-white focus:outline-none" placeholder="Choose your browser...">
+                        <datalist id="browsers">
+                          <option value="Edge">
+                          <option value="Firefox">
+                          <option value="Chrome">
+                          <option value="Opera">
+                          <option value="Safari">
+                        </datalist>
+                        <button type="submit" class="px-3 py-2 rounded-none bg-gray-400 hover:bg-gray-500 dark:bg-gray-500 dark:hover:bg-gray-300">
+                          <i class="fa-solid fa-magnifying-glass text-black dark:text-white"></i>
+                        </button>
+                      </form>
+                    </div>          
+
                     <h2 class="text-base sm:text-xl font-bold mt-5">Edit Status of this Appointment</h2>
                     <form action="#" method="GET">
                       <ul class="items-center w-full text-lg font-medium text-gray-900 bg-white border border-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white rounded-lg sm:flex mb-2">

@@ -3892,10 +3892,6 @@ details.collapse summary::-webkit-details-marker {
   align-items: stretch;
 }
 
-.justify-start {
-  justify-content: flex-start;
-}
-
 .justify-end {
   justify-content: flex-end;
 }
@@ -4220,6 +4216,10 @@ details.collapse summary::-webkit-details-marker {
 .bg-yellow-200 {
   --tw-bg-opacity: 1;
   background-color: rgb(254 240 138 / var(--tw-bg-opacity));
+}
+
+.bg-transparent {
+  background-color: transparent;
 }
 
 .bg-opacity-50 {
@@ -5115,6 +5115,10 @@ details.collapse summary::-webkit-details-marker {
     width: 10rem;
   }
 
+  .sm\:w-48 {
+    width: 12rem;
+  }
+
   .sm\:w-80 {
     width: 20rem;
   }
@@ -5125,18 +5129,6 @@ details.collapse summary::-webkit-details-marker {
 
   .sm\:w-auto {
     width: auto;
-  }
-
-  .sm\:w-44 {
-    width: 11rem;
-  }
-
-  .sm\:w-52 {
-    width: 13rem;
-  }
-
-  .sm\:w-48 {
-    width: 12rem;
   }
 
   .sm\:grid-cols-2 {
@@ -5153,10 +5145,6 @@ details.collapse summary::-webkit-details-marker {
 
   .sm\:items-stretch {
     align-items: stretch;
-  }
-
-  .sm\:justify-between {
-    justify-content: space-between;
   }
 
   .sm\:space-x-4 > :not([hidden]) ~ :not([hidden]) {

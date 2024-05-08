@@ -192,7 +192,7 @@ session_start(); ?>
 
                        <!-- lalabas lang to sa follow up stage -->
                       <div class="flex flex-col sm:flex-row justify-between sm:items-center">
-                          <select name="sort" disabled class="select select-bordered text-black dark:text-white w-full sm:w-48  bg-gray-300 dark:bg-gray-600 text-base sm:text-lg lg:text-xl focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 mb-4 sm:mb-0 sm:mr-4">
+                          <select name="sort" disabled class="select select-bordered text-black dark:text-white w-full sm:w-48  bg-gray-300 dark:bg-gray-600 text-base sm:text-lg lg:text-xl focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 mb-4 sm:mb-0 sm:mr-4 disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400">
                               <option disabled selected>Follow Up #</option>                  
                               <option>First</option>
                               <option>Second</option>
