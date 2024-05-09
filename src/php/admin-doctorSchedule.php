@@ -230,10 +230,30 @@ session_start(); ?>
                         <dialog id="deleteSched" class="modal">
                             <div class="modal-box w-11/12 max-w-5xl bg-gray-200 dark:bg-gray-700 text-[#0e1011] dark:text-[#eef0f1]">
                                 <h3 class="font-bold text-xl sm:text-3xl">Delete/Reset Schedule</h3>
-                                <p class="py-4 text-lg sm:text-xl font-medium">How do you want to delete your schedule?</p>
+                                
                                 
                                 <form action="#" method="GET" class="space-y-4">
+                                <div class="form-group mt-5">
+                                    <label
+                                    for="dltDoctorSched"
+                                    class="block font-medium text-black dark:text-white text-base sm:text-lg"
+                                    >Select Doctor's Name:</label
+                                    >
+                                    <select
+                                    id="dltDoctorSched"
+                                    name="dltDoctorSched"
+                                    class="select select-bordered appearance-none block w-full px-3 border-gray-300 rounded-md shadow-sm focus:outline-none text-base sm:text-lg bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400 disabled:border-gray-300"
+                                    required
+                                    >
+                                    <option value="">Select a Doctor</option>
+                                    <option value="John Edward Dionisio">John Edward Dionisio</option>
+                                    <option value="Cy Anthony Cruz">Cy Anthony Cruz</option>
+                                    <option value="Clent Juarez">Clent Juarez</option>
+                                    <option value="Walter White Jr.">Walter White Jr.</option>
+                                    </select>
+                                </div>   
                                     <!-- Radio Buttons for Deletion Options -->
+                                    <p class="text-lg sm:text-xl font-medium">How do you want to delete Doctor's schedule?</p>
                                     <ul class="items-center w-full text-lg font-medium text-gray-900 bg-white border border-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white rounded-lg sm:flex">
                                         <li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
                                             <div class="flex items-center ps-3">
