@@ -98,6 +98,7 @@
               <th>Visit</th>
               <th>Status</th>
               <th>Action</th>
+              <th>Archive</th>
             </tr>
           </thead>
           <tbody class="text-black dark:text-white text-base sm:text-lg">
@@ -121,6 +122,7 @@
               <td class="pl-9">
                 <a href="admin-patientFullRecord.php"><i class="fa-regular fa-eye"></i></a>
               </td>
+              <td class="pl-10"><button onclick="archive_record.showModal()"><i class="fa-solid fa-box-archive"></i></button></td>
             </tr>
             <!-- sample row end -->
 
@@ -131,6 +133,24 @@
         </table>
       </div>
     </div>
+
+           <!-- modal content for archive record -->
+            <dialog id="archive_record" class="modal">
+                <div class="modal-box bg-gray-200 dark:bg-gray-700 text-[#0e1011] dark:text-[#eef0f1]">
+                    <h3 class="font-bold text-xl">Are you sure you want to Archive this Patient Record?</h3>
+
+                    <!-- <p class="text-black dark:text-white mt-2 mb-1 font-medium">
+                      This record will be moved to the <a href="admin-archiveAccounts.php" class="text-blue-500 underline">Archived Patient Records</a></p> -->
+                      <button class="btn btn-error mt-5">Archive this Patient Record</button>
+
+                    <div class="modal-action">
+                        <form method="dialog">
+                            <!-- if there is a button in form, it will close the modal -->
+                            <button class="btn bg-gray-400 dark:bg-white hover:bg-gray-500 dark:hover:bg-gray-400  text-black  border-none">Close</button>
+                        </form>
+                    </div>
+                </div>
+            </dialog>
 
    
 

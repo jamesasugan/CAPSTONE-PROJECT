@@ -203,6 +203,12 @@
                           >
                         </li>
                         <li>
+                          <a href="admin-archiveAccounts.php"
+                            class="hover:bg-gray-300 dark:hover:bg-gray-600 hover:font-bold text-lg transition duration-300 ease-in-out"
+                            >Archived Records</a
+                          >
+                        </li>
+                        <li>
                           <a href='#'
                             class="hover:bg-gray-300 dark:hover:bg-gray-600 hover:font-bold text-lg transition duration-300 ease-in-out"
                             >Log Out</a
