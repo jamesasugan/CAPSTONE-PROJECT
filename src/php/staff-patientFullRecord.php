@@ -68,6 +68,13 @@
                             </div>
                         </div>
 
+                        <!-- You can open the modal using ID.showModal() method -->
+                        <div class="flex justify-end">
+                            <button class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none mb-5" onclick="editpatient_info.showModal()">Edit Patient Info</button>
+                        </div>                      
+
+                        <div class="border border-gray-400 mb-10"></div>
+
 
                                 <!-- lalabas lang to sa follow up stage.
                                     nilipat ko muna ng pwesto, nilabas ko sa form kase pag nasa form nagkakaerror, gawan mo na lang sariling form siguro to
@@ -265,7 +272,7 @@
 
                             <div id="editControls" class="space-x-4">
                                 <a href="#" id="editBtn" class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none">
-                                    <i class="fa-solid fa-pen-to-square"></i> Edit Patient Information
+                                    <i class="fa-solid fa-pen-to-square"></i> Edit Patient Record
                                 </a>                    
                                 <input id="updateBtn" class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none hidden" type="submit" value="Update">
                                 <button id="cancelBtn" class="btn bg-white text-black hover:bg-gray-400 border-none hidden">Cancel</button>
@@ -285,7 +292,201 @@
 
 
             </div>
+
+
+            <!-- modal content for edit patient information -->
+            <dialog id="editpatient_info" class="modal">
+                <div class="modal-box w-11/12 max-w-5xl bg-gray-200 dark:bg-gray-700 text-[#0e1011] dark:text-[#eef0f1]">
+                    <h3 class="font-bold text-2xl ">Edit Patient</h3>
+                    <form id="patientForm" action="#" method="POST" >
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 mt-5">      
+                            <div>
+                                <label class="block">
+                                    Service:
+                                    <div class="flex flex-col w-full">           
+                                        <ul class="w-full text-lg font-medium  bg-white dark:bg-gray-600  text-black dark:text-white border border-gray-200 rounded-lg dark:border-gray-600 ">
+                                        <li class="border-b border-gray-400 dark:border-slate-300">
+                                            <label class="flex items-center pl-3 w-full cursor-pointer">
+                                            <input id="horizontal-list-radio-license" 
+                                            type="radio" 
+                                            value="Consultation" 
+                                            name="service" 
+                                            class="radio radio-info [color-scheme:light] dark:[color-scheme:dark]" 
+                                            required>
+                                            <span class="py-3 ml-2 text-lg font-medium ">Consultation</span>
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label class="flex items-center pl-3 w-full cursor-pointer">
+                                            <input id="horizontal-list-radio-id" 
+                                            type="radio" 
+                                            value="Test/Procedure" 
+                                            name="service" 
+                                            class="radio radio-info [color-scheme:light] dark:[color-scheme:dark]" 
+                                            required>
+                                            <span class="py-3 ml-2 text-lg font-medium ">Test/Procedure</span>
+                                            </label>
+                                        </li>
+                                        </ul>
+                                    </div>
+                                </label>
+                            </div>
+                            <div>
+                                <label class="block">
+                                    Service Type:
+                                    <select
+                                        id="service-type"
+                                        required
+                                        class="select select-bordered w-full bg-white dark:bg-gray-600  text-black dark:text-white text-base sm:text-lg lg:text-xl focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
+                                        name="service-type"
+                                    >
+                                        <option value="" disabled selected>Select service type...</option>
+                                        <option value="OB-Gyne">OB-Gyne</option>
+                                        <option value="Pregnancy Testing">Pregnancy Testing</option>
+                                        <option value="Dengue Test">Dengue Test</option>
+                                        <option value="Covid-19 Rapid Testing">Covid-19 Rapid Testing</option>
+                                        <option value="Family Medicine">Family Medicine</option>
+                                        <option value="Internal Medicine">Internal Medicine</option>
+                                        <option value="Medical Consultation">Medical Consultation</option>
+                                        <option value="Vaccination">Vaccination</option>
+                                        <option value="BP Monitoring">BP Monitoring</option>
+                                        <option value="Blood Glucose Determination">Blood Glucose Determination</option>
+                                        <option value="Nebulization">Nebulization</option>
+                                        <option value="Complete Blood Count (CBC)">Complete Blood Count (CBC)</option>
+                                        <option value="Fecalysis">Fecalysis</option>
+                                        <option value="Electrocardiogram (ECG)">Electrocardiogram (ECG)</option>
+                                        <option value="X-RAY">X-RAY</option>
+                                        <option value="Pre-Employment Package">Pre-Employment Package</option>
+                                        <option value="Annual Physical Examination">Annual Physical Examination</option>
+                                        <option value="FBS">FBS</option>
+                                        <option value="Lipid Profile">Lipid Profile</option>
+                                        <option value="AST/ALT">AST/ALT</option>
+                                        <option value="Uric Acid">Uric Acid</option>
+                                        <option value="Blood Typing">Blood Typing</option>
+                                        <option value="Electrolytes">Electrolytes</option>
+                                        <option value="Syphilis Screening">Syphilis Screening</option>
+                                        <option value="Pregnant Screening">Pregnant Screening</option>
+                                        <option value="FT4/TSH">FT4/TSH</option>
+                                    </select>
+                                </label>
+                            </div>   
+                            <div>
+                                <label class="block">
+                                    Name:
+                                    <input type="text" 
+                                        name="patient-name" 
+                                        value="James"
+                                        required  
+                                        placeholder="Name"
+                                        class="input input-bordered w-full p-2 bg-white dark:bg-gray-600  text-black dark:text-white " />
+                                </label>
+                            </div>
+                            <div>
+                                <label class="block">
+                                    Contact Number:
+                                    <input type="tel"
+                                    name="contact-number"  
+                                    required 
+                                    autocomplete="off"
+                                    placeholder="Contact Number" 
+                                    pattern="[0-9]{1,11}" 
+                                    minlength="11" 
+                                    maxlength="11" 
+                                    title="Please enter up to 11 numeric characters." 
+                                    class="input input-bordered w-full p-2 bg-white dark:bg-gray-600  text-black dark:text-white " />
+                                </label>
+                            </div>           
+                            <div>
+                                <label class="block">
+                                    Sex:
+                                    <select id="sex" required class="select select-bordered w-full p-2 bg-white dark:bg-gray-600  text-black dark:text-white text-lg" name="sex">
+                                        <option value="" disabled selected>Select...</option>
+                                        <option value="Male">Male</option>
+                                        <option value="Female">Female</option>
+                                    </select>
+                                </label>
+                            </div>
+                            <div>
+                                <label class="block">
+                                    Email:
+                                    <input type="email"
+                                    name="email"
+                                    required 
+                                    autocomplete="off"
+                                    placeholder="Email"
+                                    class="input input-bordered w-full p-2 bg-white dark:bg-gray-600  text-black dark:text-white "/>
+                                </label>
+                            </div>
+                            <div>
+                                <label class="block">
+                                    Vaccinated:
+                                    <div class="flex items-center space-x-4 p-2 bg-white dark:bg-gray-600  text-black dark:text-white rounded">
+                                        <label class="flex items-center">
+                                            <input type="radio" name="vaccinated" value="yes" class="radio radio-primary" required>
+                                            <span class="ml-2">Yes</span>
+                                        </label>
+                                        <label class="flex items-center">
+                                            <input type="radio" name="vaccinated" value="no" class="radio radio-primary" required>
+                                            <span class="ml-2">No</span>
+                                        </label>
+                                    </div>
+                                </label>
+                            </div>
+                            <div>
+                                <label class="block">
+                                    Address:
+                                    <input type="text" 
+                                    name="address" 
+                                    autocomplete="off"
+                                    placeholder="Address" 
+                                    required 
+                                    class="input input-bordered w-full p-2 bg-white dark:bg-gray-600  text-black dark:text-white " />
+                                </label>
+                            </div>
+                            <div>
+                                <label class="block">
+                                    Date of Birth:
+                                    <input type="date"
+                                    id="dob"
+                                    name="dob" 
+                                    required 
+                                    class="input input-bordered w-full p-2 bg-white dark:bg-gray-600  text-black dark:text-white [color-scheme:light] dark:[color-scheme:dark]" />
+                                </label>
+                            </div>         
+                        </div>
+                        <div class="flex justify-center">
+                            <input type="submit" value="Update" class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none">
+                        </div> 
+                        </form>
+
+
+
+
+
+
+                    <div class="modal-action">
+                        <form method="dialog">
+                                <!-- if there is a button, it will close the modal -->
+                            <button class="btn bg-gray-400 dark:bg-white hover:bg-gray-500 dark:hover:bg-gray-400  text-black  border-none">Close</button>
+                        </form>
+                    </div>
+                </div>
+            </dialog>
+            <!-- modal content for edit patient information end -->
+
             </section>
 
+
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                var inputDob = document.getElementById('dob');
+                if (inputDob) {
+                    // Check if the element exists
+                    var today = new Date();
+                    var maxDate = today.toISOString().split('T')[0]; // format yyyy-mm-dd
+                    inputDob.max = maxDate;
+                }
+                });
+            </script>
 </body>
 </html>
