@@ -1,3 +1,27 @@
+<?php
+include '../Database/database_conn.php';
+session_start();
+
+
+
+if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] == 'patient'){
+    header("Location: index.php");
+
+}
+$user_id = $_SESSION['user_id'];
+$sql = "SELECT role from tbl_staff where User_ID = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param('i', $user_id);
+$stmt->execute();
+$result = $stmt->get_result();
+if ($result->num_rows > 0) {
+    $row = $result->fetch_assoc();
+    if ($row['role'] == 'doctor'){
+        header("Location: staff-index.php");
+    }
+}
+?>
+
 <!doctype html>
 <html lang="en">
   <head>

@@ -1,5 +1,25 @@
 <?php
-session_start(); ?>
+include '../Database/database_conn.php';
+session_start();
+
+
+
+if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] == 'patient'){
+    header("Location: index.php");
+
+}
+$user_id = $_SESSION['user_id'];
+$sql = "SELECT role from tbl_staff where User_ID = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param('i', $user_id);
+$stmt->execute();
+$result = $stmt->get_result();
+if ($result->num_rows > 0) {
+    $row = $result->fetch_assoc();
+    if ($row['role'] == 'doctor'){
+        header("Location: staff-index.php");
+    }
+} ?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -59,40 +79,29 @@ session_start(); ?>
                                     >
                                     <select
                                     id="DoctorName"
-                                    name="DoctorName"
+                                    name="DoctorID"
                                     class="select select-bordered appearance-none block w-full px-3 border-gray-300 rounded-md shadow-sm focus:outline-none text-base sm:text-lg bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400 disabled:border-gray-300"
                                     required
                                     disabled
                                     >
                                     <option value="">Select a Doctor</option>
-                                    <option value="John Edward Dionisio">John Edward Dionisio</option>
-                                    <option value="Cy Anthony Cruz">Cy Anthony Cruz</option>
-                                    <option value="Clent Juarez">Clent Juarez</option>
-                                    <option value="Walter White Jr.">Walter White Jr.</option>
+                                      <?php
+                                      $sql = "SELECT * FROM tbl_staff where role = 'doctor' ";
+                                      $stmt = $conn->prepare($sql);
+                                      $stmt->execute();
+                                      $result = $stmt->get_result();
+                                      while ($row = $result->fetch_assoc()){
+                                      $middleInitial = (strlen($row['Middle_Name']) >= 1) ? substr($row['Middle_Name'], 0, 1) : '';
+                                        echo '<option value="'.$row['Staff_ID'].'">'.$row['First_Name'].' '.$middleInitial.'. '.$row['Last_Name'].'</option>';
+                                      }
+                                      ?>
                                     </select>
                                 </div>   
 
                                 <div class="form-group">
-                                    <label
-                                    for="department"
-                                    class="block font-medium text-black dark:text-white text-base sm:text-lg"
-                                    >Department:</label
-                                    >
-                                    <select
-                                    id="department"
-                                    name="department"
-                                    class="select select-bordered appearance-none block w-full px-3 border-gray-300 rounded-md shadow-sm focus:outline-none text-base sm:text-lg bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400 disabled:border-gray-300"
-                                    required
-                                    disabled
-                                    >
-                                    <option value="">Select Department</option>
-                                    <option value="Internal Medicine">Internal Medicine</option>
-                                    <option value="OB-GYNE">OB-GYNE</option>
-                                    <option value="Family Medicine">Family Medicine</option>
-                                    <option value="Pediatrics">Pediatrics</option>
-                                    <option value="General Medicine">General Medicine</option>
-                                    <option value="Surgery">Surgery</option>
-                                    </select>
+
+                                  <H1 id='speciality' class='card-title'></H1>
+
                                 </div>   
                             </div>
 
@@ -102,21 +111,21 @@ session_start(); ?>
                                     <!-- Monday Item -->
                                     <li class="flex-grow w-full sm:w-1/2 md:w-1/3 border-b border-r last:border-r-0 last:border-b-0 md:last:border-r sm:last:border-b-0 sm:odd:border-r border-gray-400 dark:border-gray-400">
                                         <div class="flex items-center p-3">
-                                            <input id="monday-checkbox" type="checkbox" disabled name="monday" value="" class="checkbox checkbox-info text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-300 dark:border-gray-500">
+                                            <input id="monday-checkbox" type="checkbox" disabled name="monday" value="monday" class="checkbox checkbox-info text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-300 dark:border-gray-500">
                                             <label for="monday-checkbox" class="ml-2 flex-grow py-3">Monday</label>
                                         </div>
                                     </li>
                                     <!-- Tuesday Item -->
                                     <li class="flex-grow w-full sm:w-1/2 md:w-1/3 border-b border-r last:border-r-0 last:border-b-0 md:last:border-r sm:last:border-b-0 sm:odd:border-r border-gray-400 dark:border-gray-400">
                                         <div class="flex items-center p-3">
-                                            <input id="tuesday-checkbox" type="checkbox" disabled name="tuesday" value="" class="checkbox checkbox-info text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-300 dark:border-gray-500">
+                                            <input id="tuesday-checkbox" type="checkbox" disabled name="tuesday" value="tuesday" class="checkbox checkbox-info text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-300 dark:border-gray-500">
                                             <label for="tuesday-checkbox" class="ml-2 flex-grow py-3">Tuesday</label>
                                         </div>
                                     </li>
                                     <!-- Wednesday Item -->
                                     <li class="flex-grow w-full sm:w-1/2 md:w-1/3 border-b border-r md:border-r last:border-r-0 last:border-b-0 md:last:border-r-0 sm:last:border-b-0 sm:odd:border-r border-gray-400 dark:border-gray-400">
                                         <div class="flex items-center p-3">
-                                            <input id="wednesday-checkbox" type="checkbox" disabled name="wednesday" value="" class="checkbox checkbox-info text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-300 dark:border-gray-500">
+                                            <input id="wednesday-checkbox" type="checkbox" disabled name="wednesday" value="wednesday" class="checkbox checkbox-info text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-300 dark:border-gray-500">
                                             <label for="wednesday-checkbox" class="ml-2 flex-grow py-3">Wednesday</label>
                                         </div>
                                     </li>
@@ -124,7 +133,7 @@ session_start(); ?>
                                     <!-- Thursday Item -->
                                     <li class="flex-grow w-full sm:w-1/2 md:w-1/3 border-b border-r md:border-b-0 last:border-r-0 last:border-b-0 md:last:border-r sm:last:border-b-0 sm:last:border-r-0 sm:odd:border-r border-gray-400 dark:border-gray-400">
                                         <div class="flex items-center p-3">
-                                            <input id="thursday-checkbox" type="checkbox" disabled name="thursday" value="" class="checkbox checkbox-info text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-300 dark:border-gray-500">
+                                            <input id="thursday-checkbox" type="checkbox" disabled name="thursday" value="thursday" class="checkbox checkbox-info text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-300 dark:border-gray-500">
                                             <label for="thursday-checkbox" class="ml-2 flex-grow py-3">Thursday</label>
                                         </div>
                                     </li>
@@ -132,7 +141,7 @@ session_start(); ?>
                                     <!-- Friday Item -->
                                     <li class="flex-grow w-full sm:w-1/2 md:w-1/3 border-b border-r last:border-r-0 last:border-b-0 md:border-b-0 md:last:border-r sm:border-b-0 sm:border-r-0 sm:last:border-b-0 sm:odd:border-r sm:even:border-r-0 border-gray-400 dark:border-gray-400">
                                         <div class="flex items-center p-3">
-                                            <input id="friday-checkbox" type="checkbox" disabled name="friday" value="" class="checkbox checkbox-info text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-300 dark:border-gray-500">
+                                            <input id="friday-checkbox" type="checkbox" disabled name="friday" value="friday" class="checkbox checkbox-info text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-300 dark:border-gray-500">
                                             <label for="friday-checkbox" class="ml-2 flex-grow py-3">Friday</label>
                                         </div>
                                     </li>
@@ -140,19 +149,32 @@ session_start(); ?>
                                     <!-- Saturday Item -->
                                     <li class="flex-grow w-full sm:w-1/2 md:w-1/3 border-b border-r last:border-r-0 last:border-b-0 md:last:border-r sm:last:border-b-0 sm:odd:border-r border-gray-400 dark:border-gray-400">
                                         <div class="flex items-center p-3">
-                                            <input id="saturday-checkbox" type="checkbox" disabled name="saturday" value="" class="checkbox checkbox-info text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-300 dark:border-gray-500">
+                                            <input id="saturday-checkbox" type="checkbox" disabled name="saturday" value="saturday" class="checkbox checkbox-info text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-300 dark:border-gray-500">
                                             <label for="saturday-checkbox" class="ml-2 flex-grow py-3">Saturday</label>
                                         </div>
                                     </li>
                                 </ul>
                                 <div id="checkboxAlert" class="flex justify-center hidden mt-2">
-                                    <div role="alert" class="alert alert-info w-auto font-medium">
+                                    <div role="alert" class="alert alert-warning w-auto font-medium">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                         </svg>
                                         <span>Please select at least one day.</span>
                                     </div>
                                 </div>
+                              <dialog id="scheSet" class='modal'>
+                                <div class='absolute top-20'>
+                                  <div  class="flex justify-center  mt-2">
+                                    <div role="alert" class="alert alert-success w-auto font-medium">
+                                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                      </svg>
+                                      <span>Schedule successfully set</span>
+                                    </div>
+                                  </div>
+                                </div>
+                              </dialog>
+
 
                             </fieldset>
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -232,7 +254,7 @@ session_start(); ?>
                                 <h3 class="font-bold text-xl sm:text-3xl">Delete/Reset Schedule</h3>
                                 
                                 
-                                <form action="#" method="GET" class="space-y-4">
+                              <form id='deleteSchedForm' action="#" method="GET" class="space-y-4">
                                 <div class="form-group mt-5">
                                     <label
                                     for="dltDoctorSched"
@@ -245,11 +267,17 @@ session_start(); ?>
                                     class="select select-bordered appearance-none block w-full px-3 border-gray-300 rounded-md shadow-sm focus:outline-none text-base sm:text-lg bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400 disabled:border-gray-300"
                                     required
                                     >
-                                    <option value="">Select a Doctor</option>
-                                    <option value="John Edward Dionisio">John Edward Dionisio</option>
-                                    <option value="Cy Anthony Cruz">Cy Anthony Cruz</option>
-                                    <option value="Clent Juarez">Clent Juarez</option>
-                                    <option value="Walter White Jr.">Walter White Jr.</option>
+                                      <option value="" disabled selected>Select a Doctor</option>
+                                        <?php
+                                        $sql = "SELECT * FROM tbl_staff where role = 'doctor' ";
+                                        $stmt = $conn->prepare($sql);
+                                        $stmt->execute();
+                                        $result = $stmt->get_result();
+                                        while ($row = $result->fetch_assoc()){
+                                            $middleInitial = (strlen($row['Middle_Name']) >= 1) ? substr($row['Middle_Name'], 0, 1) : '';
+                                            echo '<option value="'.$row['Staff_ID'].'">'.$row['First_Name'].' '.$middleInitial.'. '.$row['Last_Name'].'</option>';
+                                        }
+                                        ?>
                                     </select>
                                 </div>   
                                     <!-- Radio Buttons for Deletion Options -->
@@ -257,7 +285,7 @@ session_start(); ?>
                                     <ul class="items-center w-full text-lg font-medium text-gray-900 bg-white border border-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white rounded-lg sm:flex">
                                         <li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
                                             <div class="flex items-center ps-3">
-                                                <input id="deleteAll" type="radio" required name="list-radio" class="radio radio-info" value="deleteAll">
+                                                <input id="deleteAll" type="radio" required name="list-radio"  class="radio radio-info" value="deleteAll">
                                                 <label for="deleteAll" class="w-full py-3 ms-2">Delete All</label>
                                             </div>
                                         </li>
@@ -306,13 +334,13 @@ session_start(); ?>
                                         <p class="text-black dark:text-white mt-2 mb-1">Please enter your password to avoid accidentally deleting your schedule</p>
                                         <label for="dlt-password" class="block font-medium text-black dark:text-white">Confirm Password</label>
                                         <div class="relative">
-                                            <input id="dlt-password" type="password" required autocomplete="off" placeholder="Enter your password" 
+                                            <input name='conf_passoword' id="dlt-password" type="password" required autocomplete="off" placeholder="Enter your password"
                                             class="input input-bordered w-full border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:outline-none sm:text-sm bg-white dark:bg-gray-600 text-black dark:text-white">
                                         </div>
                                     </div>                                       
                                     <!-- delete button -->
                                     <input type="submit" value="Delete" class="btn btn-error">                        
-                                </form>
+                              </form>
 
                                 <!-- close button modal -->
                                 <div class="modal-action">                          
@@ -364,4 +392,102 @@ session_start(); ?>
             </div>
         </section>
 </body>
+
+<script>
+  document.getElementById('DoctorName').addEventListener('change', function() {
+    var selectedStaffId = this.value;
+    if (selectedStaffId) {
+      getSpeciality(selectedStaffId);
+    } else {
+      document.querySelector('#speciality').textContent = '';
+    }
+  });
+  function getSpeciality(staff_id){
+    $.ajax({
+      url: 'ajax.php?action=getStaffinfo&staff_id=' + staff_id,
+      method: 'GET',
+      dataType: 'json',
+      success: function(data) {
+        if (data && data.speciality) {
+          document.querySelector('#speciality').textContent = data.speciality;
+        } else {
+          document.querySelector('#speciality').textContent = '';
+        }
+      },
+      error: function(xhr, status, error) {
+        console.error('Error fetching data:', error);
+        document.querySelector('#speciality').textContent = '';
+      }
+    });
+  }
+  function checkCheckboxes(form) {
+    const checkboxes = document.querySelectorAll( '#'+ form + ' input[type="checkbox"]');
+    const checkboxAlert = document.getElementById('checkboxAlert');
+    const isAtLeastOneChecked = Array.from(checkboxes).some(
+      (checkbox) => checkbox.checked,
+    );
+    if (isAtLeastOneChecked) {
+      checkboxAlert.classList.add('hidden');
+      return true;
+    }
+    else {
+      checkboxAlert.classList.remove('hidden')
+      return  false;
+    }
+  }
+  function toggleDialog(id) {
+    let dialog = document.getElementById(id);
+    if (dialog) {
+      if (dialog.hasAttribute('open')) {
+        dialog.removeAttribute('open');
+      } else {
+        dialog.setAttribute('open', '');
+      }
+    }
+  }
+  document.getElementById('availability-form').addEventListener('submit',function(e){
+    e.preventDefault();
+    if (checkCheckboxes('availability-form')){
+
+      let form_data = new FormData(e.target);
+      $.ajax({
+        url: 'ajax.php?action=DoctorSchedule',
+        type: 'POST',
+        data: form_data,
+        processData: false,
+        contentType: false,
+        success: function(response) {
+          if (parseInt(response) === 1) {
+            toggleDialog('scheSet')
+            e.target.reset();
+            setTimeout(function() {
+              toggleDialog('scheSet')
+              window.location.href='admin-doctorSchedule.php';
+            }, 3000);
+
+          }
+        },
+      });
+    }
+
+  });
+  document.getElementById('deleteSchedForm').addEventListener('submit', function(e){
+    e.preventDefault()
+    let form_data = new FormData(e.target);
+    $.ajax({
+      url: 'ajax.php?action=deleteSched',
+      type: 'POST',
+      data: form_data,
+      processData: false,
+      contentType: false,
+      success: function(response) {
+        if (parseInt(response) === 1) {
+          window.location.href='admin-doctorSchedule.php';
+        }
+        console.log(response);
+      },
+    });
+    });
+
+</script>
 </html>

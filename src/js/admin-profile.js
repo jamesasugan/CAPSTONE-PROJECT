@@ -183,6 +183,7 @@ document
     document.getElementById('personalInfoStaff').classList.remove('hidden');
     document.getElementById('passwordSectionStaff').classList.add('hidden');
     resetSecurityEditState(); // Reset the password tab when leaving it
+    getUserInfo();
   });
 
 document
@@ -237,6 +238,7 @@ function toggleEdit(enable) {
     document.getElementById('updateButton').classList.add('hidden');
     document.getElementById('cancelButton').classList.add('hidden');
     form.reset();
+    getUserInfo();
   }
 }
 

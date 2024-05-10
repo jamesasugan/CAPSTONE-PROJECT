@@ -1,5 +1,25 @@
 <?php
-session_start(); ?>
+session_start();
+include "../Database/database_conn.php";
+
+
+
+if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] == 'patient'){
+    header("Location: index.php");
+
+}
+$user_id = $_SESSION['user_id'];
+$sql = "SELECT role from tbl_staff where User_ID = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param('i', $user_id);
+$stmt->execute();
+$result = $stmt->get_result();
+if ($result->num_rows > 0) {
+    $row = $result->fetch_assoc();
+    if ($row['role'] == 'admin'){
+        header("Location: admin-index.php");
+    }
+} ?>
 
 <!doctype html>
 <html lang="en">
@@ -34,6 +54,8 @@ session_start(); ?>
     />
     <link rel="stylesheet" href="../css/services-swiper.css" />
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
     <script src="../js/main.js" defer></script>
     <script src="../js/staff-profile.js" defer></script>
   </head>
@@ -95,7 +117,7 @@ session_start(); ?>
                       id="first-name"
                       name="first-name"
                       type="text"
-                      value="James"
+
                       autocomplete="off"
                       required
                       disabled
@@ -113,7 +135,7 @@ session_start(); ?>
                       id="middle-name"
                       name="middle-name"
                       type="text"
-                      value="Reid"
+
                       autocomplete="off"
                       required
                       disabled
@@ -132,7 +154,7 @@ session_start(); ?>
                       id="last-name"
                       name="last-name"
                       type="text"
-                      value="Asugan"
+
                       autocomplete="off"
                       required
                       disabled
@@ -172,7 +194,6 @@ session_start(); ?>
                       id="contact-number"
                       name="contact-number"
                       type="tel"
-                      value="05555555"
                       required
                       disabled
                       placeholder="Contact Number"
@@ -230,8 +251,8 @@ session_start(); ?>
                       disabled
                     >
                       <option value="">Select...</option>
-                      <option value="male">Male</option>
-                      <option value="female">Female</option>
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
                     </select>
                   </div>                
                   <div class="form-group col-span-1 sm:col-span-1">
@@ -275,28 +296,7 @@ session_start(); ?>
                   </button>
                 </div>
 
-                <!-- pashow nito pag nag update info patient -->
-                <div class="flex justify-center">
-                  <div
-                    role="alert"
-                    class="inline-flex items-center bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      class="stroke-current shrink-0 h-6 w-6 mr-2"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                      />
-                    </svg>
-                    <span>Information Updated</span>
-                  </div>
-                </div>
+
               </form>
             </div>
           </div>
@@ -313,6 +313,8 @@ session_start(); ?>
                 method="POST"
                 class="space-y-6"
               >
+                <input type='hidden' name='editPass' value='true'>
+
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <!-- Password Field -->
                   <div class="form-group">
@@ -323,10 +325,10 @@ session_start(); ?>
                     >
                     <div class="relative">
                       <input
+                        name='newPass'
                         id="password"
                         type="password"
                         required
-                        value="Passwordko1"
                         disabled
                         autocomplete="off"
                         placeholder="Password"
@@ -350,9 +352,9 @@ session_start(); ?>
                     >
                     <div class="relative">
                       <input
+                        name='confPass'
                         id="confirm-password"
                         type="password"
-                        value="Passwordko1"
                         required
                         disabled
                         autocomplete="off"
@@ -416,34 +418,32 @@ session_start(); ?>
                 </div>
 
                 <!-- pashow nito pag nag update password patient -->
-                <div class="flex justify-center">
-                  <div
-                    role="alert"
-                    class="inline-flex items-center bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      class="stroke-current shrink-0 h-6 w-6 mr-2"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                      />
-                    </svg>
-                    <span>Password Updated</span>
-                  </div>
-                </div>
               </form>
             </div>
           </div>
         </div>
       </div>
     </div>
-   
-
+  <dialog id='profileAlert' class='modal' onclick='toggleDialog("profileAlert");toggleSecurityEdit(false);toggleEdit(false)' >
+    <div class="flex justify-center" >
+      <div role="alert" class="inline-flex items-center bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative">
+        <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <span id='textInfo'></span>
+      </div>
+    </div>
+  </dialog>
+  <dialog id='errorAlert' class='modal' onclick='toggleDialog("errorAlert");toggleSecurityEdit(false);toggleEdit(false)' >
+    <div class="flex justify-center" >
+      <div role="alert" class="inline-flex items-center bg-error border border-black text-black px-4 py-3 rounded relative">
+        <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <span>Somthing went wrong</span>
+      </div>
+    </div>
+  </dialog>
+  <script src='../js/usersInfo.js' defer></script>
   </body>
 </html>

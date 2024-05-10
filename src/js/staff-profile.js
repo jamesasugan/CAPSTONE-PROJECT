@@ -183,6 +183,7 @@ document
     document.getElementById('personalInfoStaff').classList.remove('hidden');
     document.getElementById('passwordSectionStaff').classList.add('hidden');
     resetSecurityEditState(); // Reset the password tab when leaving it
+
   });
 
 document
@@ -191,6 +192,7 @@ document
     document.getElementById('personalInfoStaff').classList.add('hidden');
     document.getElementById('passwordSectionStaff').classList.remove('hidden');
     resetPersonalInfoStaffEditState(); // Reset the personal info tab when leaving it
+    getUserInfo();
   });
 
 // for active links sidebar
@@ -237,6 +239,7 @@ function toggleEdit(enable) {
     document.getElementById('updateButton').classList.add('hidden');
     document.getElementById('cancelButton').classList.add('hidden');
     form.reset();
+    getUserInfo();
   }
 }
 
@@ -263,3 +266,4 @@ function resetSecurityEditState() {
   document.querySelector('.requirement-list').classList.add('hidden');
   resetForm();
 }
+

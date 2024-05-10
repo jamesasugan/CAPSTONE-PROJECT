@@ -1,8 +1,30 @@
+<?php
+$first_name = '';
+$last_name = '';
+if (isset($_SESSION['user_type']) && $_SESSION['user_type'] == 'staff'){
+    $sql = "SELECT * FROM tbl_staff WHERE User_id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $_SESSION['user_id']);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows === 1) {
+        $row = $result->fetch_assoc();
+        $first_name = $row['First_Name'];
+        $last_name = $row['Last_Name'];
+    }
+}else{
+    header("Location: index.php");
+}
+
+?>
+
+
 <div class="dashboard-page pt-32 sm:pt-60 ">
   <div class="title mb-0 sm:mb-10 w-full px-4">
     <h1 class="text-3xl sm:text-6xl font-bold text-center break-words mb-5">
       Welcome,
-      <span> Name.</span>
+      <span> <?php echo $first_name .' '. $last_name?></span>
     </h1>
   </div>
 

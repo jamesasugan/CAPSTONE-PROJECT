@@ -44,6 +44,8 @@ if (!isset($_SESSION['user_type']) or $_SESSION['user_type'] !== 'patient'){
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script src="../js/main.js" defer></script>
     <script src="../js/patient-profile.js" defer></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
   </head>
   <body>
 
@@ -92,7 +94,7 @@ if (!isset($_SESSION['user_type']) or $_SESSION['user_type'] !== 'patient'){
                       id="first-name"
                       name="first-name"
                       type="text"
-                      value="James"
+                      value=""
                       autocomplete="off"
                       required
                       disabled
@@ -111,7 +113,7 @@ if (!isset($_SESSION['user_type']) or $_SESSION['user_type'] !== 'patient'){
                       id="middle-name"
                       name="middle-name"
                       type="text"
-                      value="Reid"
+                      value=""
                       autocomplete="off"
                       required
                       disabled
@@ -131,7 +133,7 @@ if (!isset($_SESSION['user_type']) or $_SESSION['user_type'] !== 'patient'){
                       id="last-name"
                       name="last-name"
                       type="text"
-                      value="Asugan"
+                      value=""
                       autocomplete="off"
                       required
                       disabled
@@ -150,7 +152,7 @@ if (!isset($_SESSION['user_type']) or $_SESSION['user_type'] !== 'patient'){
                       id="contact-number"
                       name="contact-number"
                       type="tel"
-                      value="05555555"
+                      value=""
                       required
                       disabled
                       placeholder="Contact Number"
@@ -246,14 +248,16 @@ if (!isset($_SESSION['user_type']) or $_SESSION['user_type'] !== 'patient'){
                     </div>
 
                     <!-- pashow nito pag nag update info patient -->
-                    <div class="flex justify-center">
+                <dialog id='profileAlert' class='modal' onclick='toggleDialog("profileAlert");toggleSecurityEdit(false);toggleEdit(false)' >
+                    <div class="flex justify-center" >
                         <div role="alert" class="inline-flex items-center bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative">
                             <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
-                            <span>Information Updated</span>
+                            <span id='textInfo'></span>
                         </div>
                     </div>
+                </dialog>
                  
               </form>
             </div>
@@ -266,15 +270,17 @@ if (!isset($_SESSION['user_type']) or $_SESSION['user_type'] !== 'patient'){
                   Password
               </h3>
               <form id="security-form" action="#" method="POST" class="space-y-6">
+                <input type='hidden' name='editPass' value='true'>
                   <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <!-- Password Field -->
                       <div class="form-group">
                           <label for="password" class="block font-medium text-black dark:text-white">Password</label>
                           <div class="relative">
                               <input id="password" 
-                                  type="password" 
+                                  type="password"
+                                     name="newPass"
                                   required 
-                                  value="Passwordko1"
+                                  value=""
                                   disabled
                                   autocomplete="off" 
                                   placeholder="Password" 
@@ -293,8 +299,9 @@ if (!isset($_SESSION['user_type']) or $_SESSION['user_type'] !== 'patient'){
                     <label for="confirm-password" class="block font-medium text-black dark:text-white">Confirm Password</label>
                     <div class="relative">
                       <input id="confirm-password" 
-                      type="password" 
-                      value="Passwordko1"
+                      type="password"
+                             name="confPass"
+                      value=""
                       required 
                       disabled
                       autocomplete="off" 
@@ -328,17 +335,6 @@ if (!isset($_SESSION['user_type']) or $_SESSION['user_type'] !== 'patient'){
                         Cancel
                     </button>
                 </div>
-
-                <!-- pashow nito pag nag update password patient -->
-                <div class="flex justify-center">
-                        <div role="alert" class="inline-flex items-center bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                            <span>Password Updated</span>
-                        </div>
-                    </div>
-                    
               </form>
           </div>
         </div>
@@ -611,7 +607,17 @@ if (!isset($_SESSION['user_type']) or $_SESSION['user_type'] !== 'patient'){
         </div>
       </div>
     </div>
-      
+    <dialog id='errorAlert' open class='modal' onclick='toggleDialog("errorAlert");toggleSecurityEdit(false);toggleEdit(false)' >
+      <div class="flex justify-center" >
+        <div role="alert" class="inline-flex items-center bg-error border border-green-400 text-green-700 px-4 py-3 rounded relative">
+          <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <span>Somthing went wrong</span>
+        </div>
+      </div>
+    </dialog>
+    <script src='../js/usersInfo.js' defer></script>
   </body>
 </html>
 

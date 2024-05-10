@@ -1,5 +1,25 @@
 <?php
-session_start(); ?>
+include '../Database/database_conn.php';
+session_start();
+
+
+
+if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] == 'patient'){
+    header("Location: index.php");
+
+}
+$user_id = $_SESSION['user_id'];
+$sql = "SELECT role from tbl_staff where User_ID = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param('i', $user_id);
+$stmt->execute();
+$result = $stmt->get_result();
+if ($result->num_rows > 0) {
+    $row = $result->fetch_assoc();
+    if ($row['role'] == 'doctor'){
+        header("Location: staff-index.php");
+    }
+}?>
 
 
 <!DOCTYPE html>
@@ -196,18 +216,15 @@ session_start(); ?>
           success: function(response) {
             if (parseInt(response) === 1) {
               toggle_successNotif();
-              toggle_signUp_notif();
+              e.target.reset();
               setTimeout(function() {
-                toggle_signUp_notif();
-                setTimeout(function() {
-                  toggle_successNotif();
-                }, 3000); // 3000 milliseconds = 3 seconds
-              }, 3000); // 3000 milliseconds = 3 seconds
+                toggle_successNotif();
+              }, 3000);
             }
 
 
             console.log(response);
-            e.target.reset();
+
           },
         })
       })

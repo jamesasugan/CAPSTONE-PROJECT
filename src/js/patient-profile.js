@@ -174,6 +174,7 @@ function toggleSecurityEdit(enable) {
     passwordInput.removeEventListener('input', updateRequirements);
     confirmPasswordInput.removeEventListener('input', updateRequirements);
   }
+
 }
 
 //for sidebar links
@@ -183,6 +184,7 @@ document
     document.getElementById('personalInfo').classList.remove('hidden');
     document.getElementById('passwordSection').classList.add('hidden');
     document.getElementById('appointmentHistory').classList.add('hidden');
+    getUserInfo();
     resetSecurityEditState(); // Reset the password tab when leaving it
   });
 
@@ -190,6 +192,7 @@ document.getElementById('passwordTab').addEventListener('click', function () {
   document.getElementById('personalInfo').classList.add('hidden');
   document.getElementById('passwordSection').classList.remove('hidden');
   document.getElementById('appointmentHistory').classList.add('hidden');
+
   resetPersonalInfoEditState(); // Reset the personal info tab when leaving it
 });
 
@@ -247,6 +250,7 @@ function toggleEdit(enable) {
     document.getElementById('updateButton').classList.add('hidden');
     document.getElementById('cancelButton').classList.add('hidden');
     form.reset();
+    getUserInfo();
   }
 }
 
@@ -263,7 +267,6 @@ function resetPersonalInfoEditState() {
     });
   document.getElementById('personal-info').reset();
 }
-
 function resetSecurityEditState() {
   document.getElementById('editSecurityBtn').classList.remove('hidden');
   document.getElementById('updateSecurityBtn').classList.add('hidden');

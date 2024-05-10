@@ -186,6 +186,9 @@
                             </svg>
                           </label>
                         </li>
+                        <?php
+                        if (!isset($_SESSION['user_type'])):
+                        ?>
                         <!-- labas mo to pag di naka log in -->
                         <li>
                           <a href="login.php"
@@ -196,6 +199,7 @@
                         <!-- labas mo to pag di naka log in end -->
 
                         <!-- ito nakalabas pag naka log in -->
+                        <?php else:?>
                         <li>
                           <a href="admin-profile.php"
                             class="hover:bg-gray-300 dark:hover:bg-gray-600 hover:font-bold text-lg transition duration-300 ease-in-out"
@@ -209,12 +213,13 @@
                           >
                         </li>
                         <li>
-                          <a href='#'
+                          <a href='logout.php'
                             class="hover:bg-gray-300 dark:hover:bg-gray-600 hover:font-bold text-lg transition duration-300 ease-in-out"
                             >Log Out</a
                           >
                         </li>  
-                        <!-- ito nakalabas pag naka log in end -->   
+                        <!-- ito nakalabas pag naka log in end -->
+                        <?php endif;?>
 
                       </ul>
                     </details>

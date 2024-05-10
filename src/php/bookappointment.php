@@ -1,5 +1,25 @@
 <?php
 session_start();
+include_once '../Database/database_conn.php';
+
+if (isset($_SESSION['user_type']) and $_SESSION['user_type'] == 'staff'){
+
+    $user_id = $_SESSION['user_id'];
+    $sql = "SELECT role from tbl_staff where User_ID = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param('i', $user_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        if ($row['role'] == 'doctor'){
+            header("Location: staff-index.php");
+        }elseif ($row['role'] == 'admin'){
+            header("Location: admin-index.php");
+        }
+    }
+}
+
 ?>
 
 <!doctype html>
@@ -62,7 +82,7 @@ session_start();
         </p>
         <p><span>Note:</span> The selection of Doctor will depend if the selected doctor is available on the set appointment date and time</p>
 
-        <form action="#" method="GET">
+        <form id='patient_bookAppointment' action="#" method="GET">
         <fieldset class="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
           <legend class="text-xl font-bold mb-2 col-span-full">Service:</legend>
           <div class="flex flex-col w-full">           
@@ -145,7 +165,7 @@ session_start();
 
         <div class="w-full md:w-auto md:col-span-1">
           <label for="appointment-date" class="block text-base sm:text-lg font-medium">
-            Appointment Date
+            Appointment Date<span id='appointmentDateNote' class='text-sm text-info hidden'> (Please check doctor schedule)</span>
           </label>
           <input
             type="date"
@@ -269,31 +289,129 @@ session_start();
               required
               class="form-checkbox h-5 w-5 rounded-none checkbox checkbox-success [color-scheme:light] dark:[color-scheme:dark]"
               name="privacy"
+              value='checked'
             />
             <span class="ml-2">I understand</span>
           </label>
 
           <div class="flex justify-center mt-4 mb-2">
-            <input
-              type="submit"
-              value="Submit"
-              class="bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold py-2 px-4 rounded w-1/2 cursor-pointer"
-            />
+            <?php
+            if (isset($_SESSION['user_type']) && $_SESSION['user_type'] == 'patient'):
+            ?>
+            <input type='hidden' name='online_user_id' value='<?php echo $_SESSION['user_id']?>'>
+            <input type='hidden' name='book_status' value='pending'>
+            <input type='hidden' name='appointment_type' value='Online'>
+              <input
+                type="submit"
+                value="Submit"
+                class="bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold py-2 px-4 rounded w-1/2 cursor-pointer"
+              />
+            <?php else:?>
+              <a href='login.php' class='text-center bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold py-2 px-4 rounded w-1/2 cursor-pointer'>Submit</a>
+            <?php endif;?>
+
           </div>
 
         </form>
 
         <!-- pashow nito pagnasubmit -->
-        <div class="flex justify-center">
-            <div role="alert" class="inline-flex items-center bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative">
-                <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <span>Appointment has been booked! Please wait for confirmation message.</span>
+        <dialog id='bookCompletAlert' class='modal'>
+          <div  class="flex justify-center " onclick='toggleDialog("bookCompletAlert")'>
+              <div role="alert" class="inline-flex items-center bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <span>Appointment has been booked! Please wait for confirmation message.</span>
+              </div>
+          </div>
+        </dialog>
+        <dialog id='bookFailed' class='modal' >
+          <div  class="flex justify-center pointer-events-none" onclick='toggleDialog("bookFailed")'>
+            <div role="alert" class="inline-flex items-center bg-error border border-red-400 text-black px-4 py-3 rounded relative">
+              <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+              <span>Appointment failed please contact support</span>
             </div>
-        </div>
+          </div>
+        </dialog>
 
       </div>
     </section>
   </body>
+  <script>
+    function toggleDialog(id) {
+      let dialog = document.getElementById(id);
+      if (dialog) {
+        if (dialog.hasAttribute('open')) {
+          dialog.removeAttribute('open');
+        } else {
+          dialog.setAttribute('open', '');
+        }
+      }
+    }
+
+
+    document.getElementById('patient_bookAppointment').addEventListener('submit', function(e){
+      e.preventDefault();
+      let form_data = new FormData(e.target);
+      $.ajax({
+        url: 'ajax.php?action=patientBookAppointment',
+        type: 'POST',
+        data: form_data,
+        processData: false,
+        contentType: false,
+        success: function(response) {
+          if (parseInt(response) === 1) {
+            toggleDialog('bookCompletAlert');
+          }else {
+            toggleDialog('bookFailed')
+          }
+          e.target.reset();
+          console.log(response);
+        }
+      });
+    });
+
+    function getDoctorSchedule() {
+      let schedule;
+      $.ajax({
+        url: 'ajax.php?action=getDoctorSched',
+        method: 'GET',
+        dataType: 'json',
+        async: false,
+        success: function(response) {
+          schedule = response;
+        },
+        error: function(xhr, status, error) {
+          console.error('Error fetching schedule:', error);
+        }
+      });
+      return schedule;
+    }
+
+    let schedule = getDoctorSchedule();
+    let dates = [];
+    for (let date in schedule) {
+      dates.push(date);
+    }
+    function setSelectableDates(datesArray) {
+      let dateInput = document.getElementById('appointment-date');
+      dateInput.setAttribute('type', 'date');
+      let dateObjects = datesArray.map(date => new Date(date));
+      let minDate = new Date(Math.min.apply(null, dateObjects));
+      let maxDate = new Date(Math.max.apply(null, dateObjects));
+      dateInput.setAttribute('min', minDate.toISOString().slice(0,10));
+      dateInput.setAttribute('max', maxDate.toISOString().slice(0,10));
+      dateInput.addEventListener('input', function() {
+        let selectedDate = new Date(this.value);
+        if (!dateObjects.find(date => date.toISOString().slice(0,10) === selectedDate.toISOString().slice(0,10))) {
+          document.getElementById('appointmentDateNote').classList.remove('hidden');
+          this.value = ''; // Reset value if not in datesArray
+        }else {
+          document.getElementById('appointmentDateNote').classList.add('hidden');
+        }
+      });
+    }
+    setSelectableDates(dates);
+
+  </script>
 </html>

@@ -181,14 +181,19 @@
                           </label>
                         </li>
                         <!-- labas mo to pag di naka log in -->
+                        <?php
+                        if (!isset($_SESSION['user_id'])):
+                        ?>
                         <li>
                           <a href="login.php"
                             class="hover:bg-gray-300 dark:hover:bg-gray-600 hover:font-bold text-lg transition duration-300 ease-in-out"
                             >Log In</a
                           >
-                        </li>    
+                        </li>
                         <!-- labas mo to pag di naka log in end -->
-
+                        <?php
+                        else:
+                        ?>
                         <!-- ito nakalabas pag naka log in -->
                         <li>
                           <a href="staff-profile.php"
@@ -197,13 +202,13 @@
                           >
                         </li>
                         <li>
-                          <a href='#'
+                          <a href='logout.php'
                             class="hover:bg-gray-300 dark:hover:bg-gray-600 hover:font-bold text-lg transition duration-300 ease-in-out"
                             >Log Out</a
                           >
                         </li>  
                         <!-- ito nakalabas pag naka log in end -->   
-
+                      <?php endif;?>
                       </ul>
                     </details>
                   </li>

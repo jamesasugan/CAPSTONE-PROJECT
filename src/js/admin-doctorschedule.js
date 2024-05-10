@@ -68,37 +68,8 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 });
 
-// for required on monday to saturday and alert
-document.addEventListener('DOMContentLoaded', function () {
-  const form = document.querySelector('form');
-  const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-  const checkboxAlert = document.getElementById('checkboxAlert');
 
-  function checkCheckboxes() {
-    const isAtLeastOneChecked = Array.from(checkboxes).some(
-      (checkbox) => checkbox.checked,
-    );
-    if (isAtLeastOneChecked) {
-      checkboxAlert.classList.add('hidden');
-    }
-  }
 
-  checkboxes.forEach(function (checkbox) {
-    checkbox.addEventListener('change', checkCheckboxes);
-  });
-
-  form.addEventListener('submit', function (event) {
-    const isAtLeastOneChecked = Array.from(checkboxes).some(
-      (checkbox) => checkbox.checked,
-    );
-    if (!isAtLeastOneChecked) {
-      checkboxAlert.classList.remove('hidden');
-      event.preventDefault();
-    } else {
-      checkboxAlert.classList.add('hidden');
-    }
-  });
-});
 
 // for required on input date in delete schedule
 document.addEventListener('DOMContentLoaded', function () {

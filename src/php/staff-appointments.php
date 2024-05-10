@@ -1,5 +1,25 @@
 <?php
-session_start(); ?>
+session_start();
+include "../Database/database_conn.php";
+
+
+
+if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] == 'patient'){
+    header("Location: index.php");
+
+}
+$user_id = $_SESSION['user_id'];
+$sql = "SELECT role from tbl_staff where User_ID = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param('i', $user_id);
+$stmt->execute();
+$result = $stmt->get_result();
+if ($result->num_rows > 0) {
+    $row = $result->fetch_assoc();
+    if ($row['role'] == 'admin'){
+        header("Location: admin-index.php");
+    }
+} ?>
 
 <!doctype html>
 <html lang="en">
@@ -151,22 +171,7 @@ session_start(); ?>
                     <h1 class="text-base sm:text-xl font-bold">STATUS: <span class="font-bold text-yellow-500 dark:text-yellow-300">Pending</span></h1>  <!-- ayusin mo rin colors dito ah -->
 
                  
-                    <div class="mt-3 w-full max-w-xs mx-auto">
-                      <label for="browser" class="block mb-1 text-lg font-medium text-black dark:text-white">Choose your browser:</label>
-                      <form action="#" method="POST" class="flex items-center bg-white dark:bg-gray-600 border border-black dark:border-white">
-                        <input list="browsers" name="browser" id="browser" class="flex-1 px-3 py-2 rounded-none bg-transparent text-black dark:text-white focus:outline-none" placeholder="Choose your browser...">
-                        <datalist id="browsers">
-                          <option value="Edge">
-                          <option value="Firefox">
-                          <option value="Chrome">
-                          <option value="Opera">
-                          <option value="Safari">
-                        </datalist>
-                        <button type="submit" class="px-3 py-2 rounded-none bg-gray-400 hover:bg-gray-500 dark:bg-gray-500 dark:hover:bg-gray-300">
-                          <i class="fa-solid fa-magnifying-glass text-black dark:text-white"></i>
-                        </button>
-                      </form>
-                    </div>          
+
 
                     <h2 class="text-base sm:text-xl font-bold mt-5">Edit Status of this Appointment</h2>
                     <form action="#" method="GET">

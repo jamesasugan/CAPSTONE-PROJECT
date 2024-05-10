@@ -1,3 +1,26 @@
+<?php
+session_start();
+include_once '../Database/database_conn.php';
+
+if (isset($_SESSION['user_type']) and $_SESSION['user_type'] == 'staff'){
+
+    $user_id = $_SESSION['user_id'];
+    $sql = "SELECT role from tbl_staff where User_ID = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param('i', $user_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        if ($row['role'] == 'doctor'){
+            header("Location: staff-index.php");
+        }elseif ($row['role'] == 'admin'){
+            header("Location: admin-index.php");
+        }
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -28,7 +51,11 @@
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script src="../js/main.js" defer></script>
     <script src="../js/calendar.js" defer></script>
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+
+
 
 </head>
 <body>
@@ -81,8 +108,7 @@
         </section>
 
 
-    
-    
-    
+
+
 </body>
 </html>
