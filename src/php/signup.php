@@ -295,7 +295,7 @@ if (isset($_SESSION['user_type'])){
           <!-- eto notif pag nacreate account  -->
 
           <!-- eto notif pag nacreate account  -->
-          <dialog id='notif' open class='modal' onclick='toggleDialog("notif");' >
+          <dialog id='notif' class='modal' onclick='toggleDialog("notif");' >
             <div class="flex justify-center" >
               <div role="alert" id='alert' class="inline-flex items-center bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative">
               <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24">

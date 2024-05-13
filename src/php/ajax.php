@@ -384,7 +384,7 @@ if ($action == 'patientBookAppointment') {
 
             $sqlAppointment = "INSERT INTO tbl_appointment 
                 (Patient_ID, Appointment_schedule, Service_Field,Service_Type, Status, Appointment_type, Vaccination, reason, AgreementApproval) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?,?)";
             $stmtAppointment = $conn->prepare($sqlAppointment);
             $stmtAppointment->bind_param('issssssss', $patientID,
                 $appointment_schedule, $service_field,$service_type, $status,
