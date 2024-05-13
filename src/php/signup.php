@@ -293,25 +293,18 @@ if (isset($_SESSION['user_type'])){
           </div>
 
           <!-- eto notif pag nacreate account  -->
-          <div id="notif" class=" pb-10 hidden">
-            <div id="alert" role="alert" class="alert  mt-2">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="stroke-current shrink-0 h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>
-              <span class="text-center" id='alert_text'></span>
-            </div>
-          </div>
+
           <!-- eto notif pag nacreate account  -->
+          <dialog id='notif' open class='modal' onclick='toggleDialog("notif");' >
+            <div class="flex justify-center" >
+              <div role="alert" id='alert' class="inline-flex items-center bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative">
+              <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span id='alert_text'>Account Created</span>
+            </div>
+            </div>
+          </dialog>
         </div>
       </div>
 
@@ -351,16 +344,15 @@ if (isset($_SESSION['user_type'])){
 
     <script>
       function toggle_signUp_notif(notification_type){
-        let notification = document.getElementById('notif');
         let notif_type = document.getElementById('alert');
         let notif_text = document.getElementById('alert_text');
         if (notification_type === 1){
 
-          notif_type.classList.add('alert-success');
+          notif_type.classList.add('bg-success');
           notif_text.innerHTML = 'Account Created'
         }
         if (notification_type === 2 || notification_type === 3 || notification_type === 4){
-          notif_type.classList.add('alert-error');
+          notif_type.classList.add('b-error');
           if (notification_type === 2){
             notif_text.innerHTML = 'Please Fill up the form';
           }else if (notification_type === 3){
@@ -370,7 +362,7 @@ if (isset($_SESSION['user_type'])){
           }
 
         }
-        notification.classList.remove('hidden');
+
 
       }
 
@@ -387,8 +379,10 @@ if (isset($_SESSION['user_type'])){
           success: function(response) {
             if (parseInt(response) === 1) {
               toggle_signUp_notif(parseInt(response));
+              toggleDialog('notif');
             } else {
               toggle_signUp_notif(parseInt(response));
+              toggleDialog('notif');
             }
             e.target.reset();
           },
@@ -397,7 +391,16 @@ if (isset($_SESSION['user_type'])){
 
       })
 
-
+      function toggleDialog(id) {
+        let dialog = document.getElementById(id);
+        if (dialog) {
+          if (dialog.hasAttribute('open')) {
+            dialog.removeAttribute('open');
+          } else {
+            dialog.setAttribute('open', '');
+          }
+        }
+      }
 
       document.addEventListener('DOMContentLoaded', function () {
         var inputDob = document.getElementById('dob');

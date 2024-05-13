@@ -464,9 +464,9 @@ if ($result->num_rows > 0) {
               toggleDialog('scheSet')
               window.location.href='admin-doctorSchedule.php';
             }, 3000);
-
           }
-        },
+          }
+        ,
       });
     }
 
