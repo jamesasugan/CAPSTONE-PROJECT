@@ -297,8 +297,15 @@ if (isset($_SESSION['user_type']) and $_SESSION['user_type'] == 'staff'){
           <div class="flex justify-center mt-4 mb-2">
             <?php
             if (isset($_SESSION['user_type']) && $_SESSION['user_type'] == 'patient'):
+                $sql = "SELECT * FROM account_user_info where User_ID = ?";
+                $stmt = $conn->prepare($sql);
+                $stmt->bind_param('i', $_SESSION['user_id']);
+                $stmt->execute();
+                $result = $stmt->get_result();
+                $row = $result->fetch_assoc();
+
             ?>
-            <input type='hidden' name='online_user_id' value='<?php echo $_SESSION['user_id']?>'>
+            <input type='hidden' name='online_user_id' value='<?php echo $row['user_info_ID']?>'>
             <input type='hidden' name='book_status' value='pending'>
             <input type='hidden' name='appointment_type' value='Online'>
               <input
@@ -325,15 +332,14 @@ if (isset($_SESSION['user_type']) and $_SESSION['user_type'] == 'staff'){
               </div>
           </div>
         </dialog>
-        <dialog id='bookFailed' class='modal' >
-          <div  class="flex justify-center pointer-events-none" onclick='toggleDialog("bookFailed")'>
+        <dialog id='bookFailed'  class='modal'  onclick='toggleDialog("bookFailed")'>
+          <div  class="flex justify-center pointer-events-none">
             <div role="alert" class="inline-flex items-center bg-error border border-red-400 text-black px-4 py-3 rounded relative">
               <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
               <span>Appointment failed please contact support</span>
             </div>
           </div>
         </dialog>
-
       </div>
     </section>
   </body>
@@ -348,8 +354,6 @@ if (isset($_SESSION['user_type']) and $_SESSION['user_type'] == 'staff'){
         }
       }
     }
-
-
     document.getElementById('patient_bookAppointment').addEventListener('submit', function(e){
       e.preventDefault();
       let form_data = new FormData(e.target);
@@ -370,7 +374,7 @@ if (isset($_SESSION['user_type']) and $_SESSION['user_type'] == 'staff'){
         }
       });
     });
-
+    /*
     function getDoctorSchedule() {
       let schedule;
       $.ajax({
@@ -412,6 +416,7 @@ if (isset($_SESSION['user_type']) and $_SESSION['user_type'] == 'staff'){
       });
     }
     setSelectableDates(dates);
+    */
 
   </script>
 </html>

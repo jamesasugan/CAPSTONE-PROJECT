@@ -29,7 +29,11 @@ function calculateDates($selectedDays, $onRepeat) {
     } else {
         $currentTimestamp = time();
         $currentDayOfWeek = date('N', $currentTimestamp);
-        $startOfWeekTimestamp = strtotime('last Monday', $currentTimestamp);
+        if ($currentDayOfWeek == 7) {
+            $startOfWeekTimestamp = strtotime('next Monday', $currentTimestamp);
+        } else {
+            $startOfWeekTimestamp = strtotime('this Monday', $currentTimestamp);
+        }
         for ($i = 0; $i < 7; $i++) {
             $currentDayTimestamp = strtotime("+$i days", $startOfWeekTimestamp);
             $dayOfWeek = date('N', $currentDayTimestamp);
@@ -38,6 +42,7 @@ function calculateDates($selectedDays, $onRepeat) {
                 $dates[] = $currentDayDate;
             }
         }
+
     }
     return $dates;
 }
@@ -271,11 +276,13 @@ if ($action == 'DoctorSchedule'){
     if ($saturday) $selectedDays[] = 6; // Saturday
 
 
-    $dates = calculateDates($selectedDays, $onRepeat);
+
     $del = "DELETE FROM tbl_availability where Staff_ID = ?";
     $del_stmt = $conn->prepare($del);
     $del_stmt->bind_param('i', $staff_id);
     $del_stmt->execute();
+    $dates = calculateDates($selectedDays, $onRepeat);
+
     foreach ($dates as $date) {
 
         $sql = "INSERT INTO tbl_availability (Staff_ID, Date, StartTime, EndTime) VALUES (?, ?, ?, ?)";
@@ -337,7 +344,7 @@ if ($action == 'deleteSched'){
 }
 if ($action == 'patientBookAppointment'){
     $firstName = isset($_POST['first-name']) ? $_POST['first-name'] : '';
-    $middleName = $_POST['middle-name'];
+    $middleName = isset($_POST['middle-name']) ? $_POST['middle-name'] : null;
     $lastName = isset($_POST['last-name']) ? $_POST['last-name'] : '';
     $dob = isset($_POST['dob']) ? $_POST['dob'] : '';
     $sex = isset($_POST['sex']) ? $_POST['sex'] : '';
@@ -367,17 +374,24 @@ if ($action == 'patientBookAppointment'){
         && $agreement_approval !== '') {
         $sql = 'INSERT INTO tbl_patient 
     (user_info_ID, First_Name, Middle_Name, Last_Name, DateofBirth, Sex, Contact_Number, patientEmail, Address) 
-    VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("issssssss", $user_id,$firstName, $middleName, $lastName, $dob, $sex, $contactNumber, $patient_email,$address);
-        $stmt->execute();
-        $patientID = $stmt->insert_id;
-        /*
-        echo $patientID.' '.$firstName.' '.$middleName.' '.$lastName.' '.$dob.' '.$sex.' '.$contactNumber.' '.$patient_email.' '.$address
-            .' '.$appointment_schedule.' '.$service_field.' '.$service_type.' '.$status.' '.$appointment_type.' '.$vaccination.' '.$agreement_approval
-        ;
-        */
+        if (!$stmt) {
+            die("Prepare failed: (" . $conn->errno . ") " . $conn->error);
+        }
+        $stmt->bind_param("issssssss", $user_id, $firstName, $middleName, $lastName, $dob, $sex, $contactNumber, $patient_email, $address);
 
+        if (!$stmt->execute()) {
+            die("Execute failed: (" . $stmt->errno . ") " . $stmt->error);
+        } else {
+            $patientID = $stmt->insert_id;
+
+        }
+        /*
+                echo $patientID.' '.$firstName.' '.$middleName.' '.$lastName.' '.$dob.' '.$sex.' '.$contactNumber.' '.$patient_email.' '.$address
+                    .' '.$appointment_schedule.' '.$service_field.' '.$service_type.' '.$status.' '.$appointment_type.' '.$vaccination.' '.$agreement_approval
+                ;
+        */
         if($stmt->affected_rows > 0) {
             $patient_appointment = "INSERT INTO tbl_appointment 
                                     (Patient_ID, Appointment_schedule, Service_Field, Service_Type, Status, Appointment_type, Vaccination, AgreementApproval) 
@@ -393,11 +407,16 @@ if ($action == 'patientBookAppointment'){
             if ($appointment_stmt->affected_rows > 0){
                 echo 1;
                 exit();
+            }else{
+                echo 'newAppointment failed insert';
             }
+        }else{
+            echo 'newPatient faile insert';
         }
+    }else{
+        echo "Error occurred while booking appointment.";
     }
 
-    echo "Error occurred while booking appointment.";
 
     $stmt->close();
 }
