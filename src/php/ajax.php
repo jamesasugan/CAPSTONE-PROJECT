@@ -1,10 +1,10 @@
 <?php
-/*
+
 if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] !== 'XMLHttpRequest') {
     header("Location: 404.php");
     exit();
 }
-*/
+
 
 
 
@@ -655,7 +655,6 @@ if ($action == 'createPatientRecord') {
             $stmt->bind_param('i', $record_id);
             $stmt->execute();
             $result = $stmt->get_result();
-
             if ($result->num_rows === 1) {
                 $sql = "UPDATE tbl_records SET 
                        Consultant_Staff_ID = ? , 
@@ -679,59 +678,46 @@ if ($action == 'createPatientRecord') {
                     $assesment, $treatment_plan, $record_id);
                 $stmt->execute();
 
-
-            }else{
-                echo 'Something wrong please reload the website1' ;
-                exit();
-            }
-        }else {
-            if ($followUp === 'no') {
-                // Prepare and execute INSERT statement
-                $sql = "INSERT INTO tbl_records (Chart_ID, Consultant_Staff_ID, consultationDate, Temperature, HeartRate, Weight, Blood_Pressure, Saturation, Chief_complaint, Physical_Examination, Assessment, Treatment_Plan) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-                $stmt = $conn->prepare($sql);
-                $stmt->bind_param("iissssssssss", $Chart_ID, $consultant, $consultation_date, $temperature, $heart_rate, $weight, $blood_pressure, $saturation, $chief_comp, $physical_exam, $assesment, $treatment_plan);
-                $stmt->execute();
-                $record_id = $stmt->insert_id; // Retrieve insert_id after execution
-
-                // Update patient chart status
-                $update_patient_chart = "UPDATE tbl_patient_chart SET followUp_schedule = 'No Schedule', patient_Status ='Completed' WHERE Chart_id = ?";
-                $stmt2 = $conn->prepare($update_patient_chart);
-                $stmt2->bind_param('i', $Chart_ID);
-                $stmt2->execute();
-            } elseif ($followUp === 'yes') {
-                // Prepare and execute INSERT statement
-                $sql = "INSERT INTO tbl_records (Chart_ID, Consultant_Staff_ID, consultationDate, Temperature, HeartRate, Weight, Blood_Pressure, Saturation, Chief_complaint, Physical_Examination, Assessment, Treatment_Plan) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-                $stmt = $conn->prepare($sql);
-                $stmt->bind_param("iissssssssss", $Chart_ID, $consultant, $consultation_date, $temperature, $heart_rate, $weight, $blood_pressure, $saturation, $chief_comp, $physical_exam, $assesment, $treatment_plan);
-                $stmt->execute();
-                $record_id = $stmt->insert_id;
-                $followUpDate = $_POST['followUpDate'];
-                $followUpTime = $_POST['followUpTime'];
-                $followupSched = $followUpDate . ' ' . $followUpTime;
-                $update_patient_chart = "UPDATE tbl_patient_chart SET followUp_schedule = ?, patient_Status ='Follow Up' WHERE Chart_id = ?";
-                $stmt = $conn->prepare($update_patient_chart);
-                $stmt->bind_param('si', $followupSched, $Chart_ID);
-                $stmt->execute();
-            }
-        }
-
-        if (!empty($_FILES['resultImage']['name'][0])) {
-            if ($record_id !== 0){$record_id = $_POST['record_id'];
-                $getRec = "SELECT * FROM tbl_records where Record_ID = ?";
-                $stmt = $conn->prepare($getRec);
-                $stmt->bind_param('i', $record_id);
-                $stmt->execute();
-                $result = $stmt->get_result();
-                if ($result->num_rows === 1) {
+                if (!empty($_FILES['resultImage']['name'][0])) {
                     $delsql = "DELETE FROM patientimageresult where record_id = ?";
                     $delstmt = $conn->prepare($delsql);
                     $delstmt->bind_param('i', $record_id);
                     $delstmt->execute();
                 }
+            }else{
+                echo 'Something wrong please reload the website1' ;
+                exit();
             }
+        }else {
+            $sql = "INSERT INTO tbl_records (Chart_ID, Consultant_Staff_ID, consultationDate, Temperature, HeartRate, Weight, Blood_Pressure, Saturation, Chief_complaint, Physical_Examination, Assessment, Treatment_Plan) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("iissssssssss", $Chart_ID, $consultant, $consultation_date, $temperature, $heart_rate, $weight, $blood_pressure, $saturation, $chief_comp, $physical_exam, $assesment, $treatment_plan);
+            $stmt->execute();
+            $record_id = $stmt->insert_id;
+        }
 
+
+
+
+        if ($followUp === 'no') {
+            $update_patient_chart = "UPDATE tbl_patient_chart SET followUp_schedule = 'No Schedule', patient_Status ='Completed' WHERE Chart_id = ?";
+            $stmt2 = $conn->prepare($update_patient_chart);
+            $stmt2->bind_param('i', $Chart_ID);
+            $stmt2->execute();
+        } elseif ($followUp === 'yes') {
+            $followUpDate = $_POST['followUpDate'];
+            $followUpTime = $_POST['followUpTime'];
+            $followupSched = $followUpDate . ' ' . $followUpTime;
+            $update_patient_chart = "UPDATE tbl_patient_chart SET followUp_schedule = ?, patient_Status ='Follow Up' WHERE Chart_id = ?";
+            $stmt = $conn->prepare($update_patient_chart);
+            $stmt->bind_param('si', $followupSched, $Chart_ID);
+            $stmt->execute();
+        }
+
+
+
+        if (!empty($_FILES['resultImage']['name'][0])) {
             foreach ($_FILES['resultImage']['tmp_name'] as $key => $tmp_name) {
                 $temp_file = $_FILES['resultImage']['tmp_name'][$key];
                 $file_type = $_FILES['resultImage']['type'][$key];

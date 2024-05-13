@@ -58,6 +58,7 @@ $staff_id = $row['Staff_ID'];
     <link rel="stylesheet" href="../css/services-swiper.css" />
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script src="../js/main.js" defer></script>
+    <script src="../js/SearchTables.js" defer></script>
   </head>
   <body>
 
@@ -74,54 +75,49 @@ $staff_id = $row['Staff_ID'];
         <h3 class="text-2xl sm:text-4xl font-bold text-black dark:text-white mb-4 sm:mb-0 uppercase mr-0 sm:mr-10">
           Patients
         </h3>
-        <form action="#" method="POST" class="w-full sm:flex sm:items-center justify-end">
-          <select name="sort" class="select select-bordered text-black dark:text-white w-full sm:w-40 bg-gray-300 dark:bg-gray-600 text-base sm:text-lg lg:text-xl focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 mb-4 sm:mb-0 sm:mr-4">
-            <option disabled selected>Sort by</option>
-            <optgroup label="Name">
-              <option>A-Z</option>
-              <option>Z-A</option>
-            </optgroup>
-            <optgroup label="Visit">
-              <option>Initial Visit</option>
-              <option>Follow-up Visit</option>
-              <option>Clearance Visit</option>
-            </optgroup>
+        <div  class="w-full sm:flex sm:items-center justify-end">
+          <select onchange='handleSearch("dropDownSort", "TableList")' id='dropDownSort' name="sort" class="select select-bordered text-black dark:text-white w-full sm:w-40 bg-gray-300 dark:bg-gray-600 text-base sm:text-lg lg:text-xl focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 mb-4 sm:mb-0 sm:mr-4">
+            <option selected value='none'>Filter</option>
             <optgroup label="Appointment Type">
               <option>Walk In</option>
               <option>Online</option>
             </optgroup>
             <optgroup label="Status">
               <option>To be Seen</option>
+              <option>Follow Up</option>
               <option>Completed</option>
+              <option>Unarchive</option>
             </optgroup>
           </select>
-
           <!-- Search Input and Button -->
           <div class="flex w-full sm:w-auto">
             <input
               type="text"
               name="text"
+              id='search'
               class="input input-bordered appearance-none w-full px-3 py-2 rounded-none bg-white dark:bg-gray-600 text-black dark:text-white border border-black border-r-0 dark:border-white"
-              placeholder="Search" />
+              placeholder="Search"
+              onkeyup='handleSearch("search", "TableList")'
+            />
             <button type="submit" class="btn btn-square bg-gray-400 hover:bg-gray-500  rounded-none dark:bg-gray-500 dark:hover:bg-gray-300 border border-black border-l-0 dark:border-white">
               <i class="fa-solid fa-magnifying-glass text-black dark:text-white"></i>
             </button>
           </div>
-        </form>
+        </div>
       </div>
 
       <!-- Table Container with scrolling -->
       <div class="bg-gray-200 dark:bg-gray-700 p-5 overflow-y-auto" style="max-height: calc(80vh - 100px);">
-        <table class="table w-full">
+        <table class="table w-full" id='TableList'>
           <thead>
           <tr class="font-bold text-black dark:text-white text-base sm:text-lg">
-            <th>Name</th>
-            <th>Age</th>
-            <th>Sex</th>
-            <th>Appointment Type</th>
-            <th>Service</th>
-            <th>Schedule</th>
-            <th>Status</th>
+            <th class='cursor-pointer'  onclick="sortTable(0)">Name</th>
+            <th class='cursor-pointer'  onclick="sortTable(1)">Age</th>
+            <th class='cursor-pointer'  onclick="sortTable(2)">Sex</th>
+            <th class='cursor-pointer'  onclick="sortTable(3)">Appointment Type</th>
+            <th class='cursor-pointer'  onclick="sortTable(4)">Service</th>
+            <th class='cursor-pointer'  onclick="sortTable(5)">Schedule</th>
+            <th class='cursor-pointer'  onclick="sortTable(6)">Status</th>
             <th>Action</th>
           </tr>
           </thead>

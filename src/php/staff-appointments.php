@@ -71,12 +71,12 @@ $staff_id = $row['Staff_ID'];
       <h3 class="text-2xl sm:text-xl md:text-3xl font-bold text-black dark:text-white mb-4 sm:mb-0 uppercase mr-0 sm:mr-10">
         Appointments
       </h3>
-      <form action="#" method="POST" class="w-full sm:flex sm:items-center justify-end">
-        <select name="sort" class="select select-bordered text-black dark:text-white w-full sm:w-40 bg-gray-300 dark:bg-gray-600 text-base sm:text-lg lg:text-xl focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 mb-4 sm:mb-0 sm:mr-4">
-          <option disabled selected>Sort by</option>
-          <optgroup label="Name">
-            <option>A-Z</option>
-            <option>Z-A</option>
+      <div class="w-full sm:flex sm:items-center justify-end">
+        <select onchange='handleSearch("dropDownSort", "TableList")' id='dropDownSort' name="sort" class="select select-bordered text-black dark:text-white w-full sm:w-40 bg-gray-300 dark:bg-gray-600 text-base sm:text-lg lg:text-xl focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 mb-4 sm:mb-0 sm:mr-4">
+          <option  selected value='none'>Filter</option>
+          <optgroup label="Service">
+            <option>Consultation</option>
+            <option>Test/Procedure</option>
           </optgroup>
           <optgroup label="Status">
             <option>Approved</option>
@@ -84,20 +84,21 @@ $staff_id = $row['Staff_ID'];
             <option>Rescheduled</option>
           </optgroup>
         </select>
-
         <!-- Search Input and Button -->
         <div class="flex w-full sm:w-auto">
           <input
+            id='search'
             type="text"
             name="text"
             class="input input-bordered appearance-none w-full px-3 py-2 rounded-none bg-white dark:bg-gray-600 text-black dark:text-white border border-black border-r-0 dark:border-white"
             placeholder="Search"
+            onkeyup='handleSearch("search", "TableList")'
           />
           <button type="submit" class="btn btn-square bg-gray-400 hover:bg-gray-500  rounded-none dark:bg-gray-500 dark:hover:bg-gray-300 border border-black border-l-0 dark:border-white">
             <i class="fa-solid fa-magnifying-glass text-black dark:text-white"></i>
           </button>
         </div>
-      </form>
+      </div>
     </div>
 
     <!-- Table Container with scrolling -->
@@ -105,19 +106,19 @@ $staff_id = $row['Staff_ID'];
       class="bg-gray-200 dark:bg-gray-700 p-5 overflow-y-auto"
       style="max-height: calc(80vh - 100px)"
     >
-      <table class="table w-full">
+      <table class="table w-full" id='TableList'>
         <thead>
 
 
         <tr
           class="font-bold text-black dark:text-white text-base sm:text-lg"
         >
-          <th>Name</th>
-          <th>Appointment Date</th>
-          <th>Appointment Time</th>
-          <th>Service</th>
-          <th>Status</th>
-          <th>Action</th>
+          <th class='cursor-pointer' onclick="sortTable(0)">Name</th>
+          <th class='cursor-pointer' onclick="sortTable(1)">Appointment Date</th>
+          <th class='cursor-pointer' onclick="sortTable(2)">Appointment Time</th>
+          <th class='cursor-pointer' onclick="sortTable(3)">Service</th>
+          <th class='cursor-pointer' onclick="sortTable(4)">Status</th>
+          <th  >Action</th>
         </tr>
         </thead>
         <tbody class="text-black dark:text-white text-base sm:text-lg">
