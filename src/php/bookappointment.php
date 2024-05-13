@@ -113,55 +113,11 @@ if (isset($_SESSION['user_type']) and $_SESSION['user_type'] == 'staff'){
           </div>
 
           <div class="w-full">
-            <label for="service-type" class="block text-lg font-medium mb-1">What type of service?</label>
-            <select
-              id="service-type"
-              required
-              class="select select-bordered w-full bg-gray-300 dark:bg-gray-600 text-base sm:text-lg lg:text-xl focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
-              name="service-type"
-          >
-              <option value="" disabled <?php echo is_null($selectedService)
-                  ? 'selected'
-                  : ''; ?>>Select service type...</option>
-              <?php
-              $services = [
-                  'OB-Gyne',
-                  'Pregnancy Testing',
-                  'Dengue Test',
-                  'Covid-19 Rapid Testing',
-                  'Family Medicine',
-                  'Internal Medicine',
-                  'Medical Consultation',
-                  'Vaccination',
-                  'BP Monitoring',
-                  'Blood Glucose Determination',
-                  'Nebulization',
-                  'Complete Blood Count (CBC)',
-                  'Fecalysis',
-                  'Electrocardiogram (ECG)',
-                  'X-RAY',
-                  'Pre-Employment Package',
-                  'Annual Physical Examination',
-                  'FBS',
-                  'Lipid Profile',
-                  'AST/ALT',
-                  'Uric Acid',
-                  'Blood Typing',
-                  'Electrolytes',
-                  'Syphilis Screening',
-                  'Pregnant Screening',
-                  'FT4/TSH',
-              ];
-              foreach ($services as $service) {
-                  echo "<option value=\"$service\" " .
-                      ($selectedService === $service ? 'selected' : '') .
-                      ">$service</option>";
-              }
-              ?>
-          </select>
+            <label for="service-type" class="block text-lg font-medium mb-1">Reason</label>
+            <input type="text"  name="reason" placeholder="Type here" required class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600" />
 
 
-        </div>
+          </div>
 
         <div class="w-full md:w-auto md:col-span-1">
           <label for="appointment-date" class="block text-base sm:text-lg font-medium">
@@ -366,6 +322,7 @@ if (isset($_SESSION['user_type']) and $_SESSION['user_type'] == 'staff'){
         success: function(response) {
           if (parseInt(response) === 1) {
             toggleDialog('bookCompletAlert');
+
           }else {
             toggleDialog('bookFailed')
           }

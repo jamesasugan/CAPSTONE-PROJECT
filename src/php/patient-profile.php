@@ -1,6 +1,6 @@
 <?php
 session_start();
-
+include "../Database/database_conn.php";
 if (!isset($_SESSION['user_type']) or $_SESSION['user_type'] !== 'patient'){
   header("Location: index.php");
 
@@ -361,264 +361,111 @@ if (!isset($_SESSION['user_type']) or $_SESSION['user_type'] !== 'patient'){
                   </thead>
                   <tbody>
 
-                    <!-- kapag pending text-yellow-500 -->
-                    <tr class="text-base hover:bg-gray-300  dark:hover:bg-gray-600 font-medium text-black dark:text-white">               
-                      <td>Cy Ganderton</td>
-                      <td>Consultation</td>
-                      <td>21/05/2024</td>
-                      <td>12:00</td>
-                      <td class="font-bold text-yellow-600 dark:text-yellow-300 ">Pending</td> 
-                      <td>Your schedule is being process</td>
+                      <?php
+                      $user_id = $_SESSION['user_id'];
+                      $sql = "
+                      SELECT `tbl_patient`.*, `tbl_appointment`.*
+FROM `account_user_info`
+JOIN `tbl_patient` ON `tbl_patient`.`user_info_ID` = `account_user_info`.`user_info_ID`
+JOIN `tbl_appointment` ON `tbl_appointment`.`Patient_ID` = `tbl_patient`.`Patient_ID`
+WHERE `account_user_info`.`User_ID` = ?
+ORDER BY CASE WHEN `tbl_appointment`.`Status` = 'pending' THEN 0 ELSE 1 END, `tbl_appointment`.`AppointmentCreated`;
+";
+                      $stmt = $conn->prepare($sql);
+                      $stmt->bind_param('i', $user_id);
+                      $stmt->execute();
+                      $result = $stmt->get_result();
+                      if ($result->num_rows > 0){
+                          while ($row = $result->fetch_assoc()){
+                              $middleInitial = (strlen($row['Middle_Name']) >= 1) ? substr($row['Middle_Name'], 0, 1) : '';
+                              $status_color = '';
 
-                      <!-- ito yung modal. hindi maoopen yung mga sumunod na modal kapag yung "viewandCancel" name parehas, dapat magkaiba. lahat ng modal ko na may ganito kaya check mo na lang
-                      ex: viewandCancel2..3..4..5 sa mga susunod. ikaw na bahala hackerman -->
-                      <td class="pl-9"> 
-                        <button onclick="viewandCancel.showModal()"><i class="fa-regular fa-eye"></i></button>                          
-                            <dialog id="viewandCancel" class="modal">
-                            <div class="modal-box w-11/12 max-w-5xl bg-gray-200 dark:bg-gray-700">
+                              if ($row['Status'] == 'pending'){
+                                $status_color = 'text-yellow-600';
+                              }elseif ($row['Status'] == 'completed'){
+                                  $status_color = 'text-green-500';
+                              }
+                              elseif ($row['Status'] == 'approved'){
+                                  $status_color = 'text-blue-500';
+                              }elseif ($row['Status'] == 'cancelled'){
+                                  $status_color = 'text-red-500';
+                              }
+                              $appointment_schedule = $row['Appointment_schedule'];
+                              $date = isset($appointment_schedule) ? date("F j, Y", strtotime($appointment_schedule)): 'N/A';
+                              $time = isset($appointment_schedule) ?date("g:ia", strtotime($appointment_schedule)): 'N/A';
+                              echo '
+                      <tr class="text-base hover:bg-gray-300  dark:hover:bg-gray-600 font-medium text-black dark:text-white">               
+                        <td>'.$row['First_Name'].' '.$middleInitial.' '.$row['Middle_Name'].'</td>
+                        <td>'.$row['Service_Field'].'</td>
+                        <td>'.$date.'</td>
+                        <td>'.$time.'</td>
+                        <td class="font-bold  '.$status_color.' ">'.$row['Status'].'</td> 
+                        <td>'.$row['Remarks'].'</td>';
+                              if ($row['Status'] == 'pending'){
+                                echo '<td class="pl-9"> 
+                          <button onclick="toggleDialog(\'viewandCancel\');getAppointmentId('.$row['Appointment_ID'].')"><i class="fa-regular fa-eye"></i></button>
+                        </td>';
+                              }
 
-                            <!-- appointment form section. Nilagyan ko lahat ng id ng "History" kase error pag kaparehas sa profile info settings -->
-                            <form action="#" method="GET">
-                            <div
-                              class="flex flex-col sm:flex-row justify-between items-center"
-                            >
-                              <div class="order-2 sm:order-1">
-                                <h3
-                                  class="font-bold text-black dark:text-white text-base sm:text-2xl md:text-3xl mb-2 sm:mb-0"
-                                >
-                                  Appointment Form
-                                </h3>
-                              </div>
-                              <div class="order-1 sm:order-2 mb-2 sm:mb-0">
-                                <!-- Toggle between different logos for light/dark mode -->
-                                <img
-                                  src="../images/HCMC-blue.png"
-                                  class="block h-10 lg:h-16 w-auto dark:hidden"
-                                  alt="logo-light"
-                                />
-                                <img
-                                  src="../images/HCMC-white.png"
-                                  class="h-10 lg:h-16 w-auto hidden dark:block"
-                                  alt="logo-dark"
-                                />
-                              </div>
-                            </div>
-                            <h1 class="text-base sm:text-xl font-bold mb-2">STATUS: <span class="font-bold text-yellow-500 dark:text-yellow-300">Pending</span></h1>  <!-- ayusin mo rin colors dito ah -->
-                            <p class="mb-2"><span class="font-bold text-blue-400">NOTE: </span>This form is NOT editable. If you notice any mistake, cancel your appointment immediately and rebook with the correct details. Once your appointment is approved, cancellation is no longer possible.</p>
+                            echo '</tr>';
+                          }
+                        }
+                        ?>
 
-                              <fieldset class="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <legend class="text-xl font-bold mb-2 col-span-full">Service:</legend>
-                                <div class="flex flex-col w-full">           
-                                  <ul class="w-full text-lg font-medium text-gray-900 bg-gray-300 dark:bg-gray-600 border border-gray-200 rounded-lg dark:border-gray-600 dark:text-white">
-                                    <li class="border-b border-gray-400 dark:border-slate-300">
-                                      <label class="flex items-center pl-3 w-full cursor-pointer">
-                                        <input id="horizontal-list-radio-license" 
-                                        type="radio" 
-                                        value="Consultation" 
-                                        name="service" 
-                                        disabled
-                                        class="radio radio-info [color-scheme:light] dark:[color-scheme:dark] disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300" 
-                                        required>
-                                        <span class="py-3 ml-2 text-lg font-medium ">Consultation</span>
-                                      </label>
-                                    </li>
-                                    <li>
-                                      <label class="flex items-center pl-3 w-full cursor-pointer">
-                                        <input id="horizontal-list-radio-id" 
-                                        type="radio" 
-                                        value="Test/Procedure" 
-                                        name="service" 
-                                        disabled
-                                        class="radio radio-info [color-scheme:light] dark:[color-scheme:dark] disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300" 
-                                        required>
-                                        <span class="py-3 ml-2 text-lg font-medium ">Test/Procedure</span>
-                                      </label>
-                                    </li>
-                                  </ul>
-                                </div>
+                    </tbody>
+                  </table>
+                </div>
 
-                                <div class="w-full">
-                                  <label for="service-typeHistory" class="block text-lg font-medium mb-1">What type of service?</label>
-                                  <select
-                                    id="service-typeHistory"
-                                    required
-                                    disabled
-                                    class="select select-bordered w-full bg-gray-300 dark:bg-gray-600 text-base sm:text-lg lg:text-xl focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300"
-                                    name="service-type"
-                                >
-                                    <option value="lagay mo dito magic mo">Service na pinili ni patient dito</option>
-                                </select>
-
-
-                              </div>
-
-                              <div class="w-full md:w-auto md:col-span-1">
-                                <label for="appointment-dateHistory" class="block text-base sm:text-lg font-medium">
-                                  Appointment Date
-                                </label>
-                                <input
-                                  type="date"
-                                  id="appointment-dateHistory"
-                                  name="appointment-dateHistory"
-                                  disabled
-                                  required
-                                  class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark] disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300"
-                                />
-                              </div>
-                              <div class="w-full md:w-auto md:col-span-1">
-                                <label for="appointment-timeHistory" class="block text-base sm:text-lg font-medium">
-                                  Appointment Time
-                                </label>
-                                <input
-                                  type="time"
-                                  id="appointment-timeHistory"
-                                  name="appointment-timeHistory"
-                                  required
-                                  disabled
-                                  min="08:00"
-                                  max="17:00"
-                                  class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark] disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300"
-                                />
-                              </div>
-                              </fieldset>
-
-                                <h3 class="text-xl font-bold mt-5 mb-2">Personal Information</h3>
-                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                  <div>
-                                      <label for="first-nameHistory" class="block text-base sm:text-lg font-medium">First Name</label>
-                                      <input type="text" id="first-nameHistory" name="first-nameHistory" disabled autocomplete="off" placeholder="First Name" required class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300" />
-                                  </div>
-                                  <div>
-                                      <label for="middle-nameHistory" class="block text-base sm:text-lg font-medium">Middle Name</label>
-                                      <input type="text" id="middle-nameHistory" name="middle-nameHistory" disabled placeholder="Middle Name" required class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300" />
-                                  </div>
-
-                                  <div>
-                                      <label for="last-nameHistory" class="block text-base sm:text-lg font-medium">Last Name</label>
-                                      <input type="text" id="last-nameHistory" name="last-nameHistory" disabled placeholder="Last Name" required class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300" />
-                                  </div>
-                                  <div>
-                                      <label for="contact-numberHistory" class="block text-base sm:text-lg font-medium">Contact Number</label>
-                                      <input id="contact-numberHistory" name="contact-numberHistory" disabled type="tel" required autocomplete="off" placeholder="Contact Number" pattern="[0-9]{1,11}" minlength="11" maxlength="11" title="Please enter up to 11 numeric characters." class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300" />
-                                  </div>
-
-                                  <div>
-                                      <label for="sexHistory" class="block text-base sm:text-lg font-medium">Sex</label>
-                                      <select id="sexHistory" required class="select select-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 text-lg disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300" name="sexHistory" disabled>
-                                          <option value="" disabled selected>Select...</option>
-                                          <option value="Male">Male</option>
-                                          <option value="Female">Female</option>
-                                      </select>
-                                  </div>
-                                  <div>
-                                      <label for="dobHistory" class="block text-base sm:text-lg font-medium">Date of Birth</label>
-                                      <input type="date" id="dobHistory" name="dobHistory" disabled required class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark] disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300" />
-                                  </div>
-
-                                  <div>
-                                      <div class="block text-base sm:text-lg font-medium mb-1">Are you vaccinated?</div>
-                                      <div class="flex items-center space-x-4 p-2 bg-gray-300 dark:bg-gray-600 rounded">
-                                          <label class="flex items-center">
-                                              <input type="radio" name="vaccinatedHistory" disabled value="yes" class="radio radio-primary disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300 [color-scheme:light] dark:[color-scheme:dark]" required>
-                                              <span class="ml-2">Yes</span>
-                                          </label>
-                                          <label class="flex items-center">
-                                              <input type="radio" name="vaccinatedHistory" disabled value="no" class="radio radio-primary disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300 [color-scheme:light] dark:[color-scheme:dark]" required>
-                                              <span class="ml-2">No</span>
-                                          </label>
-                                      </div>
-                                  </div>
-                                  <div>
-                                      <label for="addressHistory" class="block text-base sm:text-lg font-medium">Address</label>
-                                      <input type="text" id="addressHistory" name="addressHistory" disabled autocomplete="off" placeholder="Address" required class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300" />
-                                  </div>
-                              </div>
-
-                              </form>
-                        <!-- appointment form section end -->
-
-                            <!-- cancel appointment section -->      
-                              <h3 class="font-bold text-xl text-black dark:text-white mt-10">Do you want to Cancel your Appointment?</h3>
-                              <p class="font-bold text-red-400">This action is permanent and cannot be undone.</p>
-                                <p class="mt-2 text-black dark:text-white">Please enter your password to avoid accidentally cancelling your Appointment</p>
-                            <form action="#" method="POST">
-                                <div class="form-group mb-4">                          
-                                  <label for="dlt-password" class="block font-medium text-black dark:text-white">Confirm Password</label>
-                                  <div class="relative">
-                                    <input id="dlt-password" type="password" required autocomplete="off" placeholder="Enter your password" 
-                                    class="input input-bordered w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:outline-none sm:text-sm bg-white dark:bg-gray-600 text-black dark:text-white">
-                                  </div>
-                                </div>                            
-                                <input type="submit" value="Submit" class="btn btn-error hover:bg-red-700 text-white font-bold border-none px-7">                            
-                            </form> 
-                            <!-- cancel appointment section end -->
-
-                               <!-- close modal button -->
-                            <div class="modal-action">
-                              <form method="dialog">                              
-                                <button class="btn bg-gray-400 dark:bg-white hover:bg-gray-500 dark:hover:bg-gray-400  text-black  border-none">Close</button>
-                              </form>
-                            </div>           
-                          </div>
-                        </dialog>    
-                      </td>
-                      <!-- ito yung modal end -->
-                    </tr>
-
-                    <!-- kapag completed text-green-500 -->
-                    <tr class="text-base hover:bg-gray-300 dark:hover:bg-gray-600 font-medium text-black dark:text-white">
-                      <td>Hart Hagerty</td>
-                      <td>Test/Procedure</td>
-                      <td>02/05/2024</td>
-                      <td>09:00</td>
-                      <td class="font-bold text-green-500">Completed</td>
-                      <td>Appointment completed</td>
-                      <td class="pl-9"><a href="#"><i class="fa-regular fa-eye"></i></a></td>
-                    </tr>
-
-                    <!-- kapag approved text-blue-500 -->
-                    <tr class="text-base hover:bg-gray-300 dark:hover:bg-gray-600 font-medium text-black dark:text-white">
-                      <td>Brice Swyre</td>
-                      <td>Consultation</td>
-                      <td>14/05/2024</td>
-                      <td>05:00</td>
-                      <td class="font-bold text-blue-500">Approved</td>
-                      <td>Your appointment is now listed, comply on the set date and time</td>
-                      <td class="pl-9"><a href="#"><i class="fa-regular fa-eye"></i></a></td>
-                    </tr>
-                    
-                    <!-- kapag cancelled text-red-500 -->
-                    <tr class="text-base hover:bg-gray-300 dark:hover:bg-gray-600 font-medium text-black dark:text-white">
-                      <td>John Edward Dionisio</td>
-                      <td>Test/Procedure</td>
-                      <td>04/15/2024</td>
-                      <td>03:00</td>
-                      <td class="font-bold text-red-500">Cancelled</td>
-                      <td>Your Appointment has been Cancelled due to unforeseen circumstances. <a href="bookappointment.php" class="text-blue-500 underline">Rebook now</a> if you want to continue</td>
-                      <td class="pl-9"><a href="#"><i class="fa-regular fa-eye"></i></a></td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
+            </div>
+          </div>
 
           </div>
         </div>
-
-        </div>
       </div>
-    </div>
-    <dialog id='errorAlert' class='modal' onclick='toggleDialog("errorAlert");toggleSecurityEdit(false);toggleEdit(false)' >
-      <div class="flex justify-center" >
-        <div role="alert" class="inline-flex items-center bg-error border border-green-400 text-green-700 px-4 py-3 rounded relative">
-          <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-          <span>Somthing went wrong</span>
+      <dialog id="viewandCancel" class="modal bg-black bg-opacity-50">
+        <dialog id='errorAlert' class='modal ' onclick='toggleDialog("errorAlert");toggleSecurityEdit(false);toggleEdit(false)' >
+          <div class="flex justify-center bg-red-600" >
+            <div role="alert" class="inline-flex items-center border  px-4 py-3 rounded relative">
+              <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span id='errorAlert'>Somthing went wrong</span>
+            </div>
+          </div>
+        </dialog>
+        <div class="modal-box w-11/12 max-w-5xl bg-gray-200 dark:bg-gray-700">
+          <h3 class="font-bold text-xl text-black dark:text-white mt-10">Do you want to Cancel your Appointment?</h3>
+          <p class="font-bold text-red-400">This action is permanent and cannot be undone.</p>
+          <p class="mt-2 text-black dark:text-white">Please enter your password to avoid accidentally cancelling your Appointment</p>
+          <form id='cancel_appoinment' action="#" method="POST">
+            <div class="form-group mb-4">
+              <label for="dlt-password" class="block font-medium text-black dark:text-white">Confirm Password</label>
+              <div class="relative">
+                <input id="dlt-password" name='conf_pass' type="password" required autocomplete="off" placeholder="Enter your password"
+                       class="input input-bordered w-full px-3 py-2 border border-gray-300 rounded-md
+                       shadow-sm focus:border-indigo-500 focus:outline-none sm:text-sm bg-white dark:bg-gray-600 text-black dark:text-white">
+              </div>
+              <input type='hidden' id='appoint_id' name='appointment_id' value=''>
+            </div>
+            <input type="submit" value="Submit" class="btn btn-error hover:bg-red-700 text-white font-bold border-none px-7">
+          </form>
+          <div class="modal-action">
+            <button class="btn bg-gray-400 dark:bg-white hover:bg-gray-500 dark:hover:bg-gray-400  text-black  border-none" onclick='toggleDialog("viewandCancel")'>Close</button>
+          </div>
         </div>
-      </div>
-    </dialog>
-    <script src='../js/usersInfo.js' defer></script>
-  </body>
-</html>
 
-              
+      </dialog>
+
+
+      <script src='../js/usersInfo.js' defer></script>
+    <script>
+      function getAppointmentId(id) {
+        let appoit_id = document.getElementById('appoint_id');
+        appoit_id.value = id;
+      }
+
+    </script>
+
+    </body>
+  </html>
+

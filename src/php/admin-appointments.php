@@ -70,9 +70,11 @@ if ($result->num_rows > 0) {
                 <h3 class="text-2xl sm:text-xl md:text-3xl font-bold text-black dark:text-white mb-4 sm:mb-0 uppercase mr-0 sm:mr-10">
                   Appointments
                 </h3>
+
       <div class="w-full sm:flex sm:items-center justify-end">
-        <select onchange='handleSearch("search", "TableList")' id='dropDownSort' name="sort" class="select select-bordered text-black dark:text-white w-full sm:w-40 bg-gray-300 dark:bg-gray-600 text-base sm:text-lg lg:text-xl focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 mb-4 sm:mb-0 sm:mr-4">
-          <option  selected value='none'>Filter</option>
+
+        <select onchange='if (this.value === "none") { resetSearch("TableList"); } else { handleSearch("dropDownSort", "TableList", this.value); }' id='dropDownSort' name="sort" class="select select-bordered text-black dark:text-white w-full sm:w-40 bg-gray-300 dark:bg-gray-600 text-base sm:text-lg lg:text-xl focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 mb-4 sm:mb-0 sm:mr-4">
+          <option selected value='none'>Filter</option>
           <optgroup label="Service">
             <option>Consultation</option>
             <option>Test/Procedure</option>
@@ -333,6 +335,44 @@ ORDER BY
               ?>
           </select>
         </div>
+        <div>
+          <label class="block">
+            Service Type:
+            <select
+              id="service-type"
+              class="select select-bordered w-full bg-white dark:bg-gray-600  text-black dark:text-white text-base sm:text-lg lg:text-xl focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
+              name="service-type"
+            >
+              <option value="" disabled selected>Select service type...</option>
+              <option value="OB-Gyne">OB-Gyne</option>
+              <option value="Pregnancy Testing">Pregnancy Testing</option>
+              <option value="Dengue Test">Dengue Test</option>
+              <option value="Covid-19 Rapid Testing">Covid-19 Rapid Testing</option>
+              <option value="Family Medicine">Family Medicine</option>
+              <option value="Internal Medicine">Internal Medicine</option>
+              <option value="Medical Consultation">Medical Consultation</option>
+              <option value="Vaccination">Vaccination</option>
+              <option value="BP Monitoring">BP Monitoring</option>
+              <option value="Blood Glucose Determination">Blood Glucose Determination</option>
+              <option value="Nebulization">Nebulization</option>
+              <option value="Complete Blood Count (CBC)">Complete Blood Count (CBC)</option>
+              <option value="Fecalysis">Fecalysis</option>
+              <option value="Electrocardiogram (ECG)">Electrocardiogram (ECG)</option>
+              <option value="X-RAY">X-RAY</option>
+              <option value="Pre-Employment Package">Pre-Employment Package</option>
+              <option value="Annual Physical Examination">Annual Physical Examination</option>
+              <option value="FBS">FBS</option>
+              <option value="Lipid Profile">Lipid Profile</option>
+              <option value="AST/ALT">AST/ALT</option>
+              <option value="Uric Acid">Uric Acid</option>
+              <option value="Blood Typing">Blood Typing</option>
+              <option value="Electrolytes">Electrolytes</option>
+              <option value="Syphilis Screening">Syphilis Screening</option>
+              <option value="Pregnant Screening">Pregnant Screening</option>
+              <option value="FT4/TSH">FT4/TSH</option>
+            </select>
+          </label>
+        </div>
 
         <div class="mb-3 mt-10">
           <p><span class="font-bold text-blue-400">NOTE: </span>Remarks is set to default, if you want custom message, you can edit the text directly in the input field provided.</p>
@@ -400,19 +440,16 @@ ORDER BY
               </li>
             </ul>
           </div>
+          <div>
+            <label for="reason" class="block text-base sm:text-lg font-medium">Reason/Purpose</label>
 
-          <div class="w-full">
-            <label for="service-typeHistory" class="block text-lg font-medium mb-1">What type of service?</label>
-            <input
-              id="service-typeHistory"
-              required
-              disabled
-              class="select select-bordered w-full bg-gray-300 dark:bg-gray-600 text-base sm:text-lg lg:text-xl focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300"
-              name="service-type"
-            >
-
-
+            <input type="text" id="reason" name="reason" disabled autocomplete="off"
+                   placeholder="" required class="text-black input input-bordered
+                      w-full p-2 bg-gray-300 dark:bg-gray-600 disabled:bg-white disabled:text-black dark:text-white
+                       disabled:border-gray-300" />
           </div>
+
+
 
           <div class="w-full md:w-auto md:col-span-1">
             <label for="appointment-dateHistory" class="block text-base sm:text-lg font-medium">
@@ -426,6 +463,7 @@ ORDER BY
               required
               class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark] disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300"
             />
+
           </div>
           <div class="w-full md:w-auto md:col-span-1">
             <label for="appointment-timeHistory" class="block text-base sm:text-lg font-medium">
@@ -441,17 +479,21 @@ ORDER BY
               max="17:00"
               class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark] disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300"
             />
+
           </div>
         </fieldset>
         <h3 class="text-xl font-bold mt-5 mb-2">Personal Information</h3>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label for="first-nameHistory" class="block text-base sm:text-lg font-medium">First Name</label>
-            <input type="text" id="first-nameHistory" name="first-nameHistory" disabled autocomplete="off" placeholder="First Name" required class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300" />
+            <input type="text" id="first-nameHistory" name="first-nameHistory" disabled autocomplete="off"
+                   placeholder="First Name" required class="input input-bordered
+                    w-full p-2 bg-gray-300 dark:bg-gray-600 disabled:bg-white disabled:text-black
+                     dark:disabled:text-gray-500 disabled:border-gray-300" />
           </div>
           <div>
             <label for="middle-nameHistory" class="block text-base sm:text-lg font-medium">Middle Name</label>
-            <input type="text" id="middle-nameHistory" name="middle-nameHistory" disabled placeholder="Middle Name" required class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300" />
+            <input type="text" id="middle-nameHistory" name="middle-nameHistory" disabled placeholder="Middle Name" required class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 disabled:bg-white disabled:text-black dark:disabled:text-gray-500 disabled:border-gray-300" />
           </div>
 
           <div>
@@ -567,7 +609,21 @@ ORDER BY
             } else if (serviceValue === 'Test/Procedure') {
               document.getElementById('horizontal-list-radio-id').checked = true;
             }
-            document.querySelector('#appointmentform input[name="service-type"]').value = data.Service_Type;
+            let reason;
+            if (data.reason !== null) {
+              reason = data.reason
+            }else {
+              reason = '';
+            }
+            let service_type
+            if (data.Service_Type !== null){
+              service_type = data.Service_Type
+            }else {
+              service_type = ''
+            }
+
+            document.querySelector('#update_appointment select[name="service-type"]').value = service_type;
+            document.querySelector('#appointmentform input[name="reason"]').value = reason;
             document.querySelector('#appointmentform input[name="appointment-dateHistory"]').value = date;
             document.querySelector('#appointmentform input[name="appointment-timeHistory"]').value = time;
             document.querySelector('#appointmentform input[name="first-nameHistory"]').value = data.First_Name;
@@ -631,6 +687,8 @@ ORDER BY
         }
       });
     })
+
+
 
   </script>
   </body>

@@ -37,16 +37,22 @@ function toggleDialog(id) {
 document.addEventListener('submit',function(e){
   e.preventDefault();
   let form_data = new FormData(e.target);
+  let endpoint
   let infoText;
   if (e.target.id === 'personal-info'){
     infoText = 'Information Updated';
+    endpoint = 'editUserInfo';
   }else if (e.target.id === 'security-form'){
     infoText = 'Password Updated';
+    endpoint = 'editUserInfo';
+  }
+  else if (e.target.id === 'cancel_appoinment'){
+    endpoint = 'cancelAppointment'
 
   }
   document.getElementById('textInfo').innerHTML = infoText;
   $.ajax({
-    url: 'ajax.php?action=editUserInfo',
+    url: 'ajax.php?action=' +endpoint,
     type: 'POST',
     data: form_data,
     processData: false,
@@ -55,7 +61,10 @@ document.addEventListener('submit',function(e){
       if (parseInt(response) === 1) {
         toggleDialog('profileAlert');
         getUserInfo()
+      }if (parseInt(response) === 2) {
+        window.location.href = 'patient-profile.php'
       }else {
+        document.getElementById('errorAlert').innerHTML = response;
         toggleDialog('errorAlert');
         console.log(response);
       }

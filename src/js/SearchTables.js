@@ -20,13 +20,21 @@ function handleSearch(inputId, tableId) {
         }
       }
     }
-
-
     if (found) {
       tr[i].style.display = "";
     } else {
       tr[i].style.display = "none";
     }
+  }
+}
+function resetSearch(table_id){
+  let table, tbody, tr, td, i, txtValue;
+  table = document.getElementById(table_id);
+  tbody = table.getElementsByTagName("tbody")[0];
+  tr = tbody.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td");
+    tr[i].style.display = "";
   }
 }
 

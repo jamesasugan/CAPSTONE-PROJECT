@@ -68,7 +68,7 @@ $staff_id = $row['Staff_ID'];
 
       <!-- add New patient button -->
       <div class="flex justify-end mb-5">
-        <a href="admin-addwalkInPatient.php" class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold py-2 px-4 rounded cursor-pointer border-none">Add New Patient</a>
+        <a href="addwalkInPatient.php" class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold py-2 px-4 rounded cursor-pointer border-none">Add New Patient</a>
       </div>
 
       <div class="flex flex-col sm:flex-row justify-between items-center bg-gray-200 dark:bg-gray-700 p-5 border-b border-b-black">
@@ -76,7 +76,7 @@ $staff_id = $row['Staff_ID'];
           Patients
         </h3>
         <div  class="w-full sm:flex sm:items-center justify-end">
-          <select onchange='handleSearch("dropDownSort", "TableList")' id='dropDownSort' name="sort" class="select select-bordered text-black dark:text-white w-full sm:w-40 bg-gray-300 dark:bg-gray-600 text-base sm:text-lg lg:text-xl focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 mb-4 sm:mb-0 sm:mr-4">
+          <select onchange='if (this.value === "none") { resetSearch("TableList"); } else { handleSearch("dropDownSort", "TableList", this.value); }' id='dropDownSort' name="sort" class="select select-bordered text-black dark:text-white w-full sm:w-40 bg-gray-300 dark:bg-gray-600 text-base sm:text-lg lg:text-xl focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 mb-4 sm:mb-0 sm:mr-4">
             <option selected value='none'>Filter</option>
             <optgroup label="Appointment Type">
               <option>Walk In</option>

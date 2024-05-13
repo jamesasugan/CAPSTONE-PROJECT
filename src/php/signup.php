@@ -380,6 +380,10 @@ if (isset($_SESSION['user_type'])){
             if (parseInt(response) === 1) {
               toggle_signUp_notif(parseInt(response));
               toggleDialog('notif');
+               setTimeout(function() {
+              window.location.href = 'login.php';
+            }, 2000);
+          }
             } else {
               toggle_signUp_notif(parseInt(response));
               toggleDialog('notif');

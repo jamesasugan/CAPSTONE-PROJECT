@@ -95,7 +95,7 @@ if ($action == 'signup'){
         $stmt_accounts->bind_param("sss", $email, $hashed_password, $user_type);
         $stmt_accounts->execute();
         $user_id = $conn->insert_id;
-        //  send email
+        // send email
 
         if ($user_type == 'patient'){
             $sql_patient = "INSERT INTO account_user_info (User_ID, First_Name, Middle_Name, Last_Name, DateofBirth, Sex, Contact_Number, Address) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
@@ -342,7 +342,7 @@ if ($action == 'deleteSched'){
         echo 2;
     }
 }
-if ($action == 'patientBookAppointment'){
+if ($action == 'patientBookAppointment') {
     $firstName = isset($_POST['first-name']) ? $_POST['first-name'] : '';
     $middleName = isset($_POST['middle-name']) ? $_POST['middle-name'] : null;
     $lastName = isset($_POST['last-name']) ? $_POST['last-name'] : '';
@@ -355,71 +355,55 @@ if ($action == 'patientBookAppointment'){
     $appointment_date = isset($_POST['appointment-date']) ? $_POST['appointment-date'] : '';
     $appointment_time = isset($_POST['appointment-time']) ? $_POST['appointment-time'] : '';
     $service_field = isset($_POST['service']) ? $_POST['service'] : '';
-    $service_type = isset($_POST['service-type']) ? $_POST['service-type'] : '';
     $status = isset($_POST['book_status']) ? $_POST['book_status'] : '';
     $appointment_type = isset($_POST['appointment_type']) ? $_POST['appointment_type'] : '';
     $vaccination = isset($_POST['vaccinated']) ? $_POST['vaccinated'] : '';
     $agreement_approval = isset($_POST['privacy']) ? $_POST['privacy'] : '';
-    $mysqlDate = date('Y-m-d', strtotime($appointment_date));
-    $appointment_schedule = $mysqlDate . ' ' . $appointment_time;
+    $reason = isset($_POST['reason']) ? $_POST['reason']: '';
+    $service_type = isset($_POST['service-type']) ? $_POST['service-type'] : null;
 
+    if (!empty($firstName) && !empty($lastName) && !empty($dob)
+        && !empty($sex) && !empty($contactNumber)
+        && !empty($address) && !empty($user_id)
+        && !empty($patient_email) && !empty($appointment_date)
+        && !empty($appointment_time) && !empty($service_field)
+        && !empty($status) && !empty($appointment_type)
+        && !empty($vaccination) && !empty($agreement_approval)
+    ) {
+        $mysqlDate = date('Y-m-d', strtotime($appointment_date));
+        $appointment_schedule = $mysqlDate . ' ' . $appointment_time;
 
-    if ($firstName !== '' &&  $lastName !== '' && $dob !== ''
-        && $sex !== '' && $contactNumber !== ''
-        && $address !== '' && $user_id !== ''
-        && $patient_email !== '' && $appointment_date !== ''
-        && $appointment_time !== '' && $service_field !== ''
-        && $service_type !== '' && $status !== ''
-        && $appointment_type !== '' && $vaccination !== ''
-        && $agreement_approval !== '') {
-        $sql = 'INSERT INTO tbl_patient 
-    (user_info_ID, First_Name, Middle_Name, Last_Name, DateofBirth, Sex, Contact_Number, patientEmail, Address) 
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
-        $stmt = $conn->prepare($sql);
-        if (!$stmt) {
-            die("Prepare failed: (" . $conn->errno . ") " . $conn->error);
-        }
-        $stmt->bind_param("issssssss", $user_id, $firstName, $middleName, $lastName, $dob, $sex, $contactNumber, $patient_email, $address);
+        $sqlPatient = 'INSERT INTO tbl_patient 
+            (user_info_ID, First_Name, Middle_Name, Last_Name, DateofBirth, Sex, Contact_Number, patientEmail, Address) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
+        $stmtPatient = $conn->prepare($sqlPatient);
+        $stmtPatient->bind_param("issssssss", $user_id, $firstName, $middleName, $lastName, $dob, $sex, $contactNumber, $patient_email, $address);
 
-        if (!$stmt->execute()) {
-            die("Execute failed: (" . $stmt->errno . ") " . $stmt->error);
-        } else {
-            $patientID = $stmt->insert_id;
+        if ($stmtPatient->execute()) {
+            $patientID = $stmtPatient->insert_id;
 
-        }
-        /*
-                echo $patientID.' '.$firstName.' '.$middleName.' '.$lastName.' '.$dob.' '.$sex.' '.$contactNumber.' '.$patient_email.' '.$address
-                    .' '.$appointment_schedule.' '.$service_field.' '.$service_type.' '.$status.' '.$appointment_type.' '.$vaccination.' '.$agreement_approval
-                ;
-        */
-        if($stmt->affected_rows > 0) {
-            $patient_appointment = "INSERT INTO tbl_appointment 
-                                    (Patient_ID, Appointment_schedule, Service_Field, Service_Type, Status, Appointment_type, Vaccination, AgreementApproval) 
-                                    VALUES 
-                                    (?, ?, ?, ?, ?, ?, ?, ?)";
+            $sqlAppointment = "INSERT INTO tbl_appointment 
+                (Patient_ID, Appointment_schedule, Service_Field,Service_Type, Status, Appointment_type, Vaccination, reason, AgreementApproval) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            $stmtAppointment = $conn->prepare($sqlAppointment);
+            $stmtAppointment->bind_param('issssssss', $patientID,
+                $appointment_schedule, $service_field,$service_type, $status,
+                $appointment_type, $vaccination, $reason, $agreement_approval);
 
-            $appointment_stmt = $conn->prepare($patient_appointment);
-            $appointment_stmt->bind_param('isssssss', $patientID,
-                $appointment_schedule, $service_field, $service_type,
-                $status, $appointment_type, $vaccination, $agreement_approval);
-            $appointment_stmt->execute();
-
-            if ($appointment_stmt->affected_rows > 0){
-                echo 1;
+            if ($stmtAppointment->execute()) {
+                echo 1; // Success
                 exit();
-            }else{
-                echo 'newAppointment failed insert';
+            } else {
+                echo 'Failed to insert appointment';
             }
-        }else{
-            echo 'newPatient faile insert';
+        } else {
+            echo 'Failed to insert patient';
         }
-    }else{
+    } else {
         echo "Error occurred while booking appointment.";
     }
-
-
-    $stmt->close();
 }
+
 if ($action == 'getUserInfo'){
     $UID = $_SESSION['user_id'];
     $user_type = $_SESSION['user_type'];
@@ -575,34 +559,38 @@ if ($action == 'updateAppointment'){
     $doctor_id = isset($_POST['appointDoctor']) ? $_POST['appointDoctor'] : '';
     $appointment_id = $_POST['appointment_id'];
     $remark = $_POST['remarks'];
+    $service_type = isset($_POST['service-type']) ? $_POST['service-type'] : null;
     if ($appointment_status == 'rescheduled'){
         $set_Date = date('Y-m-d', strtotime($_POST['rescheduled-date']));
         $set_time = $_POST['rescheduled-time'];
         $rescheduledDateTime = $set_Date. ' '. $set_time;
         $sql = 'UPDATE tbl_appointment SET Staff_ID = ?, 
             Status = ?,
+            Service_Type = ?,
             Remarks = ?,
             Appointment_schedule = ?               
             WHERE Appointment_ID = ?';
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param('isssi', $doctor_id, $appointment_status, $remark, $rescheduledDateTime, $appointment_id);
+        $stmt->bind_param('issssi', $doctor_id, $appointment_status,$service_type, $remark, $rescheduledDateTime, $appointment_id);
 
     }else if ($appointment_status == 'approved'){
         $sql = 'UPDATE tbl_appointment SET Staff_ID = ?, 
             Status = ?,
+            Service_Type = ?,
             Remarks = ?
             WHERE Appointment_ID = ?';
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param('issi', $doctor_id, $appointment_status, $remark, $appointment_id);
+        $stmt->bind_param('isssi', $doctor_id, $appointment_status, $service_type, $remark, $appointment_id);
     }else{
         $rescheduledDateTim = '';
         $sql = 'UPDATE tbl_appointment SET  
             Status = ?,
+            Service_Type = ?,
             Remarks = ?,
             Appointment_schedule = NULL
             WHERE Appointment_ID = ?';
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param('ssi',  $appointment_status, $remark, $appointment_id);
+        $stmt->bind_param('sssi',  $appointment_status, $service_type,$remark, $appointment_id);
     }
     if ($stmt->execute()){
         echo 1;
@@ -807,5 +795,83 @@ if ($action == 'UnarchivePatientChart'){
     $stmt->bind_param('i', $chart_id);
     if ($stmt->execute()){
         echo 1;
+    }
+}
+
+if ($action == 'cancelAppointment'){
+    $conf_password = $_POST['conf_pass'];
+    $appointment_id = $_POST['appointment_id'];
+    $user_id = $_SESSION['user_id'];
+    $sql = "SELECT * FROM tbl_accounts WHERE User_ID = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param('i', $user_id);
+    $stmt->execute();
+    $res = $stmt->get_result();
+    $row = $res->fetch_assoc();
+    if (password_verify($conf_password, $row['Password'])) {
+        $sql = "UPDATE tbl_appointment 
+            SET Status = 'cancelled',
+                Appointment_schedule = NULL
+            WHERE Appointment_ID = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param('i', $appointment_id);
+        $stmt->execute();
+        echo 2;
+    } else {
+        echo 'Incorrect Password';
+    }
+
+}
+if ($action == 'AddWalkInPatient') {
+    $service_field = isset($_POST['service']) ? $_POST['service'] : '';
+    $service_type = isset($_POST['service-type']) ? $_POST['service-type'] : '';
+    $reason = isset($_POST['reason']) ? $_POST['reason'] : '';
+    $fname = isset($_POST['first-name']) ? $_POST['first-name'] : '';
+    $mname = isset($_POST['middle-name']) ? $_POST['middle-name'] : '';
+    $lname = isset($_POST['last-name']) ? $_POST['last-name'] : '';
+    $email = isset($_POST['email']) ? $_POST['email'] : '';
+    $contactNumber = isset($_POST['contact-number']) ? $_POST['contact-number'] : '';
+    $sex = isset($_POST['sex']) ? $_POST['sex'] : '';
+    $dob = isset($_POST['dob']) ? $_POST['dob'] : '';
+    $vaccinated = isset($_POST['vaccinated']) ? $_POST['vaccinated'] : '';
+    $address = isset($_POST['address']) ? $_POST['address'] : '';
+    $agrement_approval = isset($_POST['agreementApproval']) ? $_POST['agreementApproval'] : '';
+    $appoint_doctor = isset($_POST['appointDoctor']) ? $_POST['appointDoctor']: '';
+    $status = 'approved';
+    $appointment_type = 'Walk In';
+
+    $sqlPatient = 'INSERT INTO tbl_patient 
+            (user_info_ID, First_Name, Middle_Name, Last_Name, DateofBirth, Sex, Contact_Number, patientEmail, Address) 
+            VALUES (Null, ?, ?, ?, ?, ?, ?, ?, ?)';
+    $stmtPatient = $conn->prepare($sqlPatient);
+    $stmtPatient->bind_param("ssssssss", $fname, $mname, $lname, $dob, $sex, $contactNumber, $email, $address);
+
+    if ($stmtPatient->execute()) {
+        $patientID = $stmtPatient->insert_id;
+        $sqlAppointment = "INSERT INTO tbl_appointment 
+                ( Staff_ID,Patient_ID, Appointment_schedule, Service_Field,Service_Type, Status, Appointment_type, Vaccination, reason, AgreementApproval) 
+                VALUES (?, ?, NOW(), ?, ?, ?, ?, ?, ?, 'checked')";
+        $stmtAppointment = $conn->prepare($sqlAppointment);
+        $stmtAppointment->bind_param('iissssss', $appoint_doctor,$patientID,
+            $service_field, $service_type, $status,
+            $appointment_type, $vaccinated, $reason);
+
+        if ($stmtAppointment->execute()) {
+            $appointment_id = $stmtAppointment->insert_id;
+            $newPatientChart = "INSERT INTO tbl_patient_chart (Appointment_id, followUp_schedule, patient_Status) 
+                    VALUES (?, NOW(), 'To be Seen')";
+            $newChart_stmt = $conn->prepare($newPatientChart);
+            $newChart_stmt->bind_param('i', $appointment_id);
+            if ($newChart_stmt->execute()){
+                echo 1;
+                exit();
+            }else{
+                echo 'Failed to insert appointment: ' . $newChart_stmt->error;
+            }
+        } else {
+            echo 'Failed to insert appointment: ' . $stmtAppointment->error;
+        }
+    } else {
+        echo 'Failed to insert patient: ' . $stmtPatient->error;
     }
 }
