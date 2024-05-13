@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   document.querySelectorAll('input[name="list-status"]').forEach((input) => {
     input.addEventListener('change', function () {
-      if (this.value === 'reschedule') {
+      if (this.value === 'rescheduled') {
         rescheduleSection.style.display = 'flex';
         dateInput.required = true;
         timeInput.required = true;
@@ -20,10 +20,10 @@ document.addEventListener('DOMContentLoaded', function () {
         rescheduleSection.style.display = 'none';
         dateInput.required = false;
         timeInput.required = false;
-        if (this.value === 'approve') {
+        if (this.value === 'approved') {
           remarksInput.value =
             'Your appointment is now listed, comply on the set date and time';
-        } else if (this.value === 'cancel') {
+        } else if (this.value === 'cancelled') {
           remarksInput.value =
             'Your Appointment has been Cancelled due to unforeseen circumstances. Please rebook again if you want to continue';
         }

@@ -10,17 +10,18 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] == 'patient'){
 
 }
 $user_id = $_SESSION['user_id'];
-$sql = "SELECT role from tbl_staff where User_ID = ?";
+$sql = "SELECT * from tbl_staff where User_ID = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param('i', $user_id);
 $stmt->execute();
 $result = $stmt->get_result();
 if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
-    if ($row['role'] == 'admin'){
+    if ($row['Role'] == 'admin'){
         header("Location: admin-index.php");
     }
 }
+$staff_id = $row['Staff_ID'];
 ?>
 
 <!doctype html>
@@ -62,7 +63,13 @@ if ($result->num_rows > 0) {
 
     <?php include 'staff-navbar.php'; ?>
 
-    <div id="patients-recordTab" class="p-10 pt-32 mx-auto w-full min-h-screen bg-[#ebf0f4] dark:bg-[#17222a]">
+    <div id="patients-recordTab" class="p-10 pt-24 mx-auto w-full min-h-screen bg-[#ebf0f4] dark:bg-[#17222a]">
+
+      <!-- add New patient button -->
+      <div class="flex justify-end mb-5">
+        <a href="admin-addwalkInPatient.php" class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold py-2 px-4 rounded cursor-pointer border-none">Add New Patient</a>
+      </div>
+
       <div class="flex flex-col sm:flex-row justify-between items-center bg-gray-200 dark:bg-gray-700 p-5 border-b border-b-black">
         <h3 class="text-2xl sm:text-4xl font-bold text-black dark:text-white mb-4 sm:mb-0 uppercase mr-0 sm:mr-10">
           Patients
@@ -91,12 +98,11 @@ if ($result->num_rows > 0) {
 
           <!-- Search Input and Button -->
           <div class="flex w-full sm:w-auto">
-            <input 
-              type="text" 
+            <input
+              type="text"
               name="text"
-              class="input input-bordered appearance-none w-full px-3 py-2 rounded-none bg-white dark:bg-gray-600 text-black dark:text-white border border-black border-r-0 dark:border-white" 
-              placeholder="Search"
-            />
+              class="input input-bordered appearance-none w-full px-3 py-2 rounded-none bg-white dark:bg-gray-600 text-black dark:text-white border border-black border-r-0 dark:border-white"
+              placeholder="Search" />
             <button type="submit" class="btn btn-square bg-gray-400 hover:bg-gray-500  rounded-none dark:bg-gray-500 dark:hover:bg-gray-300 border border-black border-l-0 dark:border-white">
               <i class="fa-solid fa-magnifying-glass text-black dark:text-white"></i>
             </button>
@@ -104,64 +110,107 @@ if ($result->num_rows > 0) {
         </form>
       </div>
 
-
-  
-
-
-
       <!-- Table Container with scrolling -->
       <div class="bg-gray-200 dark:bg-gray-700 p-5 overflow-y-auto" style="max-height: calc(80vh - 100px);">
         <table class="table w-full">
           <thead>
-            <tr class="font-bold text-black dark:text-white text-base sm:text-lg">
-              <th>Name</th>
-              <th>Age</th>
-              <th>Sex</th>
-              <th>Appointment Type</th>
-              <th>Service</th>
-              <th>Visit</th>
-              <th>Status</th>
-              <th>Action</th>
-            </tr>
+          <tr class="font-bold text-black dark:text-white text-base sm:text-lg">
+            <th>Name</th>
+            <th>Age</th>
+            <th>Sex</th>
+            <th>Appointment Type</th>
+            <th>Service</th>
+            <th>Schedule</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
           </thead>
           <tbody class="text-black dark:text-white text-base sm:text-lg">
+          <?php
+          $sql = "SELECT `tbl_patient`.*, `tbl_appointment`.*, `tbl_patient_chart`.*
+FROM `tbl_patient` 
+INNER JOIN `tbl_appointment` ON `tbl_appointment`.`Patient_ID` = `tbl_patient`.`Patient_ID` 
+INNER JOIN `tbl_patient_chart` ON `tbl_patient_chart`.`Appointment_id` = `tbl_appointment`.`Appointment_ID`
+and `tbl_appointment`.`Staff_ID` = ?
+where tbl_patient_chart.patient_Status != 'Archived' and tbl_patient_chart.patient_Status != 'Deleted'
+ORDER BY 
+    CASE WHEN `tbl_patient_chart`.`followUp_schedule` IS NULL THEN 1 ELSE 0 END, 
+    `tbl_patient_chart`.`followUp_schedule` ASC;
+";
+          $stmt = $conn->prepare($sql);
+          $stmt->bind_param('i', $staff_id);
+          $stmt->execute();
+          $result = $stmt->get_result();
+          while ($row= $result->fetch_assoc()){
+              $middleInitial = (strlen($row['Middle_Name']) >= 1) ? substr($row['Middle_Name'], 0, 1) : '';
+              $age = date_diff(date_create($row['DateofBirth']), date_create('today'))->y;
+              $date = date("F j, Y", strtotime($row['followUp_schedule']));
+              $time = date("g:ia", strtotime($row['followUp_schedule']));
+              $followUpschedule = $date . ' ' . $time == 'January 1, 1970 1:00am' ? $row['followUp_schedule'] : $date . ' ' . $time;
 
-            <!-- sample row -->
-            <tr class="text-base hover:bg-gray-300 dark:hover:bg-gray-600 font-medium text-black dark:text-white">
-              <td>John Edward Dionisio</td>
-              <td>21</td>
-              <td>Male</td>
-              <td>Walk In</td>
-              <td>OB-GYNE</td>
-              <td>Initial Visit</td>
-              <!-- 
-                Follow-up Visit
-                Clearance Visit
-               -->
-              <td class="font-bold text-yellow-600 dark:text-yellow-300">To be Seen</td>
+
+              echo '<tr class="text-base hover:bg-gray-300 dark:hover:bg-gray-600 font-medium text-black dark:text-white">
+              <td>'.$row['First_Name'].' '.$middleInitial.'. '.$row['Last_Name'].'</td>
+              <td>'.$age.'</td>
+              <td>'.$row['Sex'].'</td>
+              <td>'.$row['Appointment_type'].'</td>
+              <td>'.$row['Service_Type'].'</td>
+              <td>'.$followUpschedule.'</td>
+              <td class="font-bold text-yellow-600 dark:text-yellow-300">'.$row['patient_Status'].'</td>
               <!-- Status List
-                   Completed = text-green-500     
+                   Completed = text-green-500
+                   Waiting for Results = text-yellow-600 dark:text-yellow-300
                    No Show =  text-red-500
             -->
+
+              <!-- view information -->
               <td class="pl-9">
-                <a href="staff-patientFullRecord.php"><i class="fa-regular fa-eye"></i></a>
+                <a href="staff-patientFullRecord.php?id='.$row['Patient_ID'].'&chart_id='.$row['Chart_id'].'"><i class="fa-regular fa-eye"></i></a>
               </td>
             </tr>
-            <!-- sample row end -->
-            
+            <!-- sample row end -->';
+          }
+          ?>
+
+
+
+
+
+
           </tbody>
         </table>
       </div>
     </div>
 
-   
+    <!-- modal content for archive record -->
+    <dialog id="archive_record" class="modal">
+      <div class="modal-box bg-gray-200 dark:bg-gray-700 text-[#0e1011] dark:text-[#eef0f1]">
+        <h3 class="font-bold text-xl">Are you sure you want to Archive this Patient Record?</h3>
 
-<!-- <script>
-  const printBtn = document.getElementById('print-content');
+        <!-- <p class="text-black dark:text-white mt-2 mb-1 font-medium">
+          This record will be moved to the <a href="admin-archiveAccounts.php" class="text-blue-500 underline">Archived Patient Records</a></p> -->
+        <button class="btn btn-error mt-5">Archive this Patient Record</button>
 
-  printBtn.addEventListener('click', function(){
-    print();
-  });
-</script> -->
+        <div class="modal-action">
+          <form method="dialog">
+            <!-- if there is a button in form, it will close the modal -->
+            <button class="btn bg-gray-400 dark:bg-white hover:bg-gray-500 dark:hover:bg-gray-400  text-black  border-none">Close</button>
+          </form>
+        </div>
+      </div>
+    </dialog>
+
+
+
+    <!-- <script>
+      const printBtn = document.getElementById('print-content');
+
+      printBtn.addEventListener('click', function(){
+        print();
+      });
+    </script> -->
+
+
+
   </body>
 </html>

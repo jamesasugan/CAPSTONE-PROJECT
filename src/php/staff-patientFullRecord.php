@@ -1,3 +1,56 @@
+
+<?php
+include '../Database/database_conn.php';
+session_start();
+
+
+
+if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] == 'patient'){
+    header("Location: index.php");
+
+}
+$user_id = $_SESSION['user_id'];
+$sql = "SELECT * from tbl_staff where User_ID = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param('i', $user_id);
+$stmt->execute();
+$result = $stmt->get_result();
+if ($result->num_rows > 0) {
+    $row = $result->fetch_assoc();
+    if ($row['Role'] == 'admin'){
+        header("Location: staff-index.php");
+    }
+}
+$staff_id = $row['Staff_ID'];
+
+$patient_id = isset($_GET['id']) ? intval($_GET['id']) : null;
+$chart_id = isset($_GET['chart_id']) ? intval($_GET['chart_id']) : null;
+if (!is_int($patient_id) or !is_int($chart_id)){
+    header('Location: staff-patientsRecord.php');
+    exit();
+}
+
+$sql = "SELECT `tbl_patient`.*, `tbl_appointment`.*, `tbl_patient_chart`.*
+        FROM `tbl_patient` 
+        INNER JOIN `tbl_appointment` ON `tbl_appointment`.`Patient_ID` = `tbl_patient`.`Patient_ID` 
+        INNER JOIN `tbl_patient_chart` ON `tbl_patient_chart`.`Appointment_id` = `tbl_appointment`.`Appointment_ID`
+        WHERE `tbl_appointment`.`Patient_ID` = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param('i', $patient_id);
+$stmt->execute();
+$result = $stmt->get_result();
+if ($result && $result->num_rows > 0){
+    $row = $result->fetch_assoc();
+    $middleInitial = (strlen($row['Middle_Name']) >= 1) ? substr($row['Middle_Name'], 0, 1) : '';
+
+
+}else{
+    header('Location: staff-patientsRecord.php');
+    exit();
+}
+
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -33,6 +86,8 @@
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script src="../js/main.js" defer></script>
     <script src="../js/staff-patientsRecord.js" defer></script>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
 </head>
 <body>
         <?php include 'staff-navbar.php'; ?>
@@ -46,104 +101,102 @@
                 class="w-full max-w-7xl mx-auto p-4 rounded-lg shadow-lg bg-gray-200 dark:bg-gray-700 text-[#0e1011] dark:text-[#eef0f1]"
             >
                 <h2 class="text-3xl font-bold mb-2">Patient's Chart</h2>
-                
-                <div class="patientInfo mb-10 mt-5">
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-1 text-lg sm:text-xl">
-                                <h2 class="text-lg sm:text-xl font-bold">Status: <span class="text-yellow-600 dark:text-yellow-300">To be Seen</span></h2>
-                                <p><strong>Appointment Type:</strong> Walk In</p>
-                                
-                                <p><strong>Service:</strong> Consultation</p>
-                                <p><strong>Service Type:</strong> OB-GYNE</p>
 
-                                <p><strong>Name:</strong> John Edward E. Dionisio</p>
-                                <p><strong>Contact Number:</strong> 099999999999</p>
+              <div class="patientInfo mb-10 mt-5">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-1 text-lg sm:text-xl">
+                  <h2 class="text-lg sm:text-xl font-bold">Status: <span class="text-yellow-600 dark:text-yellow-300"><?php echo $row['patient_Status']?></span></h2>
+                  <p><strong>Appointment Type: </strong><?php echo $row['Appointment_type']?> </p>
 
-                                <p><strong>Sex:</strong> Male</p>
-                                <p><strong>Email:</strong> myemail@gmail.com</p>
+                  <p><strong>Service: </strong> <?php echo $row['Service_Field']?></p>
+                  <p><strong>Service Type: </strong> <?php echo $row['Service_Type']?></p>
 
-                                <p><strong>Vaccinated:</strong> Yes</p>
+                  <p><strong>Name: </strong> <?php echo  $row['First_Name'].' '.$middleInitial.'. '.$row['Last_Name']?></p>
+                  <p><strong>Contact Number: </strong> <?php echo $row['Contact_Number']?></p>
 
-                                <p><strong>Address:</strong> 1234 Health Ave, Immunization City</p>
-                                <p><strong>Date of Birth:</strong> June 21, 2024</p>
-                            </div>
-                        </div>
+                  <p><strong>Sex: </strong> <?php echo $row['Sex']?></p>
+                  <p><strong>Email: </strong><?php echo $row['patientEmail']?></p>
 
-                        <!-- You can open the modal using ID.showModal() method -->
-                        <div class="flex justify-end">
-                            <button class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none mb-5" onclick="editpatient_info.showModal()">Edit Patient Info</button>
-                        </div>                      
+                  <p><strong>Vaccinated:</strong> <?php echo $row['Vaccination']?></p>
 
-                        <div class="border border-gray-400 mb-10"></div>
+                  <p><strong>Address:</strong> <?php echo $row['Address']?></p>
+                  <p><strong>Date of Birth: </strong><?php echo $row['DateofBirth']?></p>
+                </div>
+              </div>
+              <div class="flex justify-end">
+                <button class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none mb-5" onclick="editpatient_info.showModal()">Edit Patient Info</button>
+              </div>
+              <!-- lalabas lang to sa follow up stage.
+                  nilipat ko muna ng pwesto, nilabas ko sa form kase pag nasa form nagkakaerror, gawan mo na lang sariling form siguro to
 
+          -->
+              <div class="flex flex-col sm:flex-row justify-between sm:items-center">
+                <select id="visitDropdown" onchange="if(this.value !== 'newRecord')
+                { getRecords(this.value); getResImg(this.value);} else { document.getElementById('patientRecordForm').reset();
+                  document.getElementById('record_id').value = ''; resetImgDisplay();}" name="sort" class="select
+                select-bordered text-black dark:text-white w-full sm:w-48  bg-gray-300 dark:bg-gray-600
+                text-base sm:text-lg lg:text-xl focus:border-blue-500 focus:ring focus:ring-blue-500
+                focus:ring-opacity-50 mb-4 sm:mb-0 sm:mr-4 disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400">
+                  <option  selected value='newRecord'>Insert new</option>
+                    <?php
+                    $visitNUmber = 1;
+                    $getRecord = "SELECT * FROM tbl_records where Chart_ID = ?";
+                    $recordStmt = $conn->prepare($getRecord);
+                    $recordStmt->bind_param('i',$chart_id);
+                    $recordStmt->execute();
+                    $result = $recordStmt->get_result();
+                    if ($result->num_rows > 0) {
+                        while ($row = $result->fetch_assoc()) {
+                            echo '<option value="'.$row['Record_ID'].'">Visit '.$visitNUmber++.'</option>';
 
-                                <!-- lalabas lang to sa follow up stage.
-                                    nilipat ko muna ng pwesto, nilabas ko sa form kase pag nasa form nagkakaerror, gawan mo na lang sariling form siguro to
-                            -->
-                            <div class="flex flex-col sm:flex-row justify-between sm:items-center">
-                                <select name="sort" class="select select-bordered text-black dark:text-white w-full sm:w-48  bg-gray-300 dark:bg-gray-600 text-base sm:text-lg lg:text-xl focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 mb-4 sm:mb-0 sm:mr-4 disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400">
-                                    <option disabled selected>Follow Up #</option>                  
-                                    <option>First</option>
-                                    <option>Second</option>
-                                </select>
+                        }
+                    }
+                    ?>
+                </select>
+              </div>
 
-                                <button id="followUpBtn" class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none">Add</button>
-                            </div>
-                            <h3 class="font-bold text-center text-black dark:text-white text-xl sm:text-2xl mb-5 sm:mb-0">First Follow Up</h3>
-                            <!-- lalabas lang to sa follow up stage end -->
-
-                        <form id="patientForm" action="#" method="POST" >
-
-                        <label class="block font-bold text-lg"> Current Visit Status:
-                        <ul class="items-center w-full text-lg font-medium text-gray-900 bg-white border border-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white rounded-lg sm:flex mb-5">
-                                <li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
-                                <div class="flex items-center ps-3">
-                                    <input id="initial" type="radio" disabled required name="list-status" class="radio radio-info" value="initial">
-                                    <label for="initial" class="w-full py-3 ms-2">Initial</label>
-                                </div>
-                                </li>
-                                <li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
-                                <div class="flex items-center ps-3">
-                                    <input id="followUp" type="radio" disabled required name="list-status" class="radio radio-info" value="followUp">
-                                    <label for="followUp" class="w-full py-3 ms-2">Follow-up</label>
-                                </div>
-                                </li>
-                            </ul>
-                            </label>
-
-                            
-
-
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 mt-5">                              
+              <form id="patientRecordForm" action="#" method="POST" enctype='multipart/form-data'>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 mt-5">
                             <div>
                                 <label class="block">
                                     Consultation Date:
                                     <input type="date" 
                                         name="consultation-date" 
                                         required 
-                                        disabled 
+
                                         class="input input-bordered w-full p-2 bg-white dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark] text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400" />
                                 </label>
                             </div>
+                          <input id='record_id' type='hidden' name='record_id' value=''>
                             <div>
                                 <label class="block">
                                     Consultant:
-                                    <input type="text" 
-                                        name="consultant-name" 
-                                        value="Walter White" 
-                                        required 
-                                        disabled
-                                        placeholder="Consultant Name"
-                                        class="input input-bordered w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400" />
+                                  <select name="consultant-name" class="select
+                select-bordered text-black dark:text-white w-full   bg-gray-300 dark:bg-gray-600
+                text-base sm:text-lg lg:text-xl focus:border-blue-500 focus:ring focus:ring-blue-500
+                focus:ring-opacity-50 mb-4 sm:mb-0 sm:mr-4 disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400">
+                                    <option  selected value='' disabled>Select consultant</option>
+                                      <?php
+                                      $sql = "SELECT * FROM tbl_staff WHERE role = 'doctor'";
+                                      $stmt = $conn->prepare($sql);
+                                      $stmt->execute();
+                                      $result = $stmt->get_result();
+
+                                      while ($row = $result->fetch_assoc()) {
+                                          $middleInitial = substr($row['Middle_Name'], 0, 1);
+                                          $selected = ($row['Staff_ID'] == $staff_id) ? 'selected' : '';
+                                          echo "<option value='{$row['Staff_ID']}' $selected>{$row['First_Name']} $middleInitial. {$row['Last_Name']}</option>";
+                                      }
+                                      ?>
+
+                                  </select>
                                 </label>
                             </div>
                             <div>
                                 <label class="block">
                                     Weight:
                                     <input type="text" 
-                                    name="weight" 
-                                    value="36" 
-                                    required 
-                                    disabled 
+                                    name="weight"
+                                    required
                                     placeholder="Weight"
                                     class="input input-bordered w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400" />
                                 </label>
@@ -152,10 +205,8 @@
                                 <label class="block">
                                     Heart Rate:
                                     <input type="text" 
-                                    name="heart-rate" 
-                                    value="36" 
-                                    required 
-                                    disabled 
+                                    name="heart-rate"
+                                    required
                                     placeholder="Heart Rate"
                                     class="input input-bordered w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400" />
                                 </label>
@@ -165,9 +216,9 @@
                                     Temperature (Celsius):
                                     <input type="text" 
                                     name="temperature" 
-                                    value="36" 
+
                                     required 
-                                    disabled 
+
                                     placeholder="Temperature in Celsius"
                                     class="input input-bordered w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400" />
                                 </label>
@@ -176,10 +227,9 @@
                                 <label class="block">
                                     Blood Pressure:
                                     <input type="text" 
-                                    name="blood-pressure" 
-                                    value="123/50" 
+                                    name="blood-pressure"
                                     required 
-                                    disabled 
+
                                     placeholder="Blood Pressure"
                                     class="input input-bordered w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400" />
                                 </label>
@@ -189,23 +239,23 @@
                         <div class="grid grid-cols-1 gap-4 mb-14">
                             <label class="block">
                                 Saturation:
-                                <input type="text" name="saturation" required placeholder="Saturation" disabled class="input input-bordered w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400" />
+                                <input type="text" name="saturation" required placeholder="Saturation"  class="input input-bordered w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400" />
                             </label>
 
                             <label class="block">Chief Complaint:
-                                <textarea id="chiefComplaint" rows="4" name="Chief Complaint" disabled class="input input-bordered h-52 w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400" placeholder="Chief Complaint"></textarea>
+                                <textarea id="chiefComplaint" rows="4" name="Chief Complaint"  class="input input-bordered h-52 w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400" placeholder="Chief Complaint"></textarea>
                             </label>
 
                             <label class="block">Physical Examination:
-                                <textarea id="physicalExamination" rows="4" name="Physical Examination" disabled class="input input-bordered h-52 w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400" placeholder="Physical Examination"></textarea>
+                                <textarea id="physicalExamination" rows="4" name="Physical Examination"  class="input input-bordered h-52 w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400" placeholder="Physical Examination"></textarea>
                             </label>
 
                             <label class="block">Assessment:
-                                <textarea id="assessment" rows="4" name="Assessment" disabled class="input input-bordered h-52 w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400" placeholder="Assessment"></textarea>
+                                <textarea id="assessment" rows="4" name="Assessment"  class="input input-bordered h-52 w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400" placeholder="Assessment"></textarea>
                             </label>
 
                             <label class="block">Treatment Plan:
-                                <textarea id="treatmentPlan" rows="4" name="Treatment Plan" disabled class="input input-bordered h-52 w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400" placeholder="Treatment Plan"></textarea>
+                                <textarea id="treatmentPlan" rows="4" name="Treatment Plan"  class="input input-bordered h-52 w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400" placeholder="Treatment Plan"></textarea>
                             </label>
 
                             <!-- lalabas to sa initial muna, tas pag nag yes, pwede din lumabas ulit sa follow up check up stage kung need ulit ng follow up -->
@@ -213,11 +263,11 @@
                                 <h1 class="text-lg font-semibold mb-2">Does this patient need a follow-up check-up?</h1>
                                 <div class="flex flex-wrap justify-center gap-2">
                                     <div class="flex items-center space-x-2">
-                                        <input id="yesFollowUp" type="radio" disabled value="yes" name="followUp-radio" class="radio radio-info">
+                                        <input required onclick='toggleDetails();' id="yesFollowUp" type="radio"  value="yes" name="followUp-radio" class="radio radio-info">
                                         <label for="yesFollowUp" class="text-black dark:text-white">Yes</label>
                                     </div>
                                     <div class="flex items-center space-x-2">
-                                        <input id="noFollowUp" type="radio" disabled value="no" name="followUp-radio" class="radio radio-info">
+                                        <input required onclick='toggleDetails();' id="noFollowUp" type="radio"  value="no" name="followUp-radio" class="radio radio-info">
                                         <label for="noFollowUp" class="text-black dark:text-white">No</label>
                                     </div>
                                 </div>
@@ -227,6 +277,7 @@
                                         Follow Up Date:
                                     </label>
                                     <input
+                                      onclick=''
                                         type="date"
                                         id="followUpDate"
                                         name="followUpDate"
@@ -260,35 +311,23 @@
 
                         <h2 class="text-2xl sm:text-3xl font-bold mb-4 text-center">Results</h2>
                             <!-- Images dito. pag nag upload sa upload file button dito lalabas dapat. kapag kunwari lima inupload na picture dapat lima din tong buong DIV -->
-                                <div class="flex justify-center items-center w-full mb-3">
-                                    <img class="h-auto max-w-full" 
-                                    src="../images/example.jpg" 
-                                    alt="image description">
+                                <div class="flex flex-wrap gap-2 justify-center items-center w-full mb-3" id='ImageResults'>
+
+
+
                                 </div>
-                            <!-- images dito end -->
+
 
                         <div class="chart-actions text-center my-4">                             
-                            <input type="file" accept="image/*" disabled class="file-input file-input-bordered file-input-info mb-3 w-full max-w-xs bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400 disabled:border-gray-300" />
+                            <input type="file" accept="image/*" name='resultImage[]' multiple class="file-input file-input-bordered file-input-info mb-3 w-full max-w-xs bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400 disabled:border-gray-300" />
 
                             <div id="editControls" class="space-x-4">
-                                <a href="#" id="editBtn" class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none">
-                                    <i class="fa-solid fa-pen-to-square"></i> Edit Patient Record
-                                </a>                    
-                                <input id="updateBtn" class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none hidden" type="submit" value="Update">
-                                <button id="cancelBtn" class="btn bg-white text-black hover:bg-gray-400 border-none hidden">Cancel</button>
+                              <input id="updateBtn" class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none " type="submit" value="Submit">
                             </div>
                         </div>
-                        </form>
+              </form>
 
-                        <!-- pashow ulit nito pag nagedit at sinubmit -->
-                        <div class="flex justify-center">
-                                <div role="alert" class="inline-flex items-center bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                    </svg>
-                                    <span>Patient Information Updated!</span>
-                                </div>
-                            </div>
+
 
 
             </div>
@@ -298,7 +337,7 @@
             <dialog id="editpatient_info" class="modal">
                 <div class="modal-box w-11/12 max-w-5xl bg-gray-200 dark:bg-gray-700 text-[#0e1011] dark:text-[#eef0f1]">
                     <h3 class="font-bold text-2xl ">Edit Patient</h3>
-                    <form id="patientForm" action="#" method="POST" >
+                    <form id="EditpatientForm" action="#" method="POST" >
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 mt-5">      
                             <div>
                                 <label class="block">
@@ -475,6 +514,26 @@
             <!-- modal content for edit patient information end -->
 
             </section>
+        <dialog id='SuccessAlert'  class='modal' onclick='toggleDialog("SuccessAlert")' >
+          <div class="flex justify-center" >
+            <div role="alert" class="inline-flex items-center bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative">
+              <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span id='textInfo'>Patient Information Updated!</span>
+            </div>
+          </div>
+        </dialog>
+        <dialog id='errorAlert'  class='modal' onclick='toggleDialog("errorAlert");' >
+          <div class="flex justify-center" >
+            <div role="alert" class="inline-flex items-center bg-error border border-black  text-black px-4 py-3 rounded relative">
+              <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span id='error'>Somthing went wrong</span>
+            </div>
+          </div>
+        </dialog>
 
 
             <script>
@@ -488,5 +547,88 @@
                 }
                 });
             </script>
+        <script>
+
+          function toggleDialog(id) {
+            let dialog = document.getElementById(id);
+            if (dialog) {
+              if (dialog.hasAttribute('open')) {
+                dialog.removeAttribute('open');
+              } else {
+                dialog.setAttribute('open', '');
+              }
+            }
+          }
+          function getResImg(id){
+            $.ajax({
+              url: 'ajax.php?action=getResImg&record_id=' + encodeURIComponent(id),
+              method: 'GET',
+              dataType: 'html',
+              success: function(data) {
+                if (data) {
+                  $('#ImageResults').html(data);
+                }
+              },
+              error: function(xhr, status, error) {
+                console.error('Error fetching data:', error);
+              }
+            });
+          }
+
+          function resetImgDisplay(){
+            document.getElementById('ImageResults').innerHTML = ''
+          }
+          function getRecords(id){
+            $.ajax({
+              url: 'ajax.php?action=getPatientRecord&record_id='+ encodeURIComponent(id) + '&chart_id='+encodeURIComponent(<?php echo $chart_id?>),
+              method: 'GET',
+              dataType: 'json',
+              success: function(data) {
+
+                if (data) {
+                  document.querySelector('#patientRecordForm input[name="consultation-date"]').value = data.consultationDate;
+                  document.querySelector('#patientRecordForm input[name="record_id"]').value = data.Record_ID;
+                  document.querySelector('#patientRecordForm select[name="consultant-name"]').value = data.Consultant_Staff_ID;
+                  document.querySelector('#patientRecordForm input[name="weight"]').value = data.Weight;
+                  document.querySelector('#patientRecordForm input[name="blood-pressure"]').value = data.Blood_Pressure;
+                  document.querySelector('#patientRecordForm input[name="heart-rate"]').value = data.HeartRate;
+                  document.querySelector('#patientRecordForm input[name="saturation"]').value = data.Saturation;
+                  document.querySelector('#patientRecordForm input[name="temperature"]').value = data.Temperature;
+                  document.querySelector('#patientRecordForm textarea[name="Chief Complaint"]').value = data.Chief_complaint;
+                  document.querySelector('#patientRecordForm textarea[name="Physical Examination"]').value = data.Physical_Examination;
+                  document.querySelector('#patientRecordForm textarea[name="Assessment"]').value = data.Assessment;
+                  document.querySelector('#patientRecordForm textarea[name="Treatment Plan"]').value = data.Treatment_Plan;
+
+                }
+              },
+              error: function(xhr, status, error) {
+                console.error('Error fetching data:', error);
+              }
+            });
+          }
+          document.getElementById('patientRecordForm').addEventListener('submit', function(e){
+            e.preventDefault();
+            let endpoint;
+            endpoint = 'createPatientRecord';
+            let form_data = new FormData(e.target);
+            $.ajax({
+              url: 'ajax.php?action=' + endpoint + '&chart_id='+ encodeURIComponent(<?php echo $chart_id?>),
+              type: 'POST',
+              data: form_data,
+              processData: false,
+              contentType: false,
+              success: function(response) {
+                if (parseInt(response) === 1) {
+                  toggleDialog('SuccessAlert');
+                  window.location.href='staff-patientFullRecord.php?id=<?php echo $_GET['id']?>&chart_id=<?php echo $_GET['chart_id']?>';
+
+                }else {
+                  document.getElementById('error').innerHTML = response;
+                  toggleDialog('errorAlert');
+                }
+              }
+            });
+          });
+        </script>
 </body>
 </html>

@@ -1,9 +1,10 @@
 <?php
-
+/*
 if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] !== 'XMLHttpRequest') {
     header("Location: 404.php");
     exit();
 }
+*/
 
 
 
@@ -530,4 +531,276 @@ if ($action == 'editUserInfo'){
 
     }
 
+}
+
+if ($action == 'getAppointmentInfo'){
+    $patient_id = $_GET['patient_id'];
+    $sql = "SELECT *
+            FROM `tbl_patient` 
+            JOIN `tbl_appointment` ON `tbl_appointment`.`Patient_ID` = `tbl_patient`.`Patient_ID`
+            where `tbl_appointment`.`Patient_ID` = ?;";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param('i', $patient_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    if ($result && $result->num_rows > 0){
+        $row = $result->fetch_assoc();
+        header('Content-Type: application/json');
+        echo json_encode($row);
+    }
+        exit();
+}
+
+if ($action == 'updateAppointment'){
+    $appointment_status = $_POST['list-status'];
+    $doctor_id = isset($_POST['appointDoctor']) ? $_POST['appointDoctor'] : '';
+    $appointment_id = $_POST['appointment_id'];
+    $remark = $_POST['remarks'];
+    if ($appointment_status == 'rescheduled'){
+        $set_Date = date('Y-m-d', strtotime($_POST['rescheduled-date']));
+        $set_time = $_POST['rescheduled-time'];
+        $rescheduledDateTime = $set_Date. ' '. $set_time;
+        $sql = 'UPDATE tbl_appointment SET Staff_ID = ?, 
+            Status = ?,
+            Remarks = ?,
+            Appointment_schedule = ?               
+            WHERE Appointment_ID = ?';
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param('isssi', $doctor_id, $appointment_status, $remark, $rescheduledDateTime, $appointment_id);
+
+    }else if ($appointment_status == 'approved'){
+        $sql = 'UPDATE tbl_appointment SET Staff_ID = ?, 
+            Status = ?,
+            Remarks = ?
+            WHERE Appointment_ID = ?';
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param('issi', $doctor_id, $appointment_status, $remark, $appointment_id);
+    }else{
+        $rescheduledDateTim = '';
+        $sql = 'UPDATE tbl_appointment SET  
+            Status = ?,
+            Remarks = ?,
+            Appointment_schedule = NULL
+            WHERE Appointment_ID = ?';
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param('ssi',  $appointment_status, $remark, $appointment_id);
+    }
+    if ($stmt->execute()){
+        echo 1;
+        exit();
+    }else{
+        echo $stmt->error;
+    }
+}
+if ($action == 'createPatientChart'){
+    try {
+        $appointment_id = $_GET['appointment_id'];
+        $sql = "SELECT Appointment_schedule from tbl_appointment where Appointment_ID = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param('i', $appointment_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
+        $patientStatus = 'To be Seen';
+        $sql = "INSERT INTO tbl_patient_chart (Appointment_id, patient_Status, followUp_schedule) VALUES (?, ?, ?)";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param('iss', $appointment_id, $patientStatus, $row['Appointment_schedule']);
+        if ($stmt->execute()){
+            echo 1;
+            exit();
+        }
+    } catch (Exception $e) {
+        echo "Error: " . $e->getMessage();
+    }
+}
+
+if ($action == 'getPatientRecord'){
+    $record_id = $_GET['record_id'];
+    $sql= "SELECT 
+                *
+            FROM 
+                tbl_records  WHERE Record_ID = ?;";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param('i', $record_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    if ($result && $result->num_rows > 0){
+        $row = $result->fetch_assoc();
+        header('Content-Type: application/json');
+        echo json_encode($row);
+    }
+    exit();
+}
+
+if ($action == 'createPatientRecord') {
+    try {
+        $record_id = 0;
+        $consultation_date = $_POST['consultation-date'];
+        $consultant = $_POST['consultant-name'];
+        $weight = $_POST['weight'];
+        $heart_rate = $_POST['heart-rate'];
+        $temperature = $_POST['temperature'];
+        $blood_pressure = $_POST['blood-pressure'];
+        $saturation = $_POST['saturation'];
+        $chief_comp = $_POST['Chief_Complaint'];
+        $physical_exam = $_POST['Physical_Examination'];
+        $assesment = $_POST['Assessment'];
+        $treatment_plan = $_POST['Treatment_Plan'];
+        $followUp = $_POST['followUp-radio'];
+        $Chart_ID = $_GET['chart_id'];
+        if (!empty($_POST['record_id'])){
+            $record_id = $_POST['record_id'];
+            $getRec = "SELECT * FROM tbl_records where Record_ID = ?";
+            $stmt = $conn->prepare($getRec);
+            $stmt->bind_param('i', $record_id);
+            $stmt->execute();
+            $result = $stmt->get_result();
+
+            if ($result->num_rows === 1) {
+                $sql = "UPDATE tbl_records SET 
+                       Consultant_Staff_ID = ? , 
+                       consultationDate = ?,
+                       Temperature = ?, 
+                       HeartRate = ?,
+                       Weight = ?, 
+                       Blood_Pressure = ?, 
+                       Saturation = ?, 
+                       Chief_complaint = ?, 
+                       Physical_Examination = ?, 
+                       Assessment = ?, 
+                       Treatment_Plan= ?
+                       WHERE Record_ID = ?
+                       ";
+                $stmt = $conn->prepare($sql);
+                $stmt->bind_param('isdddssssssi', $consultant,
+                    $consultation_date, $temperature,
+                    $heart_rate, $weight, $blood_pressure,
+                    $saturation, $chief_comp, $physical_exam,
+                    $assesment, $treatment_plan, $record_id);
+                $stmt->execute();
+
+
+            }else{
+                echo 'Something wrong please reload the website1' ;
+                exit();
+            }
+        }else {
+            if ($followUp === 'no') {
+                // Prepare and execute INSERT statement
+                $sql = "INSERT INTO tbl_records (Chart_ID, Consultant_Staff_ID, consultationDate, Temperature, HeartRate, Weight, Blood_Pressure, Saturation, Chief_complaint, Physical_Examination, Assessment, Treatment_Plan) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                $stmt = $conn->prepare($sql);
+                $stmt->bind_param("iissssssssss", $Chart_ID, $consultant, $consultation_date, $temperature, $heart_rate, $weight, $blood_pressure, $saturation, $chief_comp, $physical_exam, $assesment, $treatment_plan);
+                $stmt->execute();
+                $record_id = $stmt->insert_id; // Retrieve insert_id after execution
+
+                // Update patient chart status
+                $update_patient_chart = "UPDATE tbl_patient_chart SET followUp_schedule = 'No Schedule', patient_Status ='Completed' WHERE Chart_id = ?";
+                $stmt2 = $conn->prepare($update_patient_chart);
+                $stmt2->bind_param('i', $Chart_ID);
+                $stmt2->execute();
+            } elseif ($followUp === 'yes') {
+                // Prepare and execute INSERT statement
+                $sql = "INSERT INTO tbl_records (Chart_ID, Consultant_Staff_ID, consultationDate, Temperature, HeartRate, Weight, Blood_Pressure, Saturation, Chief_complaint, Physical_Examination, Assessment, Treatment_Plan) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                $stmt = $conn->prepare($sql);
+                $stmt->bind_param("iissssssssss", $Chart_ID, $consultant, $consultation_date, $temperature, $heart_rate, $weight, $blood_pressure, $saturation, $chief_comp, $physical_exam, $assesment, $treatment_plan);
+                $stmt->execute();
+                $record_id = $stmt->insert_id;
+                $followUpDate = $_POST['followUpDate'];
+                $followUpTime = $_POST['followUpTime'];
+                $followupSched = $followUpDate . ' ' . $followUpTime;
+                $update_patient_chart = "UPDATE tbl_patient_chart SET followUp_schedule = ?, patient_Status ='Follow Up' WHERE Chart_id = ?";
+                $stmt = $conn->prepare($update_patient_chart);
+                $stmt->bind_param('si', $followupSched, $Chart_ID);
+                $stmt->execute();
+            }
+        }
+
+        if (!empty($_FILES['resultImage']['name'][0])) {
+            if ($record_id !== 0){$record_id = $_POST['record_id'];
+                $getRec = "SELECT * FROM tbl_records where Record_ID = ?";
+                $stmt = $conn->prepare($getRec);
+                $stmt->bind_param('i', $record_id);
+                $stmt->execute();
+                $result = $stmt->get_result();
+                if ($result->num_rows === 1) {
+                    $delsql = "DELETE FROM patientimageresult where record_id = ?";
+                    $delstmt = $conn->prepare($delsql);
+                    $delstmt->bind_param('i', $record_id);
+                    $delstmt->execute();
+                }
+            }
+
+            foreach ($_FILES['resultImage']['tmp_name'] as $key => $tmp_name) {
+                $temp_file = $_FILES['resultImage']['tmp_name'][$key];
+                $file_type = $_FILES['resultImage']['type'][$key];
+                $file_name = uniqid() . '.' . pathinfo($_FILES['resultImage']['name'][$key], PATHINFO_EXTENSION);
+                $destination_directory = '../PatientChartRecordResults/';
+                $destination_file = $destination_directory . $file_name;
+                if (move_uploaded_file($temp_file, $destination_file)){
+                    $sql = "INSERT INTO patientimageresult (record_id,	image_file_name)
+                                values (?,?)";
+                    $stmt = $conn->prepare($sql);
+                    $stmt->bind_param('is',$record_id, $file_name);
+                    $stmt->execute();
+                }
+            }
+            echo 1;
+            exit();
+        }else{
+            echo 1;
+            exit();
+        }
+    } catch (Exception $e) {
+        echo "Error: " . $e->getMessage();
+    }
+}
+
+if ($action == 'getResImg'){
+    $record_id = $_GET['record_id'];
+    $sql = "SELECT * FROM patientimageresult where record_id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param('i', $record_id);
+    $stmt->execute();
+    $res = $stmt->get_result();
+    if ($res->num_rows > 0){
+        while ($row = $res->fetch_assoc()){
+            echo '<img class="h-auto max-w-full"
+                                       src="../PatientChartRecordResults/'.$row['image_file_name'].'"
+                                       alt="image description">';
+        }
+    }
+    exit();
+}
+
+if ($action == 'archivePatientChar'){
+    $chart_id = $_GET['chart_id'];
+    $sql = "UPDATE tbl_patient_chart SET followUp_schedule = NULL, 
+                             patient_Status = 'Archived' where Chart_id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param('i', $chart_id);
+    if ($stmt->execute()){
+        echo 1;
+    }
+}
+if ($action == 'DeletePatientChart'){
+    $chart_id = $_GET['chart_id'];
+    $sql = "UPDATE tbl_patient_chart SET followUp_schedule = NULL, 
+                             patient_Status = 'Deleted' where Chart_id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param('i', $chart_id);
+    if ($stmt->execute()){
+        echo 1;
+    }
+}
+if ($action == 'UnarchivePatientChart'){
+    $chart_id = $_GET['chart_id'];
+    $sql = "UPDATE tbl_patient_chart SET followUp_schedule = 'No schedule', 
+                             patient_Status = '	Unarchive ' where Chart_id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param('i', $chart_id);
+    if ($stmt->execute()){
+        echo 1;
+    }
 }

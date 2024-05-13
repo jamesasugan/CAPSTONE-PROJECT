@@ -40,6 +40,8 @@ if ($result->num_rows > 0) {
       href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
       rel="stylesheet"
     />
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
     <script
       type="module"
       src="https://unpkg.com/ionicons@4.5.10-0/dist/ionicons/ionicons.esm.js"
@@ -105,6 +107,8 @@ if ($result->num_rows > 0) {
       >
         <table class="table w-full">
           <thead>
+
+
             <tr
               class="font-bold text-black dark:text-white text-base sm:text-lg"
             >
@@ -118,32 +122,112 @@ if ($result->num_rows > 0) {
           </thead>
           <tbody class="text-black dark:text-white text-base sm:text-lg">
             <!-- sample row -->
-            <tr
-              class="text-base hover:bg-gray-300 dark:hover:bg-gray-600 font-medium text-black dark:text-white"
-            >
-              <td>John Edward Dionisio</td>
-              <td>May 10, 2024</td>
-              <td class="pl-10">10:00 AM</td> <!-- alisin mo yung pl-10 pag nagoverlap yung ilalagay mo -->
-              <td>OB-GYNE</td>
-              <td class="font-bold text-yellow-600 dark:text-yellow-300">Pending</td> 
-              <!-- 
-              Completed - text-green-500
-              Cancelled - text-red-500
-              Approved - text-blue-500
-            -->
+            <?php
+            $sql = "SELECT `tbl_patient`.*, `tbl_appointment`.*, `tbl_patient_chart`.*
+FROM `tbl_patient` 
+INNER JOIN `tbl_appointment` ON `tbl_appointment`.`Patient_ID` = `tbl_patient`.`Patient_ID` 
+LEFT JOIN `tbl_patient_chart` ON `tbl_patient_chart`.`Appointment_id` = `tbl_appointment`.`Appointment_ID`
+WHERE `tbl_patient_chart`.`Appointment_id` IS NULL
+ORDER BY 
+    CASE WHEN `tbl_appointment`.`Appointment_schedule` IS NULL THEN 1 ELSE 0 END, 
+    `tbl_appointment`.`Appointment_schedule` ASC;
+";
 
-              <td class="pl-9">
-                <!-- yung modal name viewAppointment2,3,4,5 dapat sa mga susunod, bawal parehas kase di maoopen -->
-                <button onclick="viewAppointment.showModal()">
-                  <i class="fa-regular fa-eye"></i>
-                </button>
-              </td>
-            </tr>
+            $stmt = $conn->prepare($sql);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            if ($result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()) {
+                  if ($row['Status']){
+
+                  }
+                    $middleInitial = (strlen($row['Middle_Name']) >= 1) ? substr($row['Middle_Name'], 0, 1) : '';
+                    $appointment_schedule = $row['Appointment_schedule'];
+                    $date = isset($appointment_schedule) ? date("F j, Y", strtotime($appointment_schedule)): 'N/A';
+                    $time = isset($appointment_schedule) ?date("g:ia", strtotime($appointment_schedule)): 'N/A';
+                    $status = ucfirst(strtolower($row['Status']));
+                    $class = '';
+                    switch ($status) {
+                        case 'Completed':
+                            $class = 'text-green-500';
+                            break;
+                        case 'Cancelled':
+                            $class = 'text-red-500';
+                            break;
+                        case 'Approved':
+                            $class = 'text-blue-500';
+                            // Include additional part for Approved status
+
+                            break;
+                        default:
+                            // default class if status doesn't match any of the cases
+                            $class = 'text-yellow-600 dark:text-yellow-300';
+                            break;
+                    }
+                    echo '<tr class="text-base hover:bg-gray-300 dark:hover:bg-gray-600 font-medium text-black dark:text-white">
+                <td>'.$row['First_Name'].' '.$middleInitial.'. '.$row['Last_Name'].'</td>
+                <td>'.$date.'</td>
+                <td class="pl-10">'.$time.'</td> <!-- alisin mo yung pl-10 pag nagoverlap yung ilalagay mo -->
+                <td>'.$row['Service_Field'].'</td>
+                <td class="font-bold '.$class.'">'.$status.'</td> 
+                <!-- 
+                Completed - text-green-500
+                Cancelled - text-red-500
+                Approved - text-blue-500
+                -->
+                <td class="pl-9">
+                  <!-- yung modal name viewAppointment2,3,4,5 dapat sa mga susunod, bawal parehas kase di maoopen -->
+                  <button onclick="viewAppointment.showModal();getAppointmentInfo(this.getAttribute(\'data-id\'))" data-id="'.$row['Patient_ID'].'">
+                    <i class="fa-regular fa-eye"></i>
+                  </button>';
+                    // Include the tooltip for Approved status here
+                    if($status === 'Approved') {
+                        echo '<div class="ml-2 tooltip tooltip-bottom" data-tip="Create patient chart">
+                                <a class="hover:cursor-pointer" onclick="toggleDialog(\'addPatient\');setAppointmentId(this.getAttribute(\'data-appointment-id\'))" data-appointment-id="'.$row['Appointment_ID'].'">
+                                  <i class="fa-solid fa-user-plus"></i>
+                                </a>
+                            </div>';
+                    }
+                    echo '</td>
+            </tr>';
+                }
+            }
+            ?>
+
           </tbody>
         </table>
       </div>
     </div>
   <dialog id="viewAppointment" class="modal">
+    <dialog id='profileAlert'  class='modal ' onclick='toggleDialog("profileAlert")' >
+      <div class="flex justify-center" >
+        <div role="alert" class="inline-flex items-center bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="stroke-current shrink-0 h-6 w-6 mr-2"
+            fill="none"
+            viewBox="0 0 24 24">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>
+          <span id='textInfo'>Appointment Updated!</span>
+        </div>
+      </div>
+    </dialog>
+    <dialog id='errorAlert'  class='modal' onclick='toggleDialog("errorAlert");' >
+      <div class="flex justify-center" >
+        <div role="alert" class="inline-flex items-center bg-error border border-black  text-black px-4 py-3 rounded relative">
+          <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <span id='error'>Somthing went wrong</span>
+        </div>
+      </div>
+    </dialog>
     <div
       id="patient-content"
       class="modal-box h-auto w-11/12 max-w-7xl bg-gray-200 dark:bg-gray-700"
@@ -174,28 +258,26 @@ if ($result->num_rows > 0) {
       </div>
 
       <!-- staff action -->
-      <h1 class="text-base sm:text-xl font-bold">STATUS: <span class="font-bold text-yellow-500 dark:text-yellow-300">Pending</span></h1>  <!-- ayusin mo rin colors dito ah -->
-
-
+      <h1 class="text-base sm:text-xl font-bold">STATUS: <span class="font-bold text-neutral-500" id='appointment_status'>Pending</span></h1>  <!-- ayusin mo rin colors dito ah -->
 
       <h2 class="text-base sm:text-xl font-bold mt-5">Edit Status of this Appointment</h2>
-      <form action="#" method="GET">
+      <form id='update_appointment' action="#" method="GET">
         <ul class="items-center w-full text-lg font-medium text-gray-900 bg-white border border-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white rounded-lg sm:flex mb-2">
           <li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
             <div class="flex items-center ps-3">
-              <input id="approve" type="radio" required name="list-status" class="radio radio-info" value="approve">
+              <input id="approve"  type="radio" required name="list-status" class="radio radio-info" value="approved">
               <label for="approve" class="w-full py-3 ms-2">Approve</label>
             </div>
           </li>
           <li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
             <div class="flex items-center ps-3">
-              <input id="reschedule" type="radio" required name="list-status" class="radio radio-info" value="reschedule">
+              <input id="reschedule" type="radio" required name="list-status" class="radio radio-info" value="rescheduled">
               <label for="reschedule" class="w-full py-3 ms-2">Reschedule</label>
             </div>
           </li>
           <li class="w-full dark:border-gray-600">
             <div class="flex items-center ps-3">
-              <input id="cancel" type="radio" required name="list-status" class="radio radio-info" value="cancel">
+              <input id="cancel" type="radio" required name="list-status" class="radio radio-info" value="cancelled">
               <label for="cancel" class="w-full py-3 ms-2">Cancel</label>
             </div>
           </li>
@@ -227,7 +309,7 @@ if ($result->num_rows > 0) {
             />
           </div>
         </div>
-        <div class="form-group mt-5">
+        <div id='doctorList' class="form-group mt-5">
           <label
             for="appointDoctor"
             class="block font-medium text-black dark:text-white text-base sm:text-lg"
@@ -267,34 +349,14 @@ if ($result->num_rows > 0) {
             class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 "
           />
         </div>
+        <input type='hidden' name='appointment_id' value=''>
 
         <p><span class="font-bold text-red-500">NOTE: </span>Once you click the submit button, it cannot be undone. Please confirm all the fields before submitting.</p>
         <input type="submit" value="Submit" class="btn mt-1 bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none px-7 mb-2">
       </form>
 
 
-      <!-- pashow ulit nito pag nagedit at sinubmit -->
-      <div class="flex justify-center">
-        <div
-          role="alert"
-          class="inline-flex items-center bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="stroke-current shrink-0 h-6 w-6 mr-2"
-            fill="none"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
-          </svg>
-          <span>Appointment Updated!</span>
-        </div>
-      </div>
+
 
       <div class="mb-10"></div>
       <div class="modal-action">
@@ -307,10 +369,8 @@ if ($result->num_rows > 0) {
           </button>
         </form>
       </div>
-
-
       <!-- appointment form patient info. Nilagyan ko rin "History" sa ID dito katulad sa patient-profile appointment form -->
-      <form action="#" method="GET">
+      <form id='appointmentform' action="#" method="GET">
         <fieldset class="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
           <legend class="text-xl font-bold mb-2 col-span-full">Service:</legend>
           <div class="flex flex-col w-full">
@@ -344,15 +404,13 @@ if ($result->num_rows > 0) {
 
           <div class="w-full">
             <label for="service-typeHistory" class="block text-lg font-medium mb-1">What type of service?</label>
-            <select
+            <input
               id="service-typeHistory"
               required
               disabled
               class="select select-bordered w-full bg-gray-300 dark:bg-gray-600 text-base sm:text-lg lg:text-xl focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300"
               name="service-type"
             >
-              <option value="lagay mo dito magic mo">Service na pinili ni patient dito</option>
-            </select>
 
 
           </div>
@@ -386,9 +444,6 @@ if ($result->num_rows > 0) {
             />
           </div>
         </fieldset>
-
-
-
         <h3 class="text-xl font-bold mt-5 mb-2">Personal Information</h3>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
@@ -443,11 +498,11 @@ if ($result->num_rows > 0) {
             <div class="block text-base sm:text-lg font-medium mb-1">Are you vaccinated?</div>
             <div class="flex items-center space-x-4 p-2 bg-gray-300 dark:bg-gray-600 rounded">
               <label class="flex items-center">
-                <input type="radio" name="vaccinatedHistory" disabled value="yes" class="radio radio-primary disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300 [color-scheme:light] dark:[color-scheme:dark]" required>
+                <input id='vaccinated' type="radio" name="vaccinatedHistory" disabled value="yes" class="radio radio-primary disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300 [color-scheme:light] dark:[color-scheme:dark]" required>
                 <span class="ml-2">Yes</span>
               </label>
               <label class="flex items-center">
-                <input type="radio" name="vaccinatedHistory" disabled value="no" class="radio radio-primary disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300 [color-scheme:light] dark:[color-scheme:dark]" required>
+                <input id='notvaccinated' type="radio" name="vaccinatedHistory" disabled value="no" class="radio radio-primary disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300 [color-scheme:light] dark:[color-scheme:dark]" required>
                 <span class="ml-2">No</span>
               </label>
             </div>
@@ -457,11 +512,127 @@ if ($result->num_rows > 0) {
             <input type="text" id="addressHistory" name="addressHistory" disabled autocomplete="off" placeholder="Address" required class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300" />
           </div>
         </div>
-
       </form>
-
       <!-- <button id="print-content">Print</button> wag muna -->
     </div>
   </dialog>
+  <dialog id="addPatient"   class="modal bg-black  bg-opacity-40 ">
+    <div class="card bg-slate-50 w-[80vw] absolute top-10 sm:w-[30rem] max-h-[35rem]  flex flex-col text-black">
+      <div  class=" card-title sticky  w-full grid place-items-center">
+        <h3 class="font-bold text-center text-lg  p-5 ">Create patient chart list?</h3>
+      </div>
+      <div class="p-4 w-full flex justify-evenly">
+        <a id="newChart" class="btn btn-info w-1/4" onclick="create_patientChart(this.getAttribute('data-appointment-id'));">Yes</a>
+        <button class="btn  btn-neutral  w-1/4 " onclick='toggleDialog("addPatient")'>Close</button>
+      </div>
+    </div>
+  </dialog>
+  <script>
+    function setAppointmentId(appointmentId) {
+      document.getElementById('newChart').setAttribute('data-appointment-id', appointmentId);
+    }
+    function toggleDialog(id) {
+      let dialog = document.getElementById(id);
+      if (dialog) {
+        if (dialog.hasAttribute('open')) {
+          dialog.removeAttribute('open');
+        } else {
+          dialog.setAttribute('open', '');
+        }
+      }
+    }
+    function getAppointmentInfo(patient_id){
+      $.ajax({
+        url: 'ajax.php?action=getAppointmentInfo&patient_id=' + patient_id,
+        method: 'GET',
+        dataType: 'json',
+        success: function(data) {
+          if (data) {
+            let appointmentSchedule = data.Appointment_schedule;
+            let date = '';
+            let time = '';
+
+            if (appointmentSchedule) {
+              let parts = appointmentSchedule.split(' ');
+              date = parts[0];
+              time = parts[1];
+            }
+            let status = data.Status.charAt(0).toUpperCase() + data.Status.slice(1).toLowerCase();
+            document.querySelector('#appointment_status').textContent = status;
+            document.getElementById('approve').disabled = (status === 'Cancelled');
+
+
+            let serviceValue = data.Service_Field;
+            if (serviceValue === 'Consultation') {
+              document.getElementById('horizontal-list-radio-license').checked = true;
+            } else if (serviceValue === 'Test/Procedure') {
+              document.getElementById('horizontal-list-radio-id').checked = true;
+            }
+            document.querySelector('#appointmentform input[name="service-type"]').value = data.Service_Type;
+            document.querySelector('#appointmentform input[name="appointment-dateHistory"]').value = date;
+            document.querySelector('#appointmentform input[name="appointment-timeHistory"]').value = time;
+            document.querySelector('#appointmentform input[name="first-nameHistory"]').value = data.First_Name;
+            document.querySelector('#appointmentform input[name="middle-nameHistory"]').value = data.Middle_Name;
+            document.querySelector('#appointmentform input[name="last-nameHistory"]').value = data.Last_Name;
+            document.querySelector('#appointmentform input[name="email"]').value = data.patientEmail;
+            document.querySelector('#appointmentform input[name="contact-numberHistory"]').value = data.Contact_Number;
+            document.querySelector('#appointmentform input[name="dobHistory"]').value = data.DateofBirth;
+            document.querySelector('#appointmentform input[name="addressHistory"]').value = data.Address;
+            document.querySelector('#update_appointment input[name="appointment_id"]').value = data.Appointment_ID;
+            document.querySelector('#appointmentform select[name="sexHistory"]').value = data.Sex;
+            document.querySelector('#update_appointment select[name="appointDoctor"]').value = data.Staff_ID;
+
+            if (data.Vaccination === 'yes'){
+              document.getElementById('vaccinated').checked = true
+            }else if (data.Vaccination === 'no'){
+              document.getElementById('notvaccinated').checked = true
+            }
+          }
+        },
+        error: function(xhr, status, error) {
+          console.error('Error fetching data:', error);
+        }
+      });
+    }
+    function create_patientChart(id) {
+      $.ajax({
+        url: 'ajax.php?action=createPatientChart&appointment_id=' + encodeURIComponent(id),
+        type: 'GET',
+        success: function(response) {
+          if (parseInt(response) === 1) {
+              window.location.href='admin-appointments.php';
+          } else {
+            document.getElementById('error').innerHTML = response;
+            toggleDialog('errorAlert');
+          }
+          console.log(response)
+        }
+
+      });
+    }
+
+    document.getElementById('update_appointment').addEventListener('submit', function(e){
+      e.preventDefault();
+      let form_data = new FormData(e.target);
+      $.ajax({
+        url: 'ajax.php?action=updateAppointment',
+        type: 'POST',
+        data: form_data,
+        processData: false,
+        contentType: false,
+        success: function(response) {
+          if (parseInt(response) === 1) {
+            window.location.href='admin-appointments.php';
+
+          }else {
+            document.getElementById('error').innerHTML= response;
+            toggleDialog('errorAlert');
+
+          }
+        }
+      });
+    })
+
+  </script>
   </body>
 </html>

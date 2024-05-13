@@ -6,7 +6,6 @@ session_start();
 
 if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] == 'patient'){
     header("Location: index.php");
-
 }
 $user_id = $_SESSION['user_id'];
 $sql = "SELECT role from tbl_staff where User_ID = ?";
@@ -20,6 +19,8 @@ if ($result->num_rows > 0) {
         header("Location: staff-index.php");
     }
 }
+
+
 ?>
 
 <!doctype html>
@@ -55,19 +56,17 @@ if ($result->num_rows > 0) {
     />
     <link rel="stylesheet" href="../css/services-swiper.css" />
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
     <script src="../js/main.js" defer></script>
   </head>
   <body>
-
     <?php include 'admin-navbar.php'; ?>
-
     <div id="patients-recordTab" class="p-10 pt-24 mx-auto w-full min-h-screen bg-[#ebf0f4] dark:bg-[#17222a]">
-
       <!-- add New patient button -->
       <div class="flex justify-end mb-5">
             <a href="admin-addwalkInPatient.php" class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold py-2 px-4 rounded cursor-pointer border-none">Add New Patient</a>
         </div>
-
             <div class="flex flex-col sm:flex-row justify-between items-center bg-gray-200 dark:bg-gray-700 p-5 border-b border-b-black">
                 <h3 class="text-2xl sm:text-4xl font-bold text-black dark:text-white mb-4 sm:mb-0 uppercase mr-0 sm:mr-10">
                   Patients
@@ -119,23 +118,40 @@ if ($result->num_rows > 0) {
               <th>Sex</th>
               <th>Appointment Type</th>
               <th>Service</th>
-              <th>Visit</th>
+              <th>Schedule</th>
               <th>Status</th>
               <th>Action</th>
               <th>Archive</th>
             </tr>
           </thead>
           <tbody class="text-black dark:text-white text-base sm:text-lg">
-
-            <!-- sample row -->
-            <tr class="text-base hover:bg-gray-300 dark:hover:bg-gray-600 font-medium text-black dark:text-white">
-              <td>John Edward Dionisio</td>
-              <td>21</td>
-              <td>Male</td>
-              <td>Walk In</td>
-              <td>OB-GYNE</td>
-              <td>Follow-up</td>
-              <td class="font-bold text-yellow-600 dark:text-yellow-300">To be Seen</td>
+            <?php
+            $sql = "SELECT `tbl_patient`.*, `tbl_appointment`.*, `tbl_patient_chart`.*
+FROM `tbl_patient` 
+INNER JOIN `tbl_appointment` ON `tbl_appointment`.`Patient_ID` = `tbl_patient`.`Patient_ID` 
+INNER JOIN `tbl_patient_chart` ON `tbl_patient_chart`.`Appointment_id` = `tbl_appointment`.`Appointment_ID`
+where tbl_patient_chart.patient_Status != 'Archived' and tbl_patient_chart.patient_Status != 'Deleted'
+ORDER BY 
+    CASE WHEN `tbl_patient_chart`.`followUp_schedule` IS NULL THEN 1 ELSE 0 END, 
+    `tbl_patient_chart`.`followUp_schedule` ASC;
+";
+            $stmt = $conn->prepare($sql);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            while ($row= $result->fetch_assoc()){
+                $middleInitial = (strlen($row['Middle_Name']) >= 1) ? substr($row['Middle_Name'], 0, 1) : '';
+                $age = date_diff(date_create($row['DateofBirth']), date_create('today'))->y;
+                $date = date("F j, Y", strtotime($row['followUp_schedule']));
+                $time = date("g:ia", strtotime($row['followUp_schedule']));
+                $followUpschedule = $date . ' ' . $time == 'January 1, 1970 1:00am' ? $row['followUp_schedule'] : $date . ' ' . $time;
+                echo '<tr class="text-base hover:bg-gray-300 dark:hover:bg-gray-600 font-medium text-black dark:text-white">
+              <td>'.$row['First_Name'].' '.$middleInitial.'. '.$row['Last_Name'].'</td>
+              <td>'.$age.'</td>
+              <td>'.$row['Sex'].'</td>
+              <td>'.$row['Appointment_type'].'</td>
+              <td>'.$row['Service_Type'].'</td>
+              <td>'.$followUpschedule.'</td>
+              <td class="font-bold text-yellow-600 dark:text-yellow-300">'.$row['patient_Status'].'</td>
               <!-- Status List
                    Completed = text-green-500
                    Waiting for Results = text-yellow-600 dark:text-yellow-300
@@ -144,14 +160,15 @@ if ($result->num_rows > 0) {
 
               <!-- view information -->
               <td class="pl-9">
-                <a href="admin-patientFullRecord.php"><i class="fa-regular fa-eye"></i></a>
+                <a href="admin-patientFullRecord.php?id='.$row['Patient_ID'].'&chart_id='.$row['Chart_id'].'"><i class="fa-regular fa-eye"></i></a>
               </td>
-              <td class="pl-10"><button onclick="archive_record.showModal()"><i class="fa-solid fa-box-archive"></i></button></td>
+              <td class="pl-10"><button onclick="archive_record.showModal();get_chartID('.$row['Chart_id'].')"><i class="fa-solid fa-box-archive"></i></button></td>
             </tr>
-            <!-- sample row end -->
+            <!-- sample row end -->';
+            }
 
-
-           
+            ?>
+            <!-- sample row -->
 
           </tbody>
         </table>
@@ -165,7 +182,7 @@ if ($result->num_rows > 0) {
 
                     <!-- <p class="text-black dark:text-white mt-2 mb-1 font-medium">
                       This record will be moved to the <a href="admin-archiveAccounts.php" class="text-blue-500 underline">Archived Patient Records</a></p> -->
-                      <button class="btn btn-error mt-5">Archive this Patient Record</button>
+                      <a class="btn btn-error mt-5" data-chart-id="" id='archiveBtn' onclick='archivePatientChart(this.getAttribute("data-chart-id"))'>Archive this Patient Record</a>
 
                     <div class="modal-action">
                         <form method="dialog">
@@ -186,7 +203,27 @@ if ($result->num_rows > 0) {
   });
 </script> -->
 
-    
+    <script>
+      function get_chartID(id) {
+        let archivebtn = document.getElementById('archiveBtn');
+        archivebtn.setAttribute('data-chart-id', id);
+      }
+      function archivePatientChart(id){
+        $.ajax({
+          url: 'ajax.php?action=archivePatientChar&chart_id=' + encodeURIComponent(id),
+          method: 'GET',
+          dataType: 'html',
+          success: function(response) {
+            if (parseInt(response) === 1) {
+              window.location.href='admin-patientRecords.php';
+            } else {
+              // Handle failure
+            }
+          }
+        });
+      }
+
+    </script>
 
   </body>
 </html>

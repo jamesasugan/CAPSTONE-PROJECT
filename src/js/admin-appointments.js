@@ -11,19 +11,25 @@ document.addEventListener('DOMContentLoaded', function () {
 
   document.querySelectorAll('input[name="list-status"]').forEach((input) => {
     input.addEventListener('change', function () {
-      if (this.value === 'reschedule') {
+      if (this.value === 'rescheduled') {
         rescheduleSection.style.display = 'flex';
         dateInput.required = true;
         timeInput.required = true;
         remarksInput.value = '';
+        document.getElementById('doctorList').classList.remove('hidden')
+
       } else {
         rescheduleSection.style.display = 'none';
         dateInput.required = false;
         timeInput.required = false;
-        if (this.value === 'approve') {
+        if (this.value === 'approved') {
+          document.getElementById('doctorList').classList.remove('hidden')
+
           remarksInput.value =
             'Your appointment is now listed, comply on the set date and time';
-        } else if (this.value === 'cancel') {
+        } else if (this.value === 'cancelled') {
+          document.getElementById('doctorList').classList.add('hidden')
+          document.getElementById('appointDoctor').required = false;
           remarksInput.value =
             'Your Appointment has been Cancelled due to unforeseen circumstances. Please rebook again if you want to continue';
         }
