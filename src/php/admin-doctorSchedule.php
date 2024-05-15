@@ -2,24 +2,22 @@
 include '../Database/database_conn.php';
 session_start();
 
-
-
-if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] == 'patient'){
-    header("Location: index.php");
-
+if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] == 'patient') {
+    header('Location: index.php');
 }
 $user_id = $_SESSION['user_id'];
-$sql = "SELECT role from tbl_staff where User_ID = ?";
+$sql = 'SELECT role from tbl_staff where User_ID = ?';
 $stmt = $conn->prepare($sql);
 $stmt->bind_param('i', $user_id);
 $stmt->execute();
 $result = $stmt->get_result();
 if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
-    if ($row['role'] == 'doctor'){
-        header("Location: staff-index.php");
+    if ($row['role'] == 'doctor') {
+        header('Location: staff-index.php');
     }
-} ?>
+}
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -86,13 +84,29 @@ if ($result->num_rows > 0) {
                                     >
                                     <option value="">Select a Doctor</option>
                                       <?php
-                                      $sql = "SELECT * FROM tbl_staff where role = 'doctor' ";
+                                      $sql =
+                                          "SELECT * FROM tbl_staff where role = 'doctor' ";
                                       $stmt = $conn->prepare($sql);
                                       $stmt->execute();
                                       $result = $stmt->get_result();
-                                      while ($row = $result->fetch_assoc()){
-                                      $middleInitial = (strlen($row['Middle_Name']) >= 1) ? substr($row['Middle_Name'], 0, 1) : '';
-                                        echo '<option value="'.$row['Staff_ID'].'">'.$row['First_Name'].' '.$middleInitial.'. '.$row['Last_Name'].'</option>';
+                                      while ($row = $result->fetch_assoc()) {
+                                          $middleInitial =
+                                              strlen($row['Middle_Name']) >= 1
+                                                  ? substr(
+                                                      $row['Middle_Name'],
+                                                      0,
+                                                      1
+                                                  )
+                                                  : '';
+                                          echo '<option value="' .
+                                              $row['Staff_ID'] .
+                                              '">' .
+                                              $row['First_Name'] .
+                                              ' ' .
+                                              $middleInitial .
+                                              '. ' .
+                                              $row['Last_Name'] .
+                                              '</option>';
                                       }
                                       ?>
                                     </select>
@@ -236,7 +250,7 @@ if ($result->num_rows > 0) {
                             
                             <div class="flex justify-end space-x-2">
                                 <button id="editSchedule" type="button" class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none px-7">
-                                    Edit Schedule
+                                    Add Schedule
                                 </button>
                                 <input id="updateSchedule" type="submit" value="Update" class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none hidden">
                                 <button id="cancelSchedule" type="button" class="btn bg-white text-black hover:bg-gray-400 border-none hidden">
@@ -269,13 +283,29 @@ if ($result->num_rows > 0) {
                                     >
                                       <option value="" disabled selected>Select a Doctor</option>
                                         <?php
-                                        $sql = "SELECT * FROM tbl_staff where role = 'doctor' ";
+                                        $sql =
+                                            "SELECT * FROM tbl_staff where role = 'doctor' ";
                                         $stmt = $conn->prepare($sql);
                                         $stmt->execute();
                                         $result = $stmt->get_result();
-                                        while ($row = $result->fetch_assoc()){
-                                            $middleInitial = (strlen($row['Middle_Name']) >= 1) ? substr($row['Middle_Name'], 0, 1) : '';
-                                            echo '<option value="'.$row['Staff_ID'].'">'.$row['First_Name'].' '.$middleInitial.'. '.$row['Last_Name'].'</option>';
+                                        while ($row = $result->fetch_assoc()) {
+                                            $middleInitial =
+                                                strlen($row['Middle_Name']) >= 1
+                                                    ? substr(
+                                                        $row['Middle_Name'],
+                                                        0,
+                                                        1
+                                                    )
+                                                    : '';
+                                            echo '<option value="' .
+                                                $row['Staff_ID'] .
+                                                '">' .
+                                                $row['First_Name'] .
+                                                ' ' .
+                                                $middleInitial .
+                                                '. ' .
+                                                $row['Last_Name'] .
+                                                '</option>';
                                         }
                                         ?>
                                     </select>

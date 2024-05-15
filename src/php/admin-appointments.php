@@ -2,24 +2,22 @@
 include '../Database/database_conn.php';
 session_start();
 
-
-
-if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] == 'patient'){
-    header("Location: index.php");
-
+if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] == 'patient') {
+    header('Location: index.php');
 }
 $user_id = $_SESSION['user_id'];
-$sql = "SELECT role from tbl_staff where User_ID = ?";
+$sql = 'SELECT role from tbl_staff where User_ID = ?';
 $stmt = $conn->prepare($sql);
 $stmt->bind_param('i', $user_id);
 $stmt->execute();
 $result = $stmt->get_result();
 if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
-    if ($row['role'] == 'doctor'){
-        header("Location: staff-index.php");
+    if ($row['role'] == 'doctor') {
+        header('Location: staff-index.php');
     }
-} ?>
+}
+?>
 
 <!doctype html>
 <html lang="en">
@@ -141,11 +139,17 @@ ORDER BY
             $result = $stmt->get_result();
             if ($result->num_rows > 0) {
                 while ($row = $result->fetch_assoc()) {
-
-                    $middleInitial = (strlen($row['Middle_Name']) >= 1) ? substr($row['Middle_Name'], 0, 1) : '';
+                    $middleInitial =
+                        strlen($row['Middle_Name']) >= 1
+                            ? substr($row['Middle_Name'], 0, 1)
+                            : '';
                     $appointment_schedule = $row['Appointment_schedule'];
-                    $date = isset($appointment_schedule) ? date("F j, Y", strtotime($appointment_schedule)): 'N/A';
-                    $time = isset($appointment_schedule) ?date("g:ia", strtotime($appointment_schedule)): 'N/A';
+                    $date = isset($appointment_schedule)
+                        ? date('F j, Y', strtotime($appointment_schedule))
+                        : 'N/A';
+                    $time = isset($appointment_schedule)
+                        ? date('g:ia', strtotime($appointment_schedule))
+                        : 'N/A';
                     $status = ucfirst(strtolower($row['Status']));
                     $class = '';
                     switch ($status) {
@@ -166,11 +170,27 @@ ORDER BY
                             break;
                     }
                     echo '<tr class="text-base hover:bg-gray-300 dark:hover:bg-gray-600 font-medium text-black dark:text-white">
-                <td>'.$row['First_Name'].' '.$middleInitial.'. '.$row['Last_Name'].'</td>
-                <td>'.$date.'</td>
-                <td class="pl-10">'.$time.'</td> <!-- alisin mo yung pl-10 pag nagoverlap yung ilalagay mo -->
-                <td>'.$row['Service_Field'].'</td>
-                <td class="font-bold '.$class.'">'.$status.'</td> 
+                <td>' .
+                        $row['First_Name'] .
+                        ' ' .
+                        $middleInitial .
+                        '. ' .
+                        $row['Last_Name'] .
+                        '</td>
+                <td>' .
+                        $date .
+                        '</td>
+                <td class="pl-10">' .
+                        $time .
+                        '</td> <!-- alisin mo yung pl-10 pag nagoverlap yung ilalagay mo -->
+                <td>' .
+                        $row['Service_Field'] .
+                        '</td>
+                <td class="font-bold ' .
+                        $class .
+                        '">' .
+                        $status .
+                        '</td> 
                 <!-- 
                 Completed - text-green-500
                 Cancelled - text-red-500
@@ -178,13 +198,17 @@ ORDER BY
                 -->
                 <td class="pl-9">
                   <!-- yung modal name viewAppointment2,3,4,5 dapat sa mga susunod, bawal parehas kase di maoopen -->
-                  <button onclick="viewAppointment.showModal();getAppointmentInfo(this.getAttribute(\'data-id\'))" data-id="'.$row['Patient_ID'].'">
+                  <button onclick="viewAppointment.showModal();getAppointmentInfo(this.getAttribute(\'data-id\'))" data-id="' .
+                        $row['Patient_ID'] .
+                        '">
                     <i class="fa-regular fa-eye"></i>
                   </button>';
                     // Include the tooltip for Approved status here
-                    if($status === 'Approved') {
+                    if ($status === 'Approved') {
                         echo '<div class="ml-2 tooltip tooltip-bottom" data-tip="Create patient chart">
-                                <a class="hover:cursor-pointer" onclick="toggleDialog(\'addPatient\');setAppointmentId(this.getAttribute(\'data-appointment-id\'))" data-appointment-id="'.$row['Appointment_ID'].'">
+                                <a class="hover:cursor-pointer" onclick="toggleDialog(\'addPatient\');setAppointmentId(this.getAttribute(\'data-appointment-id\'))" data-appointment-id="' .
+                            $row['Appointment_ID'] .
+                            '">
                                   <i class="fa-solid fa-user-plus"></i>
                                 </a>
                             </div>';
@@ -328,9 +352,20 @@ ORDER BY
               $stmt = $conn->prepare($sql);
               $stmt->execute();
               $result = $stmt->get_result();
-              while ($row = $result->fetch_assoc()){
-                  $middleInitial = (strlen($row['Middle_Name']) >= 1) ? substr($row['Middle_Name'], 0, 1) : '';
-                  echo '<option value="'.$row['Staff_ID'].'">'.$row['First_Name'].' '.$middleInitial.'. '.$row['Last_Name'].'</option>';
+              while ($row = $result->fetch_assoc()) {
+                  $middleInitial =
+                      strlen($row['Middle_Name']) >= 1
+                          ? substr($row['Middle_Name'], 0, 1)
+                          : '';
+                  echo '<option value="' .
+                      $row['Staff_ID'] .
+                      '">' .
+                      $row['First_Name'] .
+                      ' ' .
+                      $middleInitial .
+                      '. ' .
+                      $row['Last_Name'] .
+                      '</option>';
               }
               ?>
           </select>
@@ -558,7 +593,7 @@ ORDER BY
     </div>
   </dialog>
   <dialog id="addPatient"   class="modal bg-black  bg-opacity-40 ">
-    <div class="card bg-slate-50 w-[80vw] absolute top-10 sm:w-[30rem] max-h-[35rem]  flex flex-col text-black">
+    <div class="card bg-gray-200 dark:bg-gray-700 text-[#0e1011] dark:text-[#eef0f1] w-[80vw] absolute top-10 sm:w-[30rem] max-h-[35rem]  flex flex-col">
       <div  class=" card-title sticky  w-full grid place-items-center">
         <h3 class="font-bold text-center text-lg  p-5 ">Create patient chart list?</h3>
       </div>

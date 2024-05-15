@@ -4021,14 +4021,6 @@ details.collapse summary::-webkit-details-marker {
   height: 100%;
 }
 
-.h-24 {
-  height: 6rem;
-}
-
-.h-36 {
-  height: 9rem;
-}
-
 .max-h-\[35rem\] {
   max-height: 35rem;
 }

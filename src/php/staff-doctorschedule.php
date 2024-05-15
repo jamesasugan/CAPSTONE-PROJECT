@@ -1,23 +1,20 @@
 <?php
 session_start();
-include "../Database/database_conn.php";
+include '../Database/database_conn.php';
 
-
-
-if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] == 'patient'){
-    header("Location: index.php");
-
+if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] == 'patient') {
+    header('Location: index.php');
 }
 $user_id = $_SESSION['user_id'];
-$sql = "SELECT * from tbl_staff where User_ID = ?";
+$sql = 'SELECT * from tbl_staff where User_ID = ?';
 $stmt = $conn->prepare($sql);
 $stmt->bind_param('i', $user_id);
 $stmt->execute();
 $result = $stmt->get_result();
 if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
-    if ($row['Role'] == 'admin'){
-        header("Location: admin-index.php");
+    if ($row['Role'] == 'admin') {
+        header('Location: admin-index.php');
     }
 }
 $doctor_id = $row['Staff_ID'];
@@ -72,7 +69,7 @@ $doctor_id = $row['Staff_ID'];
                             Set Your Schedule
                         </h3>
                         <form id="availability-form" action="#" method="GET" class="space-y-6">
-                          <input type='hidden' name='DoctorID' value='<?php echo $doctor_id?>'>
+                          <input type='hidden' name='DoctorID' value='<?php echo $doctor_id; ?>'>
                             <fieldset class="mb-4"> 
                                 <legend class="text-xl font-medium mb-2">Select your Days of Schedule in a Week</legend>
                               <ul class="flex flex-wrap text-base sm:text-lg font-medium text-gray-900 border border-gray-400 rounded-lg dark:border-gray-400 dark:text-white bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:light]">
@@ -203,7 +200,7 @@ $doctor_id = $row['Staff_ID'];
                             
                             <div class="flex justify-end space-x-2">
                                 <button id="editSchedule" type="button" class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none px-7">
-                                    Edit Schedule
+                                    Add Schedule
                                 </button>
                                 <input id="updateSchedule" type="submit" value="Update" class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none hidden">
                                 <button id="cancelSchedule" type="button" class="btn bg-white text-black hover:bg-gray-400 border-none hidden">
@@ -222,7 +219,7 @@ $doctor_id = $row['Staff_ID'];
                                 <p class="py-4 text-lg sm:text-xl font-medium">How do you want to delete your schedule?</p>
                                 
                                 <form id='deleteSchedForm' action="#" method="GET" class="space-y-4">
-                                  <input type='hidden' name='dltDoctorSched' value='<?php echo $doctor_id?>'>
+                                  <input type='hidden' name='dltDoctorSched' value='<?php echo $doctor_id; ?>'>
                                     <!-- Radio Buttons for Deletion Options -->
                                   <ul class="items-center w-full text-lg font-medium text-gray-900 bg-white border border-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white rounded-lg sm:flex">
                                     <li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
