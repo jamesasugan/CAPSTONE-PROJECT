@@ -7,14 +7,16 @@ document.addEventListener('DOMContentLoaded', function () {
   var inputs = form.querySelectorAll(
     'input[type="checkbox"], input[type="time"], input[type="radio"], select',
   );
-  var yesNote = document.getElementById('yesNote');
-  var noNote = document.getElementById('noNote');
+  var repeatStart = document.getElementById('repeatStart');
+  var repeatEnd = document.getElementById('repeatEnd');
 
   // Function to enable/disable form fields
   function setFormDisabledState(disabled) {
     inputs.forEach(function (input) {
       input.disabled = disabled;
     });
+    repeatStart.disabled = disabled;
+    repeatEnd.disabled = disabled;
   }
 
   // Function to show/hide buttons
@@ -41,8 +43,6 @@ document.addEventListener('DOMContentLoaded', function () {
     form.reset();
     setFormDisabledState(true);
     toggleButtons(true);
-    yesNote.style.display = 'none';
-    noNote.style.display = 'none';
     document.getElementById('checkboxAlert').classList.add('hidden');
   });
 
@@ -52,24 +52,8 @@ document.addEventListener('DOMContentLoaded', function () {
     setFormDisabledState(true);
     toggleButtons(true);
     document.getElementById('checkboxAlert').classList.add('hidden'); // Hide the alert
-    document.getElementById('yesNote').style.display = 'none';
-    document.getElementById('noNote').style.display = 'none';
-  });
-
-  // Manage display of notes based on radio button changes
-  document.getElementById('yesRadio').addEventListener('change', function () {
-    yesNote.style.display = this.checked ? 'block' : 'none';
-    noNote.style.display = 'none';
-  });
-
-  document.getElementById('noRadio').addEventListener('change', function () {
-    noNote.style.display = this.checked ? 'block' : 'none';
-    yesNote.style.display = 'none';
   });
 });
-
-
-
 
 // for required on input date in delete schedule
 document.addEventListener('DOMContentLoaded', function () {
@@ -153,5 +137,28 @@ document.addEventListener('DOMContentLoaded', function () {
     var nextDayStr = nextDay.toISOString().split('T')[0];
 
     endDate.setAttribute('min', nextDayStr);
+  });
+
+  // for repeat date range
+  var today = new Date();
+  var dd = String(today.getDate()).padStart(2, '0');
+  var mm = String(today.getMonth() + 1).padStart(2, '0');
+  var yyyy = today.getFullYear();
+  var dateStr = yyyy + '-' + mm + '-' + dd;
+
+  var repeatStart = document.getElementById('repeatStart');
+  var repeatEnd = document.getElementById('repeatEnd');
+
+  repeatStart.setAttribute('min', dateStr);
+  repeatEnd.setAttribute('min', dateStr);
+
+  repeatStart.addEventListener('change', function () {
+    var selectedrepeatStart = new Date(repeatStart.value);
+    selectedrepeatStart.setDate(selectedrepeatStart.getDate() + 1);
+
+    var nextDay = new Date(selectedrepeatStart);
+    var nextDayStr = nextDay.toISOString().split('T')[0];
+
+    repeatEnd.setAttribute('min', nextDayStr);
   });
 });

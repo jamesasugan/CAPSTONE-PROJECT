@@ -224,29 +224,24 @@ if ($result->num_rows > 0) {
                             </div>
 
                             <!-- Action Buttons -->
-                            <div class="flex flex-col sm:flex-row items-center space-x-0 sm:space-x-4">
+                            <div class="flex flex-col space-y-4">
                                 <div class="text-gray-700 dark:text-white text-base sm:text-lg font-medium">
-                                    Repeat Every Week:
+                                    Select your Start and End Date Schedule:
                                 </div>
-                                <div class="flex flex-col sm:flex-row space-x-0 sm:space-x-4 space-y-2 sm:space-y-0">
-                                    <label class="flex items-center space-x-2 cursor-pointer">
-                                        <input type="radio" disabled required name="repeat" value="yes" class="radio radio-info [color-scheme:light] dark:[color-scheme:dark]" id="yesRadio">
-                                        <span class="text-gray-700 dark:text-white font-medium">Yes</span>
-                                    </label>
-                                    <label class="flex items-center space-x-2 cursor-pointer">
-                                        <input type="radio" disabled required name="repeat" value="no" class="radio radio-info [color-scheme:light] dark:[color-scheme:dark]" id="noRadio">
-                                        <span class="text-gray-700 dark:text-white font-medium">No</span>
-                                    </label>
+                                <div id="repeatRangeDates" class="mt-4 space-y-2 mx-auto w-full">
+                                    <div class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4">
+                                        <div class="flex flex-col space-y-2 sm:space-y-0 sm:w-1/2">
+                                            <label for="repeatStart">Select Start Date:</label>
+                                            <input type="date" id="repeatStart" disabled name="repeatStart" class="input input-bordered w-full bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark] disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400 disabled:border-gray-300" />
+                                        </div>
+                                        <div class="flex flex-col space-y-2 sm:space-y-0 sm:w-1/2">
+                                            <label for="repeatEnd">Select End Date:</label>
+                                            <input type="date" id="repeatEnd" disabled name="repeatEnd" class="input input-bordered w-full bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark] disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400 disabled:border-gray-300" />
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="mt-4 space-y-2 mx-auto">
-                                <div class="note font-medium text-gray-700 dark:text-white" id="yesNote" style="display: none;">
-                                    <p>Selecting "Yes" will make the schedule recur weekly. You can edit or delete any schedule as needed.</p>
-                                </div>
-                                <div class="note font-medium text-gray-700 dark:text-white" id="noNote" style="display: none;">
-                                    <p>Selecting "No" means the schedule is set only for the selected week.<br>To continue the same schedule into subsequent weeks, you will need to manually set it again for each week.</p>
-                                </div>
-                            </div>
+                            </div> 
+
                             
                             <div class="flex justify-end space-x-2">
                                 <button id="editSchedule" type="button" class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none px-7">
