@@ -1,7 +1,7 @@
 <?php
 session_start();
-if (isset($_SESSION['user_type'])){
-    header("Location: index.php");
+if (isset($_SESSION['user_type'])) {
+    header('Location: index.php');
 }
 ?>
 
@@ -188,7 +188,7 @@ if (isset($_SESSION['user_type'])){
                 <!-- Email -->
                 <div class="login-form">
                   <label for="email" class="block font-medium text-black">
-                    Email Address
+                    Email
                   </label>
                   <input
                     id="email"
