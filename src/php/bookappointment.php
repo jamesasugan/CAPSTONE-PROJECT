@@ -2,24 +2,22 @@
 session_start();
 include_once '../Database/database_conn.php';
 
-if (isset($_SESSION['user_type']) and $_SESSION['user_type'] == 'staff'){
-
+if (isset($_SESSION['user_type']) and $_SESSION['user_type'] == 'staff') {
     $user_id = $_SESSION['user_id'];
-    $sql = "SELECT role from tbl_staff where User_ID = ?";
+    $sql = 'SELECT role from tbl_staff where User_ID = ?';
     $stmt = $conn->prepare($sql);
     $stmt->bind_param('i', $user_id);
     $stmt->execute();
     $result = $stmt->get_result();
     if ($result->num_rows > 0) {
         $row = $result->fetch_assoc();
-        if ($row['role'] == 'doctor'){
-            header("Location: staff-index.php");
-        }elseif ($row['role'] == 'admin'){
-            header("Location: admin-index.php");
+        if ($row['role'] == 'doctor') {
+            header('Location: staff-index.php');
+        } elseif ($row['role'] == 'admin') {
+            header('Location: admin-index.php');
         }
     }
 }
-
 ?>
 
 <!doctype html>
@@ -67,6 +65,10 @@ if (isset($_SESSION['user_type']) and $_SESSION['user_type'] == 'staff'){
         ? $_GET['service']
         : null; ?>
 
+    
+
+
+
     <section
       id="booking"
       class="book-appointment w-full flex justify-center items-center pt-24 pb-10 p-5
@@ -75,6 +77,16 @@ if (isset($_SESSION['user_type']) and $_SESSION['user_type'] == 'staff'){
       <div
         class="book-form w-full max-w-7xl mx-auto p-4 rounded-lg shadow-lg bg-gray-200 dark:bg-gray-700 text-[#0e1011] dark:text-[#eef0f1]"
       >
+
+      <!-- labas mo lang to pag naka log in tas hide mo pagtapos magsagot -->
+      <div class="text-center font-bold text-xl mb-10">
+        <p>Are you booking for yourself?</p>
+
+        <button class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none mr-5 mt-4">Yes</button>
+        <button class="btn bg-gray-400 text-black dark:bg-white hover:bg-gray-500 dark:hover:bg-gray-300 border-none">No</button>
+      </div>
+
+
         <h2 class="text-2xl font-bold mb-2">Set an Appointment</h2>
         <p class="mb-4">
           Kindly answer the form to set a face-to-face appointment for
@@ -251,17 +263,21 @@ if (isset($_SESSION['user_type']) and $_SESSION['user_type'] == 'staff'){
           </label>
 
           <div class="flex justify-center mt-4 mb-2">
-            <?php
-            if (isset($_SESSION['user_type']) && $_SESSION['user_type'] == 'patient'):
-                $sql = "SELECT * FROM account_user_info where User_ID = ?";
+            <?php if (
+                isset($_SESSION['user_type']) &&
+                $_SESSION['user_type'] == 'patient'
+            ):
+
+                $sql = 'SELECT * FROM account_user_info where User_ID = ?';
                 $stmt = $conn->prepare($sql);
                 $stmt->bind_param('i', $_SESSION['user_id']);
                 $stmt->execute();
                 $result = $stmt->get_result();
                 $row = $result->fetch_assoc();
-
-            ?>
-            <input type='hidden' name='online_user_id' value='<?php echo $row['user_info_ID']?>'>
+                ?>
+            <input type='hidden' name='online_user_id' value='<?php echo $row[
+                'user_info_ID'
+            ]; ?>'>
             <input type='hidden' name='book_status' value='pending'>
             <input type='hidden' name='appointment_type' value='Online'>
               <input
@@ -269,9 +285,12 @@ if (isset($_SESSION['user_type']) and $_SESSION['user_type'] == 'staff'){
                 value="Submit"
                 class="bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold py-2 px-4 rounded w-1/2 cursor-pointer"
               />
-            <?php else:?>
+            <?php
+            else:
+                 ?>
               <a href='login.php' class='text-center bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold py-2 px-4 rounded w-1/2 cursor-pointer'>Submit</a>
-            <?php endif;?>
+            <?php
+            endif; ?>
 
           </div>
 
