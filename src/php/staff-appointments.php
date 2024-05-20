@@ -1,23 +1,20 @@
 <?php
 session_start();
-include "../Database/database_conn.php";
+include '../Database/database_conn.php';
 
-
-
-if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] == 'patient'){
-    header("Location: index.php");
-
+if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] == 'patient') {
+    header('Location: index.php');
 }
 $user_id = $_SESSION['user_id'];
-$sql = "SELECT * from tbl_staff where User_ID = ?";
+$sql = 'SELECT * from tbl_staff where User_ID = ?';
 $stmt = $conn->prepare($sql);
 $stmt->bind_param('i', $user_id);
 $stmt->execute();
 $result = $stmt->get_result();
 if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
-    if ($row['Role'] == 'admin'){
-        header("Location: admin-index.php");
+    if ($row['Role'] == 'admin') {
+        header('Location: admin-index.php');
     }
 }
 $staff_id = $row['Staff_ID'];
@@ -126,7 +123,6 @@ $staff_id = $row['Staff_ID'];
         <tbody class="text-black dark:text-white text-base sm:text-lg">
         <!-- sample row -->
         <?php
-
         $sql = "SELECT `tbl_patient`.*, `tbl_appointment`.*, `tbl_patient_chart`.*
 FROM `tbl_patient` 
 INNER JOIN `tbl_appointment` ON `tbl_appointment`.`Patient_ID` = `tbl_patient`.`Patient_ID` 
@@ -143,13 +139,19 @@ ORDER BY
         $result = $stmt->get_result();
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
-                if ($row['Status']){
-
+                if ($row['Status']) {
                 }
-                $middleInitial = (strlen($row['Middle_Name']) >= 1) ? substr($row['Middle_Name'], 0, 1) : '';
+                $middleInitial =
+                    strlen($row['Middle_Name']) >= 1
+                        ? substr($row['Middle_Name'], 0, 1)
+                        : '';
                 $appointment_schedule = $row['Appointment_schedule'];
-                $date = isset($appointment_schedule) ? date("F j, Y", strtotime($appointment_schedule)): 'N/A';
-                $time = isset($appointment_schedule) ?date("g:ia", strtotime($appointment_schedule)): 'N/A';
+                $date = isset($appointment_schedule)
+                    ? date('F j, Y', strtotime($appointment_schedule))
+                    : 'N/A';
+                $time = isset($appointment_schedule)
+                    ? date('g:ia', strtotime($appointment_schedule))
+                    : 'N/A';
                 $status = ucfirst(strtolower($row['Status']));
                 $class = '';
                 switch ($status) {
@@ -170,25 +172,45 @@ ORDER BY
                         break;
                 }
                 echo '<tr class="text-base hover:bg-gray-300 dark:hover:bg-gray-600 font-medium text-black dark:text-white">
-                <td>'.$row['First_Name'].' '.$middleInitial.'. '.$row['Last_Name'].'</td>
-                <td>'.$date.'</td>
-                <td class="pl-10">'.$time.'</td> <!-- alisin mo yung pl-10 pag nagoverlap yung ilalagay mo -->
-                <td>'.$row['Service_Field'].'</td>
-                <td class="font-bold '.$class.'">'.$status.'</td> 
+                <td>' .
+                    $row['First_Name'] .
+                    ' ' .
+                    $middleInitial .
+                    '. ' .
+                    $row['Last_Name'] .
+                    '</td>
+                <td>' .
+                    $date .
+                    '</td>
+                <td class="pl-10">' .
+                    $time .
+                    '</td> <!-- alisin mo yung pl-10 pag nagoverlap yung ilalagay mo -->
+                <td>' .
+                    $row['Service_Field'] .
+                    '</td>
+                <td class="font-bold ' .
+                    $class .
+                    '">' .
+                    $status .
+                    '</td> 
                 <!-- 
                 Completed - text-green-500
                 Cancelled - text-red-500
                 Approved - text-blue-500
                 -->
-                <td class="pl-9">
+                <td class="pl-6">
                   <!-- yung modal name viewAppointment2,3,4,5 dapat sa mga susunod, bawal parehas kase di maoopen -->
-                  <button onclick="viewAppointment.showModal();getAppointmentInfo(this.getAttribute(\'data-id\'))" data-id="'.$row['Patient_ID'].'">
+                  <button onclick="viewAppointment.showModal();getAppointmentInfo(this.getAttribute(\'data-id\'))" data-id="' .
+                    $row['Patient_ID'] .
+                    '">
                     <i class="fa-regular fa-eye"></i>
                   </button>';
                 // Include the tooltip for Approved status here
-                if($status === 'Approved') {
+                if ($status === 'Approved') {
                     echo '<div class="ml-2 tooltip tooltip-bottom" data-tip="Create patient chart">
-                                <a class="hover:cursor-pointer" onclick="toggleDialog(\'addPatient\');setAppointmentId(this.getAttribute(\'data-appointment-id\'))" data-appointment-id="'.$row['Appointment_ID'].'">
+                                <a class="hover:cursor-pointer" onclick="toggleDialog(\'addPatient\');setAppointmentId(this.getAttribute(\'data-appointment-id\'))" data-appointment-id="' .
+                        $row['Appointment_ID'] .
+                        '">
                                   <i class="fa-solid fa-user-plus"></i>
                                 </a>
                             </div>';
@@ -263,11 +285,11 @@ ORDER BY
       </div>
 
       <!-- staff action -->
-      <h1 class="text-base sm:text-xl font-bold">STATUS: <span class="font-bold text-neutral-500" id='appointment_status'>Pending</span></h1>  <!-- ayusin mo rin colors dito ah -->
+      <h1 class="text-base sm:text-xl font-bold text-black dark:text-white">STATUS: <span class="font-bold text-neutral-500" id='appointment_status'>Pending</span></h1>  <!-- ayusin mo rin colors dito ah -->
 
-      <h2 class="text-base sm:text-xl font-bold mt-5">Edit Status of this Appointment</h2>
+      <h2 class="text-base sm:text-xl font-bold mt-5 text-black dark:text-white">Edit Status of this Appointment</h2>
       <form id='update_appointment' action="#" method="GET">
-        <input type='hidden' value='<?php echo $staff_id?>' name='appointDoctor'>
+        <input type='hidden' value='<?php echo $staff_id; ?>' name='appointDoctor'>
         <ul class="items-center w-full text-lg font-medium text-gray-900 bg-white border border-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white rounded-lg sm:flex mb-2">
           <li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
             <div class="flex items-center ps-3">
@@ -288,44 +310,47 @@ ORDER BY
             </div>
           </li>
         </ul>
-        <div>
-          <label class="block">
-            Service Type:
-            <select
-              id="service-type"
-              class="select select-bordered w-full bg-white dark:bg-gray-600  text-black dark:text-white text-base sm:text-lg lg:text-xl focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
-              name="service-type"
-            >
-              <option value="" disabled selected>Select service type...</option>
-              <option value="OB-Gyne">OB-Gyne</option>
-              <option value="Pregnancy Testing">Pregnancy Testing</option>
-              <option value="Dengue Test">Dengue Test</option>
-              <option value="Covid-19 Rapid Testing">Covid-19 Rapid Testing</option>
-              <option value="Family Medicine">Family Medicine</option>
-              <option value="Internal Medicine">Internal Medicine</option>
-              <option value="Medical Consultation">Medical Consultation</option>
-              <option value="Vaccination">Vaccination</option>
-              <option value="BP Monitoring">BP Monitoring</option>
-              <option value="Blood Glucose Determination">Blood Glucose Determination</option>
-              <option value="Nebulization">Nebulization</option>
-              <option value="Complete Blood Count (CBC)">Complete Blood Count (CBC)</option>
-              <option value="Fecalysis">Fecalysis</option>
-              <option value="Electrocardiogram (ECG)">Electrocardiogram (ECG)</option>
-              <option value="X-RAY">X-RAY</option>
-              <option value="Pre-Employment Package">Pre-Employment Package</option>
-              <option value="Annual Physical Examination">Annual Physical Examination</option>
-              <option value="FBS">FBS</option>
-              <option value="Lipid Profile">Lipid Profile</option>
-              <option value="AST/ALT">AST/ALT</option>
-              <option value="Uric Acid">Uric Acid</option>
-              <option value="Blood Typing">Blood Typing</option>
-              <option value="Electrolytes">Electrolytes</option>
-              <option value="Syphilis Screening">Syphilis Screening</option>
-              <option value="Pregnant Screening">Pregnant Screening</option>
-              <option value="FT4/TSH">FT4/TSH</option>
-            </select>
-          </label>
+        <div id="services-container">
+          <div class="service-dropdown">
+            <label class="block mb-2 text-black dark:text-white">
+              Service Type:
+              <select
+                class="select select-bordered w-full bg-white dark:bg-gray-600 text-black dark:text-white text-base sm:text-lg lg:text-xl focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
+                name="service-type"
+              >
+                <option value="" disabled selected>Select service type...</option>
+                <option value="OB-Gyne">OB-Gyne</option>
+                <option value="Pregnancy Testing">Pregnancy Testing</option>
+                <option value="Dengue Test">Dengue Test</option>
+                <option value="Covid-19 Rapid Testing">Covid-19 Rapid Testing</option>
+                <option value="Family Medicine">Family Medicine</option>
+                <option value="Internal Medicine">Internal Medicine</option>
+                <option value="Medical Consultation">Medical Consultation</option>
+                <option value="Vaccination">Vaccination</option>
+                <option value="BP Monitoring">BP Monitoring</option>
+                <option value="Blood Glucose Determination">Blood Glucose Determination</option>
+                <option value="Nebulization">Nebulization</option>
+                <option value="Complete Blood Count (CBC)">Complete Blood Count (CBC)</option>
+                <option value="Fecalysis">Fecalysis</option>
+                <option value="Electrocardiogram (ECG)">Electrocardiogram (ECG)</option>
+                <option value="X-RAY">X-RAY</option>
+                <option value="Pre-Employment Package">Pre-Employment Package</option>
+                <option value="Annual Physical Examination">Annual Physical Examination</option>
+                <option value="FBS">FBS</option>
+                <option value="Lipid Profile">Lipid Profile</option>
+                <option value="AST/ALT">AST/ALT</option>
+                <option value="Uric Acid">Uric Acid</option>
+                <option value="Blood Typing">Blood Typing</option>
+                <option value="Electrolytes">Electrolytes</option>
+                <option value="Syphilis Screening">Syphilis Screening</option>
+                <option value="Pregnant Screening">Pregnant Screening</option>
+                <option value="FT4/TSH">FT4/TSH</option>
+              </select>
+            </label>
+          </div>
         </div>
+        <button id="add-service" class="btn mt-1 mr-2 bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none px-7 mb-2">Add Another Service</button><small class="font-medium text-black dark:text-white">If needed</small>
+
 
         <div class="flex flex-col sm:flex-row justify-between gap-4" id="reschedule-section" style="display: none;">
           <div class="w-full">
@@ -336,7 +361,7 @@ ORDER BY
               type="date"
               id="rescheduled-date"
               name="rescheduled-date"
-              class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark]"
+              class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark] text-black dark:text-white"
             />
           </div>
           <div class="w-full">
@@ -349,14 +374,14 @@ ORDER BY
               name="rescheduled-time"
               min="08:00"
               max="17:00"
-              class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark]"
+              class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark] text-black dark:text-white"
             />
           </div>
         </div>
 
         <div class="mb-3 mt-10">
-          <p><span class="font-bold text-blue-400">NOTE: </span>Remarks is set to default, if you want custom message, you can edit the text directly in the input field provided.</p>
-          <label for="remarks" class="block text-base sm:text-lg font-medium mt-2">
+          <p class="text-black dark:text-white"><span class="font-bold text-blue-400">NOTE: </span>Remarks is set to default, if you want custom message, you can edit the text directly in the input field provided.</p>
+          <label for="remarks" class="block text-base sm:text-lg font-medium mt-2 text-black dark:text-white">
             Remarks:
           </label>
           <input
@@ -365,12 +390,12 @@ ORDER BY
             name="remarks"
             placeholder="Remarks here..."
             required
-            class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 "
+            class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 text-black dark:text-white"
           />
         </div>
         <input type='hidden' name='appointment_id' value=''>
 
-        <p><span class="font-bold text-red-500">NOTE: </span>Once you click the submit button, it cannot be undone. Please confirm all the fields before submitting.</p>
+        <p class="text-black dark:text-white"><span class="font-bold text-red-500">NOTE: </span>Once you click the submit button, it cannot be undone. Please confirm all the fields before submitting.</p>
         <input type="submit" value="Submit" class="btn mt-1 bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none px-7 mb-2">
       </form>
 
@@ -673,6 +698,27 @@ ORDER BY
       }
     }
 
+  </script>
+
+    <!-- for add another service -->
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+      const servicesContainer = document.getElementById('services-container');
+      const addServiceButton = document.getElementById('add-service');
+
+      addServiceButton.addEventListener('click', function() {
+        const firstDropdown = servicesContainer.querySelector('.service-dropdown');
+        const newDropdown = firstDropdown.cloneNode(true);
+
+        // Remove the id attribute from the new dropdown if it exists
+        newDropdown.querySelector('select').removeAttribute('id');
+
+        // Optional: Reset the select value of the new dropdown
+        newDropdown.querySelector('select').selectedIndex = 0;
+
+        servicesContainer.appendChild(newDropdown);
+      });
+    });
   </script>
   </body>
 </html>

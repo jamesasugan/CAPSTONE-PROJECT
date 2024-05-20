@@ -3,29 +3,26 @@
 include '../Database/database_conn.php';
 session_start();
 
-
-
-if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] == 'patient'){
-    header("Location: index.php");
-
+if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] == 'patient') {
+    header('Location: index.php');
 }
 $user_id = $_SESSION['user_id'];
-$sql = "SELECT * from tbl_staff where User_ID = ?";
+$sql = 'SELECT * from tbl_staff where User_ID = ?';
 $stmt = $conn->prepare($sql);
 $stmt->bind_param('i', $user_id);
 $stmt->execute();
 $result = $stmt->get_result();
 if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
-    if ($row['Role'] == 'admin'){
-        header("Location: staff-index.php");
+    if ($row['Role'] == 'admin') {
+        header('Location: staff-index.php');
     }
 }
 $staff_id = $row['Staff_ID'];
 
 $patient_id = isset($_GET['id']) ? intval($_GET['id']) : null;
 $chart_id = isset($_GET['chart_id']) ? intval($_GET['chart_id']) : null;
-if (!is_int($patient_id) or !is_int($chart_id)){
+if (!is_int($patient_id) or !is_int($chart_id)) {
     header('Location: staff-patientsRecord.php');
     exit();
 }
@@ -39,17 +36,16 @@ $stmt = $conn->prepare($sql);
 $stmt->bind_param('i', $patient_id);
 $stmt->execute();
 $result = $stmt->get_result();
-if ($result && $result->num_rows > 0){
+if ($result && $result->num_rows > 0) {
     $row = $result->fetch_assoc();
-    $middleInitial = (strlen($row['Middle_Name']) >= 1) ? substr($row['Middle_Name'], 0, 1) : '';
-
-
-}else{
+    $middleInitial =
+        strlen($row['Middle_Name']) >= 1
+            ? substr($row['Middle_Name'], 0, 1)
+            : '';
+} else {
     header('Location: staff-patientsRecord.php');
     exit();
 }
-
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -104,22 +100,44 @@ if ($result && $result->num_rows > 0){
 
               <div class="patientInfo mb-10 mt-5">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-1 text-lg sm:text-xl">
-                  <h2 class="text-lg sm:text-xl font-bold">Status: <span class="text-yellow-600 dark:text-yellow-300"><?php echo $row['patient_Status']?></span></h2>
-                  <p><strong>Appointment Type: </strong><?php echo $row['Appointment_type']?> </p>
+                  <h2 class="text-lg sm:text-xl font-bold">Status: <span class="text-yellow-600 dark:text-yellow-300"><?php echo $row[
+                      'patient_Status'
+                  ]; ?></span></h2>
+                  <p><strong>Appointment Type: </strong><?php echo $row[
+                      'Appointment_type'
+                  ]; ?> </p>
 
-                  <p><strong>Service: </strong> <?php echo $row['Service_Field']?></p>
-                  <p><strong>Service Type: </strong> <?php echo $row['Service_Type']?></p>
+                  <p><strong>Service: </strong> <?php echo $row[
+                      'Service_Field'
+                  ]; ?></p>
+                  <p><strong>Service Type: </strong> <?php echo $row[
+                      'Service_Type'
+                  ]; ?></p>
 
-                  <p><strong>Name: </strong> <?php echo  $row['First_Name'].' '.$middleInitial.'. '.$row['Last_Name']?></p>
-                  <p><strong>Contact Number: </strong> <?php echo $row['Contact_Number']?></p>
+                  <p><strong>Name: </strong> <?php echo $row['First_Name'] .
+                      ' ' .
+                      $middleInitial .
+                      '. ' .
+                      $row['Last_Name']; ?></p>
+                  <p><strong>Contact Number: </strong> <?php echo $row[
+                      'Contact_Number'
+                  ]; ?></p>
 
-                  <p><strong>Sex: </strong> <?php echo $row['Sex']?></p>
-                  <p><strong>Email: </strong><?php echo $row['patientEmail']?></p>
+                  <p><strong>Sex: </strong> <?php echo $row['Sex']; ?></p>
+                  <p><strong>Email: </strong><?php echo $row[
+                      'patientEmail'
+                  ]; ?></p>
 
-                  <p><strong>Vaccinated:</strong> <?php echo $row['Vaccination']?></p>
+                  <p><strong>Vaccinated:</strong> <?php echo $row[
+                      'Vaccination'
+                  ]; ?></p>
 
-                  <p><strong>Address:</strong> <?php echo $row['Address']?></p>
-                  <p><strong>Date of Birth: </strong><?php echo $row['DateofBirth']?></p>
+                  <p><strong>Address:</strong> <?php echo $row[
+                      'Address'
+                  ]; ?></p>
+                  <p><strong>Date of Birth: </strong><?php echo $row[
+                      'DateofBirth'
+                  ]; ?></p>
                 </div>
               </div>
               <div class="flex justify-end">
@@ -139,15 +157,18 @@ if ($result && $result->num_rows > 0){
                   <option  selected value='newRecord'>Insert new</option>
                     <?php
                     $visitNUmber = 1;
-                    $getRecord = "SELECT * FROM tbl_records where Chart_ID = ?";
+                    $getRecord = 'SELECT * FROM tbl_records where Chart_ID = ?';
                     $recordStmt = $conn->prepare($getRecord);
-                    $recordStmt->bind_param('i',$chart_id);
+                    $recordStmt->bind_param('i', $chart_id);
                     $recordStmt->execute();
                     $result = $recordStmt->get_result();
                     if ($result->num_rows > 0) {
                         while ($row = $result->fetch_assoc()) {
-                            echo '<option value="'.$row['Record_ID'].'">Visit '.$visitNUmber++.'</option>';
-
+                            echo '<option value="' .
+                                $row['Record_ID'] .
+                                '">Visit ' .
+                                $visitNUmber++ .
+                                '</option>';
                         }
                     }
                     ?>
@@ -176,14 +197,22 @@ if ($result && $result->num_rows > 0){
                 focus:ring-opacity-50 mb-4 sm:mb-0 sm:mr-4 disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400">
                                     <option  selected value='' disabled>Select consultant</option>
                                       <?php
-                                      $sql = "SELECT * FROM tbl_staff WHERE role = 'doctor'";
+                                      $sql =
+                                          "SELECT * FROM tbl_staff WHERE role = 'doctor'";
                                       $stmt = $conn->prepare($sql);
                                       $stmt->execute();
                                       $result = $stmt->get_result();
 
                                       while ($row = $result->fetch_assoc()) {
-                                          $middleInitial = substr($row['Middle_Name'], 0, 1);
-                                          $selected = ($row['Staff_ID'] == $staff_id) ? 'selected' : '';
+                                          $middleInitial = substr(
+                                              $row['Middle_Name'],
+                                              0,
+                                              1
+                                          );
+                                          $selected =
+                                              $row['Staff_ID'] == $staff_id
+                                                  ? 'selected'
+                                                  : '';
                                           echo "<option value='{$row['Staff_ID']}' $selected>{$row['First_Name']} $middleInitial. {$row['Last_Name']}</option>";
                                       }
                                       ?>
@@ -580,7 +609,7 @@ if ($result && $result->num_rows > 0){
           }
           function getRecords(id){
             $.ajax({
-              url: 'ajax.php?action=getPatientRecord&record_id='+ encodeURIComponent(id) + '&chart_id='+encodeURIComponent(<?php echo $chart_id?>),
+              url: 'ajax.php?action=getPatientRecord&record_id='+ encodeURIComponent(id) + '&chart_id='+encodeURIComponent(<?php echo $chart_id; ?>),
               method: 'GET',
               dataType: 'json',
               success: function(data) {
@@ -612,7 +641,7 @@ if ($result && $result->num_rows > 0){
             endpoint = 'createPatientRecord';
             let form_data = new FormData(e.target);
             $.ajax({
-              url: 'ajax.php?action=' + endpoint + '&chart_id='+ encodeURIComponent(<?php echo $chart_id?>),
+              url: 'ajax.php?action=' + endpoint + '&chart_id='+ encodeURIComponent(<?php echo $chart_id; ?>),
               type: 'POST',
               data: form_data,
               processData: false,
@@ -620,7 +649,9 @@ if ($result && $result->num_rows > 0){
               success: function(response) {
                 if (parseInt(response) === 1) {
                   toggleDialog('SuccessAlert');
-                  window.location.href='staff-patientFullRecord.php?id=<?php echo $_GET['id']?>&chart_id=<?php echo $_GET['chart_id']?>';
+                  window.location.href='staff-patientFullRecord.php?id=<?php echo $_GET[
+                      'id'
+                  ]; ?>&chart_id=<?php echo $_GET['chart_id']; ?>';
 
                 }else {
                   document.getElementById('error').innerHTML = response;

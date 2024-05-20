@@ -115,7 +115,7 @@
                   <li>
                     <details>
                       <summary>
-                        <i class="fa-solid fa-user text-3xl"></i>
+                        <small class="hidden sm:block">Admin</small><i class="fa-solid fa-user text-3xl"></i>
                       </summary>
                       <ul
                         class="dropdown-content p-2 bg-gray-200 dark:bg-gray-700 rounded-t-none z-10 w-36 sm:right-1 translate-x-7 custom-dropdown-menu"
@@ -186,9 +186,7 @@
                             </svg>
                           </label>
                         </li>
-                        <?php
-                        if (!isset($_SESSION['user_type'])):
-                        ?>
+                        <?php if (!isset($_SESSION['user_type'])): ?>
                         <!-- labas mo to pag di naka log in -->
                         <li>
                           <a href="login.php"
@@ -199,7 +197,7 @@
                         <!-- labas mo to pag di naka log in end -->
 
                         <!-- ito nakalabas pag naka log in -->
-                        <?php else:?>
+                        <?php else: ?>
                         <li>
                           <a href="admin-profile.php"
                             class="hover:bg-gray-300 dark:hover:bg-gray-600 hover:font-bold text-lg transition duration-300 ease-in-out"
@@ -219,7 +217,7 @@
                           >
                         </li>  
                         <!-- ito nakalabas pag naka log in end -->
-                        <?php endif;?>
+                        <?php endif; ?>
 
                       </ul>
                     </details>

@@ -2,22 +2,19 @@
 include '../Database/database_conn.php';
 session_start();
 
-
-
-if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] == 'patient'){
-    header("Location: index.php");
-
+if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] == 'patient') {
+    header('Location: index.php');
 }
 $user_id = $_SESSION['user_id'];
-$sql = "SELECT role from tbl_staff where User_ID = ?";
+$sql = 'SELECT role from tbl_staff where User_ID = ?';
 $stmt = $conn->prepare($sql);
 $stmt->bind_param('i', $user_id);
 $stmt->execute();
 $result = $stmt->get_result();
 if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
-    if ($row['role'] == 'doctor'){
-        header("Location: staff-index.php");
+    if ($row['role'] == 'doctor') {
+        header('Location: staff-index.php');
     }
 }
 ?>
@@ -122,22 +119,33 @@ if ($result->num_rows > 0) {
           </thead>
           <tbody id='' class="text-black dark:text-white text-base sm:text-lg">
           <?php
-
           $sql = "SELECT * FROM tbl_staff where role = 'doctor' ";
           $stmt = $conn->prepare($sql);
           $stmt->execute();
           $result = $stmt->get_result();
-          while ($row = $result->fetch_assoc()){
-              $middleInitial = (strlen($row['Middle_Name']) >= 1) ? substr($row['Middle_Name'], 0, 1) : '';
-
+          while ($row = $result->fetch_assoc()) {
+              $middleInitial =
+                  strlen($row['Middle_Name']) >= 1
+                      ? substr($row['Middle_Name'], 0, 1)
+                      : '';
 
               echo '<tr
               class="text-base hover:bg-gray-300 dark:hover:bg-gray-600 font-medium text-black dark:text-white"
             >
-              <td>'.$row['First_Name'].' '.$middleInitial.'. '.$row['Last_Name'].'</td>
-              <td>'.$row['speciality'].'</td>
+              <td>' .
+                  $row['First_Name'] .
+                  ' ' .
+                  $middleInitial .
+                  '. ' .
+                  $row['Last_Name'] .
+                  '</td>
+              <td>' .
+                  $row['speciality'] .
+                  '</td>
               <td class="pl-9">
-                <button onclick="view_doctor.showModal();getStaffInfo('.$row['Staff_ID'].')"><i class="fa-regular fa-eye"></i></button>
+                <button onclick="view_doctor.showModal();getStaffInfo(' .
+                  $row['Staff_ID'] .
+                  ')"><i class="fa-regular fa-eye"></i></button>
               </td>
             </tr>';
           }
@@ -174,18 +182,38 @@ if ($result->num_rows > 0) {
           $patient_stmt = $conn->prepare($patientQuery);
           $patient_stmt->execute();
           $patient_res = $patient_stmt->get_result();
-          while ($row = $patient_res->fetch_assoc()){
-            $middleInitial = (strlen($row['Middle_Name']) >= 1) ? substr($row['Middle_Name'], 0, 1) : '';
-            $age = date_diff(date_create($row['DateofBirth']), date_create('today'))->y;
+          while ($row = $patient_res->fetch_assoc()) {
+              $middleInitial =
+                  strlen($row['Middle_Name']) >= 1
+                      ? substr($row['Middle_Name'], 0, 1)
+                      : '';
+              $age = date_diff(
+                  date_create($row['DateofBirth']),
+                  date_create('today')
+              )->y;
               echo '<tr
               class="text-base hover:bg-gray-300 dark:hover:bg-gray-600 font-medium text-black dark:text-white"
             >
-              <td>'.$row['First_Name'].' '.$middleInitial.'. '.$row['Last_Name'].'</td>
-              <td>'.$age.'</td>
-              <td>'.$row['Sex'].'</td>
-              <td>'.$row['account_created'].'</td>
+              <td>' .
+                  $row['First_Name'] .
+                  ' ' .
+                  $middleInitial .
+                  '. ' .
+                  $row['Last_Name'] .
+                  '</td>
+              <td>' .
+                  $age .
+                  '</td>
+              <td>' .
+                  $row['Sex'] .
+                  '</td>
+              <td>' .
+                  $row['account_created'] .
+                  '</td>
               <td class="pl-9">
-                <button onclick="view_patient.showModal();getPatientInfo('.$row['user_info_ID'].')"><i class="fa-regular fa-eye"></i></button>
+                <button onclick="view_patient.showModal();getPatientInfo(' .
+                  $row['user_info_ID'] .
+                  ')"><i class="fa-regular fa-eye"></i></button>
               </td>
             </tr>';
           }
@@ -213,7 +241,7 @@ if ($result->num_rows > 0) {
         </div>
       </div>
 
-      <div class="patientInfo mb-10 mt-5">
+      <div class="patientInfo mb-10 mt-5 text-black dark:text-white">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-1 text-lg sm:text-xl">
           <p><strong>Name: </strong> <span id='Staff_name'>Walter White</span></p>
 
@@ -250,7 +278,7 @@ if ($result->num_rows > 0) {
         </div>
       </div>
 
-      <div class="patientInfo mb-10 mt-5">
+      <div class="patientInfo mb-10 mt-5 text-black dark:text-white">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-1 text-lg sm:text-xl">
           <p><strong>Name:</strong> <span id='patient_name'> Johny Edward Dionisio </span></p>
           <p><strong>Account Created: </strong> <span id='patient_Account_created'> May 21, 2024</span></p>

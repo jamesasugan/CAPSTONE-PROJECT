@@ -196,7 +196,7 @@ ORDER BY
                 Cancelled - text-red-500
                 Approved - text-blue-500
                 -->
-                <td class="pl-9">
+                <td class="pl-6">
                   <!-- yung modal name viewAppointment2,3,4,5 dapat sa mga susunod, bawal parehas kase di maoopen -->
                   <button onclick="viewAppointment.showModal();getAppointmentInfo(this.getAttribute(\'data-id\'))" data-id="' .
                         $row['Patient_ID'] .
@@ -283,9 +283,9 @@ ORDER BY
       </div>
 
       <!-- staff action -->
-      <h1 class="text-base sm:text-xl font-bold">STATUS: <span class="font-bold text-neutral-500" id='appointment_status'>Pending</span></h1>  <!-- ayusin mo rin colors dito ah -->
+      <h1 class="text-base sm:text-xl font-bold text-black dark:text-white">STATUS: <span class="font-bold text-neutral-500" id='appointment_status'>Pending</span></h1>  <!-- ayusin mo rin colors dito ah -->
 
-      <h2 class="text-base sm:text-xl font-bold mt-5">Edit Status of this Appointment</h2>
+      <h2 class="text-base sm:text-xl font-bold mt-5 text-black dark:text-white">Edit Status of this Appointment</h2>
       <form id='update_appointment' action="#" method="GET">
         <ul class="items-center w-full text-lg font-medium text-gray-900 bg-white border border-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white rounded-lg sm:flex mb-2">
           <li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
@@ -310,18 +310,18 @@ ORDER BY
 
         <div class="flex flex-col sm:flex-row justify-between gap-4" id="reschedule-section" style="display: none;">
           <div class="w-full">
-            <label for="rescheduled-date" class="block text-base sm:text-lg font-medium">
+            <label for="rescheduled-date" class="block text-base sm:text-lg font-medium text-black dark:text-white">
               Rescheduled Date
             </label>
             <input
               type="date"
               id="rescheduled-date"
               name="rescheduled-date"
-              class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark]"
+              class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark] text-black dark:text-white"
             />
           </div>
           <div class="w-full">
-            <label for="rescheduled-time" class="block text-base sm:text-lg font-medium">
+            <label for="rescheduled-time" class="block text-base sm:text-lg font-medium text-black dark:text-white">
               Rescheduled Time
             </label>
             <input
@@ -330,7 +330,7 @@ ORDER BY
               name="rescheduled-time"
               min="08:00"
               max="17:00"
-              class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark]"
+              class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark] text-black dark:text-white"
             />
           </div>
         </div>
@@ -370,48 +370,50 @@ ORDER BY
               ?>
           </select>
         </div>
-        <div>
-          <label class="block">
-            Service Type:
-            <select
-              id="service-type"
-              class="select select-bordered w-full bg-white dark:bg-gray-600  text-black dark:text-white text-base sm:text-lg lg:text-xl focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
-              name="service-type"
-            >
-              <option value="" disabled selected>Select service type...</option>
-              <option value="OB-Gyne">OB-Gyne</option>
-              <option value="Pregnancy Testing">Pregnancy Testing</option>
-              <option value="Dengue Test">Dengue Test</option>
-              <option value="Covid-19 Rapid Testing">Covid-19 Rapid Testing</option>
-              <option value="Family Medicine">Family Medicine</option>
-              <option value="Internal Medicine">Internal Medicine</option>
-              <option value="Medical Consultation">Medical Consultation</option>
-              <option value="Vaccination">Vaccination</option>
-              <option value="BP Monitoring">BP Monitoring</option>
-              <option value="Blood Glucose Determination">Blood Glucose Determination</option>
-              <option value="Nebulization">Nebulization</option>
-              <option value="Complete Blood Count (CBC)">Complete Blood Count (CBC)</option>
-              <option value="Fecalysis">Fecalysis</option>
-              <option value="Electrocardiogram (ECG)">Electrocardiogram (ECG)</option>
-              <option value="X-RAY">X-RAY</option>
-              <option value="Pre-Employment Package">Pre-Employment Package</option>
-              <option value="Annual Physical Examination">Annual Physical Examination</option>
-              <option value="FBS">FBS</option>
-              <option value="Lipid Profile">Lipid Profile</option>
-              <option value="AST/ALT">AST/ALT</option>
-              <option value="Uric Acid">Uric Acid</option>
-              <option value="Blood Typing">Blood Typing</option>
-              <option value="Electrolytes">Electrolytes</option>
-              <option value="Syphilis Screening">Syphilis Screening</option>
-              <option value="Pregnant Screening">Pregnant Screening</option>
-              <option value="FT4/TSH">FT4/TSH</option>
-            </select>
-          </label>
+        <div id="services-container">
+          <div class="service-dropdown">
+            <label class="block font-medium text-black dark:text-white text-base sm:text-lg mb-2 mt-2">
+              Service Type:
+              <select
+                class="select select-bordered w-full bg-white dark:bg-gray-600 text-black dark:text-white text-base sm:text-lg lg:text-xl focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
+                name="service-type"
+              >
+                <option value="" disabled selected>Select service type...</option>
+                <option value="OB-Gyne">OB-Gyne</option>
+                <option value="Pregnancy Testing">Pregnancy Testing</option>
+                <option value="Dengue Test">Dengue Test</option>
+                <option value="Covid-19 Rapid Testing">Covid-19 Rapid Testing</option>
+                <option value="Family Medicine">Family Medicine</option>
+                <option value="Internal Medicine">Internal Medicine</option>
+                <option value="Medical Consultation">Medical Consultation</option>
+                <option value="Vaccination">Vaccination</option>
+                <option value="BP Monitoring">BP Monitoring</option>
+                <option value="Blood Glucose Determination">Blood Glucose Determination</option>
+                <option value="Nebulization">Nebulization</option>
+                <option value="Complete Blood Count (CBC)">Complete Blood Count (CBC)</option>
+                <option value="Fecalysis">Fecalysis</option>
+                <option value="Electrocardiogram (ECG)">Electrocardiogram (ECG)</option>
+                <option value="X-RAY">X-RAY</option>
+                <option value="Pre-Employment Package">Pre-Employment Package</option>
+                <option value="Annual Physical Examination">Annual Physical Examination</option>
+                <option value="FBS">FBS</option>
+                <option value="Lipid Profile">Lipid Profile</option>
+                <option value="AST/ALT">AST/ALT</option>
+                <option value="Uric Acid">Uric Acid</option>
+                <option value="Blood Typing">Blood Typing</option>
+                <option value="Electrolytes">Electrolytes</option>
+                <option value="Syphilis Screening">Syphilis Screening</option>
+                <option value="Pregnant Screening">Pregnant Screening</option>
+                <option value="FT4/TSH">FT4/TSH</option>
+              </select>
+            </label>
+          </div>
         </div>
+        <button id="add-service" class="btn mt-1 mr-2 bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none px-7 mb-2">Add Another Service</button><small class="font-medium text-black dark:text-white">If needed</small>
 
         <div class="mb-3 mt-10">
-          <p><span class="font-bold text-blue-400">NOTE: </span>Remarks is set to default, if you want custom message, you can edit the text directly in the input field provided.</p>
-          <label for="remarks" class="block text-base sm:text-lg font-medium mt-2">
+          <p class="text-black dark:text-white"><span class="font-bold text-blue-400">NOTE: </span>Remarks is set to default, if you want custom message, you can edit the text directly in the input field provided.</p>
+          <label for="remarks" class="block text-base sm:text-lg font-medium mt-2 text-black dark:text-white">
             Remarks:
           </label>
           <input
@@ -420,12 +422,12 @@ ORDER BY
             name="remarks"
             placeholder="Remarks here..."
             required
-            class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 "
+            class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 text-black dark:text-white"
           />
         </div>
         <input type='hidden' name='appointment_id' value=''>
 
-        <p><span class="font-bold text-red-500">NOTE: </span>Once you click the submit button, it cannot be undone. Please confirm all the fields before submitting.</p>
+        <p class="text-black dark:text-white"><span class="font-bold text-red-500">NOTE: </span>Once you click the submit button, it cannot be undone. Please confirm all the fields before submitting.</p>
         <input type="submit" value="Submit" class="btn mt-1 bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none px-7 mb-2">
       </form>
 
@@ -726,5 +728,28 @@ ORDER BY
 
 
   </script>
+
+
+ <!-- for add another service -->
+  <script>
+      document.addEventListener('DOMContentLoaded', function() {
+      const servicesContainer = document.getElementById('services-container');
+      const addServiceButton = document.getElementById('add-service');
+
+      addServiceButton.addEventListener('click', function() {
+        const firstDropdown = servicesContainer.querySelector('.service-dropdown');
+        const newDropdown = firstDropdown.cloneNode(true);
+
+        // Remove the id attribute from the new dropdown if it exists
+        newDropdown.querySelector('select').removeAttribute('id');
+
+        // Optional: Reset the select value of the new dropdown
+        newDropdown.querySelector('select').selectedIndex = 0;
+
+        servicesContainer.appendChild(newDropdown);
+      });
+    });
+  </script>
+
   </body>
 </html>

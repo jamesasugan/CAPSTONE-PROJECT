@@ -1,11 +1,9 @@
 <?php
 session_start();
-include "../Database/database_conn.php";
-if (!isset($_SESSION['user_type']) or $_SESSION['user_type'] !== 'patient'){
-  header("Location: index.php");
-
+include '../Database/database_conn.php';
+if (!isset($_SESSION['user_type']) or $_SESSION['user_type'] !== 'patient') {
+    header('Location: index.php');
 }
-
 ?>
 
 
@@ -68,6 +66,9 @@ if (!isset($_SESSION['user_type']) or $_SESSION['user_type'] !== 'patient'){
                     </li>
                     <li id="appointmentHistoryTab" class="sidebar-item cursor-pointer text-black dark:text-white py-2 px-4 transition-colors duration-200">
                         Appointment History
+                    </li>
+                    <li id="recordHistoryTab" class="sidebar-item cursor-pointer text-black dark:text-white py-2 px-4 transition-colors duration-200">
+                        Record History
                     </li>
                 </ul>
           </div>
@@ -375,43 +376,108 @@ ORDER BY CASE WHEN `tbl_appointment`.`Status` = 'pending' THEN 0 ELSE 1 END, `tb
                       $stmt->bind_param('i', $user_id);
                       $stmt->execute();
                       $result = $stmt->get_result();
-                      if ($result->num_rows > 0){
-                          while ($row = $result->fetch_assoc()){
-                              $middleInitial = (strlen($row['Middle_Name']) >= 1) ? substr($row['Middle_Name'], 0, 1) : '';
+                      if ($result->num_rows > 0) {
+                          while ($row = $result->fetch_assoc()) {
+                              $middleInitial =
+                                  strlen($row['Middle_Name']) >= 1
+                                      ? substr($row['Middle_Name'], 0, 1)
+                                      : '';
                               $status_color = '';
 
-                              if ($row['Status'] == 'pending'){
-                                $status_color = 'text-yellow-600';
-                              }elseif ($row['Status'] == 'completed'){
+                              if ($row['Status'] == 'pending') {
+                                  $status_color = 'text-yellow-600';
+                              } elseif ($row['Status'] == 'completed') {
                                   $status_color = 'text-green-500';
-                              }
-                              elseif ($row['Status'] == 'approved'){
+                              } elseif ($row['Status'] == 'approved') {
                                   $status_color = 'text-blue-500';
-                              }elseif ($row['Status'] == 'cancelled'){
+                              } elseif ($row['Status'] == 'cancelled') {
                                   $status_color = 'text-red-500';
                               }
-                              $appointment_schedule = $row['Appointment_schedule'];
-                              $date = isset($appointment_schedule) ? date("F j, Y", strtotime($appointment_schedule)): 'N/A';
-                              $time = isset($appointment_schedule) ?date("g:ia", strtotime($appointment_schedule)): 'N/A';
+                              $appointment_schedule =
+                                  $row['Appointment_schedule'];
+                              $date = isset($appointment_schedule)
+                                  ? date(
+                                      'F j, Y',
+                                      strtotime($appointment_schedule)
+                                  )
+                                  : 'N/A';
+                              $time = isset($appointment_schedule)
+                                  ? date(
+                                      'g:ia',
+                                      strtotime($appointment_schedule)
+                                  )
+                                  : 'N/A';
                               echo '
                       <tr class="text-base hover:bg-gray-300  dark:hover:bg-gray-600 font-medium text-black dark:text-white">               
-                        <td>'.$row['First_Name'].' '.$middleInitial.' '.$row['Middle_Name'].'</td>
-                        <td>'.$row['Service_Field'].'</td>
-                        <td>'.$date.'</td>
-                        <td>'.$time.'</td>
-                        <td class="font-bold  '.$status_color.' ">'.$row['Status'].'</td> 
-                        <td>'.$row['Remarks'].'</td>';
-                              if ($row['Status'] == 'pending'){
-                                echo '<td class="pl-9"> 
-                          <button onclick="toggleDialog(\'viewandCancel\');getAppointmentId('.$row['Appointment_ID'].')"><i class="fa-regular fa-eye"></i></button>
+                        <td>' .
+                                  $row['First_Name'] .
+                                  ' ' .
+                                  $middleInitial .
+                                  ' ' .
+                                  $row['Middle_Name'] .
+                                  '</td>
+                        <td>' .
+                                  $row['Service_Field'] .
+                                  '</td>
+                        <td>' .
+                                  $date .
+                                  '</td>
+                        <td>' .
+                                  $time .
+                                  '</td>
+                        <td class="font-bold  ' .
+                                  $status_color .
+                                  ' ">' .
+                                  $row['Status'] .
+                                  '</td> 
+                        <td>' .
+                                  $row['Remarks'] .
+                                  '</td>';
+                              if ($row['Status'] == 'pending') {
+                                  echo '<td class="pl-9"> 
+                          <button onclick="toggleDialog(\'viewandCancel\');getAppointmentId(' .
+                                      $row['Appointment_ID'] .
+                                      ')"><i class="fa-regular fa-eye"></i></button>
                         </td>';
                               }
 
-                            echo '</tr>';
+                              echo '</tr>';
                           }
-                        }
-                        ?>
+                      }
+                      ?>
 
+                    </tbody>
+                  </table>
+                </div>
+
+            </div>
+          </div>
+
+          <div id="recordHistory" class="flex-1 p-10 hidden">
+          <div class="bg-gray-200 dark:bg-gray-700 p-5 rounded-lg h-full">
+              <h3 class="text-2xl font-bold text-black dark:text-white mb-4">
+                  Record History
+              </h3>
+              <div class="overflow-x-auto">
+                <table class="table">
+                  <!-- head -->
+                  <thead>
+                    <tr class="font-bold text-black dark:text-white text-base sm:text-lg">
+                      <th>Name</th>
+                      <th>Service</th>
+                      <th>Schedule </th>
+                      <th>Status</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                    <tbody>
+                      <tr class="text-base hover:bg-gray-300  dark:hover:bg-gray-600 font-medium text-black dark:text-white">
+                        <td>Cy Ganderton</td>
+                        <td>OB-GYNE</td>
+                        <td>May 21, 2024</td>
+                        <td class="font-bold">Completed</td>
+                        <td class="pl-9"><a href="patient-fullRecord.php"><i class="fa-regular fa-eye"></i></a></td>
+                      </tr>
                     </tbody>
                   </table>
                 </div>
@@ -422,6 +488,8 @@ ORDER BY CASE WHEN `tbl_appointment`.`Status` = 'pending' THEN 0 ELSE 1 END, `tb
           </div>
         </div>
       </div>
+
+
       <dialog id="viewandCancel" class="modal bg-black bg-opacity-50">
         <dialog id='errorAlert' class='modal ' onclick='toggleDialog("errorAlert");toggleSecurityEdit(false);toggleEdit(false)' >
           <div class="flex justify-center bg-red-600" >

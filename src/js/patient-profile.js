@@ -174,7 +174,6 @@ function toggleSecurityEdit(enable) {
     passwordInput.removeEventListener('input', updateRequirements);
     confirmPasswordInput.removeEventListener('input', updateRequirements);
   }
-
 }
 
 //for sidebar links
@@ -184,6 +183,7 @@ document
     document.getElementById('personalInfo').classList.remove('hidden');
     document.getElementById('passwordSection').classList.add('hidden');
     document.getElementById('appointmentHistory').classList.add('hidden');
+    document.getElementById('recordHistory').classList.add('hidden');
     getUserInfo();
     resetSecurityEditState(); // Reset the password tab when leaving it
   });
@@ -192,6 +192,7 @@ document.getElementById('passwordTab').addEventListener('click', function () {
   document.getElementById('personalInfo').classList.add('hidden');
   document.getElementById('passwordSection').classList.remove('hidden');
   document.getElementById('appointmentHistory').classList.add('hidden');
+  document.getElementById('recordHistory').classList.add('hidden');
 
   resetPersonalInfoEditState(); // Reset the personal info tab when leaving it
 });
@@ -202,6 +203,18 @@ document
     document.getElementById('personalInfo').classList.add('hidden');
     document.getElementById('passwordSection').classList.add('hidden');
     document.getElementById('appointmentHistory').classList.remove('hidden');
+    document.getElementById('recordHistory').classList.add('hidden');
+    resetPersonalInfoEditState(); // Reset the personal info tab when leaving it
+    resetSecurityEditState(); // Also reset the password tab when leaving it
+  });
+
+document
+  .getElementById('recordHistoryTab')
+  .addEventListener('click', function () {
+    document.getElementById('personalInfo').classList.add('hidden');
+    document.getElementById('passwordSection').classList.add('hidden');
+    document.getElementById('appointmentHistory').classList.add('hidden');
+    document.getElementById('recordHistory').classList.remove('hidden');
     resetPersonalInfoEditState(); // Reset the personal info tab when leaving it
     resetSecurityEditState(); // Also reset the password tab when leaving it
   });
