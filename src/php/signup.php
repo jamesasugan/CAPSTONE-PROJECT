@@ -13,7 +13,7 @@ if (isset($_SESSION['user_type'])) {
     <title>Sign Up</title>
     <link rel="stylesheet" href="../css/output.css" />
     <link rel="stylesheet" href="../css/style.css" />
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
     <script
       src="https://kit.fontawesome.com/70df29d299.js"
       crossorigin="anonymous"
@@ -34,6 +34,7 @@ if (isset($_SESSION['user_type'])) {
       src="https://unpkg.com/ionicons@4.5.10-0/dist/ionicons/ionicons.js"
     ></script>
     <script src="../js/login.js" defer></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   </head>
   <body>
     <section class="min-h-screen flex items-stretch">
@@ -363,13 +364,12 @@ if (isset($_SESSION['user_type'])) {
 
         }
 
-
       }
 
-      document.getElementById('signUp').addEventListener('submit', function(e){
+      document.getElementById('signUp').addEventListener('submit', function(e) {
         e.preventDefault();
 
-        let form_data = new FormData(e.target)
+        let form_data = new FormData(e.target);
         $.ajax({
           url: 'ajax.php?action=signup&type=patient',
           type: 'POST',
@@ -380,20 +380,19 @@ if (isset($_SESSION['user_type'])) {
             if (parseInt(response) === 1) {
               toggle_signUp_notif(parseInt(response));
               toggleDialog('notif');
-               setTimeout(function() {
-              window.location.href = 'login.php';
-            }, 2000);
-          }
+              setTimeout(function() {
+                window.location.href = 'login.php';
+              }, 2000);
             } else {
               toggle_signUp_notif(parseInt(response));
               toggleDialog('notif');
             }
             e.target.reset();
-          },
-        })
+          }
+        });
+      });
 
 
-      })
 
       function toggleDialog(id) {
         let dialog = document.getElementById(id);

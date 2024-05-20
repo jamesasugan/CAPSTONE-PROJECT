@@ -77,7 +77,7 @@ if (!isset($_SESSION['user_type']) or $_SESSION['user_type'] !== 'patient') {
 
 
           <!-- Personal Information -->
-          <div id="personalInfo" class="flex-1 p-10 ">
+          <div id="personalInfo" class="flex-1 p-10">
             <div class="bg-gray-200 dark:bg-gray-700 p-5 rounded-lg h-full">
               <h3 class="text-2xl font-bold text-black dark:text-white mb-4">
                 Personal Information
@@ -341,7 +341,7 @@ if (!isset($_SESSION['user_type']) or $_SESSION['user_type'] !== 'patient') {
         </div>
 
         <!-- Appointment Tab -->
-        <div id="appointmentHistory" class="flex-1 p-10 hidden">
+        <div id="appointmentHistory" class="flex-1 p-10 ">
           <div class="bg-gray-200 dark:bg-gray-700 p-5 rounded-lg h-full">
               <h3 class="text-2xl font-bold text-black dark:text-white mb-4">
                   Appointment History

@@ -113,12 +113,9 @@ if ($result->num_rows > 0) {
                                 </div>   
 
                                 <div class="form-group">
-
                                   <H1 id='speciality' class='card-title'></H1>
-
                                 </div>   
                             </div>
-
                             <fieldset class="mb-4"> 
                                 <legend class="text-xl font-medium mb-2">Select the Days of Doctor's Schedule in a Week</legend>
                                 <ul class="flex flex-wrap text-base sm:text-lg font-medium text-gray-900 border border-gray-400 rounded-lg dark:border-gray-400 dark:text-white bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:light]">
@@ -247,7 +244,7 @@ if ($result->num_rows > 0) {
                                 <button id="editSchedule" type="button" class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none px-7">
                                     Add Schedule
                                 </button>
-                                <input id="updateSchedule" type="submit" value="Update" class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none hidden">
+                                <input id="updateSchedule" type="submit" value="Submit" class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none hidden">
                                 <button id="cancelSchedule" type="button" class="btn bg-white text-black hover:bg-gray-400 border-none hidden">
                                     Cancel
                                 </button>
