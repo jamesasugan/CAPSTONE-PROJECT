@@ -11,42 +11,8 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH
 include '../Database/database_conn.php';
 session_start();
 
-function calculateDates($selectedDays, $onRepeat) {
-    $dates = array();
-    if ($onRepeat == 'yes') {
-        $currentYear = date('Y');
-        $currentDayOfYear = date('z') + 1;
-        $startDate = date('Y-m-d', strtotime("$currentYear-01-01 +$currentDayOfYear days"));
-        $endDate = date('Y-m-d', strtotime("$currentYear-12-31"));
-        $currentDate = $startDate;
-        while ($currentDate <= $endDate) {
-            $dayOfWeek = date('N', strtotime($currentDate));
-            if (in_array($dayOfWeek, $selectedDays)) {
-                $dates[] = $currentDate;
-            }
-            $currentDate = date('Y-m-d', strtotime($currentDate . ' +1 day'));
-        }
-    } else {
-        $currentTimestamp = time();
-        $currentDayOfWeek = date('N', $currentTimestamp);
-        if ($currentDayOfWeek == 7) {
-            $startOfWeekTimestamp = strtotime('next Monday', $currentTimestamp);
-        } else {
-            $startOfWeekTimestamp = strtotime('this Monday', $currentTimestamp);
-        }
-        for ($i = 0; $i < 7; $i++) {
-            $currentDayTimestamp = strtotime("+$i days", $startOfWeekTimestamp);
-            $dayOfWeek = date('N', $currentDayTimestamp);
-            if (in_array($dayOfWeek, $selectedDays)) {
-                $currentDayDate = date('Y-m-d', $currentDayTimestamp);
-                $dates[] = $currentDayDate;
-            }
-        }
 
-    }
-    return $dates;
-}
-
+include "ReuseFunction.php";
 
 
 $action = $_GET['action'];
@@ -255,19 +221,20 @@ if ($action == 'getPatientInfo'){
     }
     exit();
 }
-if ($action == 'DoctorSchedule'){
-    $staff_id = isset($_POST['DoctorID']) ? $_POST['DoctorID'] : '' ;
-    $monday  = isset($_POST['monday']);
+if ($action == 'DoctorSchedule') {
+    $staff_id = isset($_POST['DoctorID']) ? $_POST['DoctorID'] : '';
+    $monday = isset($_POST['monday']);
     $tuesday = isset($_POST['tuesday']);
     $wednesday = isset($_POST['wednesday']);
     $thursday = isset($_POST['thursday']);
     $friday = isset($_POST['friday']);
     $saturday = isset($_POST['saturday']);
-    $availability_time_In = isset($_POST['availability-timeIn']) ? $_POST['availability-timeIn']: '';
-    $availability_time_end = isset($_POST['availability-timeEnd'])? $_POST['availability-timeEnd'] : '';
-    $onRepeat = isset($_POST['repeat']) ? $_POST['repeat'] : '';
+    $availability_time_In = isset($_POST['availability-timeIn']) ? $_POST['availability-timeIn'] : '';
+    $availability_time_end = isset($_POST['availability-timeEnd']) ? $_POST['availability-timeEnd'] : '';
+    $startSched = isset($_POST['repeatStart']) ? $_POST['repeatStart'] : '';
+    $endSched = isset($_POST['repeatEnd']) ? $_POST['repeatEnd'] : '';
 
-    $selectedDays = array();
+    $selectedDays = [];
     if ($monday) $selectedDays[] = 1; // Monday
     if ($tuesday) $selectedDays[] = 2; // Tuesday
     if ($wednesday) $selectedDays[] = 3; // Wednesday
@@ -275,23 +242,23 @@ if ($action == 'DoctorSchedule'){
     if ($friday) $selectedDays[] = 5; // Friday
     if ($saturday) $selectedDays[] = 6; // Saturday
 
+    if ($startSched !== '' && $endSched !== '' && isValidDate($startSched) && isValidDate($endSched)) {
+        $dates = calculateDates($selectedDays, $startSched, $endSched);
+        foreach ($dates as $date) {
+            $sql = "INSERT INTO tbl_availability (Staff_ID, Date, StartTime, EndTime) VALUES (?, ?, ?, ?)";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("ssss", $staff_id, $date, $availability_time_In, $availability_time_end);
+            $stmt->execute();
+        }
 
-
-    $del = "DELETE FROM tbl_availability where Staff_ID = ?";
-    $del_stmt = $conn->prepare($del);
-    $del_stmt->bind_param('i', $staff_id);
-    $del_stmt->execute();
-    $dates = calculateDates($selectedDays, $onRepeat);
-
-    foreach ($dates as $date) {
-
-        $sql = "INSERT INTO tbl_availability (Staff_ID, Date, StartTime, EndTime) VALUES (?, ?, ?, ?)";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("ssss", $staff_id, $date, $availability_time_In, $availability_time_end);
-        $stmt->execute();
+        echo 1;
+        exit();
+    } else{
+        echo 'Some error occurred';
     }
-    echo 1;
+
 }
+
 
 if ($action == 'deleteSched'){
     $passWord_conf = $_POST['conf_passoword'];

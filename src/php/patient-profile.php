@@ -76,7 +76,7 @@ if (!isset($_SESSION['user_type']) or $_SESSION['user_type'] !== 'patient'){
 
 
           <!-- Personal Information -->
-          <div id="personalInfo" class="flex-1 p-10 ">
+          <div id="personalInfo" class="flex-1 p-10">
             <div class="bg-gray-200 dark:bg-gray-700 p-5 rounded-lg h-full">
               <h3 class="text-2xl font-bold text-black dark:text-white mb-4">
                 Personal Information
@@ -340,7 +340,7 @@ if (!isset($_SESSION['user_type']) or $_SESSION['user_type'] !== 'patient'){
         </div>
 
         <!-- Appointment Tab -->
-        <div id="appointmentHistory" class="flex-1 p-10 hidden">
+        <div id="appointmentHistory" class="flex-1 p-10 ">
           <div class="bg-gray-200 dark:bg-gray-700 p-5 rounded-lg h-full">
               <h3 class="text-2xl font-bold text-black dark:text-white mb-4">
                   Appointment History
@@ -399,7 +399,7 @@ ORDER BY CASE WHEN `tbl_appointment`.`Status` = 'pending' THEN 0 ELSE 1 END, `tb
                         <td>'.$row['Service_Field'].'</td>
                         <td>'.$date.'</td>
                         <td>'.$time.'</td>
-                        <td class="font-bold  '.$status_color.' ">'.$row['Status'].'</td> 
+                        <td class="font-bold  '.$status_color.' ">'.ucfirst(strtolower($row['Status'])).'</td> 
                         <td>'.$row['Remarks'].'</td>';
                               if ($row['Status'] == 'pending'){
                                 echo '<td class="pl-9"> 
