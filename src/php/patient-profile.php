@@ -74,9 +74,6 @@ if (!isset($_SESSION['user_type']) or $_SESSION['user_type'] !== 'patient') {
           </div>
 
 
-
-
-          <!-- Personal Information -->
           <div id="personalInfo" class="flex-1 p-10">
             <div class="bg-gray-200 dark:bg-gray-700 p-5 rounded-lg h-full">
               <h3 class="text-2xl font-bold text-black dark:text-white mb-4">
@@ -361,8 +358,7 @@ if (!isset($_SESSION['user_type']) or $_SESSION['user_type'] !== 'patient') {
                     </tr>
                   </thead>
                   <tbody>
-
-                      <?php
+                  <?php
                       $user_id = $_SESSION['user_id'];
                       $sql = "
                       SELECT `tbl_patient`.*, `tbl_appointment`.*
@@ -408,44 +404,23 @@ ORDER BY CASE WHEN `tbl_appointment`.`Status` = 'pending' THEN 0 ELSE 1 END, `tb
                                   )
                                   : 'N/A';
                               echo '
-                      <tr class="text-base hover:bg-gray-300  dark:hover:bg-gray-600 font-medium text-black dark:text-white">               
-                        <td>' .
-                                  $row['First_Name'] .
-                                  ' ' .
-                                  $middleInitial .
-                                  ' ' .
-                                  $row['Middle_Name'] .
-                                  '</td>
-                        <td>' .
-                                  $row['Service_Field'] .
-                                  '</td>
-                        <td>' .
-                                  $date .
-                                  '</td>
-                        <td>' .
-                                  $time .
-                                  '</td>
-                        <td class="font-bold  ' .
-                                  $status_color .
-                                  ' ">' .
-                                  $row['Status'] .
-                                  '</td> 
-                        <td>' .
-                                  $row['Remarks'] .
-                                  '</td>';
+                         <tr class="text-base hover:bg-gray-300  dark:hover:bg-gray-600 font-medium text-black dark:text-white">               
+                        <td>' . $row['First_Name'] . ' ' . $middleInitial . ' ' .
+                                  $row['Middle_Name'] . '</td>
+                        <td>' . $row['Service_Field'] . '</td>
+                       <td>' . $date . '</td>
+                        <td>' . $time . '</td>
+                       <td class="font-bold  ' . $status_color . ' ">' . ucfirst($row['Status']) . '</td> 
+                       <td>' . $row['Remarks'] . '</td>';
                               if ($row['Status'] == 'pending') {
-                                  echo '<td class="pl-9"> 
-                          <button onclick="toggleDialog(\'viewandCancel\');getAppointmentId(' .
-                                      $row['Appointment_ID'] .
-                                      ')"><i class="fa-regular fa-eye"></i></button>
+                                echo '<td class="pl-9"> 
+                          <button onclick="toggleDialog(\'viewandCancel\');getAppointmentId(' . $row['Appointment_ID'] . ')"><i class="fa-regular fa-eye"></i></button>
                         </td>';
                               }
-
                               echo '</tr>';
                           }
                       }
                       ?>
-
                     </tbody>
                   </table>
                 </div>

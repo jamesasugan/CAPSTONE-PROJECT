@@ -333,7 +333,7 @@ if ($action == 'patientBookAppointment') {
         && !empty($sex) && !empty($contactNumber)
         && !empty($address) && !empty($user_id)
         && !empty($patient_email) && !empty($appointment_date)
-        && !empty($appointment_time) && !empty($service_field)
+        && !empty($appointment_time)
         && !empty($status) && !empty($appointment_type)
         && !empty($vaccination) && !empty($agreement_approval)
     ) {
@@ -350,11 +350,11 @@ if ($action == 'patientBookAppointment') {
             $patientID = $stmtPatient->insert_id;
 
             $sqlAppointment = "INSERT INTO tbl_appointment 
-                (Patient_ID, Appointment_schedule, Service_Field,Service_Type, Status, Appointment_type, Vaccination, reason, AgreementApproval) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?,?)";
+                (Patient_ID, Appointment_schedule,  Status, Appointment_type, Vaccination, reason, AgreementApproval) 
+                VALUES (?, ?, ?, ?,  ?, ?,?)";
             $stmtAppointment = $conn->prepare($sqlAppointment);
-            $stmtAppointment->bind_param('issssssss', $patientID,
-                $appointment_schedule, $service_field,$service_type, $status,
+            $stmtAppointment->bind_param('issssss', $patientID,
+                $appointment_schedule,  $status,
                 $appointment_type, $vaccination, $reason, $agreement_approval);
 
             if ($stmtAppointment->execute()) {
@@ -533,31 +533,40 @@ if ($action == 'updateAppointment'){
         $rescheduledDateTime = $set_Date. ' '. $set_time;
         $sql = 'UPDATE tbl_appointment SET Staff_ID = ?, 
             Status = ?,
-            Service_Type = ?,
+        
             Remarks = ?,
             Appointment_schedule = ?               
             WHERE Appointment_ID = ?';
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param('issssi', $doctor_id, $appointment_status,$service_type, $remark, $rescheduledDateTime, $appointment_id);
+        $stmt->bind_param('isssi', $doctor_id, $appointment_status, $remark, $rescheduledDateTime, $appointment_id);
 
     }else if ($appointment_status == 'approved'){
         $sql = 'UPDATE tbl_appointment SET Staff_ID = ?, 
             Status = ?,
-            Service_Type = ?,
+        
             Remarks = ?
             WHERE Appointment_ID = ?';
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param('isssi', $doctor_id, $appointment_status, $service_type, $remark, $appointment_id);
-    }else{
+        $stmt->bind_param('issi', $doctor_id, $appointment_status,  $remark, $appointment_id);
+    }else if ($appointment_status == 'pending'){
+        $sql = 'UPDATE tbl_appointment SET Staff_ID = ?, 
+            Status = ?,
+        
+            Remarks = ?
+            WHERE Appointment_ID = ?';
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param('issi', $doctor_id, $appointment_status,  $remark, $appointment_id);
+    }
+    else{
         $rescheduledDateTim = '';
         $sql = 'UPDATE tbl_appointment SET  
             Status = ?,
-            Service_Type = ?,
+           
             Remarks = ?,
             Appointment_schedule = NULL
             WHERE Appointment_ID = ?';
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param('sssi',  $appointment_status, $service_type,$remark, $appointment_id);
+        $stmt->bind_param('ssi',  $appointment_status, $remark, $appointment_id);
     }
     if ($stmt->execute()){
         echo 1;
@@ -790,8 +799,8 @@ if ($action == 'cancelAppointment'){
 
 }
 if ($action == 'AddWalkInPatient') {
-    $service_field = isset($_POST['service']) ? $_POST['service'] : '';
-    $service_type = isset($_POST['service-type']) ? $_POST['service-type'] : '';
+    //$service_field = isset($_POST['service']) ? $_POST['service'] : '';
+    //$service_type = isset($_POST['service-type']) ? $_POST['service-type'] : '';
     $reason = isset($_POST['reason']) ? $_POST['reason'] : '';
     $fname = isset($_POST['first-name']) ? $_POST['first-name'] : '';
     $mname = isset($_POST['middle-name']) ? $_POST['middle-name'] : '';
@@ -816,11 +825,10 @@ if ($action == 'AddWalkInPatient') {
     if ($stmtPatient->execute()) {
         $patientID = $stmtPatient->insert_id;
         $sqlAppointment = "INSERT INTO tbl_appointment 
-                ( Staff_ID,Patient_ID, Appointment_schedule, Service_Field,Service_Type, Status, Appointment_type, Vaccination, reason, AgreementApproval) 
-                VALUES (?, ?, NOW(), ?, ?, ?, ?, ?, ?, 'checked')";
+                ( Staff_ID,Patient_ID, Appointment_schedule,  Status, Appointment_type, Vaccination, reason, AgreementApproval) 
+                VALUES (?, ?, NOW(), ?, ?, ?, ?, 'checked')";
         $stmtAppointment = $conn->prepare($sqlAppointment);
-        $stmtAppointment->bind_param('iissssss', $appoint_doctor,$patientID,
-            $service_field, $service_type, $status,
+        $stmtAppointment->bind_param('iissss', $appoint_doctor,$patientID, $status,
             $appointment_type, $vaccinated, $reason);
 
         if ($stmtAppointment->execute()) {

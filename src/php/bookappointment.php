@@ -95,41 +95,43 @@ if (isset($_SESSION['user_type']) and $_SESSION['user_type'] == 'staff') {
         <p><span>Note:</span> The selection of Doctor will depend if the selected doctor is available on the set appointment date and time</p>
 
         <form id='patient_bookAppointment' action="#" method="GET">
-        <fieldset class="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-          <legend class="text-xl font-bold mb-2 col-span-full">Service:</legend>
-          <div class="flex flex-col w-full">           
-            <ul class="w-full text-lg font-medium text-gray-900 bg-gray-300 dark:bg-gray-600 border border-gray-200 rounded-lg dark:border-gray-600 dark:text-white">
-              <li class="border-b border-gray-400 dark:border-slate-300">
-                <label class="flex items-center pl-3 w-full cursor-pointer">
-                  <input id="horizontal-list-radio-license" 
-                  type="radio" 
-                  value="Consultation" 
-                  name="service" 
-                  class="radio radio-info [color-scheme:light] dark:[color-scheme:dark]" 
-                  required>
-                  <span class="py-3 ml-2 text-lg font-medium ">Consultation</span>
-                </label>
-              </li>
-              <li>
-                <label class="flex items-center pl-3 w-full cursor-pointer">
-                  <input id="horizontal-list-radio-id" 
-                  type="radio" 
-                  value="Test/Procedure" 
-                  name="service" 
-                  class="radio radio-info [color-scheme:light] dark:[color-scheme:dark]" 
-                  required>
-                  <span class="py-3 ml-2 text-lg font-medium ">Test/Procedure</span>
-                </label>
-              </li>
-            </ul>
-          </div>
-
-          <div class="w-full">
+          <div class="w-full max-w-md">
             <label for="service-type" class="block text-lg font-medium mb-1">Reason</label>
-            <input type="text"  name="reason" placeholder="Type here" required class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600" />
-
-
+            <textarea   name="reason" placeholder="Type here" required class="textarea-bordered textarea w-full p-2 bg-gray-300 dark:bg-gray-600"></textarea>
           </div>
+        <fieldset class="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+
+          <!-- <legend class="text-xl font-bold mb-2 col-span-full">Service:</legend>
+
+           <div class="flex flex-col w-full">
+             <ul class="w-full text-lg font-medium text-gray-900 bg-gray-300 dark:bg-gray-600 border border-gray-200 rounded-lg dark:border-gray-600 dark:text-white">
+               <li class="border-b border-gray-400 dark:border-slate-300">
+                 <label class="flex items-center pl-3 w-full cursor-pointer">
+                   <input id="horizontal-list-radio-license"
+                   type="radio"
+                   value="Consultation"
+                   name="service"
+                   class="radio radio-info [color-scheme:light] dark:[color-scheme:dark]"
+                   required>
+                   <span class="py-3 ml-2 text-lg font-medium ">Consultation</span>
+                 </label>
+               </li>
+               <li>
+                 <label class="flex items-center pl-3 w-full cursor-pointer">
+                   <input id="horizontal-list-radio-id"
+                   type="radio"
+                   value="Test/Procedure"
+                   name="service"
+                   class="radio radio-info [color-scheme:light] dark:[color-scheme:dark]"
+                   required>
+                   <span class="py-3 ml-2 text-lg font-medium ">Test/Procedure</span>
+                 </label>
+               </li>
+             </ul>
+           </div>
+           -->
+
+
 
         <div class="w-full md:w-auto md:col-span-1">
           <label for="appointment-date" class="block text-base sm:text-lg font-medium">

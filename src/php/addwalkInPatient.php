@@ -59,6 +59,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] == 'patient'){
 
         <form id='walkInPatientForm' action="#" method="GET">
         <fieldset class="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!--
           <legend class="text-xl font-bold mb-2 col-span-full">Service:</legend>
           <div class="flex flex-col w-full">           
             <ul class="w-full text-lg font-medium text-gray-900 bg-gray-300 dark:bg-gray-600 border border-gray-200 rounded-lg dark:border-gray-600 dark:text-white">
@@ -124,6 +125,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] == 'patient'){
                 <option value="FT4/TSH">FT4/TSH</option>
             </select>
         </div>
+        -->
           <div class="w-full">
 
             <label
@@ -268,7 +270,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] == 'patient'){
             if (parseInt(response) === 1) {
               toggleDialog('addedNewPatientNotif');
               setTimeout(function() {
-                window.location.href = 'admin-addwalkInPatient.php';
+                window.location.href = 'addwalkInPatient.php';
               }, 2000);
             }else {
             }

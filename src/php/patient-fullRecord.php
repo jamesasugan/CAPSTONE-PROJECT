@@ -217,6 +217,10 @@ if ($result && $result->num_rows > 0) {
                     </label>
                   </div>
                   <div>
+
+                    asdasdasdasd
+                  </div>
+                  <div>
                     <label class="block">
                       Weight:
                       <input type="text"

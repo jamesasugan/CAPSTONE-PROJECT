@@ -208,7 +208,7 @@ if (isset($_SESSION['user_type'])) {
           } else if (response === '3') {
             toggleAlert(parseInt(response));
           } else {
-            alert('Unknown error occurred');
+            alert(response);
           }
           e.target.reset();
         },

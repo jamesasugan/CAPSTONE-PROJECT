@@ -104,21 +104,15 @@ if ($result && $result->num_rows > 0){
                 <div class="patientInfo mb-10 mt-5">
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-1 text-lg sm:text-xl">
                                 <h2 class="text-lg sm:text-xl font-bold">Status: <span class="text-yellow-600 dark:text-yellow-300"><?php echo $row['patient_Status']?></span></h2>
-                                <p><strong>Appointment Type: </strong><?php echo $row['Appointment_type']?> </p>
-                                
-                                <p><strong>Service: </strong> <?php echo $row['Service_Field']?></p>
-                                <p><strong>Service Type: </strong> <?php echo $row['Service_Type']?></p>
-
-                                <p><strong>Name: </strong> <?php echo  $row['First_Name'].' '.$middleInitial.'. '.$row['Last_Name']?></p>
-                                <p><strong>Contact Number: </strong> <?php echo $row['Contact_Number']?></p>
-
-                                <p><strong>Sex: </strong> <?php echo $row['Sex']?></p>
-                                <p><strong>Email: </strong><?php echo $row['patientEmail']?></p>
-
-                                <p><strong>Vaccinated:</strong> <?php echo $row['Vaccination']?></p>
-
-                                <p><strong>Address:</strong> <?php echo $row['Address']?></p>
-                                <p><strong>Date of Birth: </strong><?php echo $row['DateofBirth']?></p>
+                              <p><strong>Appointment Type: </strong><?php echo $row['Appointment_type']; ?> </p>
+                              <p><strong>Name: </strong> <?php echo $row['First_Name'] . ' ' . $middleInitial . '. ' . $row['Last_Name']; ?></p>
+                              <p><strong>Contact Number: </strong> <?php echo $row[ 'Contact_Number']; ?></p>
+                              <p><strong>Sex: </strong> <?php echo $row['Sex']; ?></p>
+                              <p><strong>Email: </strong><?php echo $row['patientEmail']; ?></p>
+                              <p><strong>Vaccinated:</strong> <?php echo $row['Vaccination']; ?></p>
+                              <p><strong>Address:</strong> <?php echo $row['Address']; ?></p>
+                              <p><strong>Date of Birth: </strong><?php echo $row['DateofBirth']; ?></p>
+                              <p><strong>Service Type: </strong>asdasd, asdasd, asdasd, asdasd,asdadas,asdasd,asdasd </p>
                             </div>
                         </div>
                                 <!-- lalabas lang to sa follow up stage.
@@ -183,6 +177,7 @@ if ($result && $result->num_rows > 0){
                               echo "<option value='{$row['Staff_ID']}' disabled>{$row['First_Name']} $middleInitial. {$row['Last_Name']}</option>";
                           }
                           ?>
+
                       </select>
                     </label>
                   </div>
@@ -200,10 +195,7 @@ if ($result && $result->num_rows > 0){
                   <div>
                     <label class="block">
                       Heart Rate:
-                      <input type="text"
-                             name="heart-rate"
-                             required
-                             disabled
+                      <input type="text" name="heart-rate" required disabled
                              placeholder="Heart Rate"
                              class="input input-bordered w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400" />
                     </label>
@@ -213,10 +205,8 @@ if ($result && $result->num_rows > 0){
                       Temperature (Celsius):
                       <input type="text"
                              name="temperature"
-
                              required
                              disabled
-
                              placeholder="Temperature in Celsius"
                              class="input input-bordered w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400" />
                     </label>
@@ -233,7 +223,6 @@ if ($result && $result->num_rows > 0){
                     </label>
                   </div>
                 </div>
-
                 <div class="grid grid-cols-1 gap-4 mb-14">
                   <label class="block">
                     Saturation:
@@ -255,15 +244,8 @@ if ($result && $result->num_rows > 0){
                   <label class="block">Treatment Plan:
                     <textarea disabled id="treatmentPlan" rows="4" name="Treatment Plan"  class="input input-bordered h-52 w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400" placeholder="Treatment Plan"></textarea>
                   </label>
-
                   <!-- lalabas to sa initial muna, tas pag nag yes, pwede din lumabas ulit sa follow up check up stage kung need ulit ng follow up -->
-
-
-
-
-
                 </div>
-
                 <div class="border border-gray-400 mb-10"></div>
 
                 <h2 class="text-2xl sm:text-3xl font-bold mb-4 text-center">Results</h2>

@@ -100,44 +100,17 @@ if ($result && $result->num_rows > 0) {
 
               <div class="patientInfo mb-10 mt-5">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-1 text-lg sm:text-xl">
-                  <h2 class="text-lg sm:text-xl font-bold">Status: <span class="text-yellow-600 dark:text-yellow-300"><?php echo $row[
-                      'patient_Status'
-                  ]; ?></span></h2>
-                  <p><strong>Appointment Type: </strong><?php echo $row[
-                      'Appointment_type'
-                  ]; ?> </p>
-
-                  <p><strong>Service: </strong> <?php echo $row[
-                      'Service_Field'
-                  ]; ?></p>
-                  <p><strong>Service Type: </strong> <?php echo $row[
-                      'Service_Type'
-                  ]; ?></p>
-
-                  <p><strong>Name: </strong> <?php echo $row['First_Name'] .
-                      ' ' .
-                      $middleInitial .
-                      '. ' .
-                      $row['Last_Name']; ?></p>
-                  <p><strong>Contact Number: </strong> <?php echo $row[
-                      'Contact_Number'
-                  ]; ?></p>
-
+                  <h2 class="text-lg sm:text-xl font-bold">Status: <span class="text-yellow-600 dark:text-yellow-300"><?php echo $row['patient_Status']; ?></span></h2>
+                  <p><strong>Appointment Type: </strong><?php echo $row['Appointment_type']; ?> </p>
+                  <p><strong>Name: </strong> <?php echo $row['First_Name'] . ' ' . $middleInitial . '. ' . $row['Last_Name']; ?></p>
+                  <p><strong>Contact Number: </strong> <?php echo $row[ 'Contact_Number']; ?></p>
                   <p><strong>Sex: </strong> <?php echo $row['Sex']; ?></p>
-                  <p><strong>Email: </strong><?php echo $row[
-                      'patientEmail'
-                  ]; ?></p>
+                  <p><strong>Email: </strong><?php echo $row['patientEmail']; ?></p>
+                  <p><strong>Vaccinated:</strong> <?php echo $row['Vaccination']; ?></p>
+                  <p><strong>Address:</strong> <?php echo $row['Address']; ?></p>
+                  <p><strong>Date of Birth: </strong><?php echo $row['DateofBirth']; ?></p>
+                  <p><strong>Service Type: </strong>asdasd, asdasd, asdasd, asdasd,asdadas,asdasd,asdasd </p>
 
-                  <p><strong>Vaccinated:</strong> <?php echo $row[
-                      'Vaccination'
-                  ]; ?></p>
-
-                  <p><strong>Address:</strong> <?php echo $row[
-                      'Address'
-                  ]; ?></p>
-                  <p><strong>Date of Birth: </strong><?php echo $row[
-                      'DateofBirth'
-                  ]; ?></p>
                 </div>
               </div>
               <div class="flex justify-end">
@@ -175,7 +148,207 @@ if ($result && $result->num_rows > 0) {
                 </select>
               </div>
 
-              <form id="patientRecordForm" action="#" method="POST" enctype='multipart/form-data'>
+              <form id="patientRecordForm" enctype='multipart/form-data'>
+                <a class='btn btn-info mt-6' onclick='toggleDialog("services")'>Select Service Type</a>
+                <dialog class='modal bg-black bg-opacity-20' id='services'>
+                  <div id='ServiceList'  class="modal-box w-11/12 max-w-5xl bg-gray-200 dark:bg-gray-700 text-[#0e1011] dark:text-[#eef0f1] overflow-auto">
+                    <div class="form-control">
+                      <label class="cursor-pointer label">
+                        <span class="label-text">OB-Gyne</span>
+                        <input type="checkbox" class="checkbox checkbox-info" name="OB-Gyne" value="OB-Gyne" />
+
+                      </label>
+                    </div>
+                    <div class="form-control">
+                      <label class="cursor-pointer label">
+                        <span class="label-text">Pregnancy Testing</span>
+                        <input type="checkbox"  class="checkbox checkbox-info" name="Pregnancy Testing" value="Pregnancy Testing" />
+
+                      </label>
+                    </div>
+                    <div class="form-control">
+                      <label class="cursor-pointer label">
+                        <span class="label-text">Dengue Test</span>
+                        <input type="checkbox"  class="checkbox checkbox-info" name="Dengue Test" value="Dengue Test" />
+
+                      </label>
+                    </div>
+                    <div class="form-control">
+                      <label class="cursor-pointer label">
+                        <span class="label-text">Covid-19 Rapid Testing</span>
+                        <input type="checkbox" class="checkbox checkbox-info" name="Covid-19 Rapid Testing" value="Covid-19 Rapid Testing" />
+
+                      </label>
+                    </div>
+                    <div class="form-control">
+                      <label class="cursor-pointer label">
+                        <span class="label-text">Family Medicine</span>
+                        <input type="checkbox" class="checkbox checkbox-info" name="Family Medicine" value="Family Medicine" />
+
+                      </label>
+                    </div>
+                    <div class="form-control">
+                      <label class="cursor-pointer label">
+                        <span class="label-text">Internal Medicine</span>
+                        <input type="checkbox" class="checkbox checkbox-info" name="Internal Medicine" value="Internal Medicine" />
+
+                      </label>
+                    </div>
+                    <div class="form-control">
+                      <label class="cursor-pointer label">
+                        <span class="label-text">Medical Consultation</span>
+                        <input type="checkbox"  class="checkbox checkbox-info" name="Medical Consultation" value="Medical Consultation" />
+
+                      </label>
+                    </div>
+                    <div class="form-control">
+                      <label class="cursor-pointer label">
+                        <span class="label-text">Vaccination</span>
+                        <input type="checkbox"  class="checkbox checkbox-info" name="Vaccination" value="Vaccination" />
+
+                      </label>
+                    </div>
+                    <div class="form-control">
+                      <label class="cursor-pointer label">
+                        <span class="label-text">BP Monitoring</span>
+                        <input type="checkbox"  class="checkbox checkbox-info" name="BP Monitoring" value="BP Monitoring" />
+
+                      </label>
+                    </div>
+                    <div class="form-control">
+                      <label class="cursor-pointer label">
+                        <span class="label-text">Blood Glucose Determination</span>
+                        <input type="checkbox"  class="checkbox checkbox-info" name="Blood Glucose Determination" value="Blood Glucose Determination" />
+
+                      </label>
+                    </div>
+                    <div class="form-control">
+                      <label class="cursor-pointer label">
+                        <span class="label-text">Nebulization</span>
+                        <input type="checkbox"  class="checkbox checkbox-info" name="Nebulization" value="Nebulization" />
+
+                      </label>
+                    </div>
+                    <div class="form-control">
+                      <label class="cursor-pointer label">
+                        <span class="label-text">Complete Blood Count (CBC)</span>
+                        <input type="checkbox" name='Complete Blood Count (CBC)' value='Complete Blood Count (CBC)' class="checkbox checkbox-info">
+
+
+                      </label>
+                    </div>
+                     <div class="form-control">
+                      <label class="cursor-pointer label">
+                        <span class="label-text">Fecalysis">Fecalysis</span>
+                        <input type="checkbox"  class="checkbox checkbox-info" name='Fecalysis">Fecalysis' value='Fecalysis">Fecalysis' />
+
+                      </label>
+                    </div>
+                     <div class="form-control">
+                      <label class="cursor-pointer label">
+                        <span class="label-text">Electrocardiogram (ECG)</span>
+                        <input type="checkbox" value='Electrocardiogram (ECG)' name='Electrocardiogram (ECG)'  class="checkbox checkbox-info" />
+
+                      </label>
+                    </div>
+                     <div class="form-control">
+                      <label class="cursor-pointer label">
+                        <span class="label-text">X-RAY</span>
+                        <input type="checkbox" name='X-RAY' value='X-RAY' class="checkbox checkbox-info" />
+
+                      </label>
+                    </div>
+                     <div class="form-control">
+                      <label class="cursor-pointer label">
+                        <span class="label-text">Vaccination</span>
+                        <input type="checkbox" name='Vaccination' value='Vaccination' class="checkbox checkbox-info" />
+
+                      </label>
+                    </div>
+                     <div class="form-control">
+                      <label class="cursor-pointer label">
+                        <span class="label-text">Pre-Employment Package</span>
+                        <input type="checkbox" value='Pre-Employment Package' name='Pre-Employment Package' class="checkbox checkbox-info" />
+
+                      </label>
+                    </div>
+                     <div class="form-control">
+                      <label class="cursor-pointer label">
+                        <span class="label-text">Annual Physical Examination</span>
+                        <input type="checkbox" name='Annual Physical Examination' value='Annual Physical Examination' class="checkbox checkbox-info" />
+                      </label>
+                    </div>
+                     <div class="form-control">
+                      <label class="cursor-pointer label">
+                        <span class="label-text">FBS</span>
+                        <input type="checkbox" name='FBS' value='FBS' class="checkbox checkbox-info" />
+
+                      </label>
+                    </div>
+                     <div class="form-control">
+                      <label class="cursor-pointer label">
+                        <span class="label-text">Lipid Profile</span>
+                        <input type="checkbox" value='Lipid Profile' name='Lipid Profile' class="checkbox checkbox-info" />
+
+                      </label>
+                    </div>
+                     <div class="form-control">
+                      <label class="cursor-pointer label">
+                        <span class="label-text">AST/ALT</span>
+                        <input type="checkbox" value='AST/ALT' name='AST/ALT' class="checkbox checkbox-info" />
+                      </label>
+                    </div>
+                     <div class="form-control">
+                      <label class="cursor-pointer label">
+                        <span class="label-text">Pregnant Screening</span>
+                        <input type="checkbox" value='Pregnant Screening' name='Pregnant Screening' class="checkbox checkbox-info" />
+
+                      </label>
+                    </div>
+                    <div class="form-control">
+                      <label class="cursor-pointer label">
+                        <span class="label-text">Blood Typing</span>
+                        <input type="checkbox" value='Blood Typing' name='Blood Typing' class="checkbox checkbox-info" />
+
+                      </label>
+                    </div>
+                    <div class="form-control">
+                      <label class="cursor-pointer label">
+                        <span class="label-text">Uric Acid</span>
+                        <input type="checkbox" name='Uric Acid' value='Uric Acid' class="checkbox checkbox-info" />
+
+                      </label>
+                    </div>
+                    <div class="form-control">
+                      <label class="cursor-pointer label">
+                        <span class="label-text">Electrolytes</span>
+                        <input type="checkbox" name='Electrolytes' value='Electrolytes' class="checkbox checkbox-info" />
+
+                      </label>
+                    </div>
+                    <div class="form-control">
+                      <label class="cursor-pointer label">
+                        <span class="label-text">Syphilis Screening</span>
+                        <input type="checkbox" name='Syphilis Screening' value='Syphilis Screening' class="checkbox checkbox-info" />
+
+                      </label>
+                    </div>
+                    <div class="form-control">
+                      <label class="cursor-pointer label">
+                        <span class="label-text">FT4/TSH</span>
+                        <input type="checkbox"  name='FT4/TSH' value='FT4/TSH' class="checkbox checkbox-info" />
+                      </label>
+                    </div>
+
+                    <div class="modal-action">
+
+                      <!-- if there is a button, it will close the modal -->
+                      <a class="btn bg-gray-400 dark:bg-white hover:bg-gray-500 dark:hover:bg-gray-400  text-black  border-none" onclick='toggleDialog("services")'>Close</a>
+
+                    </div>
+                  </div>
+                </dialog>
+                <input id='serviceSelected' required type='hidden' name='serviceSelected' value=''>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 mt-5">
                             <div>
                                 <label class="block">
@@ -635,13 +808,19 @@ if ($result && $result->num_rows > 0) {
               }
             });
           }
-          document.getElementById('patientRecordForm').addEventListener('submit', function(e){
+          document.getElementById('patientRecordForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            let endpoint;
-            endpoint = 'createPatientRecord';
+            let endpoint = 'createPatientRecord';
             let form_data = new FormData(e.target);
+
+            if (form_data.get('serviceSelected') === '') {
+              document.getElementById('error').innerHTML = 'Please select a service type';
+              toggleDialog('errorAlert');
+              return;
+            }
+
             $.ajax({
-              url: 'ajax.php?action=' + endpoint + '&chart_id='+ encodeURIComponent(<?php echo $chart_id; ?>),
+              url: 'ajax.php?action=' + endpoint + '&chart_id=' + encodeURIComponent(<?php echo $chart_id; ?>),
               type: 'POST',
               data: form_data,
               processData: false,
@@ -649,17 +828,31 @@ if ($result && $result->num_rows > 0) {
               success: function(response) {
                 if (parseInt(response) === 1) {
                   toggleDialog('SuccessAlert');
-                  window.location.href='staff-patientFullRecord.php?id=<?php echo $_GET[
-                      'id'
-                  ]; ?>&chart_id=<?php echo $_GET['chart_id']; ?>';
-
-                }else {
+                  window.location.href = 'staff-patientFullRecord.php?id=<?php echo $_GET['id']; ?>&chart_id=<?php echo $_GET['chart_id']; ?>';
+                } else {
                   document.getElementById('error').innerHTML = response;
                   toggleDialog('errorAlert');
                 }
               }
             });
           });
+
+          document.addEventListener('DOMContentLoaded', () => {
+            const checkboxes = document.querySelectorAll('#services input[type="checkbox"]');
+            const hiddenInput = document.getElementById('serviceSelected');
+
+            checkboxes.forEach(checkbox => {
+              checkbox.addEventListener('change', () => {
+                const selectedServices = Array.from(checkboxes)
+                  .filter(checkbox => checkbox.checked)
+                  .map(checkbox => checkbox.value)
+                  .join(',');
+
+                hiddenInput.value = selectedServices;
+              });
+            });
+          });
+
         </script>
 </body>
 </html>

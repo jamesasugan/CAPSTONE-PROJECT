@@ -111,7 +111,6 @@ if ($result->num_rows > 0) {
               <th class='cursor-pointer'  onclick="sortTable(1)">Age</th>
               <th class='cursor-pointer'  onclick="sortTable(2)">Sex</th>
               <th class='cursor-pointer'  onclick="sortTable(3)">Appointment Type</th>
-              <th class='cursor-pointer'  onclick="sortTable(4)">Service</th>
               <th class='cursor-pointer'  onclick="sortTable(5)">Schedule</th>
               <th class='cursor-pointer'  onclick="sortTable(6)">Status</th>
               <th>Action</th>
@@ -143,7 +142,6 @@ ORDER BY
               <td>'.$age.'</td>
               <td>'.$row['Sex'].'</td>
               <td>'.$row['Appointment_type'].'</td>
-              <td>'.$row['Service_Type'].'</td>
               <td>'.$followUpschedule.'</td>
               <td class="font-bold text-yellow-600 dark:text-yellow-300">'.$row['patient_Status'].'</td>
               <!-- Status List
