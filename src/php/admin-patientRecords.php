@@ -20,7 +20,7 @@ if ($result->num_rows > 0) {
     }
 }
 
-
+include "ReuseFunction.php";
 ?>
 
 <!doctype html>
@@ -75,10 +75,6 @@ if ($result->num_rows > 0) {
                 <div  class="w-full sm:flex sm:items-center justify-end">
                   <select onchange='if (this.value === "none") { resetSearch("TableList"); } else { handleSearch("dropDownSort", "TableList", this.value); }' id='dropDownSort' name="sort" class="select select-bordered text-black dark:text-white w-full sm:w-40 bg-gray-300 dark:bg-gray-600 text-base sm:text-lg lg:text-xl focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 mb-4 sm:mb-0 sm:mr-4">
                     <option selected value='none'>Filter</option>
-                    <optgroup label="Appointment Type">
-                      <option>Walk In</option>
-                      <option>Online</option>
-                    </optgroup>
                     <optgroup label="Status">
                       <option>To be Seen</option>
                       <option>Follow Up</option>
@@ -107,12 +103,10 @@ if ($result->num_rows > 0) {
         <table class="table w-full" id='TableList'>
           <thead>
             <tr class="font-bold text-black dark:text-white text-base sm:text-lg">
-              <th class='cursor-pointer'  onclick="sortTable(0)">Name</th>
-              <th class='cursor-pointer'  onclick="sortTable(1)">Age</th>
-              <th class='cursor-pointer'  onclick="sortTable(2)">Sex</th>
-              <th class='cursor-pointer'  onclick="sortTable(3)">Appointment Type</th>
-              <th class='cursor-pointer'  onclick="sortTable(5)">Schedule</th>
-              <th class='cursor-pointer'  onclick="sortTable(6)">Status</th>
+              <th class='cursor-pointer'  >Name</th>
+              <th class='cursor-pointer' >Last visit</th>
+              <th class='cursor-pointer'  >Schedule</th>
+              <th class='cursor-pointer'  >Status</th>
               <th>Action</th>
               <th>Archive</th>
             </tr>
@@ -120,13 +114,19 @@ if ($result->num_rows > 0) {
           <tbody class="text-black dark:text-white text-base sm:text-lg">
             <?php
             $sql = "SELECT `tbl_patient`.*, `tbl_appointment`.*, `tbl_patient_chart`.*
-FROM `tbl_patient` 
-INNER JOIN `tbl_appointment` ON `tbl_appointment`.`Patient_ID` = `tbl_patient`.`Patient_ID` 
-INNER JOIN `tbl_patient_chart` ON `tbl_patient_chart`.`Appointment_id` = `tbl_appointment`.`Appointment_ID`
-where tbl_patient_chart.patient_Status != 'Archived' and tbl_patient_chart.patient_Status != 'Deleted'
+FROM `tbl_patient`
+INNER JOIN `tbl_appointment` ON `tbl_appointment`.`Patient_ID` = `tbl_patient`.`Patient_ID`
+INNER JOIN `tbl_patient_chart` ON `tbl_patient_chart`.`Appointment_id` = `tbl_appointment`.`Appointment_ID` 
+WHERE tbl_patient_chart.patient_Status != 'Archived' AND tbl_patient_chart.patient_Status != 'Deleted'
 ORDER BY 
-    CASE WHEN `tbl_patient_chart`.`followUp_schedule` IS NULL THEN 1 ELSE 0 END, 
-    `tbl_patient_chart`.`followUp_schedule` ASC;
+    CASE 
+        WHEN `tbl_patient_chart`.`followUp_schedule` IS NULL THEN 1 
+        ELSE 0 
+    END,
+    `tbl_patient_chart`.`followUp_schedule` IS NULL, 
+    FIELD(`tbl_patient_chart`.`patient_Status`, 'To be Seen', 'Follow Up', 'Unarchived', 'Completed'),
+    `tbl_patient_chart`.`patient_Status` ASC;
+
 ";
             $stmt = $conn->prepare($sql);
             $stmt->execute();
@@ -136,20 +136,31 @@ ORDER BY
                 $age = date_diff(date_create($row['DateofBirth']), date_create('today'))->y;
                 $date = date("F j, Y", strtotime($row['followUp_schedule']));
                 $time = date("g:ia", strtotime($row['followUp_schedule']));
-                $followUpschedule = $date . ' ' . $time == 'January 1, 1970 1:00am' ? $row['followUp_schedule'] : $date . ' ' . $time;
+                $followUpschedule = $date . ' ' . $time == 'January 1, 1970 1:00am' ? "No schedule" : $date . ' ' . $time;
+
+                $statusClass = '';
+                switch ($row['patient_Status']) {
+                    case 'To be Seen':
+                        $statusClass = 'text-yellow-600';
+                        break;
+                    case 'Follow Up':
+                        $statusClass = 'text-info';
+                        break;
+                    case 'Completed':
+                        $statusClass = 'text-green-500';
+                        break;
+                    default:
+                        $statusClass = 'text-warning'; // Default class if none of the above match
+                        break;
+                }
+
                 echo '<tr class="text-base hover:bg-gray-300 dark:hover:bg-gray-600 font-medium text-black dark:text-white">
               <td>'.$row['First_Name'].' '.$middleInitial.'. '.$row['Last_Name'].'</td>
-              <td>'.$age.'</td>
-              <td>'.$row['Sex'].'</td>
-              <td>'.$row['Appointment_type'].'</td>
+          
+              <td>'.getLastPatientVisit($row['Chart_id']).'</td>
               <td>'.$followUpschedule.'</td>
-              <td class="font-bold text-yellow-600 dark:text-yellow-300">'.$row['patient_Status'].'</td>
-              <!-- Status List
-                   Completed = text-green-500
-                   Waiting for Results = text-yellow-600 dark:text-yellow-300
-                   No Show =  text-red-500
-            -->
-
+              <td class="font-bold '.$statusClass.'">'.$row['patient_Status'].'</td>
+          
               <!-- view information -->
               <td class="pl-9">
                 <a href="admin-patientFullRecord.php?id='.$row['Patient_ID'].'&chart_id='.$row['Chart_id'].'"><i class="fa-regular fa-eye"></i></a>

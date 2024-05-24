@@ -9,6 +9,8 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] == 'patient'){
     header("Location: index.php");
 
 }
+
+include 'ReuseFunction.php';
 $user_id = $_SESSION['user_id'];
 $sql = "SELECT * from tbl_staff where User_ID = ?";
 $stmt = $conn->prepare($sql);
@@ -21,6 +23,7 @@ if ($result->num_rows > 0) {
         header("Location: admin-index.php");
     }
 }
+
 $staff_id = $row['Staff_ID'];
 ?>
 
@@ -59,6 +62,7 @@ $staff_id = $row['Staff_ID'];
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script src="../js/main.js" defer></script>
     <script src="../js/SearchTables.js" defer></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   </head>
   <body>
 
@@ -111,27 +115,29 @@ $staff_id = $row['Staff_ID'];
         <table class="table w-full" id='TableList'>
           <thead>
           <tr class="font-bold text-black dark:text-white text-base sm:text-lg">
-            <th class='cursor-pointer'  onclick="sortTable(0)">Name</th>
-            <th class='cursor-pointer'  onclick="sortTable(1)">Age</th>
-            <th class='cursor-pointer'  onclick="sortTable(2)">Sex</th>
-            <th class='cursor-pointer'  onclick="sortTable(3)">Appointment Type</th>
-            <th class='cursor-pointer'  onclick="sortTable(4)">Service</th>
-            <th class='cursor-pointer'  onclick="sortTable(5)">Schedule</th>
-            <th class='cursor-pointer'  onclick="sortTable(6)">Status</th>
+            <th class='cursor-pointer'  >Name</th>
+            <th class='cursor-pointer' >Last visit</th>
+            <th class='cursor-pointer'  >Follow up schedule</th>
+            <th class='cursor-pointer'  >Status</th>
             <th>Action</th>
           </tr>
           </thead>
           <tbody class="text-black dark:text-white text-base sm:text-lg">
           <?php
           $sql = "SELECT `tbl_patient`.*, `tbl_appointment`.*, `tbl_patient_chart`.*
-FROM `tbl_patient` 
-INNER JOIN `tbl_appointment` ON `tbl_appointment`.`Patient_ID` = `tbl_patient`.`Patient_ID` 
-INNER JOIN `tbl_patient_chart` ON `tbl_patient_chart`.`Appointment_id` = `tbl_appointment`.`Appointment_ID`
-and `tbl_appointment`.`Staff_ID` = ?
-where tbl_patient_chart.patient_Status != 'Archived' and tbl_patient_chart.patient_Status != 'Deleted'
+FROM `tbl_patient`
+INNER JOIN `tbl_appointment` ON `tbl_appointment`.`Patient_ID` = `tbl_patient`.`Patient_ID`
+INNER JOIN `tbl_patient_chart` ON `tbl_patient_chart`.`Appointment_id` = `tbl_appointment`.`Appointment_ID` and `tbl_appointment`.`Staff_ID` = ?
+WHERE tbl_patient_chart.patient_Status != 'Archived' AND tbl_patient_chart.patient_Status != 'Deleted'
 ORDER BY 
-    CASE WHEN `tbl_patient_chart`.`followUp_schedule` IS NULL THEN 1 ELSE 0 END, 
-    `tbl_patient_chart`.`followUp_schedule` ASC;
+    CASE 
+        WHEN `tbl_patient_chart`.`followUp_schedule` IS NULL THEN 1 
+        ELSE 0 
+    END,
+    `tbl_patient_chart`.`followUp_schedule` IS NULL, 
+    FIELD(`tbl_patient_chart`.`patient_Status`, 'To be Seen', 'Follow Up', 'Unarchived', 'Completed'),
+    `tbl_patient_chart`.`patient_Status` ASC;
+
 ";
           $stmt = $conn->prepare($sql);
           $stmt->bind_param('i', $staff_id);
@@ -142,26 +148,48 @@ ORDER BY
               $age = date_diff(date_create($row['DateofBirth']), date_create('today'))->y;
               $date = date("F j, Y", strtotime($row['followUp_schedule']));
               $time = date("g:ia", strtotime($row['followUp_schedule']));
-              $followUpschedule = $date . ' ' . $time == 'January 1, 1970 1:00am' ? $row['followUp_schedule'] : $date . ' ' . $time;
+              $followUpschedule = $date . ' ' . $time == 'January 1, 1970 1:00am' ? "No schedule" : $date . ' ' . $time;
 
-
+              $statusClass = '';
+              switch ($row['patient_Status']) {
+                  case 'To be seen':
+                      $statusClass = 'text-yellow-600 dark:text-yellow-300';
+                      break;
+                  case 'Follow Up':
+                      $statusClass = 'text-info';
+                      break;
+                  case 'Completed':
+                      $statusClass = 'text-green-500';
+                      break;
+                  default:
+                      $statusClass = ''; // Default class if none of the above match
+                      break;
+              }
               echo '<tr class="text-base hover:bg-gray-300 dark:hover:bg-gray-600 font-medium text-black dark:text-white">
               <td>'.$row['First_Name'].' '.$middleInitial.'. '.$row['Last_Name'].'</td>
-              <td>'.$age.'</td>
-              <td>'.$row['Sex'].'</td>
-              <td>'.$row['Appointment_type'].'</td>
-              <td>'.$row['Service_Type'].'</td>
+         
+              <td>'.getLastPatientVisit($row['Chart_id']).'</td>
+       
               <td>'.$followUpschedule.'</td>
-              <td class="font-bold text-yellow-600 dark:text-yellow-300">'.$row['patient_Status'].'</td>
+              <td class="font-bold '.$statusClass.'">'.$row['patient_Status'].'</td>
               <!-- Status List
+                   To be seen = text-yellow-600 dark:text-yellow-300
+                   Follow Up = text-info
                    Completed = text-green-500
                    Waiting for Results = text-yellow-600 dark:text-yellow-300
                    No Show =  text-red-500
             -->
 
               <!-- view information -->
-              <td class="pl-9">
-                <a href="staff-patientFullRecord.php?id='.$row['Patient_ID'].'&chart_id='.$row['Chart_id'].'"><i class="fa-regular fa-eye"></i></a>
+              <td class="pl-9 ">
+                <a href="staff-patientFullRecord.php?id='.$row['Patient_ID'] .'&chart_id='. $row['Chart_id'].'"><i class="fa-regular fa-eye"></i></a>
+                ';
+                if ($row['patient_Status'] == 'Follow Up' and $followUpschedule != 'No schedule'){
+                  echo '<div class="tooltip tooltip-bottom ml-5" data-tip="Remove Schedule">
+                  <a  data_id="'.$row['Chart_id'].'"  onclick="removeFollowUpSched(this.getAttribute(\'data_id\'))" class="text-error cursor-pointer "> <i class="fa-solid fa-eraser"></i></a>
+                  </div>';
+                }
+              echo '
               </td>
             </tr>
             <!-- sample row end -->';
@@ -179,20 +207,9 @@ ORDER BY
     </div>
 
     <!-- modal content for archive record -->
-    <dialog id="archive_record" class="modal">
+    <dialog id="schedRemove" class="modal bg-black bg-opacity-50" onclick='toggleDialog("schedRemove")'>
       <div class="modal-box bg-gray-200 dark:bg-gray-700 text-[#0e1011] dark:text-[#eef0f1]">
-        <h3 class="font-bold text-xl">Are you sure you want to Archive this Patient Record?</h3>
-
-        <!-- <p class="text-black dark:text-white mt-2 mb-1 font-medium">
-          This record will be moved to the <a href="admin-archiveAccounts.php" class="text-blue-500 underline">Archived Patient Records</a></p> -->
-        <button class="btn btn-error mt-5">Archive this Patient Record</button>
-
-        <div class="modal-action">
-          <form method="dialog">
-            <!-- if there is a button in form, it will close the modal -->
-            <button class="btn bg-gray-400 dark:bg-white hover:bg-gray-500 dark:hover:bg-gray-400  text-black  border-none">Close</button>
-          </form>
-        </div>
+        <h3 class="font-bold text-center text-warning" id='notiftext'>Follow up schedule has been updated</h3>
       </div>
     </dialog>
 
@@ -209,4 +226,32 @@ ORDER BY
 
 
   </body>
+  <script>
+    function toggleDialog(id) {
+      let dialog = document.getElementById(id);
+      if (dialog) {
+        if (dialog.hasAttribute('open')) {
+          dialog.removeAttribute('open');
+        } else {
+          dialog.setAttribute('open', '');
+        }
+      }
+    }
+    function removeFollowUpSched(id){
+      $.ajax({
+        url: 'ajax.php?action=removeFollowupSched&chart_id=' + encodeURIComponent(id),
+        method: 'GET',
+        dataType: 'html',
+        success: function(response) {
+          if (parseInt(response) === 1) {
+            toggleDialog('schedRemove')
+            window.location.href='staff-patientsRecord.php';
+          } else {
+            document.getElementById('notiftext').innerHTML = response;
+            toggleDialog('schedRemove');
+          }
+        }
+      });
+    }
+  </script>
 </html>

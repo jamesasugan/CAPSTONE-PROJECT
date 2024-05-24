@@ -1,13 +1,13 @@
-
 <?php
-include '../Database/database_conn.php';
+
 session_start();
+include '../Database/database_conn.php';
 
 
 
+include "ReuseFunction.php";
 if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] == 'patient'){
     header("Location: index.php");
-
 }
 $user_id = $_SESSION['user_id'];
 $sql = "SELECT role from tbl_staff where User_ID = ?";
@@ -22,12 +22,8 @@ if ($result->num_rows > 0) {
     }
 }
 
-$patient_id = isset($_GET['id']) ? intval($_GET['id']) : null;
-$chart_id = isset($_GET['chart_id']) ? intval($_GET['chart_id']) : null;
-if (!is_int($patient_id) or !is_int($chart_id)){
-    header('Location: admin-patientRecords.php');
-    exit();
-}
+$patient_id = isset($_GET['id']) ?$_GET['id'] : '';
+$chart_id = isset($_GET['chart_id']) ? $_GET['chart_id'] : '';
 
 $sql = "SELECT `tbl_patient`.*, `tbl_appointment`.*, `tbl_patient_chart`.*
         FROM `tbl_patient` 
@@ -42,13 +38,10 @@ if ($result && $result->num_rows > 0){
     $row = $result->fetch_assoc();
     $middleInitial = (strlen($row['Middle_Name']) >= 1) ? substr($row['Middle_Name'], 0, 1) : '';
 
-
 }else{
-    header('Location: admin-patientRecords.php');
+    header("Location: admin-patientRecords.php");
     exit(); // Exit the script after redirecting
 }
-
-
 ?>
 
 <!DOCTYPE html>
@@ -112,7 +105,7 @@ if ($result && $result->num_rows > 0){
                               <p><strong>Vaccinated:</strong> <?php echo $row['Vaccination']; ?></p>
                               <p><strong>Address:</strong> <?php echo $row['Address']; ?></p>
                               <p><strong>Date of Birth: </strong><?php echo $row['DateofBirth']; ?></p>
-                              <p><strong>Service Type: </strong>asdasd, asdasd, asdasd, asdasd,asdadas,asdasd,asdasd </p>
+                              <p><strong>Service Type: </strong><span id='availedService'>N/A</span> </p>
                             </div>
                         </div>
                                 <!-- lalabas lang to sa follow up stage.
@@ -283,8 +276,8 @@ if ($result && $result->num_rows > 0){
       method: 'GET',
       dataType: 'json',
       success: function(data) {
-
         if (data) {
+          $('#availedService').html(data.availedService);
           document.querySelector('#patientRecordForm input[name="consultation-date"]').value = data.consultationDate;
           document.querySelector('#patientRecordForm input[name="record_id"]').value = data.Record_ID;
           document.querySelector('#patientRecordForm select[name="consultant-name"]').value = data.Consultant_Staff_ID;

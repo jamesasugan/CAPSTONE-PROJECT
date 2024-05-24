@@ -439,13 +439,79 @@ ORDER BY CASE WHEN `tbl_appointment`.`Status` = 'pending' THEN 0 ELSE 1 END, `tb
                   <thead>
                     <tr class="font-bold text-black dark:text-white text-base sm:text-lg">
                       <th>Name</th>
-                      <th>Service</th>
+                      <th>Last visit</th>
                       <th>Schedule </th>
                       <th>Status</th>
                       <th>Action</th>
                     </tr>
                   </thead>
                     <tbody>
+                    <?php /*
+                    $sql = "SELECT `tbl_patient`.*, `tbl_appointment`.*, `tbl_patient_chart`.*
+FROM `tbl_patient`
+INNER JOIN `tbl_appointment` ON `tbl_appointment`.`Patient_ID` = `tbl_patient`.`Patient_ID` 
+INNER JOIN `tbl_patient_chart` ON `tbl_patient_chart`.`Appointment_id` = `tbl_appointment`.`Appointment_ID` 
+WHERE tbl_patient_chart.patient_Status != 'Archived' AND tbl_patient_chart.patient_Status != 'Deleted' and `tbl_patient`.`user_info_ID` = ?
+ORDER BY 
+    CASE 
+        WHEN `tbl_patient_chart`.`followUp_schedule` IS NULL THEN 1 
+        ELSE 0 
+    END,
+    `tbl_patient_chart`.`followUp_schedule` IS NULL, 
+    FIELD(`tbl_patient_chart`.`patient_Status`, 'To be Seen', 'Follow Up', 'Unarchived', 'Completed'),
+    `tbl_patient_chart`.`patient_Status` ASC;
+
+";
+                    $stmt = $conn->prepare($sql);
+                    $stmt->bind_param('i', $staff_id);
+                    $stmt->execute();
+                    $result = $stmt->get_result();
+                    while ($row= $result->fetch_assoc()){
+                        $middleInitial = (strlen($row['Middle_Name']) >= 1) ? substr($row['Middle_Name'], 0, 1) : '';
+                        $age = date_diff(date_create($row['DateofBirth']), date_create('today'))->y;
+                        $date = date("F j, Y", strtotime($row['followUp_schedule']));
+                        $time = date("g:ia", strtotime($row['followUp_schedule']));
+                        $followUpschedule = $date . ' ' . $time == 'January 1, 1970 1:00am' ? "No schedule" : $date . ' ' . $time;
+
+                        $statusClass = '';
+                        switch ($row['patient_Status']) {
+                            case 'To be seen':
+                                $statusClass = 'text-yellow-600 dark:text-yellow-300';
+                                break;
+                            case 'Follow Up':
+                                $statusClass = 'text-info';
+                                break;
+                            case 'Completed':
+                                $statusClass = 'text-green-500';
+                                break;
+                            default:
+                                $statusClass = ''; // Default class if none of the above match
+                                break;
+                        }
+                        echo '<tr class="text-base hover:bg-gray-300 dark:hover:bg-gray-600 font-medium text-black dark:text-white">
+              <td>'.$row['First_Name'].' '.$middleInitial.'. '.$row['Last_Name'].'</td>
+         
+              <td>'.getLastPatientVisit($row['Chart_id']).'</td>
+       
+              <td>'.$followUpschedule.'</td>
+              <td class="font-bold '.$statusClass.'">'.$row['patient_Status'].'</td>
+              <!-- Status List
+                   To be seen = text-yellow-600 dark:text-yellow-300
+                   Follow Up = text-info
+                   Completed = text-green-500
+                   Waiting for Results = text-yellow-600 dark:text-yellow-300
+                   No Show =  text-red-500
+            -->
+
+              <!-- view information -->
+              <td class="pl-9 ">
+                <a href="patient-fullRecord.php?id='.$row['Patient_ID'] .'&chart_id='. $row['Chart_id'].'"><i class="fa-regular fa-eye"></i></a>
+                </td>
+            </tr>
+                ';
+                    }
+*/
+                    ?>
                       <tr class="text-base hover:bg-gray-300  dark:hover:bg-gray-600 font-medium text-black dark:text-white">
                         <td>Cy Ganderton</td>
                         <td>OB-GYNE</td>

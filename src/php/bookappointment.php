@@ -61,9 +61,6 @@ if (isset($_SESSION['user_type']) and $_SESSION['user_type'] == 'staff') {
 
     <?php include 'navbar-main.php'; ?>
 
-    <?php $selectedService = isset($_GET['service'])
-        ? $_GET['service']
-        : null; ?>
 
     
 
@@ -74,17 +71,20 @@ if (isset($_SESSION['user_type']) and $_SESSION['user_type'] == 'staff') {
       class="book-appointment w-full flex justify-center items-center pt-24 pb-10 p-5
       bg-[#f6fafc] dark:bg-[#17222a]"
     >
-      <div
-        class="book-form w-full max-w-7xl mx-auto p-4 rounded-lg shadow-lg bg-gray-200 dark:bg-gray-700 text-[#0e1011] dark:text-[#eef0f1]"
-      >
+      <div class="book-form w-full max-w-7xl mx-auto p-4 rounded-lg shadow-lg bg-gray-200 dark:bg-gray-700 text-[#0e1011] dark:text-[#eef0f1]" id='appointmentForm'>
+          <?php if (isset($_SESSION['user_type']) and $_SESSION['user_type']  == 'patient'):
+              ?>
 
+            <dialog open class='modal bg-black bg-opacity-20' id='chooseBook'>
+              <div class="text-center font-bold text-xl mb-10 bg bg-gray-200 dark:bg-gray-700 text-[#0e1011] dark:text-[#eef0f1] h-36 rounded w-auto p-5">
+                <p>Are you booking for yourself?</p>
+                <button class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none mr-5 mt-4" onclick='toggleDialog("chooseBook");getAccountUserInfo()'>Yes</button>
+                <button class="btn bg-gray-400 text-black dark:bg-white hover:bg-gray-500 dark:hover:bg-gray-300 border-none" onclick='toggleDialog("chooseBook")'>No</button>
+              </div>
+            </dialog>
+
+          <?php endif;?>
       <!-- labas mo lang to pag naka log in tas hide mo pagtapos magsagot -->
-      <div class="text-center font-bold text-xl mb-10">
-        <p>Are you booking for yourself?</p>
-
-        <button class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none mr-5 mt-4">Yes</button>
-        <button class="btn bg-gray-400 text-black dark:bg-white hover:bg-gray-500 dark:hover:bg-gray-300 border-none">No</button>
-      </div>
 
 
         <h2 class="text-2xl font-bold mb-2">Set an Appointment</h2>
@@ -321,6 +321,7 @@ if (isset($_SESSION['user_type']) and $_SESSION['user_type'] == 'staff') {
     </section>
   </body>
   <script>
+
     function toggleDialog(id) {
       let dialog = document.getElementById(id);
       if (dialog) {
@@ -352,6 +353,37 @@ if (isset($_SESSION['user_type']) and $_SESSION['user_type'] == 'staff') {
         }
       });
     });
+<?php if (isset($_SESSION['user_type']) and $_SESSION['user_type'] == 'patient'):?>
+    function getAccountUserInfo(){
+      $.ajax({
+        url: 'ajax.php?action=getOnlineUserInfo&onlineUser_id=' + encodeURIComponent('<?php echo $_SESSION['user_id']; ?>'),
+        method: 'GET',
+        dataType: 'json',
+        success: function(data) {
+          if (data) {
+            console.log(data);
+            document.querySelector('#patient_bookAppointment input[name="first-name"]').value = data.First_Name;
+            document.querySelector('#patient_bookAppointment input[name="middle-name"]').value = data.Middle_Name;
+            document.querySelector('#patient_bookAppointment input[name="last-name"]').value = data.Last_Name;
+            document.querySelector('#patient_bookAppointment input[name="email"]').value = data.Email;
+            document.querySelector('#patient_bookAppointment input[name="contact-number"]').value = data.Contact_Number;
+            document.querySelector('#patient_bookAppointment select[name="sex"]').value = data.Sex;
+            document.querySelector('#patient_bookAppointment input[name="dob"]').value = data.DateofBirth;
+            document.querySelector('#patient_bookAppointment input[name="address"]').value = data.Address;
+          }
+        },
+        error: function(xhr, status, error) {
+          console.error('Error fetching data:', error);
+        }
+      });
+    }
+
+    <?php endif;?>
+
+
+
+
+
     /*
     function getDoctorSchedule() {
       let schedule;

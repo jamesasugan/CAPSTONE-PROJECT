@@ -73,10 +73,6 @@ $staff_id = $row['Staff_ID'];
       <div class="w-full sm:flex sm:items-center justify-end">
         <select onchange='if (this.value === "none") { resetSearch("TableList"); } else { handleSearch("dropDownSort", "TableList", this.value); }' id='dropDownSort' name="sort" class="select select-bordered text-black dark:text-white w-full sm:w-40 bg-gray-300 dark:bg-gray-600 text-base sm:text-lg lg:text-xl focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 mb-4 sm:mb-0 sm:mr-4">
           <option selected value='none'>Filter</option>
-          <optgroup label="Service">
-            <option>Consultation</option>
-            <option>Test/Procedure</option>
-          </optgroup>
           <optgroup label="Status">
             <option>Approved</option>
             <option>Pending</option>
@@ -115,7 +111,6 @@ $staff_id = $row['Staff_ID'];
           <th class='cursor-pointer' onclick="sortTable(0)">Name</th>
           <th class='cursor-pointer' onclick="sortTable(1)">Appointment Date</th>
           <th class='cursor-pointer' onclick="sortTable(2)">Appointment Time</th>
-          <th class='cursor-pointer' onclick="sortTable(3)">Service</th>
           <th class='cursor-pointer' onclick="sortTable(4)">Status</th>
           <th  >Action</th>
         </tr>
@@ -185,9 +180,7 @@ ORDER BY
                 <td class="pl-10">' .
                     $time .
                     '</td> <!-- alisin mo yung pl-10 pag nagoverlap yung ilalagay mo -->
-                <td>' .
-                    $row['Service_Field'] .
-                    '</td>
+         
                 <td class="font-bold ' .
                     $class .
                     '">' .

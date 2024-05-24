@@ -163,8 +163,8 @@ if (isset($_SESSION['user_type'])) {
                       class="select select-bordered appearance-none block w-full px-3 border-gray-300 rounded-md shadow-sm focus:outline-none text-base sm:text-lg bg-white text-black"
                     >
                       <option value="">Select...</option>
-                      <option value="male">Male</option>
-                      <option value="female">Female</option>
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
                     </select>
                   </div>
                 </div>

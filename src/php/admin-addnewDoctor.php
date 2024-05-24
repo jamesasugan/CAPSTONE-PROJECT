@@ -19,7 +19,8 @@ if ($result->num_rows > 0) {
     if ($row['role'] == 'doctor'){
         header("Location: staff-index.php");
     }
-}?>
+}
+?>
 
 
 <!DOCTYPE html>

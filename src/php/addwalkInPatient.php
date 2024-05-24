@@ -10,6 +10,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] == 'patient'){
 }
 
 
+
 ?>
 
 <!DOCTYPE html>
@@ -44,8 +45,23 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] == 'patient'){
 
 </head>
 <body>
-
-    <?php include 'admin-navbar.php'; ?>
+<?php
+$user_id = $_SESSION['user_id'];
+$sql = "SELECT role from tbl_staff where User_ID = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param('i', $user_id);
+$stmt->execute();
+$result = $stmt->get_result();
+if ($result->num_rows > 0) {
+    $row = $result->fetch_assoc();
+    if ($row['role'] == 'doctor'){
+        include 'staff-navbar.php';
+    }else{
+        include 'admin-navbar.php';
+    }
+}
+?>
+    <?php  ?>
     
     <section
       id="addwalkInPatient"
