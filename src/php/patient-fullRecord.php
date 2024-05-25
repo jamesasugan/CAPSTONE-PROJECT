@@ -37,6 +37,21 @@ $result = $stmt->get_result(); // Fetch the result
 if ($result && $result->num_rows == 1){
     $row = $result->fetch_assoc();
     $middleInitial = (strlen($row['Middle_Name']) >= 1) ? substr($row['Middle_Name'], 0, 1) : '';
+    $statusClass = '';
+    switch ($row['patient_Status']) {
+        case 'To be Seen':
+            $statusClass = 'text-yellow-600';
+            break;
+        case 'Follow Up':
+            $statusClass = 'text-info';
+            break;
+        case 'Completed':
+            $statusClass = 'text-green-500';
+            break;
+        default:
+            $statusClass = 'text-warning';
+            break;
+    }
 
 }else{
     header("Location: patient-profile.php");
@@ -97,7 +112,7 @@ if ($result && $result->num_rows == 1){
 
         <div class="patientInfo mb-10 mt-5">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-1 text-lg sm:text-xl">
-            <h2 class="text-lg sm:text-xl font-bold">Status: <span class="text-yellow-600 dark:text-yellow-300"><?php echo $row['patient_Status']?></span></h2>
+            <h2 class="text-lg sm:text-xl font-bold">Status: <span class="<?php echo $statusClass;?>"><?php echo $row['patient_Status']?></span></h2>
             <p><strong>Appointment Type: </strong><?php echo $row['Appointment_type']; ?> </p>
             <p><strong>Name: </strong> <?php echo $row['First_Name'] . ' ' . $middleInitial . '. ' . $row['Last_Name']; ?></p>
             <p><strong>Contact Number: </strong> <?php echo $row[ 'Contact_Number']; ?></p>

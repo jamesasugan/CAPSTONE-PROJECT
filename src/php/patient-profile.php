@@ -477,8 +477,8 @@ ORDER BY CASE WHEN `tbl_appointment`.`Status` = 'pending' THEN 0 ELSE 1 END, `tb
 
                         $statusClass = '';
                         switch ($row['patient_Status']) {
-                            case 'To be seen':
-                                $statusClass = 'text-yellow-600 dark:text-yellow-300';
+                            case 'To be Seen':
+                                $statusClass = 'text-yellow-600 ';
                                 break;
                             case 'Follow Up':
                                 $statusClass = 'text-info';

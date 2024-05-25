@@ -115,6 +115,9 @@ if ($result && $result->num_rows > 0){
                               <p><strong>Appointment Type: </strong><?php echo $row['Appointment_type']; ?> </p>
                               <p><strong>Name: </strong> <?php echo $row['First_Name'] . ' ' . $middleInitial . '. ' . $row['Last_Name']; ?></p>
                               <p><strong>Contact Number: </strong> <?php echo $row[ 'Contact_Number']; ?></p>
+                              <p><strong>Age: </strong> <?php echo (new DateTime($row['DateofBirth']))->diff(new DateTime)->y; ?></p>
+
+
                               <p><strong>Sex: </strong> <?php echo $row['Sex']; ?></p>
                               <p><strong>Email: </strong><?php echo $row['patientEmail']; ?></p>
                               <p><strong>Vaccinated:</strong> <?php echo $row['Vaccination']; ?></p>

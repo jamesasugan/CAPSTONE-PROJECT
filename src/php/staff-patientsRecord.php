@@ -182,7 +182,7 @@ ORDER BY
                 ';
                 if ($row['patient_Status'] == 'Follow Up' and $followUpschedule != 'No schedule'){
                   echo '<div class="tooltip tooltip-bottom ml-5" data-tip="Remove Schedule">
-                  <a  data_id="'.$row['Chart_id'].'"  onclick="removeFollowUpSched(this.getAttribute(\'data_id\'))" class="text-error cursor-pointer "> <i class="fa-solid fa-eraser"></i></a>
+                  <a  data_id="'.$row['Chart_id'].'"  onclick="toggleDialog(\'RemoveSched\');getChart_id(this.getAttribute(\'data_id\'))" class="text-error cursor-pointer "> <i class="fa-solid fa-eraser"></i></a>
                   </div>';
                 }
               echo '
@@ -208,6 +208,17 @@ ORDER BY
         <h3 class="font-bold text-center text-warning" id='notiftext'>Follow up schedule has been updated</h3>
       </div>
     </dialog>
+    <dialog id="RemoveSched"   class="modal bg-black  bg-opacity-40 ">
+      <div class="card bg-slate-50 w-[80vw] absolute top-10 sm:w-[30rem] max-h-[35rem]  flex flex-col text-black">
+        <div  class=" card-title sticky  w-full grid place-items-center">
+          <h3 class="font-bold text-center text-lg  p-5 ">Remove follow-up schedule?</h3>
+        </div>
+        <div class="p-4 w-full flex justify-evenly">
+          <a id="removeSchedIdLink"  class="btn btn-error w-1/4" onclick="removeFollowUpSched(this.getAttribute('data_id'))">Yes</a>
+          <button class="btn  btn-neutral  w-1/4 " onclick='toggleDialog("RemoveSched")'>Close</button>
+        </div>
+      </div>
+    </dialog>
 
 
 
@@ -223,6 +234,9 @@ ORDER BY
 
   </body>
   <script>
+    function getChart_id(id) {
+      document.getElementById('removeSchedIdLink').setAttribute('data_id', id);
+    }
     function toggleDialog(id) {
       let dialog = document.getElementById(id);
       if (dialog) {
