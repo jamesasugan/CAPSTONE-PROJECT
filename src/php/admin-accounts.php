@@ -167,8 +167,8 @@ JOIN `tbl_staff` ON `tbl_staff`.`User_ID` = `tbl_accounts`.`User_ID` where role 
               class="font-bold text-black dark:text-white text-base sm:text-lg"
             >
               <th>Name</th>
-              <th>Account Created</th>
               <th>Account Status</th>
+              <th>Account Created</th>
               <th>Actions</th>
             </tr>
           </thead>
