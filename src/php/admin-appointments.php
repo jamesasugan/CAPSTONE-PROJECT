@@ -671,8 +671,9 @@ ORDER BY
                 statusClass = '';
                 break;
             }
-            document.getElementById('appointment_status').classList.add(statusClass)
+            document.getElementById('appointment_status').className = '';
 
+            document.getElementById('appointment_status').classList.add('font-bold', statusClass)
 
             document.getElementById('approve').disabled = (status === 'Cancelled');
             /*

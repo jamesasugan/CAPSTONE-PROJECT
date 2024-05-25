@@ -281,7 +281,7 @@ ORDER BY
       </div>
 
       <!-- staff action -->
-      <h1 class="text-base sm:text-xl font-bold text-black dark:text-white">STATUS: <span class="font-bold text-neutral-500" id='appointment_status'>Pending</span></h1>  <!-- ayusin mo rin colors dito ah -->
+      <h1 class="text-base sm:text-xl font-bold text-black dark:text-white">STATUS: <span id='appointment_status'>Pending</span></h1>  <!-- ayusin mo rin colors dito ah -->
 
       <h2 class="text-base sm:text-xl font-bold mt-5 text-black dark:text-white">Edit Status of this Appointment</h2>
       <form id='update_appointment' action="#" method="GET">
@@ -607,6 +607,30 @@ ORDER BY
             }
             let status = data.Status.charAt(0).toUpperCase() + data.Status.slice(1).toLowerCase();
             document.querySelector('#appointment_status').textContent = status;
+
+            let statusClass = '';
+            switch (status) {
+              case 'Pending':
+                statusClass = 'text-yellow-600';
+                break;
+              case 'Approved':
+                statusClass = 'text-info';
+                break;
+              case 'Rescheduled':
+                statusClass = 'font-bold text-green-500';
+                break;
+              case 'Cancelled':
+                statusClass = 'text-error';
+                break;
+              default:
+                statusClass = '';
+                break;
+            }
+            document.getElementById('appointment_status').className = '';
+
+            document.getElementById('appointment_status').classList.add('font-bold', statusClass)
+
+
             document.getElementById('approve').disabled = (status === 'Cancelled');
 
 /*

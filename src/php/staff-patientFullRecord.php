@@ -135,7 +135,7 @@ if ($result && $result->num_rows > 0) {
                   <p><strong>Email: </strong><?php echo $row['patientEmail']; ?></p>
                   <p><strong>Vaccinated:</strong> <?php echo  ucfirst(strtolower($patientVacStat)); ?></p>
                   <p><strong>Address:</strong> <?php echo $row['Address']; ?></p>
-                  <p><strong>Date of Birth: </strong><?php echo $row['DateofBirth']; ?></p>
+                  <p><strong>Date of Birth: </strong><?php echo   date("F j, Y", strtotime($row['DateofBirth']));?></p>
                   <p><strong>Service Type: </strong><span id='availedService'>N/A</span></p>
 
                 </div>
