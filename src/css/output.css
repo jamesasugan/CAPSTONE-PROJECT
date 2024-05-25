@@ -4009,6 +4009,10 @@ details.collapse summary::-webkit-details-marker {
   height: 5rem;
 }
 
+.h-36 {
+  height: 9rem;
+}
+
 .h-5 {
   height: 1.25rem;
 }
@@ -4031,10 +4035,6 @@ details.collapse summary::-webkit-details-marker {
 
 .h-full {
   height: 100%;
-}
-
-.h-36 {
-  height: 9rem;
 }
 
 .max-h-\[35rem\] {

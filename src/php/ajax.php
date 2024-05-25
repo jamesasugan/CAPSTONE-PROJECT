@@ -446,8 +446,7 @@ if ($action == 'editUserInfo'){
                 ";
 
             $stmt =$conn->prepare($sql);
-            $stmt->bind_param('ssssssssi', $acc_Email,$accFirstName,$accMiddleName,$accLastName,$accDOB,$accSex,$accContactNumber
-                ,$accContactNumber,$UID);
+            $stmt->bind_param('ssssssssi', $acc_Email,$accFirstName,$accMiddleName,$accLastName,$accDOB,$accSex,$accContactNumber,$accAddress,$UID);
             $stmt->execute();
             echo 1;
             exit();

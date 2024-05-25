@@ -4,6 +4,14 @@ include '../Database/database_conn.php';
 if (!isset($_SESSION['user_type']) or $_SESSION['user_type'] !== 'patient') {
     header('Location: index.php');
 }
+include "ReuseFunction.php";
+$user_id = $_SESSION['user_id'];
+
+
+
+
+
+
 ?>
 
 
@@ -192,8 +200,8 @@ if (!isset($_SESSION['user_type']) or $_SESSION['user_type'] !== 'patient') {
                       disabled
                     >
                       <option value="">Select...</option>
-                      <option value="male">Male</option>
-                      <option value="female">Female</option>
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
                     </select>
                   </div>
                   <!-- Address -->
@@ -349,7 +357,6 @@ if (!isset($_SESSION['user_type']) or $_SESSION['user_type'] !== 'patient') {
                   <thead>
                     <tr class="font-bold text-black dark:text-white text-base sm:text-lg">
                       <th>Name</th>
-                      <th>Service</th>
                       <th>Date </th>
                       <th>Time</th>
                       <th>Status</th>
@@ -359,7 +366,7 @@ if (!isset($_SESSION['user_type']) or $_SESSION['user_type'] !== 'patient') {
                   </thead>
                   <tbody>
                   <?php
-                      $user_id = $_SESSION['user_id'];
+
                       $sql = "
                       SELECT `tbl_patient`.*, `tbl_appointment`.*
 FROM `account_user_info`
@@ -407,7 +414,7 @@ ORDER BY CASE WHEN `tbl_appointment`.`Status` = 'pending' THEN 0 ELSE 1 END, `tb
                          <tr class="text-base hover:bg-gray-300  dark:hover:bg-gray-600 font-medium text-black dark:text-white">               
                         <td>' . $row['First_Name'] . ' ' . $middleInitial . ' ' .
                                   $row['Middle_Name'] . '</td>
-                        <td>' . $row['Service_Field'] . '</td>
+          
                        <td>' . $date . '</td>
                         <td>' . $time . '</td>
                        <td class="font-bold  ' . $status_color . ' ">' . ucfirst($row['Status']) . '</td> 
@@ -446,29 +453,35 @@ ORDER BY CASE WHEN `tbl_appointment`.`Status` = 'pending' THEN 0 ELSE 1 END, `tb
                     </tr>
                   </thead>
                     <tbody>
-                    <?php /*
-                    $sql = "SELECT `tbl_patient`.*, `tbl_appointment`.*, `tbl_patient_chart`.*
-FROM `tbl_patient`
-INNER JOIN `tbl_appointment` ON `tbl_appointment`.`Patient_ID` = `tbl_patient`.`Patient_ID` 
-INNER JOIN `tbl_patient_chart` ON `tbl_patient_chart`.`Appointment_id` = `tbl_appointment`.`Appointment_ID` 
-WHERE tbl_patient_chart.patient_Status != 'Archived' AND tbl_patient_chart.patient_Status != 'Deleted' and `tbl_patient`.`user_info_ID` = ?
-ORDER BY 
-    CASE 
-        WHEN `tbl_patient_chart`.`followUp_schedule` IS NULL THEN 1 
-        ELSE 0 
-    END,
-    `tbl_patient_chart`.`followUp_schedule` IS NULL, 
-    FIELD(`tbl_patient_chart`.`patient_Status`, 'To be Seen', 'Follow Up', 'Unarchived', 'Completed'),
-    `tbl_patient_chart`.`patient_Status` ASC;
+                    <?php
+                    $getAccOwner_Info = "
+        SELECT *  FROM account_user_info
+        WHERE User_ID = ?;
+    ";
+                    $getAccOwner_InfoSTMT = $conn->prepare($getAccOwner_Info);
+                    $getAccOwner_InfoSTMT->bind_param('i', $user_id);
+                    $getAccOwner_InfoSTMT->execute();
+                    $res = $getAccOwner_InfoSTMT->get_result();
+                    $row = $res->fetch_assoc();
+
+                    $accountOwner_ID = $row['user_info_ID'];
+
+                    $getaccOwnerPatientChart = "SELECT pc.Chart_id,p.Patient_ID, p.First_Name, p.Middle_Name, 
+       p.Last_Name, pc.followUp_schedule, pc.patient_Status FROM tbl_patient_chart AS pc 
+           JOIN tbl_appointment AS a ON pc.Appointment_id = a.Appointment_ID 
+           JOIN tbl_patient AS p ON a.Patient_ID = p.Patient_ID 
+            WHERE p.user_info_ID = ?
+              AND pc.patient_Status IN ('To be Seen', 'Follow Up', 'Completed')
+            ORDER BY pc.followUp_schedule;
 
 ";
-                    $stmt = $conn->prepare($sql);
-                    $stmt->bind_param('i', $staff_id);
+
+                    $stmt = $conn->prepare($getaccOwnerPatientChart);
+                    $stmt->bind_param('i', $accountOwner_ID);
                     $stmt->execute();
                     $result = $stmt->get_result();
                     while ($row= $result->fetch_assoc()){
                         $middleInitial = (strlen($row['Middle_Name']) >= 1) ? substr($row['Middle_Name'], 0, 1) : '';
-                        $age = date_diff(date_create($row['DateofBirth']), date_create('today'))->y;
                         $date = date("F j, Y", strtotime($row['followUp_schedule']));
                         $time = date("g:ia", strtotime($row['followUp_schedule']));
                         $followUpschedule = $date . ' ' . $time == 'January 1, 1970 1:00am' ? "No schedule" : $date . ' ' . $time;
@@ -510,15 +523,8 @@ ORDER BY
             </tr>
                 ';
                     }
-*/
+
                     ?>
-                      <tr class="text-base hover:bg-gray-300  dark:hover:bg-gray-600 font-medium text-black dark:text-white">
-                        <td>Cy Ganderton</td>
-                        <td>OB-GYNE</td>
-                        <td>May 21, 2024</td>
-                        <td class="font-bold">Completed</td>
-                        <td class="pl-9"><a href="patient-fullRecord.php"><i class="fa-regular fa-eye"></i></a></td>
-                      </tr>
                     </tbody>
                   </table>
                 </div>
