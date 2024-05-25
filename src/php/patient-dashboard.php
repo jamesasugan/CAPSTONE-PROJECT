@@ -1,12 +1,11 @@
 <?php
 
-
 $first_name = '';
 $last_name = '';
-if (isset($_SESSION['user_type']) && $_SESSION['user_type'] == 'patient'){
-    $sql = "SELECT * FROM account_user_info WHERE User_id = ?";
+if (isset($_SESSION['user_type']) && $_SESSION['user_type'] == 'patient') {
+    $sql = 'SELECT * FROM account_user_info WHERE User_id = ?';
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $_SESSION['user_id']);
+    $stmt->bind_param('i', $_SESSION['user_id']);
     $stmt->execute();
     $result = $stmt->get_result();
 
@@ -15,8 +14,8 @@ if (isset($_SESSION['user_type']) && $_SESSION['user_type'] == 'patient'){
         $first_name = $row['First_Name'];
         $last_name = $row['Last_Name'];
     }
-}else{
-  header("Location: index.php");
+} else {
+    header('Location: index.php');
 }
 ?>
 
@@ -25,7 +24,10 @@ if (isset($_SESSION['user_type']) && $_SESSION['user_type'] == 'patient'){
   <div class="title mb-0 sm:mb-10 w-full px-4">
     <h1 class="text-3xl sm:text-6xl font-bold text-center break-words mb-5">
       Welcome,
-      <span><?php echo isset($_SESSION['user_type']) && $_SESSION['user_type'] == 'patient' ? $first_name.' '. $last_name : '' ?>. </span>
+      <span><?php echo isset($_SESSION['user_type']) &&
+      $_SESSION['user_type'] == 'patient'
+          ? $first_name . ' ' . $last_name
+          : ''; ?>. </span>
     </h1>
   </div>
 
@@ -47,7 +49,7 @@ if (isset($_SESSION['user_type']) && $_SESSION['user_type'] == 'patient'){
           href="patient-profile.php?#appointmentHistory"
           class="btn text-base sm:text-lg rounded-none w-full bg-[#78afe2] dark:bg-[#1C3F61] uppercase text-[#0e1011] dark:text-[#eef0f1] hover:bg-[#224362] hover:text-[#eef0f1] dark:hover:bg-[#9dbedd] dark:hover:text-[#0e1011] border-[#35485a] dark:border-[#8c9caa]"
         >
-          View Current Appointment
+          View Appointment History
         </a>
       </div>
     </div>

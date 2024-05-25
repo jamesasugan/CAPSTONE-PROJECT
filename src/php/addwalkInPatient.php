@@ -2,15 +2,9 @@
 include '../Database/database_conn.php';
 session_start();
 
-
-
-if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] == 'patient'){
-    header("Location: index.php");
-
+if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] == 'patient') {
+    header('Location: index.php');
 }
-
-
-
 ?>
 
 <!DOCTYPE html>
@@ -47,16 +41,16 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] == 'patient'){
 <body>
 <?php
 $user_id = $_SESSION['user_id'];
-$sql = "SELECT role from tbl_staff where User_ID = ?";
+$sql = 'SELECT role from tbl_staff where User_ID = ?';
 $stmt = $conn->prepare($sql);
 $stmt->bind_param('i', $user_id);
 $stmt->execute();
 $result = $stmt->get_result();
 if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
-    if ($row['role'] == 'doctor'){
+    if ($row['role'] == 'doctor') {
         include 'staff-navbar.php';
-    }else{
+    } else {
         include 'admin-navbar.php';
     }
 }
@@ -162,9 +156,20 @@ if ($result->num_rows > 0) {
                 $stmt = $conn->prepare($sql);
                 $stmt->execute();
                 $result = $stmt->get_result();
-                while ($row = $result->fetch_assoc()){
-                    $middleInitial = (strlen($row['Middle_Name']) >= 1) ? substr($row['Middle_Name'], 0, 1) : '';
-                    echo '<option value="'.$row['Staff_ID'].'">'.$row['First_Name'].' '.$middleInitial.'. '.$row['Last_Name'].'</option>';
+                while ($row = $result->fetch_assoc()) {
+                    $middleInitial =
+                        strlen($row['Middle_Name']) >= 1
+                            ? substr($row['Middle_Name'], 0, 1)
+                            : '';
+                    echo '<option value="' .
+                        $row['Staff_ID'] .
+                        '">' .
+                        $row['First_Name'] .
+                        ' ' .
+                        $middleInitial .
+                        '. ' .
+                        $row['Last_Name'] .
+                        '</option>';
                 }
                 ?>
             </select>
@@ -176,6 +181,11 @@ if ($result->num_rows > 0) {
           <div id='doctorList' class="form-group mt-5">
 
           </div>
+
+          <div>
+              <label for="reason" class="block text-base sm:text-lg font-medium">Reason</label>
+              <textarea id='reason' name="reason" autocomplete="off" placeholder="Type here..." required class="textarea p-2 textarea-bordered bg-gray-300 dark:bg-gray-600  w-full" ></textarea>
+            </div>
         </fieldset>
 
 
@@ -239,10 +249,7 @@ if ($result->num_rows > 0) {
                 <label for="address" class="block text-base sm:text-lg font-medium">Address</label>
                 <input type="text" id="address" name="address" autocomplete="off" placeholder="Address" required class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600" />
             </div>
-            <div class=''>
-              <label for="reason" class="block text-base sm:text-lg font-medium">Reason</label>
-              <textarea id='reason' name="reason" autocomplete="off" placeholder="Type here..." required class="textarea p-2 textarea-bordered bg-gray-300 dark:bg-gray-600  w-full" ></textarea
-            </div>
+           
 
           </div>
 

@@ -109,7 +109,7 @@
                   <li>
                     <details>
                       <summary>
-                        <i class="fa-solid fa-user text-3xl"></i>
+                        <small class="hidden sm:block">Doctor</small><i class="fa-solid fa-user text-3xl"></i>
                       </summary>
                       <ul
                         class="dropdown-content p-2 bg-gray-200 dark:bg-gray-700 rounded-t-none z-10 w-36 sm:right-1 translate-x-7 custom-dropdown-menu"
@@ -181,9 +181,7 @@
                           </label>
                         </li>
                         <!-- labas mo to pag di naka log in -->
-                        <?php
-                        if (!isset($_SESSION['user_id'])):
-                        ?>
+                        <?php if (!isset($_SESSION['user_id'])): ?>
                         <li>
                           <a href="login.php"
                             class="hover:bg-gray-300 dark:hover:bg-gray-600 hover:font-bold text-lg transition duration-300 ease-in-out"
@@ -191,9 +189,7 @@
                           >
                         </li>
                         <!-- labas mo to pag di naka log in end -->
-                        <?php
-                        else:
-                        ?>
+                        <?php else: ?>
                         <!-- ito nakalabas pag naka log in -->
                         <li>
                           <a href="staff-profile.php"
@@ -208,7 +204,7 @@
                           >
                         </li>  
                         <!-- ito nakalabas pag naka log in end -->   
-                      <?php endif;?>
+                      <?php endif; ?>
                       </ul>
                     </details>
                   </li>
