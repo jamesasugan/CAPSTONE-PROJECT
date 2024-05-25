@@ -114,12 +114,16 @@ if ($result->num_rows > 0) {
             >
               <th>Name</th>
               <th>Specialty</th>
+              <th>Account Status</th>
+
               <th>Action</th>
             </tr>
           </thead>
           <tbody id='' class="text-black dark:text-white text-base sm:text-lg">
           <?php
-          $sql = "SELECT * FROM tbl_staff where role = 'doctor' ";
+          $sql = "SELECT `tbl_accounts`.*, `tbl_staff`.*
+FROM `tbl_accounts` 
+JOIN `tbl_staff` ON `tbl_staff`.`User_ID` = `tbl_accounts`.`User_ID` where role = 'doctor' ;";
           $stmt = $conn->prepare($sql);
           $stmt->execute();
           $result = $stmt->get_result();
@@ -132,20 +136,14 @@ if ($result->num_rows > 0) {
               echo '<tr
               class="text-base hover:bg-gray-300 dark:hover:bg-gray-600 font-medium text-black dark:text-white"
             >
-              <td>' .
-                  $row['First_Name'] .
-                  ' ' .
-                  $middleInitial .
-                  '. ' .
-                  $row['Last_Name'] .
-                  '</td>
-              <td>' .
-                  $row['speciality'] .
-                  '</td>
+              <td>' . $row['First_Name'] . ' ' . $middleInitial . '. ' . $row['Last_Name'] . '</td>
+              <td>' . $row['speciality'] . '</td>
+               <td>' . $row['status'] . '</td>
+              <td>' . $row['account_created'] . '</td>
               <td class="pl-9">
-                <button onclick="view_doctor.showModal();getStaffInfo(' .
-                  $row['Staff_ID'] .
-                  ')"><i class="fa-regular fa-eye"></i></button>
+              <td class="pl-9">
+                <button onclick="view_doctor.showModal();getStaffInfo(' . $row['Staff_ID'] . ')"><i class="fa-regular fa-eye"></i></button>
+                <a class="text-error"><i class="fa-solid fa-trash"></i></i></a>
               </td>
             </tr>';
           }
@@ -169,9 +167,8 @@ if ($result->num_rows > 0) {
               class="font-bold text-black dark:text-white text-base sm:text-lg"
             >
               <th>Name</th>
-              <th>Age</th>
-              <th>Sex</th>
               <th>Account Created</th>
+              <th>Account Status</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -194,26 +191,13 @@ if ($result->num_rows > 0) {
               echo '<tr
               class="text-base hover:bg-gray-300 dark:hover:bg-gray-600 font-medium text-black dark:text-white"
             >
-              <td>' .
-                  $row['First_Name'] .
-                  ' ' .
-                  $middleInitial .
-                  '. ' .
-                  $row['Last_Name'] .
-                  '</td>
-              <td>' .
-                  $age .
-                  '</td>
-              <td>' .
-                  $row['Sex'] .
-                  '</td>
-              <td>' .
-                  $row['account_created'] .
-                  '</td>
+              <td>' . $row['First_Name'] . ' ' . $middleInitial . '. ' . $row['Last_Name'] . '</td>
+
+              <td>' . $row['status'] . '</td>
+              <td>' . $row['account_created'] . '</td>
               <td class="pl-9">
-                <button onclick="view_patient.showModal();getPatientInfo(' .
-                  $row['user_info_ID'] .
-                  ')"><i class="fa-regular fa-eye"></i></button>
+                 <button onclick="view_patient.showModal();getPatientInfo(' . $row['user_info_ID'] . ')"><i class="fa-regular fa-eye"></i></button>
+                 <a class="text-error"><i class="fa-solid fa-trash"></i></i></a>
               </td>
             </tr>';
           }

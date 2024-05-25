@@ -111,6 +111,18 @@ if ($result && $result->num_rows > 0) {
                 
                 <div class="patientInfo mb-10 mt-5">
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-1 text-lg sm:text-xl">
+                                <h2 class="text-lg sm:text-xl font-bold">Status: <span class="<?php echo $statusClass;?>"><?php echo $row['patient_Status']?></span></h2>
+                              <p><strong>Appointment Type: </strong><?php echo $row['Appointment_type']; ?> </p>
+                              <p><strong>Name: </strong> <?php echo $row['First_Name'] . ' ' . $middleInitial . '. ' . $row['Last_Name']; ?></p>
+                              <p><strong>Contact Number: </strong> <?php echo $row[ 'Contact_Number']; ?></p>
+                              <p><strong>Age: </strong> <?php echo (new DateTime($row['DateofBirth']))->diff(new DateTime)->y; ?></p>
+
+
+                              <p><strong>Sex: </strong> <?php echo $row['Sex']; ?></p>
+                              <p><strong>Email: </strong><?php echo $row['patientEmail']; ?></p>
+                              <p><strong>Vaccinated:</strong> <?php echo $row['Vaccination']; ?></p>
+                              <p><strong>Address:</strong> <?php echo $row['Address']; ?></p>
+                              <p><strong>Date of Birth: </strong><?php echo $row['DateofBirth']; ?></p>
                                 <h2 class="text-lg sm:text-xl font-bold">Status: <span class="<?php echo $statusClass; ?>"><?php echo $row[
     'patient_Status'
 ]; ?></span></h2>
