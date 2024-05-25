@@ -447,9 +447,9 @@ ORDER BY CASE WHEN `tbl_appointment`.`Status` = 'pending' THEN 0 ELSE 1 END, `tb
                     <tbody>
                     <?php
                     $getAccOwner_Info = "
-        SELECT *  FROM account_user_info
-        WHERE User_ID = ?;
-    ";
+    SELECT * FROM account_user_info
+    WHERE User_ID = ?;
+";
                     $getAccOwner_InfoSTMT = $conn->prepare($getAccOwner_Info);
                     $getAccOwner_InfoSTMT->bind_param('i', $user_id);
                     $getAccOwner_InfoSTMT->execute();
@@ -458,14 +458,16 @@ ORDER BY CASE WHEN `tbl_appointment`.`Status` = 'pending' THEN 0 ELSE 1 END, `tb
 
                     $accountOwner_ID = $row['user_info_ID'];
 
-                    $getaccOwnerPatientChart = "SELECT pc.Chart_id,p.Patient_ID, p.First_Name, p.Middle_Name, 
-       p.Last_Name, pc.followUp_schedule, pc.patient_Status FROM tbl_patient_chart AS pc 
-           JOIN tbl_appointment AS a ON pc.Appointment_id = a.Appointment_ID 
-           JOIN tbl_patient AS p ON a.Patient_ID = p.Patient_ID 
-            WHERE p.user_info_ID = ?
-              AND pc.patient_Status IN ('To be Seen', 'Follow Up', 'Completed')
-            ORDER BY pc.followUp_schedule;
-
+                    $getaccOwnerPatientChart = "
+    SELECT 
+        pc.Chart_id, p.Patient_ID, p.First_Name, p.Middle_Name, p.Last_Name, 
+        pc.followUp_schedule, pc.patient_Status 
+    FROM tbl_patient_chart AS pc 
+    JOIN tbl_appointment AS a ON pc.Appointment_id = a.Appointment_ID 
+    JOIN tbl_patient AS p ON a.Patient_ID = p.Patient_ID 
+    WHERE p.user_info_ID = ? 
+    AND pc.patient_Status IN ('To be Seen', 'Follow Up', 'Completed')
+    ORDER BY pc.followUp_schedule;
 ";
 
                     $stmt = $conn->prepare($getaccOwnerPatientChart);
@@ -473,33 +475,15 @@ ORDER BY CASE WHEN `tbl_appointment`.`Status` = 'pending' THEN 0 ELSE 1 END, `tb
                     $stmt->execute();
                     $result = $stmt->get_result();
                     while ($row = $result->fetch_assoc()) {
-                        $middleInitial =
-                            strlen($row['Middle_Name']) >= 1
-                                ? substr($row['Middle_Name'], 0, 1)
-                                : '';
-                        $date = date(
-                            'F j, Y',
-                            strtotime($row['followUp_schedule'])
-                        );
-                        $time = date(
-                            'g:ia',
-                            strtotime($row['followUp_schedule'])
-                        );
-                        $followUpschedule =
-                            $date . ' ' . $time == 'January 1, 1970 1:00am'
-                                ? 'No schedule'
-                                : $date . ' ' . $time;
+                        $middleInitial = strlen($row['Middle_Name']) >= 1 ? substr($row['Middle_Name'], 0, 1) : '';
+                        $date = date('F j, Y', strtotime($row['followUp_schedule']));
+                        $time = date('g:ia', strtotime($row['followUp_schedule']));
+                        $followUpschedule = ($date . ' ' . $time) == 'January 1, 1970 1:00am' ? 'No schedule' : $date . ' ' . $time;
 
                         $statusClass = '';
                         switch ($row['patient_Status']) {
-<<<<<<< HEAD
-                            case 'To be seen':
-                                $statusClass =
-                                    'text-yellow-600 dark:text-yellow-300';
-=======
                             case 'To be Seen':
-                                $statusClass = 'text-yellow-600 ';
->>>>>>> 384cae39f557c99e63df23e4fccf43d2e950911d
+                                $statusClass = 'text-yellow-600';
                                 break;
                             case 'Follow Up':
                                 $statusClass = 'text-info';
@@ -511,47 +495,28 @@ ORDER BY CASE WHEN `tbl_appointment`.`Status` = 'pending' THEN 0 ELSE 1 END, `tb
                                 $statusClass = ''; // Default class if none of the above match
                                 break;
                         }
-                        echo '<tr class="text-base hover:bg-gray-300 dark:hover:bg-gray-600 font-medium text-black dark:text-white">
-              <td>' .
-                            $row['First_Name'] .
-                            ' ' .
-                            $middleInitial .
-                            '.. ' .
-                            $row['Last_Name'] .
-                            '</td>
-         
-              <td>' .
-                            getLastPatientVisit($row['Chart_id']) .
-                            '</td>
-       
-              <td>' .
-                            $followUpschedule .
-                            '</td>
-              <td class="font-bold ' .
-                            $statusClass .
-                            '">' .
-                            $row['patient_Status'] .
-                            '</td>
-              <!-- Status List
-                   To be seen = text-yellow-600 dark:text-yellow-300
-                   Follow Up = text-info
-                   Completed = text-green-500
-                   Waiting for Results = text-yellow-600 dark:text-yellow-300
-                   No Show =  text-red-500
-            -->
-
-              <!-- view information -->
-              <td class="pl-9 ">
-                <a href="patient-fullRecord.php?id=' .
-                            $row['Patient_ID'] .
-                            '&chart_id=' .
-                            $row['Chart_id'] .
-                            '"><i class="fa-regular fa-eye"></i></a>
-                </td>
-            </tr>
-                ';
+                        echo '
+    <tr class="text-base hover:bg-gray-300 dark:hover:bg-gray-600 font-medium text-black dark:text-white">
+        <td>' . $row['First_Name'] . ' ' . $middleInitial . '.. ' . $row['Last_Name'] . '</td>
+        <td>' . getLastPatientVisit($row['Chart_id']) . '</td>
+        <td>' . $followUpschedule . '</td>
+        <td class="font-bold ' . $statusClass . '">' . $row['patient_Status'] . '</td>
+        <!-- Status List
+            To be seen = text-yellow-600 dark:text-yellow-300
+            Follow Up = text-info
+            Completed = text-green-500
+            Waiting for Results = text-yellow-600 dark:text-yellow-300
+            No Show =  text-red-500
+        -->
+        <!-- view information -->
+        <td class="pl-9">
+            <a href="patient-fullRecord.php?id=' . $row['Patient_ID'] . '&chart_id=' . $row['Chart_id'] . '"><i class="fa-regular fa-eye"></i></a>
+        </td>
+    </tr>
+    ';
                     }
                     ?>
+
                     </tbody>
                   </table>
                 </div>
