@@ -502,7 +502,7 @@ ORDER BY CASE WHEN `tbl_appointment`.`Status` = 'pending' THEN 0 ELSE 1 END, `tb
                                 break;
                         }
                         echo '<tr class="text-base hover:bg-gray-300 dark:hover:bg-gray-600 font-medium text-black dark:text-white">
-              <td>'.$row['First_Name'].' '.$middleInitial.'. '.$row['Last_Name'].'</td>
+              <td>'.$row['First_Name'].' '.$middleInitial.'.. '.$row['Last_Name'].'</td>
          
               <td>'.getLastPatientVisit($row['Chart_id']).'</td>
        
