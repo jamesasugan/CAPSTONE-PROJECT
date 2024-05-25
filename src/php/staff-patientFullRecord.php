@@ -6,7 +6,7 @@ session_start();
 if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] == 'patient') {
     header('Location: index.php');
 }
-include 'ReuseFunction.php';
+include "ReuseFunction.php";
 $user_id = $_SESSION['user_id'];
 $sql = 'SELECT * from tbl_staff where User_ID = ?';
 $stmt = $conn->prepare($sql);
@@ -21,8 +21,9 @@ if ($result->num_rows > 0) {
 }
 $staff_id = $row['Staff_ID'];
 
-$patient_id = isset($_GET['id']) ? $_GET['id'] : null;
+$patient_id = isset($_GET['id']) ?$_GET['id'] : null;
 $chart_id = isset($_GET['chart_id']) ? $_GET['chart_id'] : null;
+
 
 $sql = "SELECT `tbl_patient`.*, `tbl_appointment`.*, `tbl_patient_chart`.*
         FROM `tbl_patient` 
@@ -46,11 +47,28 @@ if ($result && $result->num_rows > 0) {
     $Patient_Email = $row['patientEmail'];
     $Patient_address = $row['Address'];
     $appointmentType = $row['Appointment_type'];
-    $patientDOB = $row['DateofBirth'];
-    $patientVacStat = $row['Vaccination'];
+    $patientDOB =  $row['DateofBirth'];
+    $patientVacStat =  $row['Vaccination'];
     $patient_Sex = $row['Sex'];
     $Patient_address = $row['Address'];
     $patient_status = $row['patient_Status'];
+    $statusClass = '';
+    switch ($row['patient_Status']) {
+        case 'To be Seen':
+            $statusClass = 'text-yellow-600';
+            break;
+        case 'Follow Up':
+            $statusClass = 'text-info';
+            break;
+        case 'Completed':
+            $statusClass = 'text-green-500';
+            break;
+        default:
+            $statusClass = 'text-warning';
+            break;
+    }
+
+
 } else {
     header('Location: staff-patientsRecord.php');
     exit();
@@ -109,33 +127,15 @@ if ($result && $result->num_rows > 0) {
 
               <div class="patientInfo mb-10 mt-5">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-1 text-lg sm:text-xl">
-                  <h2 class="text-lg sm:text-xl font-bold">Status: <span class="text-yellow-600 dark:text-yellow-300"><?php echo $row[
-                      'patient_Status'
-                  ]; ?></span></h2>
-                  <p><strong>Appointment Type: </strong><?php echo $row[
-                      'Appointment_type'
-                  ]; ?> </p>
-                  <p><strong>Name: </strong> <?php echo $row['First_Name'] .
-                      ' ' .
-                      $middleInitial .
-                      '. ' .
-                      $row['Last_Name']; ?></p>
-                  <p><strong>Contact Number: </strong> <?php echo $row[
-                      'Contact_Number'
-                  ]; ?></p>
+                  <h2 class="text-lg sm:text-xl font-bold">Status: <span class="<?php echo $statusClass;?>"><?php echo $row['patient_Status']?></span></h2>
+                  <p><strong>Appointment Type: </strong><?php echo $row['Appointment_type']; ?> </p>
+                  <p><strong>Name: </strong> <?php echo $row['First_Name'] . ' ' . $middleInitial . '. ' . $row['Last_Name']; ?></p>
+                  <p><strong>Contact Number: </strong> <?php echo $row[ 'Contact_Number']; ?></p>
                   <p><strong>Sex: </strong> <?php echo $row['Sex']; ?></p>
-                  <p><strong>Email: </strong><?php echo $row[
-                      'patientEmail'
-                  ]; ?></p>
-                  <p><strong>Vaccinated:</strong> <?php echo $row[
-                      'Vaccination'
-                  ]; ?></p>
-                  <p><strong>Address:</strong> <?php echo $row[
-                      'Address'
-                  ]; ?></p>
-                  <p><strong>Date of Birth: </strong><?php echo $row[
-                      'DateofBirth'
-                  ]; ?></p>
+                  <p><strong>Email: </strong><?php echo $row['patientEmail']; ?></p>
+                  <p><strong>Vaccinated:</strong> <?php echo  ucfirst(strtolower($patientVacStat)); ?></p>
+                  <p><strong>Address:</strong> <?php echo $row['Address']; ?></p>
+                  <p><strong>Date of Birth: </strong><?php echo $row['DateofBirth']; ?></p>
                   <p><strong>Service Type: </strong><span id='availedService'>N/A</span></p>
 
                 </div>
@@ -176,194 +176,193 @@ if ($result && $result->num_rows > 0) {
               </div>
 
               <form id="patientRecordForm" enctype='multipart/form-data'>
-                <a class='btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none mt-6' onclick='toggleDialog("services")' id='serviceTypeBTN'>Select Service Type</a>
+                <a class='btn btn-info mt-6' onclick='toggleDialog("services")' id='serviceTypeBTN'>Select Service Type</a>
                 <dialog class='modal bg-black bg-opacity-20' id='services'>
                   <div id='ServiceList'  class="modal-box w-11/12 max-w-5xl bg-gray-200 dark:bg-gray-700 text-[#0e1011] dark:text-[#eef0f1] overflow-auto">
-                    <h1 class="text-2xl text-black dark:text-white text-center font-bold mb-3">Select Service:</h1>
-                    <div class="form-control hover:bg-slate-300 dark:hover:bg-gray-600 px-2 transition duration-150">
+                    <div class="form-control">
                       <label class="cursor-pointer label">
-                        <span class="label-text text-black dark:text-white font-medium text-xl">OB-Gyne</span>
+                        <span class="label-text">OB-Gyne</span>
                         <input type="checkbox" class="checkbox checkbox-info" name="OB-Gyne" value="OB-Gyne" />
 
                       </label>
                     </div>
-                    <div class="form-control hover:bg-slate-300 dark:hover:bg-gray-600 px-2 transition duration-150">
+                    <div class="form-control">
                       <label class="cursor-pointer label">
-                        <span class="label-text text-black dark:text-white font-medium text-xl">Pregnancy Testing</span>
+                        <span class="label-text">Pregnancy Testing</span>
                         <input type="checkbox"  class="checkbox checkbox-info" name="Pregnancy Testing" value="Pregnancy Testing" />
 
                       </label>
                     </div>
-                    <div class="form-control hover:bg-slate-300 dark:hover:bg-gray-600 px-2 transition duration-150">
+                    <div class="form-control">
                       <label class="cursor-pointer label">
-                        <span class="label-text text-black dark:text-white font-medium text-xl">Dengue Test</span>
+                        <span class="label-text">Dengue Test</span>
                         <input type="checkbox"  class="checkbox checkbox-info" name="Dengue Test" value="Dengue Test" />
 
                       </label>
                     </div>
-                    <div class="form-control hover:bg-slate-300 dark:hover:bg-gray-600 px-2 transition duration-150">
+                    <div class="form-control">
                       <label class="cursor-pointer label">
-                        <span class="label-text text-black dark:text-white font-medium text-xl">Covid-19 Rapid Testing</span>
+                        <span class="label-text">Covid-19 Rapid Testing</span>
                         <input type="checkbox" class="checkbox checkbox-info" name="Covid-19 Rapid Testing" value="Covid-19 Rapid Testing" />
 
                       </label>
                     </div>
-                    <div class="form-control hover:bg-slate-300 dark:hover:bg-gray-600 px-2 transition duration-150">
+                    <div class="form-control">
                       <label class="cursor-pointer label">
-                        <span class="label-text text-black dark:text-white font-medium text-xl">Family Medicine</span>
+                        <span class="label-text">Family Medicine</span>
                         <input type="checkbox" class="checkbox checkbox-info" name="Family Medicine" value="Family Medicine" />
 
                       </label>
                     </div>
-                    <div class="form-control hover:bg-slate-300 dark:hover:bg-gray-600 px-2 transition duration-150">
+                    <div class="form-control">
                       <label class="cursor-pointer label">
-                        <span class="label-text text-black dark:text-white font-medium text-xl">Internal Medicine</span>
+                        <span class="label-text">Internal Medicine</span>
                         <input type="checkbox" class="checkbox checkbox-info" name="Internal Medicine" value="Internal Medicine" />
 
                       </label>
                     </div>
-                    <div class="form-control hover:bg-slate-300 dark:hover:bg-gray-600 px-2 transition duration-150">
+                    <div class="form-control">
                       <label class="cursor-pointer label">
-                        <span class="label-text text-black dark:text-white font-medium text-xl">Medical Consultation</span>
+                        <span class="label-text">Medical Consultation</span>
                         <input type="checkbox"  class="checkbox checkbox-info" name="Medical Consultation" value="Medical Consultation" />
 
                       </label>
                     </div>
-                    <div class="form-control hover:bg-slate-300 dark:hover:bg-gray-600 px-2 transition duration-150">
+                    <div class="form-control">
                       <label class="cursor-pointer label">
-                        <span class="label-text text-black dark:text-white font-medium text-xl">Vaccination</span>
+                        <span class="label-text">Vaccination</span>
                         <input type="checkbox"  class="checkbox checkbox-info" name="Vaccination" value="Vaccination" />
 
                       </label>
                     </div>
-                    <div class="form-control hover:bg-slate-300 dark:hover:bg-gray-600 px-2 transition duration-150">
+                    <div class="form-control">
                       <label class="cursor-pointer label">
-                        <span class="label-text text-black dark:text-white font-medium text-xl">BP Monitoring</span>
+                        <span class="label-text">BP Monitoring</span>
                         <input type="checkbox"  class="checkbox checkbox-info" name="BP Monitoring" value="BP Monitoring" />
 
                       </label>
                     </div>
-                    <div class="form-control hover:bg-slate-300 dark:hover:bg-gray-600 px-2 transition duration-150">
+                    <div class="form-control">
                       <label class="cursor-pointer label">
-                        <span class="label-text text-black dark:text-white font-medium text-xl">Blood Glucose Determination</span>
+                        <span class="label-text">Blood Glucose Determination</span>
                         <input type="checkbox"  class="checkbox checkbox-info" name="Blood Glucose Determination" value="Blood Glucose Determination" />
 
                       </label>
                     </div>
-                    <div class="form-control hover:bg-slate-300 dark:hover:bg-gray-600 px-2 transition duration-150">
+                    <div class="form-control">
                       <label class="cursor-pointer label">
-                        <span class="label-text text-black dark:text-white font-medium text-xl">Nebulization</span>
+                        <span class="label-text">Nebulization</span>
                         <input type="checkbox"  class="checkbox checkbox-info" name="Nebulization" value="Nebulization" />
 
                       </label>
                     </div>
-                    <div class="form-control hover:bg-slate-300 dark:hover:bg-gray-600 px-2 transition duration-150">
+                    <div class="form-control">
                       <label class="cursor-pointer label">
-                        <span class="label-text text-black dark:text-white font-medium text-xl">Complete Blood Count (CBC)</span>
+                        <span class="label-text">Complete Blood Count (CBC)</span>
                         <input type="checkbox" name='Complete Blood Count (CBC)' value='Complete Blood Count (CBC)' class="checkbox checkbox-info">
 
 
                       </label>
                     </div>
-                     <div class="form-control hover:bg-slate-300 dark:hover:bg-gray-600 px-2 transition duration-150">
+                     <div class="form-control">
                       <label class="cursor-pointer label">
-                        <span class="label-text text-black dark:text-white font-medium text-xl">Fecalysis</span>
+                        <span class="label-text">Fecalysis</span>
                         <input type="checkbox"  class="checkbox checkbox-info" name='Fecalysis' value='Fecalysis' />
 
                       </label>
                     </div>
-                     <div class="form-control hover:bg-slate-300 dark:hover:bg-gray-600 px-2 transition duration-150">
+                     <div class="form-control">
                       <label class="cursor-pointer label">
-                        <span class="label-text text-black dark:text-white font-medium text-xl">Electrocardiogram (ECG)</span>
+                        <span class="label-text">Electrocardiogram (ECG)</span>
                         <input type="checkbox" value='Electrocardiogram (ECG)' name='Electrocardiogram (ECG)'  class="checkbox checkbox-info" />
 
                       </label>
                     </div>
-                     <div class="form-control hover:bg-slate-300 dark:hover:bg-gray-600 px-2 transition duration-150">
+                     <div class="form-control">
                       <label class="cursor-pointer label">
-                        <span class="label-text text-black dark:text-white font-medium text-xl">X-RAY</span>
+                        <span class="label-text">X-RAY</span>
                         <input type="checkbox" name='X-RAY' value='X-RAY' class="checkbox checkbox-info" />
 
                       </label>
                     </div>
-                     <div class="form-control hover:bg-slate-300 dark:hover:bg-gray-600 px-2 transition duration-150">
+                     <div class="form-control">
                       <label class="cursor-pointer label">
-                        <span class="label-text text-black dark:text-white font-medium text-xl">Vaccination</span>
+                        <span class="label-text">Vaccination</span>
                         <input type="checkbox" name='Vaccination' value='Vaccination' class="checkbox checkbox-info" />
 
                       </label>
                     </div>
-                     <div class="form-control hover:bg-slate-300 dark:hover:bg-gray-600 px-2 transition duration-150">
+                     <div class="form-control">
                       <label class="cursor-pointer label">
-                        <span class="label-text text-black dark:text-white font-medium text-xl">Pre-Employment Package</span>
+                        <span class="label-text">Pre-Employment Package</span>
                         <input type="checkbox" value='Pre-Employment Package' name='Pre-Employment Package' class="checkbox checkbox-info" />
 
                       </label>
                     </div>
-                     <div class="form-control hover:bg-slate-300 dark:hover:bg-gray-600 px-2 transition duration-150">
+                     <div class="form-control">
                       <label class="cursor-pointer label">
-                        <span class="label-text text-black dark:text-white font-medium text-xl">Annual Physical Examination</span>
+                        <span class="label-text">Annual Physical Examination</span>
                         <input type="checkbox" name='Annual Physical Examination' value='Annual Physical Examination' class="checkbox checkbox-info" />
                       </label>
                     </div>
-                     <div class="form-control hover:bg-slate-300 dark:hover:bg-gray-600 px-2 transition duration-150">
+                     <div class="form-control">
                       <label class="cursor-pointer label">
-                        <span class="label-text text-black dark:text-white font-medium text-xl">FBS</span>
+                        <span class="label-text">FBS</span>
                         <input type="checkbox" name='FBS' value='FBS' class="checkbox checkbox-info" />
 
                       </label>
                     </div>
-                     <div class="form-control hover:bg-slate-300 dark:hover:bg-gray-600 px-2 transition duration-150">
+                     <div class="form-control">
                       <label class="cursor-pointer label">
-                        <span class="label-text text-black dark:text-white font-medium text-xl">Lipid Profile</span>
+                        <span class="label-text">Lipid Profile</span>
                         <input type="checkbox" value='Lipid Profile' name='Lipid Profile' class="checkbox checkbox-info" />
 
                       </label>
                     </div>
-                     <div class="form-control hover:bg-slate-300 dark:hover:bg-gray-600 px-2 transition duration-150">
+                     <div class="form-control">
                       <label class="cursor-pointer label">
-                        <span class="label-text text-black dark:text-white font-medium text-xl">AST/ALT</span>
+                        <span class="label-text">AST/ALT</span>
                         <input type="checkbox" value='AST/ALT' name='AST/ALT' class="checkbox checkbox-info" />
                       </label>
                     </div>
-                     <div class="form-control hover:bg-slate-300 dark:hover:bg-gray-600 px-2 transition duration-150">
+                     <div class="form-control">
                       <label class="cursor-pointer label">
-                        <span class="label-text text-black dark:text-white font-medium text-xl">Pregnant Screening</span>
+                        <span class="label-text">Pregnant Screening</span>
                         <input type="checkbox" value='Pregnant Screening' name='Pregnant Screening' class="checkbox checkbox-info" />
 
                       </label>
                     </div>
-                    <div class="form-control hover:bg-slate-300 dark:hover:bg-gray-600 px-2 transition duration-150">
+                    <div class="form-control">
                       <label class="cursor-pointer label">
-                        <span class="label-text text-black dark:text-white font-medium text-xl">Blood Typing</span>
+                        <span class="label-text">Blood Typing</span>
                         <input type="checkbox" value='Blood Typing' name='Blood Typing' class="checkbox checkbox-info" />
 
                       </label>
                     </div>
-                    <div class="form-control hover:bg-slate-300 dark:hover:bg-gray-600 px-2 transition duration-150">
+                    <div class="form-control">
                       <label class="cursor-pointer label">
-                        <span class="label-text text-black dark:text-white font-medium text-xl">Uric Acid</span>
+                        <span class="label-text">Uric Acid</span>
                         <input type="checkbox" name='Uric Acid' value='Uric Acid' class="checkbox checkbox-info" />
 
                       </label>
                     </div>
-                    <div class="form-control hover:bg-slate-300 dark:hover:bg-gray-600 px-2 transition duration-150">
+                    <div class="form-control">
                       <label class="cursor-pointer label">
-                        <span class="label-text text-black dark:text-white font-medium text-xl">Electrolytes</span>
+                        <span class="label-text">Electrolytes</span>
                         <input type="checkbox" name='Electrolytes' value='Electrolytes' class="checkbox checkbox-info" />
 
                       </label>
                     </div>
-                    <div class="form-control hover:bg-slate-300 dark:hover:bg-gray-600 px-2 transition duration-150">
+                    <div class="form-control">
                       <label class="cursor-pointer label">
-                        <span class="label-text text-black dark:text-white font-medium text-xl">Syphilis Screening</span>
+                        <span class="label-text">Syphilis Screening</span>
                         <input type="checkbox" name='Syphilis Screening' value='Syphilis Screening' class="checkbox checkbox-info" />
 
                       </label>
                     </div>
-                    <div class="form-control hover:bg-slate-300 dark:hover:bg-gray-600 px-2 transition duration-150">
+                    <div class="form-control">
                       <label class="cursor-pointer label">
-                        <span class="label-text text-black dark:text-white font-medium text-xl">FT4/TSH</span>
+                        <span class="label-text">FT4/TSH</span>
                         <input type="checkbox"  name='FT4/TSH' value='FT4/TSH' class="checkbox checkbox-info" />
                       </label>
                     </div>
@@ -568,13 +567,13 @@ if ($result && $result->num_rows > 0) {
                 <div class="modal-box w-11/12 max-w-5xl bg-gray-200 dark:bg-gray-700 text-[#0e1011] dark:text-[#eef0f1]">
                     <h3 class="font-bold text-2xl ">Edit Patient</h3>
                     <form id="EditpatientForm" >
-                      <input type='hidden' name='patient_id' value='<?php echo $patient_id; ?>'>
+                      <input type='hidden' name='patient_id' value='<?php echo $patient_id?>'>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 mt-5">
                                 <label class="block">
                                     First Name:
                                     <input type="text" 
                                         name="patient_first-name"
-                                        value="<?php echo $Patient_firstname; ?>"
+                                        value="<?php echo $Patient_firstname?>"
                                         required  
                                         placeholder="Name"
                                         class="input input-bordered w-full p-2 bg-white dark:bg-gray-600  text-black dark:text-white " />
@@ -583,7 +582,7 @@ if ($result && $result->num_rows > 0) {
                                 Middle Name:
                                 <input type="text"
                                        name="patient_middle-name"
-                                       value="<?php echo $Patient_middle_name; ?>"
+                                       value="<?php echo $Patient_middle_name;?>"
                                        required
                                        placeholder="Name"
                                        class="input input-bordered w-full p-2 bg-white dark:bg-gray-600  text-black dark:text-white " />
@@ -592,7 +591,7 @@ if ($result && $result->num_rows > 0) {
                                 Last Name:
                                 <input type="text"
                                        name="patient_last-name"
-                                       value="<?php echo $Patient_lastname; ?>"
+                                       value="<?php echo $Patient_lastname?>"
                                        required
                                        placeholder="Name"
                                        class="input input-bordered w-full p-2 bg-white dark:bg-gray-600  text-black dark:text-white " />
@@ -603,7 +602,7 @@ if ($result && $result->num_rows > 0) {
                                     Contact Number:
                                     <input type="tel"
                                     name="patient_contact-number"
-                                           value="<?php echo $Patient_ContactNumber; ?>"
+                                           value="<?php echo $Patient_ContactNumber?>"
                                     required 
                                     autocomplete="off"
                                     placeholder="Contact Number" 
@@ -621,16 +620,8 @@ if ($result && $result->num_rows > 0) {
                                             required
                                             class="select select-bordered w-full p-2 bg-white dark:bg-gray-600  text-black dark:text-white text-lg" name="patient_sex">
                                         <option value="" disabled selected>Select...</option>
-                                      <option value="Male" <?php if (
-                                          $patient_Sex == 'Male'
-                                      ) {
-                                          echo 'selected';
-                                      } ?> >Male</option>
-                                      <option value="Female" <?php if (
-                                          $patient_Sex == 'Female'
-                                      ) {
-                                          echo 'selected';
-                                      } ?> >Female</option>
+                                      <option value="Male" <?php if ($patient_Sex == 'Male') echo 'selected'; ?> >Male</option>
+                                      <option value="Female" <?php if ($patient_Sex == 'Female') echo 'selected'; ?> >Female</option>
 
                                     </select>
                                 </label>
@@ -641,7 +632,7 @@ if ($result && $result->num_rows > 0) {
                                     <input type="email"
                                     name="patient_email"
                                     required
-                                           value='<?php echo $Patient_Email; ?>'
+                                           value='<?php echo $Patient_Email?>'
                                     autocomplete="off"
                                     placeholder="Email"
                                     class="input input-bordered w-full p-2 bg-white dark:bg-gray-600  text-black dark:text-white "/>
@@ -652,19 +643,11 @@ if ($result && $result->num_rows > 0) {
                                     Vaccinated:
                                     <div class="flex items-center space-x-4 p-2 bg-white dark:bg-gray-600  text-black dark:text-white rounded">
                                       <label class="flex items-center">
-                                        <input type="radio" name="patient_vaccinated" value="yes" class="radio radio-primary" <?php if (
-                                            $patientVacStat == 'yes'
-                                        ) {
-                                            echo 'checked';
-                                        } ?> required>
+                                        <input type="radio" name="patient_vaccinated" value="Yes" class="radio radio-primary" <?php if ( ucfirst(strtolower($patientVacStat)) == 'Yes') echo 'checked'; ?> required>
                                         <span class="ml-2">Yes</span>
                                       </label>
                                       <label class="flex items-center">
-                                        <input type="radio" name="patient_vaccinated" value="no" class="radio radio-primary" <?php if (
-                                            $patientVacStat == 'no'
-                                        ) {
-                                            echo 'checked';
-                                        } ?> required>
+                                        <input type="radio" name="patient_vaccinated" value="No" class="radio radio-primary" <?php if ( ucfirst(strtolower($patientVacStat))== 'No') echo 'checked'; ?> required>
                                         <span class="ml-2">No</span>
                                       </label>
 
@@ -676,7 +659,7 @@ if ($result && $result->num_rows > 0) {
                                     Address:
                                     <input type="text" 
                                     name="patient_address"
-                                           value="<?php echo $Patient_address; ?>"
+                                           value="<?php echo $Patient_address?>"
                                     autocomplete="off"
                                     placeholder="Address" 
                                     required 
@@ -688,7 +671,7 @@ if ($result && $result->num_rows > 0) {
                                     Date of Birth:
                                     <input type="date"
                                     id="dob"
-                                           value='<?php echo $patientDOB; ?>'
+                                           value='<?php echo $patientDOB?>'
                                     name="patient_dob"
                                     required 
                                     class="input input-bordered w-full p-2 bg-white dark:bg-gray-600  text-black dark:text-white [color-scheme:light] dark:[color-scheme:dark]" />
@@ -703,19 +686,9 @@ if ($result && $result->num_rows > 0) {
                                       required
                                       class="select select-bordered w-full p-2 bg-white dark:bg-gray-600  text-black dark:text-white text-lg" name="patient_status">
                                 <option value="" disabled selected>Change status</option>
-                                <option value="Female" <?php if (
-                                    $patient_status == 'To be Seen'
-                                ) {
-                                    echo 'selected';
-                                } ?> >To be Seen</option>
-                                <option value="Male" <?php if (
-                                    $patient_status == 'Follow Up'
-                                ) {
-                                    echo 'selected';
-                                } ?> >Follow Up</option>
-                                <option value="Male" <?php
-//if ($patient_status == 'Completed') echo 'selected';
-?> >Completed</option>
+                                <option value="Female" <?php if ($patient_status == 'To be Seen') echo 'selected'; ?> >To be Seen</option>
+                                <option value="Male" <?php if ($patient_status == 'Follow Up') echo 'selected'; ?> >Follow Up</option>
+                                <option value="Male" <?php //if ($patient_status == 'Completed') echo 'selected'; ?> >Completed</option>
                               </select>
                             </label>
                           </div>
@@ -869,9 +842,7 @@ if ($result && $result->num_rows > 0) {
               success: function(response) {
                 if (parseInt(response) === 1) {
                   toggleDialog('SuccessAlert');
-                  window.location.href = 'staff-patientFullRecord.php?id=<?php echo $_GET[
-                      'id'
-                  ]; ?>&chart_id=<?php echo $_GET['chart_id']; ?>';
+                  window.location.href = 'staff-patientFullRecord.php?id=<?php echo $_GET['id']; ?>&chart_id=<?php echo $_GET['chart_id']; ?>';
                 } else {
                   document.getElementById('error').innerHTML = response;
                   toggleDialog('errorAlert');
@@ -893,11 +864,7 @@ if ($result && $result->num_rows > 0) {
               success: function(response) {
                 if (parseInt(response) === 1) {
                   toggleDialog('SuccessAlert');
-                  window.location.href = 'staff-patientFullRecord.php?id=<?php echo $_GET[
-                      'id'
-                  ] .
-                      '&chart_id=' .
-                      $_GET['chart_id']; ?>';
+                  window.location.href = 'staff-patientFullRecord.php?id=<?php echo $_GET['id'].'&chart_id='.$_GET['chart_id']; ?>';
                 } else {
                   document.getElementById('error').innerHTML = response;
                   toggleDialog('errorAlert');

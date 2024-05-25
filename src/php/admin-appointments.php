@@ -98,10 +98,10 @@ function getAssignDoctor($staff_id) {
         <select onchange='if (this.value === "none") { resetSearch("TableList"); } else { handleSearch("dropDownSort", "TableList", this.value); }' id='dropDownSort' name="sort" class="select select-bordered text-black dark:text-white w-full sm:w-40 bg-gray-300 dark:bg-gray-600 text-base sm:text-lg lg:text-xl focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 mb-4 sm:mb-0 sm:mr-4">
           <option selected value='none'>Filter</option>
           <optgroup label="Status">
-            <option>Pending</option>
-            <option>Approved</option>
-            <option>Rescheduled</option>
-            <option>Cancelled</option>
+            <option value='Pending' <?php echo isset($_GET['filter']) && $_GET['filter'] == 'Pending' ? 'selected':'';?>>Pending</option>
+            <option value='Approved'>Approved</option>
+            <option value='Rescheduled'>Rescheduled</option>
+            <option value='Cancelled'>Cancelled</option>
           </optgroup>
         </select>
 
@@ -746,27 +746,14 @@ ORDER BY
 
   </script>
 
-
- <!-- for add another service -->
-  <script>/*
-      document.addEventListener('DOMContentLoaded', function() {
-      const servicesContainer = document.getElementById('services-container');
-      const addServiceButton = document.getElementById('add-service');
-
-      addServiceButton.addEventListener('click', function() {
-        const firstDropdown = servicesContainer.querySelector('.service-dropdown');
-        const newDropdown = firstDropdown.cloneNode(true);
-
-        // Remove the id attribute from the new dropdown if it exists
-        newDropdown.querySelector('select').removeAttribute('id');
-
-        // Optional: Reset the select value of the new dropdown
-        newDropdown.querySelector('select').selectedIndex = 0;
-
-        servicesContainer.appendChild(newDropdown);
-      });
-    });
-    */
+  <script>
+  <?php
+      if (isset($_GET['filter']) and $_GET['filter'] == 'Pending'):
+      ?>
+    document.addEventListener('DOMContentLoaded', function(){
+      handleSearch("dropDownSort", "TableList", 'Pending');
+    })
+    <?php endif;?>
   </script>
 
   </body>

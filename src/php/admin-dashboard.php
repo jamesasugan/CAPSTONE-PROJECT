@@ -43,7 +43,7 @@ include 'ReuseFunction.php'
       </div>
       <div class="card-actions justify-center mt-auto">
         <a
-          href="admin-appointments.php"
+          href="admin-appointments.php?filter=Pending"
           class="btn text-base sm:text-lg rounded-none w-full bg-[#78afe2] dark:bg-[#1C3F61] uppercase text-[#0e1011] dark:text-[#eef0f1] hover:bg-[#224362] hover:text-[#eef0f1] dark:hover:bg-[#9dbedd] dark:hover:text-[#0e1011] border-[#35485a] dark:border-[#8c9caa] overflow-hidden whitespace-nowrap text-overflow-ellipsis"
         >
           Pending Appointments

@@ -692,11 +692,8 @@ if ($action == 'createPatientRecord') {
             $record_id = $stmt->insert_id;
         }
 
-
-
-
         if ($followUp === 'no') {
-            $update_patient_chart = "UPDATE tbl_patient_chart SET followUp_schedule = 'No Schedule', patient_Status ='Completed' WHERE Chart_id = ?";
+            $update_patient_chart = "UPDATE tbl_patient_chart SET followUp_schedule = null, patient_Status ='Completed' WHERE Chart_id = ?";
             $stmt2 = $conn->prepare($update_patient_chart);
             $stmt2->bind_param('i', $Chart_ID);
             $stmt2->execute();
@@ -860,7 +857,7 @@ if ($action == 'AddWalkInPatient') {
 }
 if ($action == 'Editpatient'){
     if (isset($_POST['patient_id']) && isset($_POST['patient_first-name']) && isset($_POST['patient_middle-name']) && isset($_POST['patient_last-name']) && isset($_POST['patient_contact-number']) && isset($_POST['patient_sex']) &&
-        isset($_POST['patient_email']) && isset($_POST['patient_vaccinated']) && isset($_POST['patient_address']) && isset($_POST['patient_dob'])) {
+        isset($_POST['patient_email']) && isset($_POST['patient_vaccinated']) && isset($_POST['patient_address']) && isset($_POST['patient_dob']) && isset($_POST['patient_status']) && isset($_POST['patient_chart'])) {
         $patient_id = $_POST['patient_id'];
         $patientFname = $_POST['patient_first-name'];
         $patientMname = $_POST['patient_middle-name'];
@@ -871,6 +868,9 @@ if ($action == 'Editpatient'){
         $patient_VacStatus = $_POST['patient_vaccinated'];
         $patient_address = $_POST['patient_address'];
         $patient_Dob = $_POST['patient_dob'];
+        $patient_Chart_status =$_POST['patient_status'];
+        $chart_id = $_POST['patient_chart'];
+
         $updatePatientInfo = "UPDATE tbl_patient SET First_Name = ?, Middle_Name = ?, 
                        Last_Name = ?, DateofBirth = ?, Sex = ?, Contact_Number = ? , 
                        patientEmail = ? , Address = ? 
@@ -890,6 +890,14 @@ if ($action == 'Editpatient'){
             echo $update_vacstmt->error;
             exit();
         }
+        $update_patient_chart_status = "UPDATE tbl_patient_chart SET  patient_Status = ? WHERE Chart_id = ?";
+        $update_patient_chart_stmt = $conn->prepare($update_patient_chart_status);
+        $update_patient_chart_stmt->bind_param('si', $patient_Chart_status, $chart_id);
+        if (!$update_patient_chart_stmt->execute()){
+            echo $update_patient_chart_stmt->error;
+            exit();
+        }
+
         echo 1;
         exit();
 

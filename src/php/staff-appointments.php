@@ -72,11 +72,13 @@ $staff_id = $row['Staff_ID'];
       </h3>
       <div class="w-full sm:flex sm:items-center justify-end">
         <select onchange='if (this.value === "none") { resetSearch("TableList"); } else { handleSearch("dropDownSort", "TableList", this.value); }' id='dropDownSort' name="sort" class="select select-bordered text-black dark:text-white w-full sm:w-40 bg-gray-300 dark:bg-gray-600 text-base sm:text-lg lg:text-xl focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 mb-4 sm:mb-0 sm:mr-4">
-          <option selected value='none'>Filter</option>
+          <option value='none'>Filter</option>
           <optgroup label="Status">
-            <option>Approved</option>
-            <option>Pending</option>
-            <option>Rescheduled</option>
+            <option value='Pending' <?php echo isset($_GET['filter']) && $_GET['filter'] == 'Pending' ? 'selected':'';?>>Pending</option>
+            <option value='Approved'>Approved</option>
+            <option value='Rescheduled'>Rescheduled</option>
+            <option value='Cancelled'>Cancelled</option>
+
           </optgroup>
         </select>
         <!-- Search Input and Button -->
@@ -124,8 +126,9 @@ INNER JOIN `tbl_appointment` ON `tbl_appointment`.`Patient_ID` = `tbl_patient`.`
 LEFT JOIN `tbl_patient_chart` ON `tbl_patient_chart`.`Appointment_id` = `tbl_appointment`.`Appointment_ID`
 WHERE `tbl_patient_chart`.`Appointment_id` IS NULL and `tbl_appointment`.`Staff_ID` = ?
 ORDER BY 
-    CASE WHEN `tbl_appointment`.`Appointment_schedule` IS NULL THEN 1 ELSE 0 END, 
+    CASE WHEN `tbl_appointment`.`Status` = 'Pending' THEN 0 ELSE 1 END, 
     `tbl_appointment`.`Appointment_schedule` ASC;
+
 ";
 
         $stmt = $conn->prepare($sql);
@@ -564,6 +567,15 @@ ORDER BY
     </div>
   </dialog>
   <script>
+
+    <?php
+    if (isset($_GET['filter']) and $_GET['filter'] == 'Pending'):
+    ?>
+    document.addEventListener('DOMContentLoaded', function(){
+      handleSearch("dropDownSort", "TableList", 'Pending');
+    })
+    <?php endif;?>
+
     function setAppointmentId(appointmentId) {
       document.getElementById('newChart').setAttribute('data-appointment-id', appointmentId);
     }

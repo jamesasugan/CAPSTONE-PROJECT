@@ -4345,10 +4345,6 @@ details.collapse summary::-webkit-details-marker {
   border-width: 1px;
 }
 
-.border-0 {
-  border-width: 0px;
-}
-
 .border-x {
   border-left-width: 1px;
   border-right-width: 1px;
@@ -4372,10 +4368,6 @@ details.collapse summary::-webkit-details-marker {
 
 .border-t {
   border-top-width: 1px;
-}
-
-.border-b-2 {
-  border-bottom-width: 2px;
 }
 
 .border-none {
@@ -5060,10 +5052,6 @@ details.collapse summary::-webkit-details-marker {
   transition-duration: 300ms;
 }
 
-.duration-150 {
-  transition-duration: 150ms;
-}
-
 .ease-in-out {
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -5133,11 +5121,6 @@ details.collapse summary::-webkit-details-marker {
 .hover\:bg-red-700:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(185 28 28 / var(--tw-bg-opacity));
-}
-
-.hover\:bg-slate-300:hover {
-  --tw-bg-opacity: 1;
-  background-color: rgb(203 213 225 / var(--tw-bg-opacity));
 }
 
 .hover\:font-bold:hover {

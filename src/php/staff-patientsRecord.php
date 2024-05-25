@@ -82,12 +82,8 @@ $staff_id = $row['Staff_ID'];
         <div  class="w-full sm:flex sm:items-center justify-end">
           <select onchange='if (this.value === "none") { resetSearch("TableList"); } else { handleSearch("dropDownSort", "TableList", this.value); }' id='dropDownSort' name="sort" class="select select-bordered text-black dark:text-white w-full sm:w-40 bg-gray-300 dark:bg-gray-600 text-base sm:text-lg lg:text-xl focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 mb-4 sm:mb-0 sm:mr-4">
             <option selected value='none'>Filter</option>
-            <optgroup label="Appointment Type">
-              <option>Walk In</option>
-              <option>Online</option>
-            </optgroup>
             <optgroup label="Status">
-              <option>To be Seen</option>
+              <option <?php echo isset($_GET['filter']) && $_GET['filter'] == 'To be Seen' ? 'selected':'';?>>To be Seen</option>
               <option>Follow Up</option>
               <option>Completed</option>
               <option>Unarchive</option>
@@ -253,5 +249,12 @@ ORDER BY
         }
       });
     }
+    <?php
+    if (isset($_GET['filter']) and $_GET['filter'] == 'To be Seen'):
+    ?>
+    document.addEventListener('DOMContentLoaded', function(){
+      handleSearch("dropDownSort", "TableList", 'To be Seen');
+    })
+    <?php endif;?>
   </script>
 </html>

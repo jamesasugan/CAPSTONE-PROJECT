@@ -197,9 +197,7 @@ document.getElementById('passwordTab').addEventListener('click', function () {
   resetPersonalInfoEditState(); // Reset the personal info tab when leaving it
 });
 
-document
-  .getElementById('appointmentHistoryTab')
-  .addEventListener('click', function () {
+document.getElementById('appointmentHistoryTab').addEventListener('click', function () {
     document.getElementById('personalInfo').classList.add('hidden');
     document.getElementById('passwordSection').classList.add('hidden');
     document.getElementById('appointmentHistory').classList.remove('hidden');
@@ -220,23 +218,7 @@ document
   });
 
 // for active links sidebar
-document.addEventListener('DOMContentLoaded', function () {
-  const items = document.querySelectorAll('.sidebar-item');
-  items.forEach((item) => {
-    item.addEventListener('click', function () {
-      items.forEach((innerItem) => {
-        // Remove active classes
-        innerItem.classList.remove('bg-[#0b6c95]', 'text-white', 'font-bold');
-        innerItem.classList.add('text-black', 'dark:text-white');
-      });
-      // Add active classes to the clicked item
-      item.classList.add('bg-[#0b6c95]', 'text-white', 'font-bold');
-      item.classList.remove('text-black', 'dark:text-white');
-    });
-  });
-  // Set initial active state
-  document.getElementById('personalInfoTab').click();
-});
+
 
 // for patient-profile information
 let editing = false;

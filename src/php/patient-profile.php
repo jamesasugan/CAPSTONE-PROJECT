@@ -571,13 +571,44 @@ ORDER BY CASE WHEN `tbl_appointment`.`Status` = 'pending' THEN 0 ELSE 1 END, `tb
 
       </dialog>
 
+      <script src='../js/usersInfo.js'></script>
+    <script>
 
-      <script src='../js/usersInfo.js' defer></script>
+        document.addEventListener('DOMContentLoaded', function () {
+          const items = document.querySelectorAll('.sidebar-item');
+          items.forEach((item) => {
+            item.addEventListener('click', function () {
+              items.forEach((innerItem) => {
+                // Remove active classes
+                innerItem.classList.remove('bg-[#0b6c95]', 'text-white', 'font-bold');
+                innerItem.classList.add('text-black', 'dark:text-white');
+              });
+              // Add active classes to the clicked item
+              item.classList.add('bg-[#0b6c95]', 'text-white', 'font-bold');
+              item.classList.remove('text-black', 'dark:text-white');
+            });
+          });
+            <?php
+            if (isset($_GET['route']) and $_GET['route'] == 'appointmentHistory'):
+            ?>
+          // Set initial active state
+          document.getElementById('appointmentHistoryTab').click();
+            <?php else:?>
+          document.getElementById('personalInfoTab').click();
+            <?php
+            endif;
+            ?>
+        });
+
+    </script>
+
+
     <script>
       function getAppointmentId(id) {
         let appoit_id = document.getElementById('appoint_id');
         appoit_id.value = id;
       }
+
 
     </script>
 
