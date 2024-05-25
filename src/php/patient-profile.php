@@ -4,14 +4,8 @@ include '../Database/database_conn.php';
 if (!isset($_SESSION['user_type']) or $_SESSION['user_type'] !== 'patient') {
     header('Location: index.php');
 }
-include "ReuseFunction.php";
+include 'ReuseFunction.php';
 $user_id = $_SESSION['user_id'];
-
-
-
-
-
-
 ?>
 
 
@@ -355,8 +349,7 @@ $user_id = $_SESSION['user_id'];
                   </thead>
                   <tbody>
                   <?php
-
-                      $sql = "
+                  $sql = "
                       SELECT `tbl_patient`.*, `tbl_appointment`.*
 FROM `account_user_info`
 JOIN `tbl_patient` ON `tbl_patient`.`user_info_ID` = `account_user_info`.`user_info_ID`
@@ -364,59 +357,69 @@ JOIN `tbl_appointment` ON `tbl_appointment`.`Patient_ID` = `tbl_patient`.`Patien
 WHERE `account_user_info`.`User_ID` = ?
 ORDER BY CASE WHEN `tbl_appointment`.`Status` = 'pending' THEN 0 ELSE 1 END, `tbl_appointment`.`AppointmentCreated`;
 ";
-                      $stmt = $conn->prepare($sql);
-                      $stmt->bind_param('i', $user_id);
-                      $stmt->execute();
-                      $result = $stmt->get_result();
-                      if ($result->num_rows > 0) {
-                          while ($row = $result->fetch_assoc()) {
-                              $middleInitial =
-                                  strlen($row['Middle_Name']) >= 1
-                                      ? substr($row['Middle_Name'], 0, 1)
-                                      : '';
-                              $status_color = '';
+                  $stmt = $conn->prepare($sql);
+                  $stmt->bind_param('i', $user_id);
+                  $stmt->execute();
+                  $result = $stmt->get_result();
+                  if ($result->num_rows > 0) {
+                      while ($row = $result->fetch_assoc()) {
+                          $middleInitial =
+                              strlen($row['Middle_Name']) >= 1
+                                  ? substr($row['Middle_Name'], 0, 1)
+                                  : '';
+                          $status_color = '';
 
-                              if ($row['Status'] == 'pending') {
-                                  $status_color = 'text-yellow-600';
-                              } elseif ($row['Status'] == 'completed') {
-                                  $status_color = 'text-green-500';
-                              } elseif ($row['Status'] == 'approved') {
-                                  $status_color = 'text-blue-500';
-                              } elseif ($row['Status'] == 'cancelled') {
-                                  $status_color = 'text-red-500';
-                              }
-                              $appointment_schedule =
-                                  $row['Appointment_schedule'];
-                              $date = isset($appointment_schedule)
-                                  ? date(
-                                      'F j, Y',
-                                      strtotime($appointment_schedule)
-                                  )
-                                  : 'N/A';
-                              $time = isset($appointment_schedule)
-                                  ? date(
-                                      'g:ia',
-                                      strtotime($appointment_schedule)
-                                  )
-                                  : 'N/A';
-                              echo '
-                         <tr class="text-base hover:bg-gray-300  dark:hover:bg-gray-600 font-medium text-black dark:text-white">               
-                        <td>' . $row['First_Name'] . ' ' . $middleInitial . ' ' .
-                                  $row['Middle_Name'] . '</td>
-          
-                       <td>' . $date . '</td>
-                        <td>' . $time . '</td>
-                       <td class="font-bold  ' . $status_color . ' ">' . ucfirst($row['Status']) . '</td> 
-                       <td>' . $row['Remarks'] . '</td>';
-                              if ($row['Status'] == 'pending') {
-                                echo '<td class="pl-9"> 
-                          <button onclick="toggleDialog(\'viewandCancel\');getAppointmentId(' . $row['Appointment_ID'] . ')"><i class="fa-regular fa-eye"></i></button>
-                        </td>';
-                              }
-                              echo '</tr>';
+                          if ($row['Status'] == 'pending') {
+                              $status_color = 'text-yellow-600';
+                          } elseif ($row['Status'] == 'completed') {
+                              $status_color = 'text-green-500';
+                          } elseif ($row['Status'] == 'approved') {
+                              $status_color = 'text-blue-500';
+                          } elseif ($row['Status'] == 'cancelled') {
+                              $status_color = 'text-red-500';
                           }
+                          $appointment_schedule = $row['Appointment_schedule'];
+                          $date = isset($appointment_schedule)
+                              ? date('F j, Y', strtotime($appointment_schedule))
+                              : 'N/A';
+                          $time = isset($appointment_schedule)
+                              ? date('g:ia', strtotime($appointment_schedule))
+                              : 'N/A';
+                          echo '
+                         <tr class="text-base hover:bg-gray-300  dark:hover:bg-gray-600 font-medium text-black dark:text-white">               
+                        <td class="w-1/4">' .
+                              $row['First_Name'] .
+                              ' ' .
+                              $middleInitial .
+                              ' ' .
+                              $row['Middle_Name'] .
+                              '</td>
+          
+                       <td class="w-1/4">' .
+                              $date .
+                              '</td>
+                        <td>' .
+                              $time .
+                              '</td>
+                       <td class="font-bold  ' .
+                              $status_color .
+                              ' ">' .
+                              ucfirst($row['Status']) .
+                              '</td> 
+                       <td>' .
+                              $row['Remarks'] .
+                              '</td>';
+                          if ($row['Status'] == 'pending') {
+                              echo '<td class="pl-9"> 
+                          <button onclick="toggleDialog(\'viewandCancel\');getAppointmentId(' .
+                                  $row['Appointment_ID'] .
+                                  ')"><i class="fa-regular fa-eye"></i></button>
+                        </td>';
+                          }
+                          echo '</tr>';
                       }
-                      ?>
+                  }
+                  ?>
                     </tbody>
                   </table>
                 </div>
@@ -469,16 +472,29 @@ ORDER BY CASE WHEN `tbl_appointment`.`Status` = 'pending' THEN 0 ELSE 1 END, `tb
                     $stmt->bind_param('i', $accountOwner_ID);
                     $stmt->execute();
                     $result = $stmt->get_result();
-                    while ($row= $result->fetch_assoc()){
-                        $middleInitial = (strlen($row['Middle_Name']) >= 1) ? substr($row['Middle_Name'], 0, 1) : '';
-                        $date = date("F j, Y", strtotime($row['followUp_schedule']));
-                        $time = date("g:ia", strtotime($row['followUp_schedule']));
-                        $followUpschedule = $date . ' ' . $time == 'January 1, 1970 1:00am' ? "No schedule" : $date . ' ' . $time;
+                    while ($row = $result->fetch_assoc()) {
+                        $middleInitial =
+                            strlen($row['Middle_Name']) >= 1
+                                ? substr($row['Middle_Name'], 0, 1)
+                                : '';
+                        $date = date(
+                            'F j, Y',
+                            strtotime($row['followUp_schedule'])
+                        );
+                        $time = date(
+                            'g:ia',
+                            strtotime($row['followUp_schedule'])
+                        );
+                        $followUpschedule =
+                            $date . ' ' . $time == 'January 1, 1970 1:00am'
+                                ? 'No schedule'
+                                : $date . ' ' . $time;
 
                         $statusClass = '';
                         switch ($row['patient_Status']) {
                             case 'To be seen':
-                                $statusClass = 'text-yellow-600 dark:text-yellow-300';
+                                $statusClass =
+                                    'text-yellow-600 dark:text-yellow-300';
                                 break;
                             case 'Follow Up':
                                 $statusClass = 'text-info';
@@ -491,12 +507,26 @@ ORDER BY CASE WHEN `tbl_appointment`.`Status` = 'pending' THEN 0 ELSE 1 END, `tb
                                 break;
                         }
                         echo '<tr class="text-base hover:bg-gray-300 dark:hover:bg-gray-600 font-medium text-black dark:text-white">
-              <td>'.$row['First_Name'].' '.$middleInitial.'.. '.$row['Last_Name'].'</td>
+              <td>' .
+                            $row['First_Name'] .
+                            ' ' .
+                            $middleInitial .
+                            '.. ' .
+                            $row['Last_Name'] .
+                            '</td>
          
-              <td>'.getLastPatientVisit($row['Chart_id']).'</td>
+              <td>' .
+                            getLastPatientVisit($row['Chart_id']) .
+                            '</td>
        
-              <td>'.$followUpschedule.'</td>
-              <td class="font-bold '.$statusClass.'">'.$row['patient_Status'].'</td>
+              <td>' .
+                            $followUpschedule .
+                            '</td>
+              <td class="font-bold ' .
+                            $statusClass .
+                            '">' .
+                            $row['patient_Status'] .
+                            '</td>
               <!-- Status List
                    To be seen = text-yellow-600 dark:text-yellow-300
                    Follow Up = text-info
@@ -507,12 +537,15 @@ ORDER BY CASE WHEN `tbl_appointment`.`Status` = 'pending' THEN 0 ELSE 1 END, `tb
 
               <!-- view information -->
               <td class="pl-9 ">
-                <a href="patient-fullRecord.php?id='.$row['Patient_ID'] .'&chart_id='. $row['Chart_id'].'"><i class="fa-regular fa-eye"></i></a>
+                <a href="patient-fullRecord.php?id=' .
+                            $row['Patient_ID'] .
+                            '&chart_id=' .
+                            $row['Chart_id'] .
+                            '"><i class="fa-regular fa-eye"></i></a>
                 </td>
             </tr>
                 ';
                     }
-
                     ?>
                     </tbody>
                   </table>
@@ -533,7 +566,7 @@ ORDER BY CASE WHEN `tbl_appointment`.`Status` = 'pending' THEN 0 ELSE 1 END, `tb
               <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
-              <span id='errorAlert'>Somthing went wrong</span>
+              <span id='errorAlert'>Something went wrong</span>
             </div>
           </div>
         </dialog>
@@ -587,16 +620,15 @@ ORDER BY CASE WHEN `tbl_appointment`.`Status` = 'pending' THEN 0 ELSE 1 END, `tb
               item.classList.remove('text-black', 'dark:text-white');
             });
           });
-            <?php
-            if (isset($_GET['route']) and $_GET['route'] == 'appointmentHistory'):
-            ?>
+            <?php if (
+                isset($_GET['route']) and
+                $_GET['route'] == 'appointmentHistory'
+            ): ?>
           // Set initial active state
           document.getElementById('appointmentHistoryTab').click();
-            <?php else:?>
+            <?php else: ?>
           document.getElementById('personalInfoTab').click();
-            <?php
-            endif;
-            ?>
+            <?php endif; ?>
         });
 
     </script>

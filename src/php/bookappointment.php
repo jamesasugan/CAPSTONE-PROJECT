@@ -72,8 +72,10 @@ if (isset($_SESSION['user_type']) and $_SESSION['user_type'] == 'staff') {
       bg-[#f6fafc] dark:bg-[#17222a]"
     >
       <div class="book-form w-full max-w-7xl mx-auto p-4 rounded-lg shadow-lg bg-gray-200 dark:bg-gray-700 text-[#0e1011] dark:text-[#eef0f1]" id='appointmentForm'>
-          <?php if (isset($_SESSION['user_type']) and $_SESSION['user_type']  == 'patient'):
-              ?>
+          <?php if (
+              isset($_SESSION['user_type']) and
+              $_SESSION['user_type'] == 'patient'
+          ): ?>
 
             <dialog open class='modal bg-black bg-opacity-20' id='chooseBook'>
               <div class="text-center font-bold text-xl mb-10 bg bg-gray-200 dark:bg-gray-700 text-[#0e1011] dark:text-[#eef0f1] h-36 rounded w-auto p-5">
@@ -83,20 +85,21 @@ if (isset($_SESSION['user_type']) and $_SESSION['user_type'] == 'staff') {
               </div>
             </dialog>
 
-          <?php endif;?>
+          <?php endif; ?>
       <!-- labas mo lang to pag naka log in tas hide mo pagtapos magsagot -->
 
 
         <h2 class="text-2xl font-bold mb-2">Set an Appointment</h2>
-        <p class="mb-4">
+        <p class="mb-4 font-medium">
           Kindly answer the form to set a face-to-face appointment for
-          consultation, test, or procedure in our clinic. <br>View <a href="doctorschedule.php" target="_blank" class="link text-blue-400 font-bold">Doctor's Schedule</a> for more information about the schedules.
+          consultation, test, or procedure in our clinic.
         </p>
-        <p><span>Note:</span> The selection of Doctor will depend if the selected doctor is available on the set appointment date and time</p>
+        <p class="font-medium">View <a href="doctorschedule.php" target="_blank" class="link text-blue-400 font-bold">Doctor's Schedule</a> <span class="font-bold">FIRST</span>  for more information about the schedules.</p>
 
         <form id='patient_bookAppointment' action="#" method="GET">
+        <h3 class="text-xl font-bold mt-5">Service</h3>
           <div class="w-full max-w-md">
-            <label for="service-type" class="block text-lg font-medium mb-1">Reason</label>
+            <label for="service-type" class="block text-lg font-medium mb-1">Reason/Purpose</label>
             <textarea   name="reason" placeholder="Type here" required class="textarea-bordered textarea w-full p-2 bg-gray-300 dark:bg-gray-600"></textarea>
           </div>
         <fieldset class="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -353,10 +356,15 @@ if (isset($_SESSION['user_type']) and $_SESSION['user_type'] == 'staff') {
         }
       });
     });
-<?php if (isset($_SESSION['user_type']) and $_SESSION['user_type'] == 'patient'):?>
+<?php if (
+    isset($_SESSION['user_type']) and
+    $_SESSION['user_type'] == 'patient'
+): ?>
     function getAccountUserInfo(){
       $.ajax({
-        url: 'ajax.php?action=getOnlineUserInfo&onlineUser_id=' + encodeURIComponent('<?php echo $_SESSION['user_id']; ?>'),
+        url: 'ajax.php?action=getOnlineUserInfo&onlineUser_id=' + encodeURIComponent('<?php echo $_SESSION[
+            'user_id'
+        ]; ?>'),
         method: 'GET',
         dataType: 'json',
         success: function(data) {
@@ -378,7 +386,7 @@ if (isset($_SESSION['user_type']) and $_SESSION['user_type'] == 'staff') {
       });
     }
 
-    <?php endif;?>
+    <?php endif; ?>
 
 
 

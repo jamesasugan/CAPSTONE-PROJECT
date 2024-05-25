@@ -18,29 +18,32 @@ if ($result->num_rows > 0) {
     }
 }
 
-function getAssignDoctor($staff_id) {
+function getAssignDoctor($staff_id)
+{
     include '../Database/database_conn.php';
-    if (!isset($staff_id)){
-      return "N/A";
+    if (!isset($staff_id)) {
+        return 'N/A';
     }
 
-    $sql = "SELECT First_Name, Middle_Name, Last_Name FROM tbl_staff WHERE Staff_ID = ?";
+    $sql =
+        'SELECT First_Name, Middle_Name, Last_Name FROM tbl_staff WHERE Staff_ID = ?';
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $staff_id);
+    $stmt->bind_param('i', $staff_id);
     $stmt->execute();
     $stmt->bind_result($first_name, $middle_name, $last_name);
     $stmt->fetch();
 
     if ($middle_name) {
-        $middle_name = substr($middle_name, 0, 1) . ".";
+        $middle_name = substr($middle_name, 0, 1) . '.';
     }
-    $full_name = $middle_name ? "$first_name $middle_name $last_name" : "$first_name $last_name";
+    $full_name = $middle_name
+        ? "$first_name $middle_name $last_name"
+        : "$first_name $last_name";
     $stmt->close();
     $conn->close();
 
     return $full_name;
 }
-
 ?>
 
 <!doctype html>
@@ -98,7 +101,10 @@ function getAssignDoctor($staff_id) {
         <select onchange='if (this.value === "none") { resetSearch("TableList"); } else { handleSearch("dropDownSort", "TableList", this.value); }' id='dropDownSort' name="sort" class="select select-bordered text-black dark:text-white w-full sm:w-40 bg-gray-300 dark:bg-gray-600 text-base sm:text-lg lg:text-xl focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 mb-4 sm:mb-0 sm:mr-4">
           <option selected value='none'>Filter</option>
           <optgroup label="Status">
-            <option value='Pending' <?php echo isset($_GET['filter']) && $_GET['filter'] == 'Pending' ? 'selected':'';?>>Pending</option>
+            <option value='Pending' <?php echo isset($_GET['filter']) &&
+            $_GET['filter'] == 'Pending'
+                ? 'selected'
+                : ''; ?>>Pending</option>
             <option value='Approved'>Approved</option>
             <option value='Rescheduled'>Rescheduled</option>
             <option value='Cancelled'>Cancelled</option>
@@ -189,11 +195,27 @@ ORDER BY
                             break;
                     }
                     echo '<tr class="text-base hover:bg-gray-300 dark:hover:bg-gray-600 font-medium text-black dark:text-white">
-                <td>' . $row['First_Name'] . ' ' .$middleInitial .'. ' .$row['Last_Name'] . '</td>
-                <td>' . $date . ' ' . $time . '</td><!-- alisin mo yung pl-10 pag nagoverlap yung ilalagay mo -->
+                <td>' .
+                        $row['First_Name'] .
+                        ' ' .
+                        $middleInitial .
+                        '. ' .
+                        $row['Last_Name'] .
+                        '</td>
+                <td>' .
+                        $date .
+                        ' ' .
+                        $time .
+                        '</td><!-- alisin mo yung pl-10 pag nagoverlap yung ilalagay mo -->
        
-                <td>' . getAssignDoctor($row['Staff_ID']) . '</td>
-                <td class="font-bold ' . $class . '">' . $status . '</td> 
+                <td>' .
+                        getAssignDoctor($row['Staff_ID']) .
+                        '</td>
+                <td class="font-bold ' .
+                        $class .
+                        '">' .
+                        $status .
+                        '</td> 
                 <!-- 
                 Completed - text-green-500
                 Cancelled - text-red-500
@@ -460,9 +482,9 @@ ORDER BY
       <form id='appointmentform' action="#" method="GET">
 
         <div>
-          <label for="reason" class="block text-base sm:text-lg font-medium">Reason/Purpose</label>
+          <label for="reason" class="block text-base sm:text-lg font-medium text-black dark:text-white">Reason/Purpose:</label>
 
-          <textarea   name="reason" placeholder="Type here" required class="textarea-bordered textarea w-full p-2 bg-gray-300 dark:bg-gray-600"></textarea>
+          <textarea name="reason" placeholder="Type here" disabled required class="textarea-bordered textarea w-full p-2 h-20 bg-gray-300 dark:bg-gray-600 text-black dark:text-white text-base disabled:bg-white disabled:text-black dark:disabled:text-white border-none "></textarea>
 
         </div>
         <fieldset class="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -478,7 +500,7 @@ ORDER BY
                          value="Consultation"
                          name="service"
                          disabled
-                         class="radio radio-info [color-scheme:light] dark:[color-scheme:dark] disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300"
+                         class="radio radio-info [color-scheme:light] dark:[color-scheme:dark] disabled:bg-white disabled:text-black dark:disabled:text-white border-none disabled:border-gray-300"
                          required>
                   <span class="py-3 ml-2 text-lg font-medium ">Consultation</span>
                 </label>
@@ -490,7 +512,7 @@ ORDER BY
                          value="Test/Procedure"
                          name="service"
                          disabled
-                         class="radio radio-info [color-scheme:light] dark:[color-scheme:dark] disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300"
+                         class="radio radio-info [color-scheme:light] dark:[color-scheme:dark] disabled:bg-white disabled:text-black dark:disabled:text-white border-none disabled:border-gray-300"
                          required>
                   <span class="py-3 ml-2 text-lg font-medium ">Test/Procedure</span>
                 </label>
@@ -504,8 +526,8 @@ ORDER BY
 
 
           <div class="w-full md:w-auto md:col-span-1">
-            <label for="appointment-dateHistory" class="block text-base sm:text-lg font-medium">
-              Appointment Date
+            <label for="appointment-dateHistory" class="block text-base sm:text-lg font-medium text-black dark:text-white">
+              Appointment Date:
             </label>
             <input
               type="date"
@@ -513,13 +535,13 @@ ORDER BY
               name="appointment-dateHistory"
               disabled
               required
-              class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark] disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300"
+              class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark] disabled:bg-white disabled:text-black dark:disabled:text-white border-none disabled:border-gray-300"
             />
 
           </div>
           <div class="w-full md:w-auto md:col-span-1">
-            <label for="appointment-timeHistory" class="block text-base sm:text-lg font-medium">
-              Appointment Time
+            <label for="appointment-timeHistory" class="block text-base sm:text-lg font-medium text-black dark:text-white">
+              Appointment Time:
             </label>
             <input
               type="time"
@@ -529,28 +551,27 @@ ORDER BY
               disabled
               min="08:00"
               max="17:00"
-              class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark] disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300"
+              class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark] disabled:bg-white disabled:text-black dark:disabled:text-white border-none disabled:border-gray-300"
             />
 
           </div>
         </fieldset>
-        <h3 class="text-xl font-bold mt-5 mb-2">Personal Information</h3>
+        <h3 class="text-xl font-bold mt-5 mb-2 text-black dark:text-white">Personal Information</h3>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label for="first-nameHistory" class="block text-base sm:text-lg font-medium">First Name</label>
+            <label for="first-nameHistory" class="block text-base sm:text-lg font-medium text-black dark:text-white">First Name</label>
             <input type="text" id="first-nameHistory" name="first-nameHistory" disabled autocomplete="off"
                    placeholder="First Name" required class="input input-bordered
-                    w-full p-2 bg-gray-300 dark:bg-gray-600 disabled:bg-white disabled:text-black
-                     dark:disabled:text-gray-500 disabled:border-gray-300" />
+                    w-full p-2 bg-gray-300 dark:bg-gray-600 disabled:bg-white disabled:text-black dark:disabled:text-white border-none" />
           </div>
           <div>
-            <label for="middle-nameHistory" class="block text-base sm:text-lg font-medium">Middle Name</label>
-            <input type="text" id="middle-nameHistory" name="middle-nameHistory" disabled placeholder="Middle Name" required class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 disabled:bg-white disabled:text-black dark:disabled:text-gray-500 disabled:border-gray-300" />
+            <label for="middle-nameHistory" class="block text-base sm:text-lg font-medium text-black dark:text-white">Middle Name</label>
+            <input type="text" id="middle-nameHistory" name="middle-nameHistory" disabled placeholder="Middle Name" required class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 disabled:bg-white disabled:text-black dark:disabled:text-white border-none disabled:border-gray-300" />
           </div>
 
           <div>
-            <label for="last-nameHistory" class="block text-base sm:text-lg font-medium">Last Name</label>
-            <input type="text" id="last-nameHistory" name="last-nameHistory" disabled placeholder="Last Name" required class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300" />
+            <label for="last-nameHistory" class="block text-base sm:text-lg font-medium text-black dark:text-white">Last Name</label>
+            <input type="text" id="last-nameHistory" name="last-nameHistory" disabled placeholder="Last Name" required class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 disabled:bg-white disabled:text-black dark:disabled:text-white border-none disabled:border-gray-300" />
           </div>
           <div>
             <label
@@ -566,43 +587,43 @@ ORDER BY
               autocomplete="email"
               required
               placeholder="Email"
-              class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300"
+              class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 disabled:bg-white disabled:text-black dark:disabled:text-white border-none disabled:border-gray-300"
             />
           </div>
           <div>
-            <label for="contact-numberHistory" class="block text-base sm:text-lg font-medium">Contact Number</label>
-            <input id="contact-numberHistory" name="contact-numberHistory" disabled type="tel" required autocomplete="off" placeholder="Contact Number" pattern="[0-9]{1,11}" minlength="11" maxlength="11" title="Please enter up to 11 numeric characters." class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300" />
+            <label for="contact-numberHistory" class="block text-base sm:text-lg font-medium text-black dark:text-white">Contact Number</label>
+            <input id="contact-numberHistory" name="contact-numberHistory" disabled type="tel" required autocomplete="off" placeholder="Contact Number" pattern="[0-9]{1,11}" minlength="11" maxlength="11" title="Please enter up to 11 numeric characters." class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 disabled:bg-white disabled:text-black dark:disabled:text-white border-none disabled:border-gray-300" />
           </div>
 
           <div>
-            <label for="sexHistory" class="block text-base sm:text-lg font-medium">Sex</label>
-            <select id="sexHistory" required class="select select-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 text-lg disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300" name="sexHistory" disabled>
+            <label for="sexHistory" class="block text-base sm:text-lg font-medium text-black dark:text-white">Sex</label>
+            <select id="sexHistory" required class="select select-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 text-lg disabled:bg-white disabled:text-black dark:disabled:text-white border-none disabled:border-gray-300" name="sexHistory" disabled>
               <option value="" disabled selected>Select...</option>
               <option value="Male">Male</option>
               <option value="Female">Female</option>
             </select>
           </div>
           <div>
-            <label for="dobHistory" class="block text-base sm:text-lg font-medium">Date of Birth</label>
-            <input type="date" id="dobHistory" name="dobHistory" disabled required class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark] disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300" />
+            <label for="dobHistory" class="block text-base sm:text-lg font-medium text-black dark:text-white">Date of Birth</label>
+            <input type="date" id="dobHistory" name="dobHistory" disabled required class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark] disabled:bg-white disabled:text-black dark:disabled:text-white border-none disabled:border-gray-300" />
           </div>
 
           <div>
-            <div class="block text-base sm:text-lg font-medium mb-1">Are you vaccinated?</div>
+            <div class="block text-base sm:text-lg font-medium text-black dark:text-white mb-1">Are you vaccinated?</div>
             <div class="flex items-center space-x-4 p-2 bg-gray-300 dark:bg-gray-600 rounded">
               <label class="flex items-center">
-                <input id='vaccinated' type="radio" name="vaccinatedHistory" disabled value="yes" class="radio radio-primary disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300 [color-scheme:light] dark:[color-scheme:dark]" required>
+                <input id='vaccinated' type="radio" name="vaccinatedHistory" disabled value="yes" class="radio radio-primary disabled:bg-white disabled:text-black dark:disabled:text-white border-none disabled:border-gray-300 [color-scheme:light] dark:[color-scheme:dark] text-black dark:text-white" required>
                 <span class="ml-2">Yes</span>
               </label>
               <label class="flex items-center">
-                <input id='notvaccinated' type="radio" name="vaccinatedHistory" disabled value="no" class="radio radio-primary disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300 [color-scheme:light] dark:[color-scheme:dark]" required>
+                <input id='notvaccinated' type="radio" name="vaccinatedHistory" disabled value="no" class="radio radio-primary disabled:bg-white disabled:text-black dark:disabled:text-white border-none disabled:border-gray-300 [color-scheme:light] dark:[color-scheme:dark]" required>
                 <span class="ml-2">No</span>
               </label>
             </div>
           </div>
           <div>
-            <label for="addressHistory" class="block text-base sm:text-lg font-medium">Address</label>
-            <input type="text" id="addressHistory" name="addressHistory" disabled autocomplete="off" placeholder="Address" required class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 disabled:bg-white disabled:text-gray-500 dark:disabled:text-gray-500 disabled:border-gray-300" />
+            <label for="addressHistory" class="block text-base sm:text-lg font-medium text-black dark:text-white">Address</label>
+            <input type="text" id="addressHistory" name="addressHistory" disabled autocomplete="off" placeholder="Address" required class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 disabled:bg-white disabled:text-black dark:disabled:text-white border-none disabled:border-gray-300" />
           </div>
         </div>
       </form>
@@ -615,8 +636,8 @@ ORDER BY
         <h3 class="font-bold text-center text-lg  p-5 ">Create patient chart list?</h3>
       </div>
       <div class="p-4 w-full flex justify-evenly">
-        <a id="newChart" class="btn btn-info w-1/4" onclick="create_patientChart(this.getAttribute('data-appointment-id'));">Yes</a>
-        <button class="btn  btn-neutral  w-1/4 " onclick='toggleDialog("addPatient")'>Close</button>
+        <a id="newChart" class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none w-1/4" onclick="create_patientChart(this.getAttribute('data-appointment-id'));">Yes</a>
+        <button class="btn bg-gray-400 text-black dark:bg-white hover:bg-gray-500 dark:hover:bg-gray-400 border-none w-1/4 " onclick='toggleDialog("addPatient")'>Close</button>
       </div>
     </div>
   </dialog>
@@ -747,13 +768,11 @@ ORDER BY
   </script>
 
   <script>
-  <?php
-      if (isset($_GET['filter']) and $_GET['filter'] == 'Pending'):
-      ?>
+  <?php if (isset($_GET['filter']) and $_GET['filter'] == 'Pending'): ?>
     document.addEventListener('DOMContentLoaded', function(){
       handleSearch("dropDownSort", "TableList", 'Pending');
     })
-    <?php endif;?>
+    <?php endif; ?>
   </script>
 
   </body>
