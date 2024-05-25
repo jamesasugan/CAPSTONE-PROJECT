@@ -137,7 +137,6 @@ if ($result->num_rows > 0) {
         </div>
         -->
           <div class="w-full">
-
             <label
               for="appointDoctor"
               class="block font-medium text-black dark:text-white text-base sm:text-lg"
@@ -147,7 +146,7 @@ if ($result->num_rows > 0) {
             <select
               id="appointDoctor"
               name="appointDoctor"
-              class="select select-bordered appearance-none block w-full px-3 border-gray-300 rounded-md shadow-sm focus:outline-none text-base sm:text-lg bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400 disabled:border-gray-300"
+              class="select select-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 text-lg"
               required
             >
               <option value="" disabled selected>Select a Doctor</option>
@@ -183,8 +182,8 @@ if ($result->num_rows > 0) {
           </div>
 
           <div>
-              <label for="reason" class="block text-base sm:text-lg font-medium">Reason</label>
-              <textarea id='reason' name="reason" autocomplete="off" placeholder="Type here..." required class="textarea p-2 textarea-bordered bg-gray-300 dark:bg-gray-600  w-full" ></textarea>
+              <label for="reason" class="block text-base sm:text-lg font-medium">Reason/Purpose:</label>
+              <textarea id='reason' name="reason" autocomplete="off" placeholder="Type here..." required class="textarea p-2 textarea-bordered bg-gray-300 dark:bg-gray-600 text-base sm:text-lg w-full" ></textarea>
             </div>
         </fieldset>
 

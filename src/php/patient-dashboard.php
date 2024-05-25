@@ -27,7 +27,7 @@ if (isset($_SESSION['user_type']) && $_SESSION['user_type'] == 'patient') {
       <span><?php echo isset($_SESSION['user_type']) &&
       $_SESSION['user_type'] == 'patient'
           ? $first_name . ' ' . $last_name
-          : ''; ?>. </span>
+          : ''; ?></span>
     </h1>
   </div>
 
