@@ -41,15 +41,16 @@ if ($action == 'signup'){
     $stmt_check_email->execute();
     $stmt_check_email->store_result();
     if ($stmt_check_email->num_rows > 0) {
-        // Email already exists
-        echo 4;
+
+        echo "Email already exist";
         exit();
     }
 
     if (isset($first_name) || isset($last_name) || isset($contact_number) || isset($date_of_birth) || isset($sex) || isset($address) || isset($email) ) {
         $user_type = isset($_POST['type']) && in_array($_POST['type'], ['patient', 'staff']) ? $_POST['type'] : '';
         if ($user_type === '') {
-            echo 4;
+            echo $user_type;
+            echo 'User type missing';
             exit();
         }
 
@@ -75,7 +76,7 @@ if ($action == 'signup'){
                        Middle_Name, Last_Name, DateofBirth, Contact_Number,
                        Sex, Address, Role) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
             $stmt_staff = $conn->prepare($sql_staff);
-            $stmt_staff->bind_param("issssisss", $user_id,
+            $stmt_staff->bind_param("issssssss", $user_id,
                 $first_name, $middle_name, $last_name,
                 $date_of_birth,  $contact_number, $sex, $address, $role);
             $stmt_staff->execute();
@@ -839,7 +840,7 @@ if ($action == 'AddWalkInPatient') {
         if ($stmtAppointment->execute()) {
             $appointment_id = $stmtAppointment->insert_id;
             $newPatientChart = "INSERT INTO tbl_patient_chart (Appointment_id, followUp_schedule, patient_Status) 
-                    VALUES (?, NOW(), 'To be Seen')";
+                    VALUES (?,Null, 'To be Seen')";
             $newChart_stmt = $conn->prepare($newPatientChart);
             $newChart_stmt->bind_param('i', $appointment_id);
             if ($newChart_stmt->execute()){
@@ -857,7 +858,7 @@ if ($action == 'AddWalkInPatient') {
 }
 if ($action == 'Editpatient'){
     if (isset($_POST['patient_id']) && isset($_POST['patient_first-name']) && isset($_POST['patient_middle-name']) && isset($_POST['patient_last-name']) && isset($_POST['patient_contact-number']) && isset($_POST['patient_sex']) &&
-        isset($_POST['patient_email']) && isset($_POST['patient_vaccinated']) && isset($_POST['patient_address']) && isset($_POST['patient_dob']) && isset($_POST['patient_status']) && isset($_POST['patient_chart'])) {
+        isset($_POST['patient_email']) && isset($_POST['patient_vaccinated']) && isset($_POST['patient_address']) && isset($_POST['patient_dob']) && isset($_POST['patient_status']) && isset($_POST['patient_chart_id'])) {
         $patient_id = $_POST['patient_id'];
         $patientFname = $_POST['patient_first-name'];
         $patientMname = $_POST['patient_middle-name'];
@@ -869,7 +870,7 @@ if ($action == 'Editpatient'){
         $patient_address = $_POST['patient_address'];
         $patient_Dob = $_POST['patient_dob'];
         $patient_Chart_status =$_POST['patient_status'];
-        $chart_id = $_POST['patient_chart'];
+        $chart_id = $_POST['patient_chart_id'];
 
         $updatePatientInfo = "UPDATE tbl_patient SET First_Name = ?, Middle_Name = ?, 
                        Last_Name = ?, DateofBirth = ?, Sex = ?, Contact_Number = ? , 

@@ -254,16 +254,7 @@ $user_id = $_SESSION['user_id'];
                     </div>
 
                     <!-- pashow nito pag nag update info patient -->
-                <dialog id='profileAlert' class='modal' onclick='toggleDialog("profileAlert");toggleSecurityEdit(false);toggleEdit(false)' >
-                    <div class="flex justify-center" >
-                        <div role="alert" class="inline-flex items-center bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                            <span id='textInfo'></span>
-                        </div>
-                    </div>
-                </dialog>
+
                  
               </form>
             </div>
@@ -285,8 +276,7 @@ $user_id = $_SESSION['user_id'];
                               <input id="password" 
                                   type="password"
                                      name="newPass"
-                                  required 
-                                  value=""
+                                  required
                                   disabled
                                   autocomplete="off" 
                                   placeholder="Password" 
@@ -307,7 +297,6 @@ $user_id = $_SESSION['user_id'];
                       <input id="confirm-password" 
                       type="password"
                              name="confPass"
-                      value=""
                       required 
                       disabled
                       autocomplete="off" 
@@ -570,8 +559,18 @@ ORDER BY CASE WHEN `tbl_appointment`.`Status` = 'pending' THEN 0 ELSE 1 END, `tb
         </div>
 
       </dialog>
+    <dialog id='profileAlert' class='modal' onclick='toggleDialog("profileAlert");toggleSecurityEdit(false);toggleEdit(false)' >
+      <div class="flex justify-center" >
+        <div role="alert" class="inline-flex items-center bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative">
+          <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <span id='textInfo'></span>
+        </div>
+      </div>
+    </dialog>
 
-      <script src='../js/usersInfo.js'></script>
+      <script src='../js/usersInfo.js' defer></script>
     <script>
 
         document.addEventListener('DOMContentLoaded', function () {

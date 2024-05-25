@@ -66,8 +66,8 @@ function resetForm() {
   const confirmPasswordInput = document.getElementById('confirm-password');
 
   // Reset values to initial
-  passwordInput.value = passwordInput.dataset.initialValue;
-  confirmPasswordInput.value = confirmPasswordInput.dataset.initialValue;
+  passwordInput.value = '';
+  confirmPasswordInput.value = '';
 
   // Reset visibility of password fields
   resetVisibility('password', 'password-icon');
@@ -193,6 +193,7 @@ document.getElementById('passwordTab').addEventListener('click', function () {
   document.getElementById('passwordSection').classList.remove('hidden');
   document.getElementById('appointmentHistory').classList.add('hidden');
   document.getElementById('recordHistory').classList.add('hidden');
+
 
   resetPersonalInfoEditState(); // Reset the personal info tab when leaving it
 });

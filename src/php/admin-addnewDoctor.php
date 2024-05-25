@@ -162,7 +162,6 @@ if ($result->num_rows > 0) {
                         id="password"
                         type="password"
                         required
-                        value="Passwordko1"
                         autocomplete="off"
                         placeholder="Password"
                         class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600"
@@ -182,25 +181,36 @@ if ($result->num_rows > 0) {
         </form>
 
         <!-- pashow nito pagnasubmit -->
-        <div id='notif' class="flex justify-center hidden">
-            <div role="alert" class="inline-flex items-center bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative">
-                <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <span>Account Created!</span>
-            </div>
-        </div>
+
+        <dialog id='notif' class="flex justify-center modal" onclick='toggleDialog("notif")'>
+          <div role="alert" class="inline-flex alert-error items-center bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative">
+            <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span>Account Created!</span>
+          </div>
+        </dialog>
+        <dialog id='errnotif' class="flex justify-center modal" onclick='toggleDialog("errnotif")'>
+          <div role="alert" class="inline-flex alert-error items-center bg-red-100 border border-black text-black px-4 py-3 rounded relative">
+            <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span id='textError'></span>
+          </div>
+        </dialog>
 
       </div>
     </section>
     <script>
 
-      function toggle_successNotif(){
-        let notification = document.getElementById('notif');
-        if (notification.classList.contains('hidden')) {
-          notification.classList.remove('hidden');
-        } else {
-          notification.classList.add('hidden');
+      function toggleDialog(id) {
+        let dialog = document.getElementById(id);
+        if (dialog) {
+          if (dialog.hasAttribute('open')) {
+            dialog.removeAttribute('open');
+          } else {
+            dialog.setAttribute('open', '');
+          }
         }
       }
 
@@ -216,15 +226,12 @@ if ($result->num_rows > 0) {
           contentType: false,
           success: function(response) {
             if (parseInt(response) === 1) {
-              toggle_successNotif();
+              toggleDialog('notif')
               e.target.reset();
-              setTimeout(function() {
-                toggle_successNotif();
-              }, 3000);
+            }else {
+              $('#textError').html(response);
+              toggleDialog("errnotif")
             }
-
-
-            console.log(response);
 
           },
         })

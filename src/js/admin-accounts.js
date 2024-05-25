@@ -51,7 +51,6 @@ function getPatientInfo(id){
         document.querySelector('#patient_Date_ofBirth').textContent = formattedDateOfBirth;
 
       }
-      console.log(data)
     },
     error: function(xhr, status, error) {
       console.error('Error fetching data:', error);

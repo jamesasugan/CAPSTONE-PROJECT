@@ -568,6 +568,7 @@ if ($result && $result->num_rows > 0) {
                     <h3 class="font-bold text-2xl ">Edit Patient</h3>
                     <form id="EditpatientForm" >
                       <input type='hidden' name='patient_id' value='<?php echo $patient_id?>'>
+                      <input type='hidden' name='patient_chart_id' value='<?php echo $chart_id?>'>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 mt-5">
                                 <label class="block">
                                     First Name:
@@ -686,9 +687,9 @@ if ($result && $result->num_rows > 0) {
                                       required
                                       class="select select-bordered w-full p-2 bg-white dark:bg-gray-600  text-black dark:text-white text-lg" name="patient_status">
                                 <option value="" disabled selected>Change status</option>
-                                <option value="Female" <?php if ($patient_status == 'To be Seen') echo 'selected'; ?> >To be Seen</option>
-                                <option value="Male" <?php if ($patient_status == 'Follow Up') echo 'selected'; ?> >Follow Up</option>
-                                <option value="Male" <?php //if ($patient_status == 'Completed') echo 'selected'; ?> >Completed</option>
+                                <option value="To be Seen" <?php if ($patient_status == 'To be Seen') echo 'selected'; ?> >To be Seen</option>
+                                <option value="Follow Up" <?php if ($patient_status == 'Follow Up') echo 'selected'; ?> >Follow Up</option>
+                                <option value="Completed" <?php if ($patient_status == 'Completed') echo 'selected'; ?> >Completed</option>
                               </select>
                             </label>
                           </div>

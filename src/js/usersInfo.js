@@ -44,6 +44,7 @@ document.addEventListener('submit',function(e){
     endpoint = 'editUserInfo';
   }else if (e.target.id === 'security-form'){
     infoText = 'Password Updated';
+
     endpoint = 'editUserInfo';
   }
   else if (e.target.id === 'cancel_appoinment'){
