@@ -73,10 +73,6 @@ $staff_id = $row['Staff_ID'];
       <div class="w-full sm:flex sm:items-center justify-end">
         <select onchange='if (this.value === "none") { resetSearch("TableList"); } else { handleSearch("dropDownSort", "TableList", this.value); }' id='dropDownSort' name="sort" class="select select-bordered text-black dark:text-white w-full sm:w-40 bg-gray-300 dark:bg-gray-600 text-base sm:text-lg lg:text-xl focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 mb-4 sm:mb-0 sm:mr-4">
           <option selected value='none'>Filter</option>
-          <optgroup label="Service">
-            <option>Consultation</option>
-            <option>Test/Procedure</option>
-          </optgroup>
           <optgroup label="Status">
             <option>Approved</option>
             <option>Pending</option>
@@ -115,7 +111,6 @@ $staff_id = $row['Staff_ID'];
           <th class='cursor-pointer' onclick="sortTable(0)">Name</th>
           <th class='cursor-pointer' onclick="sortTable(1)">Appointment Date</th>
           <th class='cursor-pointer' onclick="sortTable(2)">Appointment Time</th>
-          <th class='cursor-pointer' onclick="sortTable(3)">Service</th>
           <th class='cursor-pointer' onclick="sortTable(4)">Status</th>
           <th  >Action</th>
         </tr>
@@ -185,9 +180,7 @@ ORDER BY
                 <td class="pl-10">' .
                     $time .
                     '</td> <!-- alisin mo yung pl-10 pag nagoverlap yung ilalagay mo -->
-                <td>' .
-                    $row['Service_Field'] .
-                    '</td>
+         
                 <td class="font-bold ' .
                     $class .
                     '">' .
@@ -310,6 +303,7 @@ ORDER BY
             </div>
           </li>
         </ul>
+        <!--
         <div id="services-container">
           <div class="service-dropdown">
             <label class="block mb-2 text-black dark:text-white">
@@ -350,7 +344,7 @@ ORDER BY
           </div>
         </div>
         <button id="add-service" class="btn mt-1 mr-2 bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none px-7 mb-2">Add Another Service</button><small class="font-medium text-black dark:text-white">If needed</small>
-
+        -->
 
         <div class="flex flex-col sm:flex-row justify-between gap-4" id="reschedule-section" style="display: none;">
           <div class="w-full">
@@ -415,8 +409,16 @@ ORDER BY
       </div>
       <!-- appointment form patient info. Nilagyan ko rin "History" sa ID dito katulad sa patient-profile appointment form -->
       <form id='appointmentform' action="#" method="GET">
+        <div class="w-full">
+          <label for="reason" class="block text-base sm:text-lg font-medium">Reason/Purpose</label>
+
+          <textarea   name="reason" placeholder="Type here" required class="textarea-bordered textarea w-full p-2 bg-gray-300 dark:bg-gray-600"></textarea>
+
+
+
+        </div>
         <fieldset class="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-          <legend class="text-xl font-bold mb-2 col-span-full">Service:</legend>
+          <!--<legend class="text-xl font-bold mb-2 col-span-full">Service:</legend>
           <div class="flex flex-col w-full">
             <ul class="w-full text-lg font-medium text-gray-900 bg-gray-300 dark:bg-gray-600 border border-gray-200 rounded-lg dark:border-gray-600 dark:text-white">
               <li class="border-b border-gray-400 dark:border-slate-300">
@@ -445,17 +447,9 @@ ORDER BY
               </li>
             </ul>
           </div>
-
-          <div class="w-full">
-            <label for="reason" class="block text-base sm:text-lg font-medium">Reason/Purpose</label>
-
-            <input type="text" id="reason" name="reason" disabled autocomplete="off"
-                   placeholder="" required class="text-black input input-bordered
-                      w-full p-2 bg-gray-300 dark:bg-gray-600 disabled:bg-white disabled:text-black dark:text-white
-                       disabled:border-gray-300" />
+          -->
 
 
-          </div>
 
           <div class="w-full md:w-auto md:col-span-1">
             <label for="appointment-dateHistory" class="block text-base sm:text-lg font-medium">
@@ -603,27 +597,33 @@ ORDER BY
             document.querySelector('#appointment_status').textContent = status;
             document.getElementById('approve').disabled = (status === 'Cancelled');
 
-
+/*
             let serviceValue = data.Service_Field;
             if (serviceValue === 'Consultation') {
               document.getElementById('horizontal-list-radio-license').checked = true;
             } else if (serviceValue === 'Test/Procedure') {
               document.getElementById('horizontal-list-radio-id').checked = true;
             }
-            let reason;
-            if (data.reason !== null) {
-              reason = data.reason
-            }else {
-              reason = '';
-            }
+
+ */
+            /*
             let service_type
             if (data.Service_Type !== null){
               service_type = data.Service_Type
             }else {
               service_type = ''
             }
-            document.querySelector('#update_appointment select[name="service-type"]').value = service_type;
-            document.querySelector('#appointmentform input[name="reason"]').value = reason;
+
+             */
+            let reason;
+            if (data.reason !== null) {
+              reason = data.reason
+            }else {
+              reason = '';
+            }
+
+            //document.querySelector('#update_appointment select[name="service-type"]').value = service_type;
+            document.querySelector('#appointmentform textarea[name="reason"]').value = reason;
             document.querySelector('#appointmentform input[name="appointment-dateHistory"]').value = date;
             document.querySelector('#appointmentform input[name="appointment-timeHistory"]').value = time;
             document.querySelector('#appointmentform input[name="first-nameHistory"]').value = data.First_Name;
@@ -701,7 +701,7 @@ ORDER BY
   </script>
 
     <!-- for add another service -->
-    <script>
+    <script>/*
       document.addEventListener('DOMContentLoaded', function() {
       const servicesContainer = document.getElementById('services-container');
       const addServiceButton = document.getElementById('add-service');
@@ -719,6 +719,7 @@ ORDER BY
         servicesContainer.appendChild(newDropdown);
       });
     });
+    */
   </script>
   </body>
 </html>

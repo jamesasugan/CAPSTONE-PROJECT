@@ -1,13 +1,13 @@
-
 <?php
-include '../Database/database_conn.php';
+
 session_start();
+include '../Database/database_conn.php';
 
 
 
+include "ReuseFunction.php";
 if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] == 'patient'){
     header("Location: index.php");
-
 }
 $user_id = $_SESSION['user_id'];
 $sql = "SELECT role from tbl_staff where User_ID = ?";
@@ -22,12 +22,8 @@ if ($result->num_rows > 0) {
     }
 }
 
-$patient_id = isset($_GET['id']) ? intval($_GET['id']) : null;
-$chart_id = isset($_GET['chart_id']) ? intval($_GET['chart_id']) : null;
-if (!is_int($patient_id) or !is_int($chart_id)){
-    header('Location: admin-patientRecords.php');
-    exit();
-}
+$patient_id = isset($_GET['id']) ?$_GET['id'] : '';
+$chart_id = isset($_GET['chart_id']) ? $_GET['chart_id'] : '';
 
 $sql = "SELECT `tbl_patient`.*, `tbl_appointment`.*, `tbl_patient_chart`.*
         FROM `tbl_patient` 
@@ -42,13 +38,10 @@ if ($result && $result->num_rows > 0){
     $row = $result->fetch_assoc();
     $middleInitial = (strlen($row['Middle_Name']) >= 1) ? substr($row['Middle_Name'], 0, 1) : '';
 
-
 }else{
-    header('Location: admin-patientRecords.php');
+    header("Location: admin-patientRecords.php");
     exit(); // Exit the script after redirecting
 }
-
-
 ?>
 
 <!DOCTYPE html>
@@ -104,21 +97,15 @@ if ($result && $result->num_rows > 0){
                 <div class="patientInfo mb-10 mt-5">
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-1 text-lg sm:text-xl">
                                 <h2 class="text-lg sm:text-xl font-bold">Status: <span class="text-yellow-600 dark:text-yellow-300"><?php echo $row['patient_Status']?></span></h2>
-                                <p><strong>Appointment Type: </strong><?php echo $row['Appointment_type']?> </p>
-                                
-                                <p><strong>Service: </strong> <?php echo $row['Service_Field']?></p>
-                                <p><strong>Service Type: </strong> <?php echo $row['Service_Type']?></p>
-
-                                <p><strong>Name: </strong> <?php echo  $row['First_Name'].' '.$middleInitial.'. '.$row['Last_Name']?></p>
-                                <p><strong>Contact Number: </strong> <?php echo $row['Contact_Number']?></p>
-
-                                <p><strong>Sex: </strong> <?php echo $row['Sex']?></p>
-                                <p><strong>Email: </strong><?php echo $row['patientEmail']?></p>
-
-                                <p><strong>Vaccinated:</strong> <?php echo $row['Vaccination']?></p>
-
-                                <p><strong>Address:</strong> <?php echo $row['Address']?></p>
-                                <p><strong>Date of Birth: </strong><?php echo $row['DateofBirth']?></p>
+                              <p><strong>Appointment Type: </strong><?php echo $row['Appointment_type']; ?> </p>
+                              <p><strong>Name: </strong> <?php echo $row['First_Name'] . ' ' . $middleInitial . '. ' . $row['Last_Name']; ?></p>
+                              <p><strong>Contact Number: </strong> <?php echo $row[ 'Contact_Number']; ?></p>
+                              <p><strong>Sex: </strong> <?php echo $row['Sex']; ?></p>
+                              <p><strong>Email: </strong><?php echo $row['patientEmail']; ?></p>
+                              <p><strong>Vaccinated:</strong> <?php echo $row['Vaccination']; ?></p>
+                              <p><strong>Address:</strong> <?php echo $row['Address']; ?></p>
+                              <p><strong>Date of Birth: </strong><?php echo $row['DateofBirth']; ?></p>
+                              <p><strong>Service Type: </strong><span id='availedService'>N/A</span> </p>
                             </div>
                         </div>
                                 <!-- lalabas lang to sa follow up stage.
@@ -183,6 +170,7 @@ if ($result && $result->num_rows > 0){
                               echo "<option value='{$row['Staff_ID']}' disabled>{$row['First_Name']} $middleInitial. {$row['Last_Name']}</option>";
                           }
                           ?>
+
                       </select>
                     </label>
                   </div>
@@ -200,10 +188,7 @@ if ($result && $result->num_rows > 0){
                   <div>
                     <label class="block">
                       Heart Rate:
-                      <input type="text"
-                             name="heart-rate"
-                             required
-                             disabled
+                      <input type="text" name="heart-rate" required disabled
                              placeholder="Heart Rate"
                              class="input input-bordered w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400" />
                     </label>
@@ -213,10 +198,8 @@ if ($result && $result->num_rows > 0){
                       Temperature (Celsius):
                       <input type="text"
                              name="temperature"
-
                              required
                              disabled
-
                              placeholder="Temperature in Celsius"
                              class="input input-bordered w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400" />
                     </label>
@@ -233,7 +216,6 @@ if ($result && $result->num_rows > 0){
                     </label>
                   </div>
                 </div>
-
                 <div class="grid grid-cols-1 gap-4 mb-14">
                   <label class="block">
                     Saturation:
@@ -255,15 +237,8 @@ if ($result && $result->num_rows > 0){
                   <label class="block">Treatment Plan:
                     <textarea disabled id="treatmentPlan" rows="4" name="Treatment Plan"  class="input input-bordered h-52 w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400" placeholder="Treatment Plan"></textarea>
                   </label>
-
                   <!-- lalabas to sa initial muna, tas pag nag yes, pwede din lumabas ulit sa follow up check up stage kung need ulit ng follow up -->
-
-
-
-
-
                 </div>
-
                 <div class="border border-gray-400 mb-10"></div>
 
                 <h2 class="text-2xl sm:text-3xl font-bold mb-4 text-center">Results</h2>
@@ -301,8 +276,8 @@ if ($result && $result->num_rows > 0){
       method: 'GET',
       dataType: 'json',
       success: function(data) {
-
         if (data) {
+          $('#availedService').html(data.availedService);
           document.querySelector('#patientRecordForm input[name="consultation-date"]').value = data.consultationDate;
           document.querySelector('#patientRecordForm input[name="record_id"]').value = data.Record_ID;
           document.querySelector('#patientRecordForm select[name="consultant-name"]').value = data.Consultant_Staff_ID;

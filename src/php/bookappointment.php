@@ -61,9 +61,6 @@ if (isset($_SESSION['user_type']) and $_SESSION['user_type'] == 'staff') {
 
     <?php include 'navbar-main.php'; ?>
 
-    <?php $selectedService = isset($_GET['service'])
-        ? $_GET['service']
-        : null; ?>
 
     
 
@@ -74,17 +71,20 @@ if (isset($_SESSION['user_type']) and $_SESSION['user_type'] == 'staff') {
       class="book-appointment w-full flex justify-center items-center pt-24 pb-10 p-5
       bg-[#f6fafc] dark:bg-[#17222a]"
     >
-      <div
-        class="book-form w-full max-w-7xl mx-auto p-4 rounded-lg shadow-lg bg-gray-200 dark:bg-gray-700 text-[#0e1011] dark:text-[#eef0f1]"
-      >
+      <div class="book-form w-full max-w-7xl mx-auto p-4 rounded-lg shadow-lg bg-gray-200 dark:bg-gray-700 text-[#0e1011] dark:text-[#eef0f1]" id='appointmentForm'>
+          <?php if (isset($_SESSION['user_type']) and $_SESSION['user_type']  == 'patient'):
+              ?>
 
+            <dialog open class='modal bg-black bg-opacity-20' id='chooseBook'>
+              <div class="text-center font-bold text-xl mb-10 bg bg-gray-200 dark:bg-gray-700 text-[#0e1011] dark:text-[#eef0f1] h-36 rounded w-auto p-5">
+                <p>Are you booking for yourself?</p>
+                <button class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none mr-5 mt-4" onclick='toggleDialog("chooseBook");getAccountUserInfo()'>Yes</button>
+                <button class="btn bg-gray-400 text-black dark:bg-white hover:bg-gray-500 dark:hover:bg-gray-300 border-none" onclick='toggleDialog("chooseBook")'>No</button>
+              </div>
+            </dialog>
+
+          <?php endif;?>
       <!-- labas mo lang to pag naka log in tas hide mo pagtapos magsagot -->
-      <div class="text-center font-bold text-xl mb-10">
-        <p>Are you booking for yourself?</p>
-
-        <button class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none mr-5 mt-4">Yes</button>
-        <button class="btn bg-gray-400 text-black dark:bg-white hover:bg-gray-500 dark:hover:bg-gray-300 border-none">No</button>
-      </div>
 
 
         <h2 class="text-2xl font-bold mb-2">Set an Appointment</h2>
@@ -95,41 +95,43 @@ if (isset($_SESSION['user_type']) and $_SESSION['user_type'] == 'staff') {
         <p><span>Note:</span> The selection of Doctor will depend if the selected doctor is available on the set appointment date and time</p>
 
         <form id='patient_bookAppointment' action="#" method="GET">
-        <fieldset class="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-          <legend class="text-xl font-bold mb-2 col-span-full">Service:</legend>
-          <div class="flex flex-col w-full">           
-            <ul class="w-full text-lg font-medium text-gray-900 bg-gray-300 dark:bg-gray-600 border border-gray-200 rounded-lg dark:border-gray-600 dark:text-white">
-              <li class="border-b border-gray-400 dark:border-slate-300">
-                <label class="flex items-center pl-3 w-full cursor-pointer">
-                  <input id="horizontal-list-radio-license" 
-                  type="radio" 
-                  value="Consultation" 
-                  name="service" 
-                  class="radio radio-info [color-scheme:light] dark:[color-scheme:dark]" 
-                  required>
-                  <span class="py-3 ml-2 text-lg font-medium ">Consultation</span>
-                </label>
-              </li>
-              <li>
-                <label class="flex items-center pl-3 w-full cursor-pointer">
-                  <input id="horizontal-list-radio-id" 
-                  type="radio" 
-                  value="Test/Procedure" 
-                  name="service" 
-                  class="radio radio-info [color-scheme:light] dark:[color-scheme:dark]" 
-                  required>
-                  <span class="py-3 ml-2 text-lg font-medium ">Test/Procedure</span>
-                </label>
-              </li>
-            </ul>
-          </div>
-
-          <div class="w-full">
+          <div class="w-full max-w-md">
             <label for="service-type" class="block text-lg font-medium mb-1">Reason</label>
-            <input type="text"  name="reason" placeholder="Type here" required class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600" />
-
-
+            <textarea   name="reason" placeholder="Type here" required class="textarea-bordered textarea w-full p-2 bg-gray-300 dark:bg-gray-600"></textarea>
           </div>
+        <fieldset class="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+
+          <!-- <legend class="text-xl font-bold mb-2 col-span-full">Service:</legend>
+
+           <div class="flex flex-col w-full">
+             <ul class="w-full text-lg font-medium text-gray-900 bg-gray-300 dark:bg-gray-600 border border-gray-200 rounded-lg dark:border-gray-600 dark:text-white">
+               <li class="border-b border-gray-400 dark:border-slate-300">
+                 <label class="flex items-center pl-3 w-full cursor-pointer">
+                   <input id="horizontal-list-radio-license"
+                   type="radio"
+                   value="Consultation"
+                   name="service"
+                   class="radio radio-info [color-scheme:light] dark:[color-scheme:dark]"
+                   required>
+                   <span class="py-3 ml-2 text-lg font-medium ">Consultation</span>
+                 </label>
+               </li>
+               <li>
+                 <label class="flex items-center pl-3 w-full cursor-pointer">
+                   <input id="horizontal-list-radio-id"
+                   type="radio"
+                   value="Test/Procedure"
+                   name="service"
+                   class="radio radio-info [color-scheme:light] dark:[color-scheme:dark]"
+                   required>
+                   <span class="py-3 ml-2 text-lg font-medium ">Test/Procedure</span>
+                 </label>
+               </li>
+             </ul>
+           </div>
+           -->
+
+
 
         <div class="w-full md:w-auto md:col-span-1">
           <label for="appointment-date" class="block text-base sm:text-lg font-medium">
@@ -319,6 +321,7 @@ if (isset($_SESSION['user_type']) and $_SESSION['user_type'] == 'staff') {
     </section>
   </body>
   <script>
+
     function toggleDialog(id) {
       let dialog = document.getElementById(id);
       if (dialog) {
@@ -350,6 +353,37 @@ if (isset($_SESSION['user_type']) and $_SESSION['user_type'] == 'staff') {
         }
       });
     });
+<?php if (isset($_SESSION['user_type']) and $_SESSION['user_type'] == 'patient'):?>
+    function getAccountUserInfo(){
+      $.ajax({
+        url: 'ajax.php?action=getOnlineUserInfo&onlineUser_id=' + encodeURIComponent('<?php echo $_SESSION['user_id']; ?>'),
+        method: 'GET',
+        dataType: 'json',
+        success: function(data) {
+          if (data) {
+            console.log(data);
+            document.querySelector('#patient_bookAppointment input[name="first-name"]').value = data.First_Name;
+            document.querySelector('#patient_bookAppointment input[name="middle-name"]').value = data.Middle_Name;
+            document.querySelector('#patient_bookAppointment input[name="last-name"]').value = data.Last_Name;
+            document.querySelector('#patient_bookAppointment input[name="email"]').value = data.Email;
+            document.querySelector('#patient_bookAppointment input[name="contact-number"]').value = data.Contact_Number;
+            document.querySelector('#patient_bookAppointment select[name="sex"]').value = data.Sex;
+            document.querySelector('#patient_bookAppointment input[name="dob"]').value = data.DateofBirth;
+            document.querySelector('#patient_bookAppointment input[name="address"]').value = data.Address;
+          }
+        },
+        error: function(xhr, status, error) {
+          console.error('Error fetching data:', error);
+        }
+      });
+    }
+
+    <?php endif;?>
+
+
+
+
+
     /*
     function getDoctorSchedule() {
       let schedule;

@@ -4,6 +4,14 @@ include '../Database/database_conn.php';
 if (!isset($_SESSION['user_type']) or $_SESSION['user_type'] !== 'patient') {
     header('Location: index.php');
 }
+include "ReuseFunction.php";
+$user_id = $_SESSION['user_id'];
+
+
+
+
+
+
 ?>
 
 
@@ -74,9 +82,6 @@ if (!isset($_SESSION['user_type']) or $_SESSION['user_type'] !== 'patient') {
           </div>
 
 
-
-
-          <!-- Personal Information -->
           <div id="personalInfo" class="flex-1 p-10">
             <div class="bg-gray-200 dark:bg-gray-700 p-5 rounded-lg h-full">
               <h3 class="text-2xl font-bold text-black dark:text-white mb-4">
@@ -195,8 +200,8 @@ if (!isset($_SESSION['user_type']) or $_SESSION['user_type'] !== 'patient') {
                       disabled
                     >
                       <option value="">Select...</option>
-                      <option value="male">Male</option>
-                      <option value="female">Female</option>
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
                     </select>
                   </div>
                   <!-- Address -->
@@ -352,7 +357,6 @@ if (!isset($_SESSION['user_type']) or $_SESSION['user_type'] !== 'patient') {
                   <thead>
                     <tr class="font-bold text-black dark:text-white text-base sm:text-lg">
                       <th>Name</th>
-                      <th>Service</th>
                       <th>Date </th>
                       <th>Time</th>
                       <th>Status</th>
@@ -361,9 +365,8 @@ if (!isset($_SESSION['user_type']) or $_SESSION['user_type'] !== 'patient') {
                     </tr>
                   </thead>
                   <tbody>
+                  <?php
 
-                      <?php
-                      $user_id = $_SESSION['user_id'];
                       $sql = "
                       SELECT `tbl_patient`.*, `tbl_appointment`.*
 FROM `account_user_info`
@@ -408,44 +411,23 @@ ORDER BY CASE WHEN `tbl_appointment`.`Status` = 'pending' THEN 0 ELSE 1 END, `tb
                                   )
                                   : 'N/A';
                               echo '
-                      <tr class="text-base hover:bg-gray-300  dark:hover:bg-gray-600 font-medium text-black dark:text-white">               
-                        <td>' .
-                                  $row['First_Name'] .
-                                  ' ' .
-                                  $middleInitial .
-                                  ' ' .
-                                  $row['Middle_Name'] .
-                                  '</td>
-                        <td>' .
-                                  $row['Service_Field'] .
-                                  '</td>
-                        <td>' .
-                                  $date .
-                                  '</td>
-                        <td>' .
-                                  $time .
-                                  '</td>
-                        <td class="font-bold  ' .
-                                  $status_color .
-                                  ' ">' .
-                                  $row['Status'] .
-                                  '</td> 
-                        <td>' .
-                                  $row['Remarks'] .
-                                  '</td>';
+                         <tr class="text-base hover:bg-gray-300  dark:hover:bg-gray-600 font-medium text-black dark:text-white">               
+                        <td>' . $row['First_Name'] . ' ' . $middleInitial . ' ' .
+                                  $row['Middle_Name'] . '</td>
+          
+                       <td>' . $date . '</td>
+                        <td>' . $time . '</td>
+                       <td class="font-bold  ' . $status_color . ' ">' . ucfirst($row['Status']) . '</td> 
+                       <td>' . $row['Remarks'] . '</td>';
                               if ($row['Status'] == 'pending') {
-                                  echo '<td class="pl-9"> 
-                          <button onclick="toggleDialog(\'viewandCancel\');getAppointmentId(' .
-                                      $row['Appointment_ID'] .
-                                      ')"><i class="fa-regular fa-eye"></i></button>
+                                echo '<td class="pl-9"> 
+                          <button onclick="toggleDialog(\'viewandCancel\');getAppointmentId(' . $row['Appointment_ID'] . ')"><i class="fa-regular fa-eye"></i></button>
                         </td>';
                               }
-
                               echo '</tr>';
                           }
                       }
                       ?>
-
                     </tbody>
                   </table>
                 </div>
@@ -464,20 +446,85 @@ ORDER BY CASE WHEN `tbl_appointment`.`Status` = 'pending' THEN 0 ELSE 1 END, `tb
                   <thead>
                     <tr class="font-bold text-black dark:text-white text-base sm:text-lg">
                       <th>Name</th>
-                      <th>Service</th>
+                      <th>Last visit</th>
                       <th>Schedule </th>
                       <th>Status</th>
                       <th>Action</th>
                     </tr>
                   </thead>
                     <tbody>
-                      <tr class="text-base hover:bg-gray-300  dark:hover:bg-gray-600 font-medium text-black dark:text-white">
-                        <td>Cy Ganderton</td>
-                        <td>OB-GYNE</td>
-                        <td>May 21, 2024</td>
-                        <td class="font-bold">Completed</td>
-                        <td class="pl-9"><a href="patient-fullRecord.php"><i class="fa-regular fa-eye"></i></a></td>
-                      </tr>
+                    <?php
+                    $getAccOwner_Info = "
+        SELECT *  FROM account_user_info
+        WHERE User_ID = ?;
+    ";
+                    $getAccOwner_InfoSTMT = $conn->prepare($getAccOwner_Info);
+                    $getAccOwner_InfoSTMT->bind_param('i', $user_id);
+                    $getAccOwner_InfoSTMT->execute();
+                    $res = $getAccOwner_InfoSTMT->get_result();
+                    $row = $res->fetch_assoc();
+
+                    $accountOwner_ID = $row['user_info_ID'];
+
+                    $getaccOwnerPatientChart = "SELECT pc.Chart_id,p.Patient_ID, p.First_Name, p.Middle_Name, 
+       p.Last_Name, pc.followUp_schedule, pc.patient_Status FROM tbl_patient_chart AS pc 
+           JOIN tbl_appointment AS a ON pc.Appointment_id = a.Appointment_ID 
+           JOIN tbl_patient AS p ON a.Patient_ID = p.Patient_ID 
+            WHERE p.user_info_ID = ?
+              AND pc.patient_Status IN ('To be Seen', 'Follow Up', 'Completed')
+            ORDER BY pc.followUp_schedule;
+
+";
+
+                    $stmt = $conn->prepare($getaccOwnerPatientChart);
+                    $stmt->bind_param('i', $accountOwner_ID);
+                    $stmt->execute();
+                    $result = $stmt->get_result();
+                    while ($row= $result->fetch_assoc()){
+                        $middleInitial = (strlen($row['Middle_Name']) >= 1) ? substr($row['Middle_Name'], 0, 1) : '';
+                        $date = date("F j, Y", strtotime($row['followUp_schedule']));
+                        $time = date("g:ia", strtotime($row['followUp_schedule']));
+                        $followUpschedule = $date . ' ' . $time == 'January 1, 1970 1:00am' ? "No schedule" : $date . ' ' . $time;
+
+                        $statusClass = '';
+                        switch ($row['patient_Status']) {
+                            case 'To be seen':
+                                $statusClass = 'text-yellow-600 dark:text-yellow-300';
+                                break;
+                            case 'Follow Up':
+                                $statusClass = 'text-info';
+                                break;
+                            case 'Completed':
+                                $statusClass = 'text-green-500';
+                                break;
+                            default:
+                                $statusClass = ''; // Default class if none of the above match
+                                break;
+                        }
+                        echo '<tr class="text-base hover:bg-gray-300 dark:hover:bg-gray-600 font-medium text-black dark:text-white">
+              <td>'.$row['First_Name'].' '.$middleInitial.'. '.$row['Last_Name'].'</td>
+         
+              <td>'.getLastPatientVisit($row['Chart_id']).'</td>
+       
+              <td>'.$followUpschedule.'</td>
+              <td class="font-bold '.$statusClass.'">'.$row['patient_Status'].'</td>
+              <!-- Status List
+                   To be seen = text-yellow-600 dark:text-yellow-300
+                   Follow Up = text-info
+                   Completed = text-green-500
+                   Waiting for Results = text-yellow-600 dark:text-yellow-300
+                   No Show =  text-red-500
+            -->
+
+              <!-- view information -->
+              <td class="pl-9 ">
+                <a href="patient-fullRecord.php?id='.$row['Patient_ID'] .'&chart_id='. $row['Chart_id'].'"><i class="fa-regular fa-eye"></i></a>
+                </td>
+            </tr>
+                ';
+                    }
+
+                    ?>
                     </tbody>
                   </table>
                 </div>

@@ -10,6 +10,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] == 'patient'){
 }
 
 
+
 ?>
 
 <!DOCTYPE html>
@@ -44,8 +45,23 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] == 'patient'){
 
 </head>
 <body>
-
-    <?php include 'admin-navbar.php'; ?>
+<?php
+$user_id = $_SESSION['user_id'];
+$sql = "SELECT role from tbl_staff where User_ID = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param('i', $user_id);
+$stmt->execute();
+$result = $stmt->get_result();
+if ($result->num_rows > 0) {
+    $row = $result->fetch_assoc();
+    if ($row['role'] == 'doctor'){
+        include 'staff-navbar.php';
+    }else{
+        include 'admin-navbar.php';
+    }
+}
+?>
+    <?php  ?>
     
     <section
       id="addwalkInPatient"
@@ -59,6 +75,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] == 'patient'){
 
         <form id='walkInPatientForm' action="#" method="GET">
         <fieldset class="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!--
           <legend class="text-xl font-bold mb-2 col-span-full">Service:</legend>
           <div class="flex flex-col w-full">           
             <ul class="w-full text-lg font-medium text-gray-900 bg-gray-300 dark:bg-gray-600 border border-gray-200 rounded-lg dark:border-gray-600 dark:text-white">
@@ -124,6 +141,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] == 'patient'){
                 <option value="FT4/TSH">FT4/TSH</option>
             </select>
         </div>
+        -->
           <div class="w-full">
 
             <label
@@ -268,7 +286,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] == 'patient'){
             if (parseInt(response) === 1) {
               toggleDialog('addedNewPatientNotif');
               setTimeout(function() {
-                window.location.href = 'admin-addwalkInPatient.php';
+                window.location.href = 'addwalkInPatient.php';
               }, 2000);
             }else {
             }

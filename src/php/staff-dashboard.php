@@ -17,13 +17,14 @@ if (isset($_SESSION['user_type']) && $_SESSION['user_type'] == 'staff'){
 }else{
     header("Location: index.php");
 }
+include "ReuseFunction.php";
 ?>
 
-?>
+
 <div class="dashboard-page pt-32 sm:pt-60 ">
   <div class="title mb-0 sm:mb-10 w-full px-4">
     <h1 class="text-3xl sm:text-6xl font-bold text-center break-words mb-5">
-      Welcome,
+      Welcome, Dr.
       <span> <?php echo $first_name .' '. $last_name?></span>
     </h1>
   </div>
@@ -37,7 +38,7 @@ if (isset($_SESSION['user_type']) && $_SESSION['user_type'] == 'staff'){
       <div class="flex-grow">
         <div class="card-body">
           <div class="icon flex justify-center">
-            <span class="font-bold text-6xl sm:text-7xl mt-2 overflow-hidden whitespace-nowrap text-overflow-ellipsis">9, 111</span> <!-- pending appointment numbers -->
+            <span class="font-bold text-6xl sm:text-7xl mt-2 overflow-hidden whitespace-nowrap text-overflow-ellipsis"><?php echo getPendingAppointment()?></span> <!-- pending appointment numbers -->
           </div>
         </div>
       </div>
@@ -56,7 +57,7 @@ if (isset($_SESSION['user_type']) && $_SESSION['user_type'] == 'staff'){
       <div class="flex-grow">
         <div class="card-body">
           <div class="icon flex justify-center">
-            <span class="font-bold text-6xl sm:text-7xl mt-2 overflow-hidden whitespace-nowrap text-overflow-ellipsis">55, 498</span>  <!-- total record numbers -->
+            <span class="font-bold text-6xl sm:text-7xl mt-2 overflow-hidden whitespace-nowrap text-overflow-ellipsis"><?php echo getTotalPatientChart()?></span>  <!-- total record numbers -->
           </div>
         </div>
       </div>
@@ -75,7 +76,7 @@ if (isset($_SESSION['user_type']) && $_SESSION['user_type'] == 'staff'){
       <div class="flex-grow">
         <div class="card-body">
           <div class="icon flex justify-center">
-              <span class="font-bold text-6xl sm:text-7xl mt-2 overflow-hidden whitespace-nowrap text-overflow-ellipsis">45</span>  <!-- total records ng naka "To be Seen" na status -->
+              <span class="font-bold text-6xl sm:text-7xl mt-2 overflow-hidden whitespace-nowrap text-overflow-ellipsis"><?php echo tobeSeenPatient()?></span>  <!-- total records ng naka "To be Seen" na status -->
           </div>
         </div>
       </div>

@@ -16,7 +16,7 @@ if (isset($_SESSION['user_type']) && $_SESSION['user_type'] == 'staff'){
 }else{
     header("Location: index.php");
 }
-
+include 'ReuseFunction.php'
 ?>
 
 
@@ -37,7 +37,7 @@ if (isset($_SESSION['user_type']) && $_SESSION['user_type'] == 'staff'){
       <div class="flex-grow">
         <div class="card-body">
           <div class="icon flex justify-center">
-            <span class="font-bold text-6xl sm:text-7xl mt-2 overflow-hidden whitespace-nowrap text-overflow-ellipsis">9, 111</span> <!-- pending appointment numbers -->
+            <span class="font-bold text-6xl sm:text-7xl mt-2 overflow-hidden whitespace-nowrap text-overflow-ellipsis"><?php echo getPendingAppointment()?></span> <!-- pending appointment numbers -->
           </div>
         </div>
       </div>
@@ -56,7 +56,7 @@ if (isset($_SESSION['user_type']) && $_SESSION['user_type'] == 'staff'){
       <div class="flex-grow">
         <div class="card-body">
           <div class="icon flex justify-center">
-            <span class="font-bold text-6xl sm:text-7xl mt-2 overflow-hidden whitespace-nowrap text-overflow-ellipsis">55, 498</span>  <!-- total record numbers -->
+            <span class="font-bold text-6xl sm:text-7xl mt-2 overflow-hidden whitespace-nowrap text-overflow-ellipsis"><?php echo getTotalPatientChart()?></span>  <!-- total record numbers -->
           </div>
         </div>
       </div>

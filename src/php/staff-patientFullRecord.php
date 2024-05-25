@@ -6,6 +6,7 @@ session_start();
 if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] == 'patient') {
     header('Location: index.php');
 }
+include "ReuseFunction.php";
 $user_id = $_SESSION['user_id'];
 $sql = 'SELECT * from tbl_staff where User_ID = ?';
 $stmt = $conn->prepare($sql);
@@ -20,20 +21,17 @@ if ($result->num_rows > 0) {
 }
 $staff_id = $row['Staff_ID'];
 
-$patient_id = isset($_GET['id']) ? intval($_GET['id']) : null;
-$chart_id = isset($_GET['chart_id']) ? intval($_GET['chart_id']) : null;
-if (!is_int($patient_id) or !is_int($chart_id)) {
-    header('Location: staff-patientsRecord.php');
-    exit();
-}
+$patient_id = isset($_GET['id']) ?$_GET['id'] : null;
+$chart_id = isset($_GET['chart_id']) ? $_GET['chart_id'] : null;
+
 
 $sql = "SELECT `tbl_patient`.*, `tbl_appointment`.*, `tbl_patient_chart`.*
         FROM `tbl_patient` 
         INNER JOIN `tbl_appointment` ON `tbl_appointment`.`Patient_ID` = `tbl_patient`.`Patient_ID` 
         INNER JOIN `tbl_patient_chart` ON `tbl_patient_chart`.`Appointment_id` = `tbl_appointment`.`Appointment_ID`
-        WHERE `tbl_appointment`.`Patient_ID` = ?";
+        WHERE `tbl_appointment`.`Patient_ID` = ? and `tbl_appointment`.`Staff_ID` = ?";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param('i', $patient_id);
+$stmt->bind_param('ii', $patient_id, $staff_id);
 $stmt->execute();
 $result = $stmt->get_result();
 if ($result && $result->num_rows > 0) {
@@ -42,6 +40,20 @@ if ($result && $result->num_rows > 0) {
         strlen($row['Middle_Name']) >= 1
             ? substr($row['Middle_Name'], 0, 1)
             : '';
+    $Patient_firstname = $row['First_Name'];
+    $Patient_lastname = $row['Last_Name'];
+    $Patient_middle_name = $row['Middle_Name'];
+    $Patient_ContactNumber = $row['Contact_Number'];
+    $Patient_Email = $row['patientEmail'];
+    $Patient_address = $row['Address'];
+    $appointmentType = $row['Appointment_type'];
+    $patientDOB =  $row['DateofBirth'];
+    $patientVacStat =  $row['Vaccination'];
+    $patient_Sex = $row['Sex'];
+    $Patient_address = $row['Address'];
+    $patient_status = $row['patient_Status'];
+
+
 } else {
     header('Location: staff-patientsRecord.php');
     exit();
@@ -100,48 +112,21 @@ if ($result && $result->num_rows > 0) {
 
               <div class="patientInfo mb-10 mt-5">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-1 text-lg sm:text-xl">
-                  <h2 class="text-lg sm:text-xl font-bold">Status: <span class="text-yellow-600 dark:text-yellow-300"><?php echo $row[
-                      'patient_Status'
-                  ]; ?></span></h2>
-                  <p><strong>Appointment Type: </strong><?php echo $row[
-                      'Appointment_type'
-                  ]; ?> </p>
-
-                  <p><strong>Service: </strong> <?php echo $row[
-                      'Service_Field'
-                  ]; ?></p>
-                  <p><strong>Service Type: </strong> <?php echo $row[
-                      'Service_Type'
-                  ]; ?></p>
-
-                  <p><strong>Name: </strong> <?php echo $row['First_Name'] .
-                      ' ' .
-                      $middleInitial .
-                      '. ' .
-                      $row['Last_Name']; ?></p>
-                  <p><strong>Contact Number: </strong> <?php echo $row[
-                      'Contact_Number'
-                  ]; ?></p>
-
+                  <h2 class="text-lg sm:text-xl font-bold">Status: <span class="text-yellow-600 dark:text-yellow-300"><?php echo $row['patient_Status']; ?></span></h2>
+                  <p><strong>Appointment Type: </strong><?php echo $row['Appointment_type']; ?> </p>
+                  <p><strong>Name: </strong> <?php echo $row['First_Name'] . ' ' . $middleInitial . '. ' . $row['Last_Name']; ?></p>
+                  <p><strong>Contact Number: </strong> <?php echo $row[ 'Contact_Number']; ?></p>
                   <p><strong>Sex: </strong> <?php echo $row['Sex']; ?></p>
-                  <p><strong>Email: </strong><?php echo $row[
-                      'patientEmail'
-                  ]; ?></p>
+                  <p><strong>Email: </strong><?php echo $row['patientEmail']; ?></p>
+                  <p><strong>Vaccinated:</strong> <?php echo $row['Vaccination']; ?></p>
+                  <p><strong>Address:</strong> <?php echo $row['Address']; ?></p>
+                  <p><strong>Date of Birth: </strong><?php echo $row['DateofBirth']; ?></p>
+                  <p><strong>Service Type: </strong><span id='availedService'>N/A</span></p>
 
-                  <p><strong>Vaccinated:</strong> <?php echo $row[
-                      'Vaccination'
-                  ]; ?></p>
-
-                  <p><strong>Address:</strong> <?php echo $row[
-                      'Address'
-                  ]; ?></p>
-                  <p><strong>Date of Birth: </strong><?php echo $row[
-                      'DateofBirth'
-                  ]; ?></p>
                 </div>
               </div>
               <div class="flex justify-end">
-                <button class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none mb-5" onclick="editpatient_info.showModal()">Edit Patient Info</button>
+                <a class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none mb-5" onclick='toggleDialog("editpatient_info")'>Edit Patient Info</a>
               </div>
               <!-- lalabas lang to sa follow up stage.
                   nilipat ko muna ng pwesto, nilabas ko sa form kase pag nasa form nagkakaerror, gawan mo na lang sariling form siguro to
@@ -149,8 +134,8 @@ if ($result && $result->num_rows > 0) {
           -->
               <div class="flex flex-col sm:flex-row justify-between sm:items-center">
                 <select id="visitDropdown" onchange="if(this.value !== 'newRecord')
-                { getRecords(this.value); getResImg(this.value);} else { document.getElementById('patientRecordForm').reset();
-                  document.getElementById('record_id').value = ''; resetImgDisplay();}" name="sort" class="select
+                { getRecords(this.value); getResImg(this.value); $('#serviceTypeBTN').html('Edit Service Type')} else { document.getElementById('patientRecordForm').reset(); $('#availedService').html('N/A');
+                  document.getElementById('record_id').value = ''; resetImgDisplay(); $('#serviceTypeBTN').html('Select Service Type') }" name="sort" class="select
                 select-bordered text-black dark:text-white w-full sm:w-48  bg-gray-300 dark:bg-gray-600
                 text-base sm:text-lg lg:text-xl focus:border-blue-500 focus:ring focus:ring-blue-500
                 focus:ring-opacity-50 mb-4 sm:mb-0 sm:mr-4 disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400">
@@ -175,7 +160,207 @@ if ($result && $result->num_rows > 0) {
                 </select>
               </div>
 
-              <form id="patientRecordForm" action="#" method="POST" enctype='multipart/form-data'>
+              <form id="patientRecordForm" enctype='multipart/form-data'>
+                <a class='btn btn-info mt-6' onclick='toggleDialog("services")' id='serviceTypeBTN'>Select Service Type</a>
+                <dialog class='modal bg-black bg-opacity-20' id='services'>
+                  <div id='ServiceList'  class="modal-box w-11/12 max-w-5xl bg-gray-200 dark:bg-gray-700 text-[#0e1011] dark:text-[#eef0f1] overflow-auto">
+                    <div class="form-control">
+                      <label class="cursor-pointer label">
+                        <span class="label-text">OB-Gyne</span>
+                        <input type="checkbox" class="checkbox checkbox-info" name="OB-Gyne" value="OB-Gyne" />
+
+                      </label>
+                    </div>
+                    <div class="form-control">
+                      <label class="cursor-pointer label">
+                        <span class="label-text">Pregnancy Testing</span>
+                        <input type="checkbox"  class="checkbox checkbox-info" name="Pregnancy Testing" value="Pregnancy Testing" />
+
+                      </label>
+                    </div>
+                    <div class="form-control">
+                      <label class="cursor-pointer label">
+                        <span class="label-text">Dengue Test</span>
+                        <input type="checkbox"  class="checkbox checkbox-info" name="Dengue Test" value="Dengue Test" />
+
+                      </label>
+                    </div>
+                    <div class="form-control">
+                      <label class="cursor-pointer label">
+                        <span class="label-text">Covid-19 Rapid Testing</span>
+                        <input type="checkbox" class="checkbox checkbox-info" name="Covid-19 Rapid Testing" value="Covid-19 Rapid Testing" />
+
+                      </label>
+                    </div>
+                    <div class="form-control">
+                      <label class="cursor-pointer label">
+                        <span class="label-text">Family Medicine</span>
+                        <input type="checkbox" class="checkbox checkbox-info" name="Family Medicine" value="Family Medicine" />
+
+                      </label>
+                    </div>
+                    <div class="form-control">
+                      <label class="cursor-pointer label">
+                        <span class="label-text">Internal Medicine</span>
+                        <input type="checkbox" class="checkbox checkbox-info" name="Internal Medicine" value="Internal Medicine" />
+
+                      </label>
+                    </div>
+                    <div class="form-control">
+                      <label class="cursor-pointer label">
+                        <span class="label-text">Medical Consultation</span>
+                        <input type="checkbox"  class="checkbox checkbox-info" name="Medical Consultation" value="Medical Consultation" />
+
+                      </label>
+                    </div>
+                    <div class="form-control">
+                      <label class="cursor-pointer label">
+                        <span class="label-text">Vaccination</span>
+                        <input type="checkbox"  class="checkbox checkbox-info" name="Vaccination" value="Vaccination" />
+
+                      </label>
+                    </div>
+                    <div class="form-control">
+                      <label class="cursor-pointer label">
+                        <span class="label-text">BP Monitoring</span>
+                        <input type="checkbox"  class="checkbox checkbox-info" name="BP Monitoring" value="BP Monitoring" />
+
+                      </label>
+                    </div>
+                    <div class="form-control">
+                      <label class="cursor-pointer label">
+                        <span class="label-text">Blood Glucose Determination</span>
+                        <input type="checkbox"  class="checkbox checkbox-info" name="Blood Glucose Determination" value="Blood Glucose Determination" />
+
+                      </label>
+                    </div>
+                    <div class="form-control">
+                      <label class="cursor-pointer label">
+                        <span class="label-text">Nebulization</span>
+                        <input type="checkbox"  class="checkbox checkbox-info" name="Nebulization" value="Nebulization" />
+
+                      </label>
+                    </div>
+                    <div class="form-control">
+                      <label class="cursor-pointer label">
+                        <span class="label-text">Complete Blood Count (CBC)</span>
+                        <input type="checkbox" name='Complete Blood Count (CBC)' value='Complete Blood Count (CBC)' class="checkbox checkbox-info">
+
+
+                      </label>
+                    </div>
+                     <div class="form-control">
+                      <label class="cursor-pointer label">
+                        <span class="label-text">Fecalysis</span>
+                        <input type="checkbox"  class="checkbox checkbox-info" name='Fecalysis' value='Fecalysis' />
+
+                      </label>
+                    </div>
+                     <div class="form-control">
+                      <label class="cursor-pointer label">
+                        <span class="label-text">Electrocardiogram (ECG)</span>
+                        <input type="checkbox" value='Electrocardiogram (ECG)' name='Electrocardiogram (ECG)'  class="checkbox checkbox-info" />
+
+                      </label>
+                    </div>
+                     <div class="form-control">
+                      <label class="cursor-pointer label">
+                        <span class="label-text">X-RAY</span>
+                        <input type="checkbox" name='X-RAY' value='X-RAY' class="checkbox checkbox-info" />
+
+                      </label>
+                    </div>
+                     <div class="form-control">
+                      <label class="cursor-pointer label">
+                        <span class="label-text">Vaccination</span>
+                        <input type="checkbox" name='Vaccination' value='Vaccination' class="checkbox checkbox-info" />
+
+                      </label>
+                    </div>
+                     <div class="form-control">
+                      <label class="cursor-pointer label">
+                        <span class="label-text">Pre-Employment Package</span>
+                        <input type="checkbox" value='Pre-Employment Package' name='Pre-Employment Package' class="checkbox checkbox-info" />
+
+                      </label>
+                    </div>
+                     <div class="form-control">
+                      <label class="cursor-pointer label">
+                        <span class="label-text">Annual Physical Examination</span>
+                        <input type="checkbox" name='Annual Physical Examination' value='Annual Physical Examination' class="checkbox checkbox-info" />
+                      </label>
+                    </div>
+                     <div class="form-control">
+                      <label class="cursor-pointer label">
+                        <span class="label-text">FBS</span>
+                        <input type="checkbox" name='FBS' value='FBS' class="checkbox checkbox-info" />
+
+                      </label>
+                    </div>
+                     <div class="form-control">
+                      <label class="cursor-pointer label">
+                        <span class="label-text">Lipid Profile</span>
+                        <input type="checkbox" value='Lipid Profile' name='Lipid Profile' class="checkbox checkbox-info" />
+
+                      </label>
+                    </div>
+                     <div class="form-control">
+                      <label class="cursor-pointer label">
+                        <span class="label-text">AST/ALT</span>
+                        <input type="checkbox" value='AST/ALT' name='AST/ALT' class="checkbox checkbox-info" />
+                      </label>
+                    </div>
+                     <div class="form-control">
+                      <label class="cursor-pointer label">
+                        <span class="label-text">Pregnant Screening</span>
+                        <input type="checkbox" value='Pregnant Screening' name='Pregnant Screening' class="checkbox checkbox-info" />
+
+                      </label>
+                    </div>
+                    <div class="form-control">
+                      <label class="cursor-pointer label">
+                        <span class="label-text">Blood Typing</span>
+                        <input type="checkbox" value='Blood Typing' name='Blood Typing' class="checkbox checkbox-info" />
+
+                      </label>
+                    </div>
+                    <div class="form-control">
+                      <label class="cursor-pointer label">
+                        <span class="label-text">Uric Acid</span>
+                        <input type="checkbox" name='Uric Acid' value='Uric Acid' class="checkbox checkbox-info" />
+
+                      </label>
+                    </div>
+                    <div class="form-control">
+                      <label class="cursor-pointer label">
+                        <span class="label-text">Electrolytes</span>
+                        <input type="checkbox" name='Electrolytes' value='Electrolytes' class="checkbox checkbox-info" />
+
+                      </label>
+                    </div>
+                    <div class="form-control">
+                      <label class="cursor-pointer label">
+                        <span class="label-text">Syphilis Screening</span>
+                        <input type="checkbox" name='Syphilis Screening' value='Syphilis Screening' class="checkbox checkbox-info" />
+
+                      </label>
+                    </div>
+                    <div class="form-control">
+                      <label class="cursor-pointer label">
+                        <span class="label-text">FT4/TSH</span>
+                        <input type="checkbox"  name='FT4/TSH' value='FT4/TSH' class="checkbox checkbox-info" />
+                      </label>
+                    </div>
+
+                    <div class="modal-action">
+
+                      <!-- if there is a button, it will close the modal -->
+                      <a class="btn bg-gray-400 dark:bg-white hover:bg-gray-500 dark:hover:bg-gray-400  text-black  border-none" onclick='toggleDialog("services")'>Close</a>
+
+                    </div>
+                  </div>
+                </dialog>
+                <input id='serviceSelected' required type='hidden' name='serviceSelected' value=''>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 mt-5">
                             <div>
                                 <label class="block">
@@ -327,7 +512,7 @@ if ($result && $result->num_rows > 0) {
                                         />
                                 </div>
                                 <div id="completedDetails" class="hidden">
-                                    <h2 class="text-md mt-4 font-semibold">This patient will be marked as Completed/Solved</h2>
+                                    <h2 class="text-md mt-4 font-semibold">This patient will be marked as no schedule</h2>
                                 </div>
                             </div>
 
@@ -363,97 +548,46 @@ if ($result && $result->num_rows > 0) {
 
 
             <!-- modal content for edit patient information -->
-            <dialog id="editpatient_info" class="modal">
+            <dialog id="editpatient_info" class="modal bg-opacity-30 bg-black">
                 <div class="modal-box w-11/12 max-w-5xl bg-gray-200 dark:bg-gray-700 text-[#0e1011] dark:text-[#eef0f1]">
                     <h3 class="font-bold text-2xl ">Edit Patient</h3>
-                    <form id="EditpatientForm" action="#" method="POST" >
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 mt-5">      
-                            <div>
+                    <form id="EditpatientForm" >
+                      <input type='hidden' name='patient_id' value='<?php echo $patient_id?>'>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 mt-5">
                                 <label class="block">
-                                    Service:
-                                    <div class="flex flex-col w-full">           
-                                        <ul class="w-full text-lg font-medium  bg-white dark:bg-gray-600  text-black dark:text-white border border-gray-200 rounded-lg dark:border-gray-600 ">
-                                        <li class="border-b border-gray-400 dark:border-slate-300">
-                                            <label class="flex items-center pl-3 w-full cursor-pointer">
-                                            <input id="horizontal-list-radio-license" 
-                                            type="radio" 
-                                            value="Consultation" 
-                                            name="service" 
-                                            class="radio radio-info [color-scheme:light] dark:[color-scheme:dark]" 
-                                            required>
-                                            <span class="py-3 ml-2 text-lg font-medium ">Consultation</span>
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <label class="flex items-center pl-3 w-full cursor-pointer">
-                                            <input id="horizontal-list-radio-id" 
-                                            type="radio" 
-                                            value="Test/Procedure" 
-                                            name="service" 
-                                            class="radio radio-info [color-scheme:light] dark:[color-scheme:dark]" 
-                                            required>
-                                            <span class="py-3 ml-2 text-lg font-medium ">Test/Procedure</span>
-                                            </label>
-                                        </li>
-                                        </ul>
-                                    </div>
-                                </label>
-                            </div>
-                            <div>
-                                <label class="block">
-                                    Service Type:
-                                    <select
-                                        id="service-type"
-                                        required
-                                        class="select select-bordered w-full bg-white dark:bg-gray-600  text-black dark:text-white text-base sm:text-lg lg:text-xl focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
-                                        name="service-type"
-                                    >
-                                        <option value="" disabled selected>Select service type...</option>
-                                        <option value="OB-Gyne">OB-Gyne</option>
-                                        <option value="Pregnancy Testing">Pregnancy Testing</option>
-                                        <option value="Dengue Test">Dengue Test</option>
-                                        <option value="Covid-19 Rapid Testing">Covid-19 Rapid Testing</option>
-                                        <option value="Family Medicine">Family Medicine</option>
-                                        <option value="Internal Medicine">Internal Medicine</option>
-                                        <option value="Medical Consultation">Medical Consultation</option>
-                                        <option value="Vaccination">Vaccination</option>
-                                        <option value="BP Monitoring">BP Monitoring</option>
-                                        <option value="Blood Glucose Determination">Blood Glucose Determination</option>
-                                        <option value="Nebulization">Nebulization</option>
-                                        <option value="Complete Blood Count (CBC)">Complete Blood Count (CBC)</option>
-                                        <option value="Fecalysis">Fecalysis</option>
-                                        <option value="Electrocardiogram (ECG)">Electrocardiogram (ECG)</option>
-                                        <option value="X-RAY">X-RAY</option>
-                                        <option value="Pre-Employment Package">Pre-Employment Package</option>
-                                        <option value="Annual Physical Examination">Annual Physical Examination</option>
-                                        <option value="FBS">FBS</option>
-                                        <option value="Lipid Profile">Lipid Profile</option>
-                                        <option value="AST/ALT">AST/ALT</option>
-                                        <option value="Uric Acid">Uric Acid</option>
-                                        <option value="Blood Typing">Blood Typing</option>
-                                        <option value="Electrolytes">Electrolytes</option>
-                                        <option value="Syphilis Screening">Syphilis Screening</option>
-                                        <option value="Pregnant Screening">Pregnant Screening</option>
-                                        <option value="FT4/TSH">FT4/TSH</option>
-                                    </select>
-                                </label>
-                            </div>   
-                            <div>
-                                <label class="block">
-                                    Name:
+                                    First Name:
                                     <input type="text" 
-                                        name="patient-name" 
-                                        value="James"
+                                        name="patient_first-name"
+                                        value="<?php echo $Patient_firstname?>"
                                         required  
                                         placeholder="Name"
                                         class="input input-bordered w-full p-2 bg-white dark:bg-gray-600  text-black dark:text-white " />
                                 </label>
-                            </div>
+                              <label class="block">
+                                Middle Name:
+                                <input type="text"
+                                       name="patient_middle-name"
+                                       value="<?php echo $Patient_middle_name;?>"
+                                       required
+                                       placeholder="Name"
+                                       class="input input-bordered w-full p-2 bg-white dark:bg-gray-600  text-black dark:text-white " />
+                              </label>
+                              <label class="block">
+                                Last Name:
+                                <input type="text"
+                                       name="patient_last-name"
+                                       value="<?php echo $Patient_lastname?>"
+                                       required
+                                       placeholder="Name"
+                                       class="input input-bordered w-full p-2 bg-white dark:bg-gray-600  text-black dark:text-white " />
+                              </label>
+
                             <div>
                                 <label class="block">
                                     Contact Number:
                                     <input type="tel"
-                                    name="contact-number"  
+                                    name="patient_contact-number"
+                                           value="<?php echo $Patient_ContactNumber?>"
                                     required 
                                     autocomplete="off"
                                     placeholder="Contact Number" 
@@ -467,10 +601,13 @@ if ($result && $result->num_rows > 0) {
                             <div>
                                 <label class="block">
                                     Sex:
-                                    <select id="sex" required class="select select-bordered w-full p-2 bg-white dark:bg-gray-600  text-black dark:text-white text-lg" name="sex">
+                                    <select id="sex"
+                                            required
+                                            class="select select-bordered w-full p-2 bg-white dark:bg-gray-600  text-black dark:text-white text-lg" name="patient_sex">
                                         <option value="" disabled selected>Select...</option>
-                                        <option value="Male">Male</option>
-                                        <option value="Female">Female</option>
+                                      <option value="Male" <?php if ($patient_Sex == 'Male') echo 'selected'; ?> >Male</option>
+                                      <option value="Female" <?php if ($patient_Sex == 'Female') echo 'selected'; ?> >Female</option>
+
                                     </select>
                                 </label>
                             </div>
@@ -478,8 +615,9 @@ if ($result && $result->num_rows > 0) {
                                 <label class="block">
                                     Email:
                                     <input type="email"
-                                    name="email"
-                                    required 
+                                    name="patient_email"
+                                    required
+                                           value='<?php echo $Patient_Email?>'
                                     autocomplete="off"
                                     placeholder="Email"
                                     class="input input-bordered w-full p-2 bg-white dark:bg-gray-600  text-black dark:text-white "/>
@@ -489,14 +627,15 @@ if ($result && $result->num_rows > 0) {
                                 <label class="block">
                                     Vaccinated:
                                     <div class="flex items-center space-x-4 p-2 bg-white dark:bg-gray-600  text-black dark:text-white rounded">
-                                        <label class="flex items-center">
-                                            <input type="radio" name="vaccinated" value="yes" class="radio radio-primary" required>
-                                            <span class="ml-2">Yes</span>
-                                        </label>
-                                        <label class="flex items-center">
-                                            <input type="radio" name="vaccinated" value="no" class="radio radio-primary" required>
-                                            <span class="ml-2">No</span>
-                                        </label>
+                                      <label class="flex items-center">
+                                        <input type="radio" name="patient_vaccinated" value="yes" class="radio radio-primary" <?php if ($patientVacStat == 'yes') echo 'checked'; ?> required>
+                                        <span class="ml-2">Yes</span>
+                                      </label>
+                                      <label class="flex items-center">
+                                        <input type="radio" name="patient_vaccinated" value="no" class="radio radio-primary" <?php if ($patientVacStat == 'no') echo 'checked'; ?> required>
+                                        <span class="ml-2">No</span>
+                                      </label>
+
                                     </div>
                                 </label>
                             </div>
@@ -504,7 +643,8 @@ if ($result && $result->num_rows > 0) {
                                 <label class="block">
                                     Address:
                                     <input type="text" 
-                                    name="address" 
+                                    name="patient_address"
+                                           value="<?php echo $Patient_address?>"
                                     autocomplete="off"
                                     placeholder="Address" 
                                     required 
@@ -516,27 +656,37 @@ if ($result && $result->num_rows > 0) {
                                     Date of Birth:
                                     <input type="date"
                                     id="dob"
-                                    name="dob" 
+                                           value='<?php echo $patientDOB?>'
+                                    name="patient_dob"
                                     required 
                                     class="input input-bordered w-full p-2 bg-white dark:bg-gray-600  text-black dark:text-white [color-scheme:light] dark:[color-scheme:dark]" />
                                 </label>
-                            </div>         
+                            </div>
+
+
+                          <div>
+                            <label class="block">
+                              Patient Status
+                              <select id="patient_status"
+                                      required
+                                      class="select select-bordered w-full p-2 bg-white dark:bg-gray-600  text-black dark:text-white text-lg" name="patient_status">
+                                <option value="" disabled selected>Change status</option>
+                                <option value="Female" <?php if ($patient_status == 'To be Seen') echo 'selected'; ?> >To be Seen</option>
+                                <option value="Male" <?php if ($patient_status == 'Follow Up') echo 'selected'; ?> >Follow Up</option>
+                                <option value="Male" <?php //if ($patient_status == 'Completed') echo 'selected'; ?> >Completed</option>
+                              </select>
+                            </label>
+                          </div>
+
+
                         </div>
                         <div class="flex justify-center">
                             <input type="submit" value="Update" class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none">
                         </div> 
-                        </form>
-
-
-
-
-
+                    </form>
 
                     <div class="modal-action">
-                        <form method="dialog">
-                                <!-- if there is a button, it will close the modal -->
-                            <button class="btn bg-gray-400 dark:bg-white hover:bg-gray-500 dark:hover:bg-gray-400  text-black  border-none">Close</button>
-                        </form>
+                      <a class="btn bg-gray-400 dark:bg-white hover:bg-gray-500 dark:hover:bg-gray-400  text-black  border-none" onclick='toggleDialog("editpatient_info")'>Close</a>
                     </div>
                 </div>
             </dialog>
@@ -588,6 +738,9 @@ if ($result && $result->num_rows > 0) {
               }
             }
           }
+          function isNumeric(value) {
+            return !isNaN(value) && (typeof value === 'number' || !isNaN(parseFloat(value)));
+          }
           function getResImg(id){
             $.ajax({
               url: 'ajax.php?action=getResImg&record_id=' + encodeURIComponent(id),
@@ -615,7 +768,21 @@ if ($result && $result->num_rows > 0) {
               success: function(data) {
 
                 if (data) {
+
+                  /*
+                  var availedServices = data.availedService;
+                  var checkboxes = document.querySelectorAll(".checkbox");
+                  checkboxes.forEach(function(checkbox) {
+                    if (availedServices.includes(checkbox.value)) {
+                      checkbox.checked = true;
+                    }
+                  })
+
+                   */
+                  $('#availedService').html(data.availedService);
+                  document.querySelector('#patientRecordForm input[name="serviceSelected"]').value = data.availedService;
                   document.querySelector('#patientRecordForm input[name="consultation-date"]').value = data.consultationDate;
+
                   document.querySelector('#patientRecordForm input[name="record_id"]').value = data.Record_ID;
                   document.querySelector('#patientRecordForm select[name="consultant-name"]').value = data.Consultant_Staff_ID;
                   document.querySelector('#patientRecordForm input[name="weight"]').value = data.Weight;
@@ -635,13 +802,24 @@ if ($result && $result->num_rows > 0) {
               }
             });
           }
-          document.getElementById('patientRecordForm').addEventListener('submit', function(e){
+          document.getElementById('patientRecordForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            let endpoint;
-            endpoint = 'createPatientRecord';
+            let endpoint = 'createPatientRecord';
             let form_data = new FormData(e.target);
+
+            if (form_data.get('serviceSelected') === '') {
+              document.getElementById('error').innerHTML = 'Please select a service type';
+              toggleDialog('errorAlert');
+              return;
+            }if (!isNumeric(form_data.get('weight')) || !isNumeric(form_data.get('heart-rate')) || !isNumeric(form_data.get('temperature')) ){
+              document.getElementById('error').innerHTML = 'Please input correct data type';
+              toggleDialog('errorAlert');
+              return;
+
+            }
+
             $.ajax({
-              url: 'ajax.php?action=' + endpoint + '&chart_id='+ encodeURIComponent(<?php echo $chart_id; ?>),
+              url: 'ajax.php?action=' + endpoint + '&chart_id=' + encodeURIComponent(<?php echo $chart_id; ?>),
               type: 'POST',
               data: form_data,
               processData: false,
@@ -649,17 +827,71 @@ if ($result && $result->num_rows > 0) {
               success: function(response) {
                 if (parseInt(response) === 1) {
                   toggleDialog('SuccessAlert');
-                  window.location.href='staff-patientFullRecord.php?id=<?php echo $_GET[
-                      'id'
-                  ]; ?>&chart_id=<?php echo $_GET['chart_id']; ?>';
-
-                }else {
+                  window.location.href = 'staff-patientFullRecord.php?id=<?php echo $_GET['id']; ?>&chart_id=<?php echo $_GET['chart_id']; ?>';
+                } else {
                   document.getElementById('error').innerHTML = response;
                   toggleDialog('errorAlert');
+
                 }
               }
             });
           });
+          document.getElementById('EditpatientForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            let endpoint = 'Editpatient';
+            let form_data = new FormData(e.target);
+            $.ajax({
+              url: 'ajax.php?action=' + endpoint,
+              type: 'POST',
+              data: form_data,
+              processData: false,
+              contentType: false,
+              success: function(response) {
+                if (parseInt(response) === 1) {
+                  toggleDialog('SuccessAlert');
+                  window.location.href = 'staff-patientFullRecord.php?id=<?php echo $_GET['id'].'&chart_id='.$_GET['chart_id']; ?>';
+                } else {
+                  document.getElementById('error').innerHTML = response;
+                  toggleDialog('errorAlert');
+
+                }
+              }
+            });
+          });
+
+          document.addEventListener('DOMContentLoaded', () => {
+            const checkboxes = document.querySelectorAll('#services input[type="checkbox"]');
+            const hiddenInput = document.getElementById('serviceSelected');
+
+            checkboxes.forEach(checkbox => {
+              checkbox.addEventListener('change', () => {
+                const selectedServices = Array.from(checkboxes)
+                  .filter(checkbox => checkbox.checked)
+                  .map(checkbox => checkbox.value)
+                  .join(', ');
+
+                hiddenInput.value = selectedServices;
+                $('#availedService').html(selectedServices);
+              });
+            });
+          });
+
+          document.getElementById('visitDropdown').addEventListener('change', function() {
+            if (this.value !== 'newRecord') {
+              getRecords(this.value);
+              getResImg(this.value);
+              $('#serviceTypeBTN').html('Edit Service Type');
+            } else {
+              document.getElementById('patientRecordForm').reset();
+              $('#availedService').html('N/A');
+              document.getElementById('record_id').value = '';
+              resetImgDisplay();
+              $('#serviceTypeBTN').html('Select Service Type');
+              document.querySelector('#patientRecordForm input[name="serviceSelected"]').value = '';
+            }
+          });
+
+
         </script>
 </body>
 </html>
