@@ -150,7 +150,6 @@ if ($result->num_rows > 0) {
               <th>Age</th>
               <th>Sex</th>
               <th>Appointment Type</th>
-              <th>Service</th>
               <th>Schedule</th>
               <th>Status</th>
               <th>Action</th>
@@ -184,7 +183,7 @@ ORDER BY
               <td>'.$age.'</td>
               <td>'.$row['Sex'].'</td>
               <td>'.$row['Appointment_type'].'</td>
-              <td>'.$row['Service_Type'].'</td>
+       
               <td>'.$followUpschedule.'</td>
               <td class="font-bold text-yellow-600 dark:text-yellow-300">'.$row['patient_Status'].'</td>
               <!-- Status List

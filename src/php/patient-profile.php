@@ -523,7 +523,6 @@ ORDER BY CASE WHEN `tbl_appointment`.`Status` = 'pending' THEN 0 ELSE 1 END, `tb
 
             </div>
           </div>
-
           </div>
         </div>
       </div>
