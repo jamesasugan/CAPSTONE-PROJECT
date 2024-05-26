@@ -340,8 +340,7 @@ $user_id = $_SESSION['user_id'];
                   <thead>
                     <tr class="font-bold text-black dark:text-white text-base sm:text-lg">
                       <th>Name</th>
-                      <th>Date </th>
-                      <th>Time</th>
+                      <th>Schedule </th>
                       <th>Status</th>
                       <th>Remarks</th>
                       <th>Action</th>
@@ -387,35 +386,22 @@ ORDER BY CASE WHEN `tbl_appointment`.`Status` = 'pending' THEN 0 ELSE 1 END, `tb
                               : 'N/A';
                           echo '
                          <tr class="text-base hover:bg-gray-300  dark:hover:bg-gray-600 font-medium text-black dark:text-white">               
-                        <td class="w-1/4">' .
-                              $row['First_Name'] .
-                              ' ' .
-                              $middleInitial .
-                              '. ' .
-                              $row['Last_Name'] .
+                        <td class="w-1/4">' . $row['First_Name'] . ' ' . $middleInitial . '. ' . $row['Last_Name'] .
                               '</td>
           
-                       <td class="w-1/4">' .
-                              $date .
-                              '</td>
-                        <td>' .
-                              $time .
-                              '</td>
-                       <td class="font-bold  ' .
-                              $status_color .
-                              ' ">' .
-                              ucfirst($row['Status']) .
+                       <td class="w-1/4">' . $date . ' ' . $time . '</td>
+                   
+                     <td class="font-bold  ' . $status_color . ' ">' . ucfirst($row['Status']) .
                               '</td> 
-                       <td>' .
-                              $row['Remarks'] .
-                              '</td>';
+                      <td>' . $row['Remarks'] . '</td>';
                           if ($row['Status'] == 'pending') {
                               echo '<td class="pl-9"> 
-                          <button onclick="toggleDialog(\'viewandCancel\');getAppointmentId(' .
-                                  $row['Appointment_ID'] .
-                                  ')"><i class="fa-regular fa-eye"></i></button>
-                        </td>';
-                          }
+                          <button onclick="getPatientAppointmentInfo('.$row['Patient_ID'].') ;toggleDialog(\'viewAppointmentForm\')"><i class="fa-regular fa-eye"></i></button>
+                         <button onclick="toggleDialog(\'viewandCancel\');getAppointmentId(' . $row['Appointment_ID'] . ')" class="text-error"><i class="fa-solid fa-trash"></i></button>
+                         
+                        
+                    
+                     </td>';}
                           echo '</tr>';
                       }
                   }
@@ -516,7 +502,6 @@ ORDER BY CASE WHEN `tbl_appointment`.`Status` = 'pending' THEN 0 ELSE 1 END, `tb
     ';
                     }
                     ?>
-
                     </tbody>
                   </table>
                 </div>
@@ -526,7 +511,36 @@ ORDER BY CASE WHEN `tbl_appointment`.`Status` = 'pending' THEN 0 ELSE 1 END, `tb
           </div>
         </div>
       </div>
+    <dialog id="viewAppointmentForm"  class="modal bg-opacity-50 bg-black">
+      <div class="modal-box w-11/12 max-w-7xl bg-gray-200 dark:bg-gray-700">
 
+        <div class="flex flex-col sm:flex-row justify-between items-center">
+          <div class="order-2 sm:order-1">
+            <h3 class="font-bold text-black dark:text-white text-2xl sm:text-4xl mb-2 sm:mb-0">Appointment Information</h3>
+          </div>
+          <div class="order-1 sm:order-2 mb-2 sm:mb-0">
+            <img src="../images/HCMC-blue.png" class="block h-10 lg:h-16 w-auto dark:hidden" alt="logo-light" />
+            <img src="../images/HCMC-white.png" class="h-10 lg:h-16 w-auto hidden dark:block" alt="logo-dark" />
+          </div>
+        </div>
+
+        <div class="patientInfo mb-10 mt-5 text-black dark:text-white">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-1 text-lg sm:text-xl">
+            <p><strong>Name: </strong> <span id='Patient_name'></span></p>
+            <p><strong>Contact Number: </strong><span id='Patient_contact_number'> </span></p>
+            <p><strong>Email: </strong> <span id='Patient_email'></span></p>
+            <p><strong>Sex: </strong> <span id='Patient_sex'></span></p>
+            <p><strong>Address: </strong><span id='Patient_address'> </span></p>
+            <p><strong>Date of Birth: </strong><span id='Patient_dateOfBirth'> </span></p>
+            <p><strong>Vaccinated: </strong><span id='Patient_vacStat'</span></p>
+            <p><strong>Reason/Purpose: </strong><span id='Patient_reasonn'> </span></p>
+          </div>
+        </div>
+        <div class="modal-action">
+            <button class="btn bg-gray-400 dark:bg-white hover:bg-gray-500 dark:hover:bg-gray-400  text-black  border-none" onclick='toggleDialog("viewAppointmentForm")'>Close</button>
+        </div>
+      </div>
+    </dialog>
 
       <dialog id="viewandCancel" class="modal bg-black bg-opacity-50">
         <dialog id='errorAlert' class='modal ' onclick='toggleDialog("errorAlert");toggleSecurityEdit(false);toggleEdit(false)' >
@@ -574,8 +588,35 @@ ORDER BY CASE WHEN `tbl_appointment`.`Status` = 'pending' THEN 0 ELSE 1 END, `tb
 
       <script src='../js/usersInfo.js' defer></script>
     <script>
+      function getPatientAppointmentInfo(id) {
+        $.ajax({
+          url: 'ajax.php?action=getPatientApppointmentInfoJSON&data_id=' + encodeURIComponent(id),
+          method: 'GET',
+          dataType: 'json',
+          success: function(data) {
+            if (Array.isArray(data) && data.length > 0) {
+              const patientData = data[0];
+              let formattedDateOfBirth = (new Date(patientData.DateofBirth)).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+              document.querySelector('#Patient_name').textContent = patientData.First_Name + ' ' + patientData.Middle_Name + ' ' + patientData.Last_Name;
+              document.querySelector('#Patient_contact_number').textContent = patientData.Contact_Number;
+              document.querySelector('#Patient_email').textContent = patientData.patientEmail;
+              document.querySelector('#Patient_sex').textContent = patientData.Sex;
+              document.querySelector('#Patient_address').textContent = patientData.Address;
+              document.querySelector('#Patient_dateOfBirth').textContent = formattedDateOfBirth;
+              document.querySelector('#Patient_vacStat').textContent = patientData.Vaccination;
+              document.querySelector('#Patient_reasonn').textContent = patientData.reason;
+            } else {
+              console.error('No data found for the given patient ID');
+            }
+          },
+          error: function(xhr, status, error) {
+            console.error('Error fetching data:', error);
+          }
+        });
+      }
 
-        document.addEventListener('DOMContentLoaded', function () {
+
+      document.addEventListener('DOMContentLoaded', function () {
           const items = document.querySelectorAll('.sidebar-item');
           items.forEach((item) => {
             item.addEventListener('click', function () {

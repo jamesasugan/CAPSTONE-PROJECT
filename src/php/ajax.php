@@ -944,3 +944,31 @@ if ($action == 'getOnlineUserInfo'){
         exit();
     }
 }
+if ($action === 'getPatientApppointmentInfoJSON') {
+    if (isset($_GET['data_id'])) {
+        $patient_id = $_GET['data_id'];
+        $sql = "SELECT `tbl_patient`.*, `tbl_appointment`.*
+                FROM `tbl_patient` 
+                JOIN `tbl_appointment` ON `tbl_appointment`.`Patient_ID` = `tbl_patient`.`Patient_ID`
+                WHERE tbl_patient.Patient_ID = ?;";
+
+        $stmt = $conn->prepare($sql);
+        if ($stmt) {
+            $stmt->bind_param('i', $patient_id);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $rows = [];
+            while ($row = $result->fetch_assoc()) {
+                $rows[] = $row;
+            }
+            header('Content-Type: application/json');
+            echo json_encode($rows);
+        } else {
+            // Handle the error for statement preparation failure
+            echo json_encode(['error' => 'Statement preparation failed']);
+        }
+    } else {
+        // Handle the error for missing data_id parameter
+        echo json_encode(['error' => 'Missing data_id parameter']);
+    }
+}
