@@ -105,9 +105,32 @@ if ($result && $result->num_rows > 0){
             bg-[#f6fafc] dark:bg-[#17222a]"
             >
             <div
-                class="w-full max-w-7xl mx-auto p-4 rounded-lg shadow-lg bg-gray-200 dark:bg-gray-700 text-[#0e1011] dark:text-[#eef0f1]"
+                class="w-full max-w-7xl mx-auto p-4 rounded-lg shadow-lg bg-gray-200 dark:bg-gray-700 text-[#0e1011] dark:text-[#eef0f1] printableArea"
             >
-                <h2 class="text-3xl font-bold mb-2">Patient's Chart</h2>
+            <div
+                class="flex flex-col sm:flex-row justify-between items-center"
+              >
+                <div class="order-2 sm:order-1">
+                  <h3
+                    class="font-bold text-black dark:text-white text-3xl mb-2 sm:mb-0"
+                  >
+                    Patient's Chart
+                  </h3>
+                </div>
+                <div class="order-1 sm:order-2 mb-2 sm:mb-0">
+                  <!-- Toggle between different logos for light/dark mode -->
+                  <img
+                    src="../images/HCMC-blue.png"
+                    class="block h-10 lg:h-16 w-auto dark:hidden"
+                    alt="logo-light"
+                  />
+                  <img
+                    src="../images/HCMC-white.png"
+                    class="h-10 lg:h-16 w-auto hidden dark:block"
+                    alt="logo-dark"
+                  />
+                </div>
+              </div>
                 
                 <div class="patientInfo mb-10 mt-5">
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-1 text-lg sm:text-xl">
@@ -125,6 +148,13 @@ if ($result && $result->num_rows > 0){
                               <p><strong>Date of Birth: </strong><?php echo   date("F j, Y", strtotime($row['DateofBirth']));?></p>
                               <p><strong>Service Type: </strong><span id='availedService'>N/A</span> </p>
                             </div>
+                        </div>
+
+                        <div class="flex justify-end mb-5">
+                          <button class="mt-6 btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none printformButton flex flex-col items-center px-5 py-1" onclick="window.print()">
+                              <i class="fa-solid fa-print"></i>
+                              <span>Print</span>
+                          </button>
                         </div>
                                 <!-- lalabas lang to sa follow up stage.
                                     nilipat ko muna ng pwesto, nilabas ko sa form kase pag nasa form nagkakaerror, gawan mo na lang sariling form siguro to
@@ -318,4 +348,14 @@ if ($result && $result->num_rows > 0){
   }
 
 </script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const printBtn = document.querySelector('.printform');
+
+      printBtn.addEventListener('click', function() {
+        window.print();
+      });
+    });
+  </script>
 </html>

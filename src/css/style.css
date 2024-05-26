@@ -160,6 +160,39 @@ iframe {
 }
 */
 
+
+/* for print */
+@media print {
+  body *, select {
+    visibility: hidden;
+  }
+  .printableArea, .printableArea * {
+    visibility: visible;
+  }
+  .printableArea {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    color: black;
+    padding: 20px;
+    box-shadow: none;
+  }
+  .printableArea input, 
+  .printableArea select, 
+  .printableArea textarea,
+  .printableArea * {
+    color: black !important;
+  }
+  select,
+  .printformButton {
+  display: none !important;
+  }
+}
+
+
+
+
 @media (max-width: 769px) {
   .custom-dropdown-menu {
     right: 0;
