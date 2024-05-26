@@ -178,193 +178,194 @@ if ($result && $result->num_rows > 0) {
               </div>
 
               <form id="patientRecordForm" enctype='multipart/form-data'>
-                <a class='btn btn-info mt-6' onclick='toggleDialog("services")' id='serviceTypeBTN'>Select Service Type</a>
+                <a class='btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none mt-6' onclick='toggleDialog("services")' id='serviceTypeBTN'>Select Service Type</a>
                 <dialog class='modal bg-black bg-opacity-20' id='services'>
-                  <div id='ServiceList'  class="modal-box w-11/12 max-w-5xl bg-gray-200 dark:bg-gray-700 text-[#0e1011] dark:text-[#eef0f1] overflow-auto">
-                    <div class="form-control">
+                  <div id='ServiceList'  class="modal-box w-11/12 max-w-5xl bg-gray-200 dark:bg-gray-700 overflow-auto">
+                    <h1 class="text-2xl text-center text-black dark:text-white font-bold mb-5">Select Service:</h1>
+                    <div class="form-control px-2 hover:bg-slate-300 dark:hover:bg-gray-600 transition duration-150">
                       <label class="cursor-pointer label">
-                        <span class="label-text">OB-Gyne</span>
+                        <span class="label-text text-lg sm:text-xl font-medium text-black dark:text-white">OB-Gyne</span>
                         <input type="checkbox" class="checkbox checkbox-info" name="OB-Gyne" value="OB-Gyne" />
 
                       </label>
                     </div>
-                    <div class="form-control">
+                    <div class="form-control px-2 hover:bg-slate-300 dark:hover:bg-gray-600 transition duration-150">
                       <label class="cursor-pointer label">
-                        <span class="label-text">Pregnancy Testing</span>
+                        <span class="label-text text-lg sm:text-xl font-medium text-black dark:text-white">Pregnancy Testing</span>
                         <input type="checkbox"  class="checkbox checkbox-info" name="Pregnancy Testing" value="Pregnancy Testing" />
 
                       </label>
                     </div>
-                    <div class="form-control">
+                    <div class="form-control px-2 hover:bg-slate-300 dark:hover:bg-gray-600 transition duration-150">
                       <label class="cursor-pointer label">
-                        <span class="label-text">Dengue Test</span>
+                        <span class="label-text text-lg sm:text-xl font-medium text-black dark:text-white">Dengue Test</span>
                         <input type="checkbox"  class="checkbox checkbox-info" name="Dengue Test" value="Dengue Test" />
 
                       </label>
                     </div>
-                    <div class="form-control">
+                    <div class="form-control px-2 hover:bg-slate-300 dark:hover:bg-gray-600 transition duration-150">
                       <label class="cursor-pointer label">
-                        <span class="label-text">Covid-19 Rapid Testing</span>
+                        <span class="label-text text-lg sm:text-xl font-medium text-black dark:text-white">Covid-19 Rapid Testing</span>
                         <input type="checkbox" class="checkbox checkbox-info" name="Covid-19 Rapid Testing" value="Covid-19 Rapid Testing" />
 
                       </label>
                     </div>
-                    <div class="form-control">
+                    <div class="form-control px-2 hover:bg-slate-300 dark:hover:bg-gray-600 transition duration-150">
                       <label class="cursor-pointer label">
-                        <span class="label-text">Family Medicine</span>
+                        <span class="label-text text-lg sm:text-xl font-medium text-black dark:text-white">Family Medicine</span>
                         <input type="checkbox" class="checkbox checkbox-info" name="Family Medicine" value="Family Medicine" />
 
                       </label>
                     </div>
-                    <div class="form-control">
+                    <div class="form-control px-2 hover:bg-slate-300 dark:hover:bg-gray-600 transition duration-150">
                       <label class="cursor-pointer label">
-                        <span class="label-text">Internal Medicine</span>
+                        <span class="label-text text-lg sm:text-xl font-medium text-black dark:text-white">Internal Medicine</span>
                         <input type="checkbox" class="checkbox checkbox-info" name="Internal Medicine" value="Internal Medicine" />
 
                       </label>
                     </div>
-                    <div class="form-control">
+                    <div class="form-control px-2 hover:bg-slate-300 dark:hover:bg-gray-600 transition duration-150">
                       <label class="cursor-pointer label">
-                        <span class="label-text">Medical Consultation</span>
+                        <span class="label-text text-lg sm:text-xl font-medium text-black dark:text-white">Medical Consultation</span>
                         <input type="checkbox"  class="checkbox checkbox-info" name="Medical Consultation" value="Medical Consultation" />
 
                       </label>
                     </div>
-                    <div class="form-control">
+                    <div class="form-control px-2 hover:bg-slate-300 dark:hover:bg-gray-600 transition duration-150">
                       <label class="cursor-pointer label">
-                        <span class="label-text">Vaccination</span>
+                        <span class="label-text text-lg sm:text-xl font-medium text-black dark:text-white">Vaccination</span>
                         <input type="checkbox"  class="checkbox checkbox-info" name="Vaccination" value="Vaccination" />
 
                       </label>
                     </div>
-                    <div class="form-control">
+                    <div class="form-control px-2 hover:bg-slate-300 dark:hover:bg-gray-600 transition duration-150">
                       <label class="cursor-pointer label">
-                        <span class="label-text">BP Monitoring</span>
+                        <span class="label-text text-lg sm:text-xl font-medium text-black dark:text-white">BP Monitoring</span>
                         <input type="checkbox"  class="checkbox checkbox-info" name="BP Monitoring" value="BP Monitoring" />
 
                       </label>
                     </div>
-                    <div class="form-control">
+                    <div class="form-control px-2 hover:bg-slate-300 dark:hover:bg-gray-600 transition duration-150">
                       <label class="cursor-pointer label">
-                        <span class="label-text">Blood Glucose Determination</span>
+                        <span class="label-text text-lg sm:text-xl font-medium text-black dark:text-white">Blood Glucose Determination</span>
                         <input type="checkbox"  class="checkbox checkbox-info" name="Blood Glucose Determination" value="Blood Glucose Determination" />
 
                       </label>
                     </div>
-                    <div class="form-control">
+                    <div class="form-control px-2 hover:bg-slate-300 dark:hover:bg-gray-600 transition duration-150">
                       <label class="cursor-pointer label">
-                        <span class="label-text">Nebulization</span>
+                        <span class="label-text text-lg sm:text-xl font-medium text-black dark:text-white">Nebulization</span>
                         <input type="checkbox"  class="checkbox checkbox-info" name="Nebulization" value="Nebulization" />
 
                       </label>
                     </div>
-                    <div class="form-control">
+                    <div class="form-control px-2 hover:bg-slate-300 dark:hover:bg-gray-600 transition duration-150">
                       <label class="cursor-pointer label">
-                        <span class="label-text">Complete Blood Count (CBC)</span>
+                        <span class="label-text text-lg sm:text-xl font-medium text-black dark:text-white">Complete Blood Count (CBC)</span>
                         <input type="checkbox" name='Complete Blood Count (CBC)' value='Complete Blood Count (CBC)' class="checkbox checkbox-info">
 
 
                       </label>
                     </div>
-                     <div class="form-control">
+                     <div class="form-control px-2 hover:bg-slate-300 dark:hover:bg-gray-600 transition duration-150">
                       <label class="cursor-pointer label">
-                        <span class="label-text">Fecalysis</span>
+                        <span class="label-text text-lg sm:text-xl font-medium text-black dark:text-white">Fecalysis</span>
                         <input type="checkbox"  class="checkbox checkbox-info" name='Fecalysis' value='Fecalysis' />
 
                       </label>
                     </div>
-                     <div class="form-control">
+                     <div class="form-control px-2 hover:bg-slate-300 dark:hover:bg-gray-600 transition duration-150">
                       <label class="cursor-pointer label">
-                        <span class="label-text">Electrocardiogram (ECG)</span>
+                        <span class="label-text text-lg sm:text-xl font-medium text-black dark:text-white">Electrocardiogram (ECG)</span>
                         <input type="checkbox" value='Electrocardiogram (ECG)' name='Electrocardiogram (ECG)'  class="checkbox checkbox-info" />
 
                       </label>
                     </div>
-                     <div class="form-control">
+                     <div class="form-control px-2 hover:bg-slate-300 dark:hover:bg-gray-600 transition duration-150">
                       <label class="cursor-pointer label">
-                        <span class="label-text">X-RAY</span>
+                        <span class="label-text text-lg sm:text-xl font-medium text-black dark:text-white">X-RAY</span>
                         <input type="checkbox" name='X-RAY' value='X-RAY' class="checkbox checkbox-info" />
 
                       </label>
                     </div>
-                     <div class="form-control">
+                     <div class="form-control px-2 hover:bg-slate-300 dark:hover:bg-gray-600 transition duration-150">
                       <label class="cursor-pointer label">
-                        <span class="label-text">Vaccination</span>
+                        <span class="label-text text-lg sm:text-xl font-medium text-black dark:text-white">Vaccination</span>
                         <input type="checkbox" name='Vaccination' value='Vaccination' class="checkbox checkbox-info" />
 
                       </label>
                     </div>
-                     <div class="form-control">
+                     <div class="form-control px-2 hover:bg-slate-300 dark:hover:bg-gray-600 transition duration-150">
                       <label class="cursor-pointer label">
-                        <span class="label-text">Pre-Employment Package</span>
+                        <span class="label-text text-lg sm:text-xl font-medium text-black dark:text-white">Pre-Employment Package</span>
                         <input type="checkbox" value='Pre-Employment Package' name='Pre-Employment Package' class="checkbox checkbox-info" />
 
                       </label>
                     </div>
-                     <div class="form-control">
+                     <div class="form-control px-2 hover:bg-slate-300 dark:hover:bg-gray-600 transition duration-150">
                       <label class="cursor-pointer label">
-                        <span class="label-text">Annual Physical Examination</span>
+                        <span class="label-text text-lg sm:text-xl font-medium text-black dark:text-white">Annual Physical Examination</span>
                         <input type="checkbox" name='Annual Physical Examination' value='Annual Physical Examination' class="checkbox checkbox-info" />
                       </label>
                     </div>
-                     <div class="form-control">
+                     <div class="form-control px-2 hover:bg-slate-300 dark:hover:bg-gray-600 transition duration-150">
                       <label class="cursor-pointer label">
-                        <span class="label-text">FBS</span>
+                        <span class="label-text text-lg sm:text-xl font-medium text-black dark:text-white">FBS</span>
                         <input type="checkbox" name='FBS' value='FBS' class="checkbox checkbox-info" />
 
                       </label>
                     </div>
-                     <div class="form-control">
+                     <div class="form-control px-2 hover:bg-slate-300 dark:hover:bg-gray-600 transition duration-150">
                       <label class="cursor-pointer label">
-                        <span class="label-text">Lipid Profile</span>
+                        <span class="label-text text-lg sm:text-xl font-medium text-black dark:text-white">Lipid Profile</span>
                         <input type="checkbox" value='Lipid Profile' name='Lipid Profile' class="checkbox checkbox-info" />
 
                       </label>
                     </div>
-                     <div class="form-control">
+                     <div class="form-control px-2 hover:bg-slate-300 dark:hover:bg-gray-600 transition duration-150">
                       <label class="cursor-pointer label">
-                        <span class="label-text">AST/ALT</span>
+                        <span class="label-text text-lg sm:text-xl font-medium text-black dark:text-white">AST/ALT</span>
                         <input type="checkbox" value='AST/ALT' name='AST/ALT' class="checkbox checkbox-info" />
                       </label>
                     </div>
-                     <div class="form-control">
+                     <div class="form-control px-2 hover:bg-slate-300 dark:hover:bg-gray-600 transition duration-150">
                       <label class="cursor-pointer label">
-                        <span class="label-text">Pregnant Screening</span>
+                        <span class="label-text text-lg sm:text-xl font-medium text-black dark:text-white">Pregnant Screening</span>
                         <input type="checkbox" value='Pregnant Screening' name='Pregnant Screening' class="checkbox checkbox-info" />
 
                       </label>
                     </div>
-                    <div class="form-control">
+                    <div class="form-control px-2 hover:bg-slate-300 dark:hover:bg-gray-600 transition duration-150">
                       <label class="cursor-pointer label">
-                        <span class="label-text">Blood Typing</span>
+                        <span class="label-text text-lg sm:text-xl font-medium text-black dark:text-white">Blood Typing</span>
                         <input type="checkbox" value='Blood Typing' name='Blood Typing' class="checkbox checkbox-info" />
 
                       </label>
                     </div>
-                    <div class="form-control">
+                    <div class="form-control px-2 hover:bg-slate-300 dark:hover:bg-gray-600 transition duration-150">
                       <label class="cursor-pointer label">
-                        <span class="label-text">Uric Acid</span>
+                        <span class="label-text text-lg sm:text-xl font-medium text-black dark:text-white">Uric Acid</span>
                         <input type="checkbox" name='Uric Acid' value='Uric Acid' class="checkbox checkbox-info" />
 
                       </label>
                     </div>
-                    <div class="form-control">
+                    <div class="form-control px-2 hover:bg-slate-300 dark:hover:bg-gray-600 transition duration-150">
                       <label class="cursor-pointer label">
-                        <span class="label-text">Electrolytes</span>
+                        <span class="label-text text-lg sm:text-xl font-medium text-black dark:text-white">Electrolytes</span>
                         <input type="checkbox" name='Electrolytes' value='Electrolytes' class="checkbox checkbox-info" />
 
                       </label>
                     </div>
-                    <div class="form-control">
+                    <div class="form-control px-2 hover:bg-slate-300 dark:hover:bg-gray-600 transition duration-150">
                       <label class="cursor-pointer label">
-                        <span class="label-text">Syphilis Screening</span>
+                        <span class="label-text text-lg sm:text-xl font-medium text-black dark:text-white">Syphilis Screening</span>
                         <input type="checkbox" name='Syphilis Screening' value='Syphilis Screening' class="checkbox checkbox-info" />
 
                       </label>
                     </div>
-                    <div class="form-control">
+                    <div class="form-control px-2 hover:bg-slate-300 dark:hover:bg-gray-600 transition duration-150">
                       <label class="cursor-pointer label">
-                        <span class="label-text">FT4/TSH</span>
+                        <span class="label-text text-lg sm:text-xl font-medium text-black dark:text-white">FT4/TSH</span>
                         <input type="checkbox"  name='FT4/TSH' value='FT4/TSH' class="checkbox checkbox-info" />
                       </label>
                     </div>

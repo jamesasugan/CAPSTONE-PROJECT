@@ -391,8 +391,8 @@ ORDER BY CASE WHEN `tbl_appointment`.`Status` = 'pending' THEN 0 ELSE 1 END, `tb
                               $row['First_Name'] .
                               ' ' .
                               $middleInitial .
-                              ' ' .
-                              $row['Middle_Name'] .
+                              '. ' .
+                              $row['Last_Name'] .
                               '</td>
           
                        <td class="w-1/4">' .
@@ -497,7 +497,7 @@ ORDER BY CASE WHEN `tbl_appointment`.`Status` = 'pending' THEN 0 ELSE 1 END, `tb
                         }
                         echo '
     <tr class="text-base hover:bg-gray-300 dark:hover:bg-gray-600 font-medium text-black dark:text-white">
-        <td>' . $row['First_Name'] . ' ' . $middleInitial . '.. ' . $row['Last_Name'] . '</td>
+        <td>' . $row['First_Name'] . ' ' . $middleInitial . '. ' . $row['Last_Name'] . '</td>
         <td>' . getLastPatientVisit($row['Chart_id']) . '</td>
         <td>' . $followUpschedule . '</td>
         <td class="font-bold ' . $statusClass . '">' . $row['patient_Status'] . '</td>

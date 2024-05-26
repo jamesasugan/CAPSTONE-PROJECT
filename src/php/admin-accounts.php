@@ -115,7 +115,7 @@ if ($result->num_rows > 0) {
               <th>Name</th>
               <th>Specialty</th>
               <th>Account Status</th>
-
+              <th>Account Created</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -140,7 +140,6 @@ JOIN `tbl_staff` ON `tbl_staff`.`User_ID` = `tbl_accounts`.`User_ID` where role 
               <td>' . $row['speciality'] . '</td>
                <td>' . $row['status'] . '</td>
               <td>' . $row['account_created'] . '</td>
-              <td class="pl-9">
               <td class="pl-9">
                 <button onclick="view_doctor.showModal();getStaffInfo(' . $row['Staff_ID'] . ')"><i class="fa-regular fa-eye"></i></button>
                 <a class="text-error"><i class="fa-solid fa-trash"></i></i></a>

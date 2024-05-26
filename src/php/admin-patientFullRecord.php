@@ -135,7 +135,7 @@ if ($result && $result->num_rows > 0){
                   document.getElementById('record_id').value = ''; resetImgDisplay();}" name="sort" class="select
                 select-bordered text-black dark:text-white w-full   bg-gray-300 dark:bg-gray-600
                 text-base sm:text-lg lg:text-xl focus:border-blue-500 focus:ring focus:ring-blue-500
-                focus:ring-opacity-50 mb-4 sm:mb-0 sm:mr-4 disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400">
+                focus:ring-opacity-50 mb-4 sm:mb-0 sm:mr-4 disabled:bg-white disabled:text-black dark:disabled:text-white border-none">
                   <option  selected value='newRecord'>Select Record</option>
                     <?php
                     $visitNUmber = 1;
@@ -164,7 +164,7 @@ if ($result && $result->num_rows > 0){
                              disabled
                              name="consultation-date"
                              required
-                             class="input input-bordered w-full p-2 bg-white dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark] text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400" />
+                             class="input input-bordered w-full p-2 bg-white dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark] text-black dark:text-white disabled:bg-white disabled:text-black dark:disabled:text-white border-none" />
                     </label>
                   </div>
                   <input id='record_id' type='hidden' name='record_id' value=''>
@@ -174,7 +174,7 @@ if ($result && $result->num_rows > 0){
                       <select name="consultant-name" class="select
                 select-bordered text-black dark:text-white w-full   bg-gray-300 dark:bg-gray-600
                 text-base sm:text-lg lg:text-xl focus:border-blue-500 focus:ring focus:ring-blue-500
-                focus:ring-opacity-50 mb-4 sm:mb-0 sm:mr-4 disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400">
+                focus:ring-opacity-50 mb-4 sm:mb-0 sm:mr-4 disabled:bg-white disabled:text-black dark:disabled:text-white border-none">
                         <option  selected value='' disabled>Select consultant</option>
 
                           <?php
@@ -200,7 +200,7 @@ if ($result && $result->num_rows > 0){
                              required
                              disabled
                              placeholder="Weight"
-                             class="input input-bordered w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400" />
+                             class="input input-bordered w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-black dark:disabled:text-white border-none" />
                     </label>
                   </div>
                   <div>
@@ -208,7 +208,7 @@ if ($result && $result->num_rows > 0){
                       Heart Rate:
                       <input type="text" name="heart-rate" required disabled
                              placeholder="Heart Rate"
-                             class="input input-bordered w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400" />
+                             class="input input-bordered w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-black dark:disabled:text-white border-none" />
                     </label>
                   </div>
                   <div>
@@ -219,7 +219,7 @@ if ($result && $result->num_rows > 0){
                              required
                              disabled
                              placeholder="Temperature in Celsius"
-                             class="input input-bordered w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400" />
+                             class="input input-bordered w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-black dark:disabled:text-white border-none" />
                     </label>
                   </div>
                   <div>
@@ -230,30 +230,30 @@ if ($result && $result->num_rows > 0){
                              required
                               disabled
                              placeholder="Blood Pressure"
-                             class="input input-bordered w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400" />
+                             class="input input-bordered w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-black dark:disabled:text-white border-none" />
                     </label>
                   </div>
                 </div>
                 <div class="grid grid-cols-1 gap-4 mb-14">
                   <label class="block">
                     Saturation:
-                    <input disabled type="text" name="saturation" required placeholder="Saturation"  class="input input-bordered w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400" />
+                    <input disabled type="text" name="saturation" required placeholder="Saturation"  class="input input-bordered w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-black dark:disabled:text-white border-none" />
                   </label>
 
                   <label class="block">Chief Complaint:
-                    <textarea disabled id="chiefComplaint" rows="4" name="Chief Complaint"  class="input input-bordered h-52 w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400" placeholder="Chief Complaint"></textarea>
+                    <textarea disabled id="chiefComplaint" rows="4" name="Chief Complaint"  class="input input-bordered h-52 w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-black dark:disabled:text-white border-none" placeholder="Chief Complaint"></textarea>
                   </label>
 
                   <label class="block">Physical Examination:
-                    <textarea disabled id="physicalExamination" rows="4" name="Physical Examination"  class="input input-bordered h-52 w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400" placeholder="Physical Examination"></textarea>
+                    <textarea disabled id="physicalExamination" rows="4" name="Physical Examination"  class="input input-bordered h-52 w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-black dark:disabled:text-white border-none" placeholder="Physical Examination"></textarea>
                   </label>
 
                   <label class="block">Assessment:
-                    <textarea disabled id="assessment" rows="4" name="Assessment"  class="input input-bordered h-52 w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400" placeholder="Assessment"></textarea>
+                    <textarea disabled id="assessment" rows="4" name="Assessment"  class="input input-bordered h-52 w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-black dark:disabled:text-white border-none" placeholder="Assessment"></textarea>
                   </label>
 
                   <label class="block">Treatment Plan:
-                    <textarea disabled id="treatmentPlan" rows="4" name="Treatment Plan"  class="input input-bordered h-52 w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400" placeholder="Treatment Plan"></textarea>
+                    <textarea disabled id="treatmentPlan" rows="4" name="Treatment Plan"  class="input input-bordered h-52 w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-black dark:disabled:text-white border-none" placeholder="Treatment Plan"></textarea>
                   </label>
                   <!-- lalabas to sa initial muna, tas pag nag yes, pwede din lumabas ulit sa follow up check up stage kung need ulit ng follow up -->
                 </div>
