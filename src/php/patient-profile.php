@@ -532,7 +532,7 @@ ORDER BY CASE WHEN `tbl_appointment`.`Status` = 'pending' THEN 0 ELSE 1 END, `tb
             <p><strong>Sex: </strong> <span id='Patient_sex'></span></p>
             <p><strong>Address: </strong><span id='Patient_address'> </span></p>
             <p><strong>Date of Birth: </strong><span id='Patient_dateOfBirth'> </span></p>
-            <p><strong>Vaccinated: </strong><span id='Patient_vacStat'</span></p>
+            <p><strong>Vaccinated: </strong><span id='Patient_vacStat'></span></p>
             <p><strong>Reason/Purpose: </strong><span id='Patient_reasonn'> </span></p>
           </div>
         </div>
