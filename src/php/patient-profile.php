@@ -395,9 +395,9 @@ ORDER BY CASE WHEN `tbl_appointment`.`Status` = 'pending' THEN 0 ELSE 1 END, `tb
                               '</td> 
                       <td>' . $row['Remarks'] . '</td>';
                           if ($row['Status'] == 'pending') {
-                              echo '<td class="pl-9"> 
+                              echo '<td class="w-1/12 pl-5"> 
                           <button onclick="getPatientAppointmentInfo('.$row['Patient_ID'].') ;toggleDialog(\'viewAppointmentForm\')"><i class="fa-regular fa-eye"></i></button>
-                         <button onclick="toggleDialog(\'viewandCancel\');getAppointmentId(' . $row['Appointment_ID'] . ')" class="text-error"><i class="fa-solid fa-trash"></i></button>
+                         <button onclick="toggleDialog(\'viewandCancel\');getAppointmentId(' . $row['Appointment_ID'] . ')" class="text-error ml-3"><i class="fa-solid fa-trash"></i></button>
                          
                         
                     
