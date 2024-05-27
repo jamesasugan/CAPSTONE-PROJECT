@@ -113,7 +113,7 @@ $staff_id = $row['Staff_ID'];
           <tr class="font-bold text-black dark:text-white text-base sm:text-lg">
             <th class='cursor-pointer'  >Name</th>
             <th class='cursor-pointer' >Last visit</th>
-            <th class='cursor-pointer'  >Follow up schedule</th>
+            <th class='cursor-pointer'  >Schedule</th>
             <th class='cursor-pointer'  >Status</th>
             <th>Action</th>
           </tr>
@@ -177,7 +177,7 @@ ORDER BY
             -->
 
               <!-- view information -->
-              <td class="pl-9 ">
+              <td>
                 <a href="staff-patientFullRecord.php?id='.$row['Patient_ID'] .'&chart_id='. $row['Chart_id'].'"><i class="fa-regular fa-eye"></i></a>
                 ';
                 if ($row['patient_Status'] == 'Follow Up' and $followUpschedule != 'No schedule'){
