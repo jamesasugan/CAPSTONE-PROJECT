@@ -212,6 +212,22 @@ if ($result && $result->num_rows > 0) {
                 <dialog class='modal bg-black bg-opacity-20' id='services'>
                   <div id='ServiceList'  class="modal-box w-11/12 max-w-5xl bg-gray-200 dark:bg-gray-700 overflow-auto">
                     <h1 class="text-2xl text-center text-black dark:text-white font-bold mb-5">Select Service:</h1>
+                      <div  class="w-full sm:flex sm:items-center justify-end mb-5">                     
+                        <!-- search | paayos nito -->
+                        <div class="flex w-full sm:w-auto">
+                          <input
+                            type="text"
+                            name="text"
+                            id='search'
+                            class="input input-bordered appearance-none w-full px-3 py-2 rounded-none bg-white dark:bg-gray-600 text-black dark:text-white border border-black border-r-0 dark:border-white"
+                            placeholder="Search"
+                            onkeyup='handleSearch("search", "TableList")'
+                          />
+                          <button type="submit" class="btn btn-square bg-gray-400 hover:bg-gray-500  rounded-none dark:bg-gray-500 dark:hover:bg-gray-300 border border-black border-l-0 dark:border-white">
+                            <i class="fa-solid fa-magnifying-glass text-black dark:text-white"></i>
+                          </button>
+                        </div>
+                      </div>
                     <div class="form-control px-2 hover:bg-slate-300 dark:hover:bg-gray-600 transition duration-150">
                       <label class="cursor-pointer label">
                         <span class="label-text text-lg sm:text-xl font-medium text-black dark:text-white">OB-Gyne</span>
