@@ -67,7 +67,7 @@ if ($action == 'signup'){
         if ($user_type == 'patient'){
             $sql_patient = "INSERT INTO account_user_info (User_ID, First_Name, Middle_Name, Last_Name, DateofBirth, Sex, Contact_Number, Address) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             $stmt_patient = $conn->prepare($sql_patient);
-            $stmt_patient->bind_param("isssssis", $user_id, $first_name, $middle_name, $last_name, $date_of_birth, $sex, $contact_number, $address);
+            $stmt_patient->bind_param("isssssss", $user_id, $first_name, $middle_name, $last_name, $date_of_birth, $sex, $contact_number, $address);
             $stmt_patient->execute();
 
         }else{

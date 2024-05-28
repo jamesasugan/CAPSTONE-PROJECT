@@ -235,11 +235,11 @@ if ($result->num_rows > 0) {
                 <div class="block text-base sm:text-lg font-medium mb-1">Is the Patient vaccinated?</div>
                 <div class="flex items-center space-x-4 p-2 bg-gray-300 dark:bg-gray-600 rounded">
                     <label class="flex items-center">
-                        <input type="radio" name="vaccinated" value="yes" class="radio radio-primary" required>
+                        <input type="radio" name="vaccinated" value="Yes" class="radio radio-primary" required>
                         <span class="ml-2">Yes</span>
                     </label>
                     <label class="flex items-center">
-                        <input type="radio" name="vaccinated" value="no" class="radio radio-primary" required>
+                        <input type="radio" name="vaccinated" value="No" class="radio radio-primary" required>
                         <span class="ml-2">No</span>
                     </label>
                 </div>
