@@ -374,6 +374,8 @@ ORDER BY CASE WHEN `tbl_appointment`.`Status` = 'pending' THEN 0 ELSE 1 END, `tb
                               $status_color = 'text-green-500';
                           } elseif ($row['Status'] == 'approved') {
                               $status_color = 'text-blue-500';
+                          } elseif ($row['Status'] == 'rescheduled') {
+                              $status_color = 'text-yellow-600';
                           } elseif ($row['Status'] == 'cancelled') {
                               $status_color = 'text-red-500';
                           }

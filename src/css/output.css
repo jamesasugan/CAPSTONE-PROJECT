@@ -3840,6 +3840,10 @@ details.collapse summary::-webkit-details-marker {
   margin-left: 5rem;
 }
 
+.ml-3 {
+  margin-left: 0.75rem;
+}
+
 .ml-5 {
   margin-left: 1.25rem;
 }
@@ -3910,10 +3914,6 @@ details.collapse summary::-webkit-details-marker {
 
 .mt-auto {
   margin-top: auto;
-}
-
-.ml-3 {
-  margin-left: 0.75rem;
 }
 
 .block {
@@ -4012,6 +4012,10 @@ details.collapse summary::-webkit-details-marker {
   min-height: 100vh;
 }
 
+.w-1\/12 {
+  width: 8.333333%;
+}
+
 .w-1\/2 {
   width: 50%;
 }
@@ -4054,18 +4058,6 @@ details.collapse summary::-webkit-details-marker {
 
 .w-full {
   width: 100%;
-}
-
-.w-10 {
-  width: 2.5rem;
-}
-
-.w-2\/12 {
-  width: 16.666667%;
-}
-
-.w-1\/12 {
-  width: 8.333333%;
 }
 
 .max-w-3xl {
@@ -4744,10 +4736,6 @@ details.collapse summary::-webkit-details-marker {
 
 .pt-32 {
   padding-top: 8rem;
-}
-
-.pl-1 {
-  padding-left: 0.25rem;
 }
 
 .text-left {
