@@ -3916,6 +3916,10 @@ details.collapse summary::-webkit-details-marker {
   margin-top: auto;
 }
 
+.ml-4 {
+  margin-left: 1rem;
+}
+
 .block {
   display: block;
 }

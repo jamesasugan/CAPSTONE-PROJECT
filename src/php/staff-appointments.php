@@ -197,7 +197,7 @@ ORDER BY
                 Cancelled - text-red-500
                 Approved - text-blue-500
                 -->
-                <td class="pl-6">
+                <td>
                   <!-- yung modal name viewAppointment2,3,4,5 dapat sa mga susunod, bawal parehas kase di maoopen -->
                   <button onclick="viewAppointment.showModal();getAppointmentInfo(this.getAttribute(\'data-id\'))" data-id="' .
                     $row['Patient_ID'] .
@@ -207,7 +207,7 @@ ORDER BY
                 // Include the tooltip for Approved status here
                 if ($status === 'Approved') {
                     echo '<div class="ml-2 tooltip tooltip-bottom" data-tip="Create patient chart">
-                                <a class="hover:cursor-pointer" onclick="toggleDialog(\'addPatient\');setAppointmentId(this.getAttribute(\'data-appointment-id\'))" data-appointment-id="' .
+                                <a class="ml-5 hover:cursor-pointer" onclick="toggleDialog(\'addPatient\');setAppointmentId(this.getAttribute(\'data-appointment-id\'))" data-appointment-id="' .
                         $row['Appointment_ID'] .
                         '">
                                   <i class="fa-solid fa-user-plus"></i>
@@ -559,10 +559,12 @@ ORDER BY
     </div>
   </dialog>
   <dialog id="addPatient"   class="modal bg-black  bg-opacity-40 ">
-    <div class="card bg-slate-50 w-[80vw] absolute top-10 sm:w-[30rem] max-h-[35rem]  flex flex-col text-black">
+    <div class="card bg-gray-200 dark:bg-gray-700 text-[#0e1011] dark:text-[#eef0f1] w-[80vw] absolute top-10 sm:w-[30rem] max-h-[35rem]  flex flex-col">
       <div  class=" card-title sticky  w-full grid place-items-center">
-        <h3 class="font-bold text-center text-lg  p-5 ">Create patient chart list?</h3>
+        <h3 class="font-bold text-center text-lg  p-5 ">Create Patient Chart List?</h3>
       </div>
+      <p class="text-base text-center font-medium mb-5"><span class="font-bold text-blue-500">NOTE: </span>This patient's information will be added to the patient records.</p>
+      
       <div class="p-4 w-full flex justify-evenly">
         <a id="newChart" class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none w-1/4" onclick="create_patientChart(this.getAttribute('data-appointment-id'));">Yes</a>
         <button class="btn bg-gray-400 text-black dark:bg-white hover:bg-gray-500 dark:hover:bg-gray-400 border-none   w-1/4 " onclick='toggleDialog("addPatient")'>Close</button>

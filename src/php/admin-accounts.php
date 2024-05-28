@@ -140,9 +140,9 @@ JOIN `tbl_staff` ON `tbl_staff`.`User_ID` = `tbl_accounts`.`User_ID` where role 
               <td>' . $row['speciality'] . '</td>
                <td>' . $row['status'] . '</td>
               <td>' . $row['account_created'] . '</td>
-              <td class="pl-9">
+              <td>
                 <button onclick="view_doctor.showModal();getStaffInfo(' . $row['Staff_ID'] . ')"><i class="fa-regular fa-eye"></i></button>
-                <a class="text-error"><i class="fa-solid fa-trash"></i></i></a>
+                <a class="text-error ml-5"><i class="fa-solid fa-trash"></i></i></a>
               </td>
             </tr>';
           }
