@@ -698,22 +698,7 @@ ORDER BY
             document.getElementById('appointment_status').classList.add('font-bold', statusClass)
 
             document.getElementById('approve').disabled = (status === 'Cancelled');
-            /*
 
-            let serviceValue = data.Service_Field;
-            if (serviceValue === 'Consultation') {
-              document.getElementById('horizontal-list-radio-license').checked = true;
-            } else if (serviceValue === 'Test/Procedure') {
-              document.getElementById('horizontal-list-radio-id').checked = true;
-            }
-
-            let service_type
-            if (data.Service_Type !== null){
-              service_type = data.Service_Type
-            }else {
-              service_type = ''
-            }
-            */
             let reason;
             if (data.reason !== null) {
               reason = data.reason
@@ -736,9 +721,9 @@ ORDER BY
             document.querySelector('#appointmentform select[name="sexHistory"]').value = data.Sex;
             document.querySelector('#update_appointment select[name="appointDoctor"]').value = data.Staff_ID;
 
-            if (data.Vaccination === 'yes'){
+            if (data.Vaccination === 'Yes'){
               document.getElementById('vaccinated').checked = true
-            }else if (data.Vaccination === 'no'){
+            }else if (data.Vaccination === 'No'){
               document.getElementById('notvaccinated').checked = true
             }
           }

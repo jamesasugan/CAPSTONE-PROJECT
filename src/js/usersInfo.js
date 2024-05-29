@@ -48,7 +48,8 @@ document.addEventListener('submit',function(e){
     endpoint = 'editUserInfo';
   }
   else if (e.target.id === 'cancel_appoinment'){
-    endpoint = 'cancelAppointment'
+    endpoint = 'cancelAppointment';
+    infoText = 'Appointment has been cancelled';
 
   }
   document.getElementById('textInfo').innerHTML = infoText;
@@ -63,11 +64,12 @@ document.addEventListener('submit',function(e){
         toggleDialog('profileAlert');
         getUserInfo()
       }if (parseInt(response) === 2) {
-        window.location.href = 'patient-profile.php'
+        toggleDialog('profileAlert');
+        window.location.href = 'patient-profile.php?route=appointmentHistory'
       }else {
         document.getElementById('errorAlert').innerHTML = response;
         toggleDialog('errorAlert');
-        console.log(response);
+
       }
     }
   });

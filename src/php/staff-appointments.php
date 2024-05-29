@@ -678,7 +678,7 @@ ORDER BY
 
             if (data.Vaccination === 'yes'){
               document.getElementById('vaccinated').checked = true
-            }else if (data.Vaccination === 'no'){
+            }else if (data.Vaccination === 'No'){
               document.getElementById('notvaccinated').checked = true
             }
           }
