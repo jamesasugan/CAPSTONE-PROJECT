@@ -1,7 +1,7 @@
 <?php
 $host = "localhost";
 $username = "root";
-$database = "hcmccapstone_db";
+$database = "hcmccapstone_dbrevised";
 
 $conn = new mysqli($host, $username, '', $database);
 

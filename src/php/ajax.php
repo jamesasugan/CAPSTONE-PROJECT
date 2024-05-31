@@ -506,9 +506,9 @@ if ($action == 'editUserInfo'){
 if ($action == 'getAppointmentInfo'){
     $patient_id = $_GET['patient_id'];
     $sql = "SELECT *
-            FROM `tbl_patient` 
-            JOIN `tbl_appointment` ON `tbl_appointment`.`Patient_ID` = `tbl_patient`.`Patient_ID`
-            where `tbl_appointment`.`Patient_ID` = ?;";
+            FROM `tbl_accountpatientmember` 
+            JOIN `tbl_appointment` ON `tbl_appointment`.`Account_Patient_ID_Member` = `tbl_accountpatientmember`.`Account_Patient_ID_Member`
+            where `tbl_appointment`.`Account_Patient_ID_Member` = ?;";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param('i', $patient_id);
     $stmt->execute();
@@ -543,7 +543,6 @@ if ($action == 'updateAppointment'){
     }else if ($appointment_status == 'approved'){
         $sql = 'UPDATE tbl_appointment SET Staff_ID = ?, 
             Status = ?,
-        
             Remarks = ?
             WHERE Appointment_ID = ?';
         $stmt = $conn->prepare($sql);
@@ -575,20 +574,43 @@ if ($action == 'updateAppointment'){
         echo $stmt->error;
     }
 }
-if ($action == 'createPatientChart'){
+if ($action == 'createPatientChart') {
     try {
         $appointment_id = $_GET['appointment_id'];
-        $sql = "SELECT Appointment_schedule from tbl_appointment where Appointment_ID = ?";
+        $sql = "SELECT `tbl_accountpatientmember`.*, `tbl_appointment`.*
+                FROM `tbl_accountpatientmember`
+                LEFT JOIN `tbl_appointment` ON `tbl_appointment`.`Account_Patient_ID_Member` = `tbl_accountpatientmember`.`Account_Patient_ID_Member`
+                WHERE `tbl_appointment`.`Appointment_ID` = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param('i', $appointment_id);
         $stmt->execute();
         $result = $stmt->get_result();
+        if ($result->num_rows !== 1) {
+            echo 'Something went wrong';
+            exit();
+        }
         $row = $result->fetch_assoc();
+
+        $chartOnlineUser_Id = isset($row['user_info_ID']) ? $row['user_info_ID'] : NULL;
+        $chartConsultant = $row['Staff_ID'];
+        $chartFname = $row['First_Name'];
+        $chartMname = $row['Middle_Name'];
+        $chartLname = $row['Last_Name'];
+        $chartDob = $row['DateofBirth'];
+        $chartSex = $row['Sex'];
+        $chartContactNum = $row['Contact_Number'];
+        $chartAddress = $row['Address'];
+        $chartEmail = $row['MemberPatientEmail']; // Adding email if it's required
         $patientStatus = 'To be Seen';
-        $sql = "INSERT INTO tbl_patient_chart (Appointment_id, patient_Status, followUp_schedule) VALUES (?, ?, ?)";
+        $followUpSchedule = $row['Appointment_schedule'];
+
+        $sql = "INSERT INTO tbl_patient_chart (user_info_ID, Consultant_id, First_Name,
+                    Middle_Name, Last_Name, DateofBirth, Sex, Contact_Number, patientEmail, Address, patient_Status, followUp_schedule) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param('iss', $appointment_id, $patientStatus, $row['Appointment_schedule']);
-        if ($stmt->execute()){
+        $stmt->bind_param('iissssssssss', $chartOnlineUser_Id, $chartConsultant, $chartFname,
+            $chartMname, $chartLname, $chartDob, $chartSex, $chartContactNum, $chartEmail, $chartAddress, $patientStatus, $followUpSchedule);
+        if ($stmt->execute()) {
             echo 1;
             exit();
         }
@@ -619,7 +641,6 @@ if ($action == 'createPatientRecord') {
     try {
         $record_id = 0;
         $consultation_date = $_POST['consultation-date'];
-        $consultant = $_POST['consultant-name'];
         $weight = $_POST['weight'];
         $heart_rate = $_POST['heart-rate'];
         $temperature = $_POST['temperature'];
@@ -641,7 +662,7 @@ if ($action == 'createPatientRecord') {
             $result = $stmt->get_result();
             if ($result->num_rows === 1) {
                 $sql = "UPDATE tbl_records SET 
-                       Consultant_Staff_ID = ? , 
+                    
                        consultationDate = ?,
                        
                        Temperature = ?, 
@@ -657,8 +678,7 @@ if ($action == 'createPatientRecord') {
                        WHERE Record_ID = ?
                        ";
                 $stmt = $conn->prepare($sql);
-                $stmt->bind_param('isdddsssssssi', $consultant,
-                    $consultation_date, $temperature,
+                $stmt->bind_param('sdddsssssssi', $consultation_date, $temperature,
                     $heart_rate, $weight, $blood_pressure,
                     $saturation, $chief_comp, $physical_exam,
                     $assesment, $availed_Service, $treatment_plan, $record_id);
@@ -680,10 +700,10 @@ if ($action == 'createPatientRecord') {
                 exit();
             }
         }else {
-            $sql = "INSERT INTO tbl_records (Chart_ID, Consultant_Staff_ID, consultationDate, availedService,Temperature, HeartRate, Weight, Blood_Pressure, Saturation, Chief_complaint, Physical_Examination, Assessment, Treatment_Plan) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?,?, ?, ?, ?, ?)";
+            $sql = "INSERT INTO tbl_records (Chart_ID,consultationDate, availedService,Temperature, HeartRate, Weight, Blood_Pressure, Saturation, Chief_complaint, Physical_Examination, Assessment, Treatment_Plan) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?,?, ?, ?, ?)";
             $stmt = $conn->prepare($sql);
-            $stmt->bind_param("iissdddssssss", $Chart_ID, $consultant, $consultation_date, $availed_Service,$temperature, $heart_rate, $weight, $blood_pressure, $saturation, $chief_comp, $physical_exam, $assesment, $treatment_plan);
+            $stmt->bind_param("issdddssssss", $Chart_ID,  $consultation_date, $availed_Service,$temperature, $heart_rate, $weight, $blood_pressure, $saturation, $chief_comp, $physical_exam, $assesment, $treatment_plan);
             if (!$stmt->execute()){
                 if ($stmt->errno == 1265){
                     echo "Data insert mismatch error";
@@ -857,43 +877,34 @@ if ($action == 'AddWalkInPatient') {
     }
 }
 if ($action == 'Editpatient'){
-    if (isset($_POST['patient_id']) && isset($_POST['patient_first-name']) && isset($_POST['patient_middle-name']) && isset($_POST['patient_last-name']) && isset($_POST['patient_contact-number']) && isset($_POST['patient_sex']) &&
-        isset($_POST['patient_email']) && isset($_POST['patient_vaccinated']) && isset($_POST['patient_address']) && isset($_POST['patient_dob']) && isset($_POST['patient_status']) && isset($_POST['patient_chart_id'])) {
-        $patient_id = $_POST['patient_id'];
+    if (isset($_POST['patient_first-name'])
+        && isset($_POST['patient_middle-name'])
+        && isset($_POST['patient_last-name'])
+        && isset($_POST['patient_contact-number'])
+        && isset($_POST['patient_sex']) &&
+        isset($_POST['patient_email']) &&
+
+        isset($_POST['patient_address']) &&
+        isset($_POST['patient_dob']) &&
+        isset($_POST['patient_status']) &&
+        isset($_POST['patient_chart_id'])) {
         $patientFname = $_POST['patient_first-name'];
         $patientMname = $_POST['patient_middle-name'];
         $patientLname = $_POST['patient_last-name'];
         $patient_contactNum = $_POST['patient_contact-number'];
         $patient_sex = $_POST['patient_sex'];
         $patientEmail = $_POST['patient_email'];
-        $patient_VacStatus = $_POST['patient_vaccinated'];
         $patient_address = $_POST['patient_address'];
         $patient_Dob = $_POST['patient_dob'];
         $patient_Chart_status =$_POST['patient_status'];
         $chart_id = $_POST['patient_chart_id'];
 
-        $updatePatientInfo = "UPDATE tbl_patient SET First_Name = ?, Middle_Name = ?, 
+        $update_patient_chart_status = "UPDATE tbl_patient_chart SET First_Name = ?, Middle_Name = ?, 
                        Last_Name = ?, DateofBirth = ?, Sex = ?, Contact_Number = ? , 
-                       patientEmail = ? , Address = ? 
-                   where Patient_ID = ? ";
-        $updatePatientInfoStmt = $conn->prepare($updatePatientInfo);
-        $updatePatientInfoStmt->bind_param('ssssssssi',$patientFname, $patientMname,
-            $patientLname, $patient_Dob, $patient_sex, $patient_contactNum, $patient_email, $patient_address, $patient_id);
-        $updatePatientInfoStmt->execute();
-        if (!$updatePatientInfoStmt->execute()){
-            echo $updatePatientInfoStmt->error;
-            exit();
-        }
-        $updateVac = "UPDATE tbl_appointment SET Vaccination = ? where Patient_ID = ?";
-        $update_vacstmt = $conn->prepare($updateVac);
-        $update_vacstmt->bind_param( 'si',$patient_VacStatus, $patient_id);
-        if (!$update_vacstmt->execute()){
-            echo $update_vacstmt->error;
-            exit();
-        }
-        $update_patient_chart_status = "UPDATE tbl_patient_chart SET  patient_Status = ? WHERE Chart_id = ?";
+                       patientEmail = ? , Address = ? , patient_Status = ? WHERE Chart_id = ?";
         $update_patient_chart_stmt = $conn->prepare($update_patient_chart_status);
-        $update_patient_chart_stmt->bind_param('si', $patient_Chart_status, $chart_id);
+        $update_patient_chart_stmt->bind_param('sssssssssi', $patientFname, $patientMname,
+            $patientLname, $patient_Dob, $patient_sex, $patient_contactNum, $patient_email, $patient_address, $patient_Chart_status, $chart_id);
         if (!$update_patient_chart_stmt->execute()){
             echo $update_patient_chart_stmt->error;
             exit();
@@ -901,8 +912,6 @@ if ($action == 'Editpatient'){
 
         echo 1;
         exit();
-
-
 
     } else {
         echo "Some fields are empty";

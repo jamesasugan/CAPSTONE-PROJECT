@@ -7,8 +7,6 @@ function calculateDates($selectedDays, $startingDate, $endingDate) {
         $dates[] = $startingDate;
         return $dates;
     }
-
-
     $currentDate = strtotime($startingDate);
     $endDate = strtotime($endingDate);
 
@@ -78,12 +76,10 @@ function getPendingAppointment() {
 function getTotalPatientChart() {
     include '../Database/database_conn.php';
     $userRole = getUserRole();
-    $staffCondition = $userRole['Role'] == 'doctor' ? ' AND a.Staff_ID = ?' : '';
+    $staffCondition = $userRole['Role'] == 'doctor' ? ' AND Consultant_id = ?' : '';
     $sql = "SELECT COUNT(*) AS total_count
-            FROM tbl_patient_chart pc
-            JOIN tbl_appointment 
-            a ON pc.Appointment_id = a.Appointment_ID WHERE 
-            pc.patient_Status != 'Archived' and pc.patient_Status != 'Deleted'" . $staffCondition;
+            FROM tbl_patient_chart WHERE 
+            patient_Status != 'Archived' and patient_Status != 'Deleted'" . $staffCondition;
     $stmt = $conn->prepare($sql);
 
     if ($stmt === false) {
@@ -105,11 +101,10 @@ function getTotalPatientChart() {
 function tobeSeenPatient() {
     include '../Database/database_conn.php';
     $userRole = getUserRole();
-    $staffCondition = $userRole['Role'] == 'doctor' ? ' AND a.Staff_ID = ?' : '';
+    $staffCondition = $userRole['Role'] == 'doctor' ? ' AND Consultant_id = ?' : '';
     $sql = "SELECT COUNT(*) AS total_count
-            FROM tbl_patient_chart pc
-            JOIN tbl_appointment a ON pc.Appointment_id = a.Appointment_ID
-            WHERE pc.patient_Status = 'To be Seen'" . $staffCondition;
+            FROM tbl_patient_chart
+            WHERE patient_Status = 'To be Seen'" . $staffCondition;
     $stmt = $conn->prepare($sql);
     if ($stmt === false) {
         die("Preparation failed: (" . $conn->errno . ") " . $conn->error);

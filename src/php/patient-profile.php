@@ -6,6 +6,17 @@ if (!isset($_SESSION['user_type']) or $_SESSION['user_type'] !== 'patient') {
 }
 include 'ReuseFunction.php';
 $user_id = $_SESSION['user_id'];
+$getAccOwner_Info = "
+    SELECT * FROM account_user_info
+    WHERE User_ID = ?;
+";
+$getAccOwner_InfoSTMT = $conn->prepare($getAccOwner_Info);
+$getAccOwner_InfoSTMT->bind_param('i', $user_id);
+$getAccOwner_InfoSTMT->execute();
+$res = $getAccOwner_InfoSTMT->get_result();
+$row = $res->fetch_assoc();
+
+$accountOwner_ID = $row['user_info_ID'];
 ?>
 
 
@@ -66,12 +77,17 @@ $user_id = $_SESSION['user_id'];
                     <li id="passwordTab" class="sidebar-item cursor-pointer text-black dark:text-white py-2 px-4 transition-colors duration-200">
                         Password
                     </li>
+                  <li id="AccountMember" class="sidebar-item cursor-pointer text-black dark:text-white py-2 px-4 transition-colors duration-200">
+                    Account Appointment Member
+                  </li>
                     <li id="appointmentHistoryTab" class="sidebar-item cursor-pointer text-black dark:text-white py-2 px-4 transition-colors duration-200">
                         Appointment History
                     </li>
-                    <li id="recordHistoryTab" class="sidebar-item cursor-pointer text-black dark:text-white py-2 px-4 transition-colors duration-200">
-                        Record History
-                    </li>
+
+
+                  <li id="recordHistoryTab" class="sidebar-item cursor-pointer text-black dark:text-white py-2 px-4 transition-colors duration-200">
+                    Record History
+                  </li>
                 </ul>
           </div>
 
@@ -328,36 +344,81 @@ $user_id = $_SESSION['user_id'];
           </div>
         </div>
 
-        <!-- Appointment Tab -->
-        <div id="appointmentHistory" class="flex-1 p-10 ">
-          <div class="bg-gray-200 dark:bg-gray-700 p-5 rounded-lg h-full">
+
+          <div id="Memberstab" class="flex-1 p-10 hidden">
+            <div class="bg-gray-200 dark:bg-gray-700 p-5 rounded-lg h-full">
               <h3 class="text-2xl font-bold text-black dark:text-white mb-4">
-                  Appointment History
+                Account Appointment Members
               </h3>
               <div class="overflow-x-auto">
                 <table class="table">
                   <!-- head -->
                   <thead>
-                    <tr class="font-bold text-black dark:text-white text-base sm:text-lg">
-                      <th>Name</th>
-                      <th>Schedule </th>
-                      <th>Status</th>
-                      <th>Remarks</th>
-                      <th>Action</th>
-                    </tr>
+                  <tr class="font-bold text-black dark:text-white text-base sm:text-lg">
+                    <th>Name</th>
+                    <th>Relationship Type</th>
+                    <th>Action</th>
+                  </tr>
                   </thead>
                   <tbody>
                   <?php
                   $sql = "
-                      SELECT `tbl_patient`.*, `tbl_appointment`.*
-FROM `account_user_info`
-JOIN `tbl_patient` ON `tbl_patient`.`user_info_ID` = `account_user_info`.`user_info_ID`
-JOIN `tbl_appointment` ON `tbl_appointment`.`Patient_ID` = `tbl_patient`.`Patient_ID`
-WHERE `account_user_info`.`User_ID` = ?
+    SELECT * FROM tbl_accountpatientmember WHERE user_info_ID = ?";
+                  $stmt = $conn->prepare($sql);
+                  $stmt->bind_param('i', $accountOwner_ID);
+                  $stmt->execute();
+                  $result = $stmt->get_result();
+                  if ($result->num_rows > 0) {
+                      while ($row = $result->fetch_assoc()) {
+                          $middleInitial = strlen($row['Middle_Name']) >= 1 ? substr($row['Middle_Name'], 0, 1) : '';
+                          echo '
+            <tr class="text-base hover:bg-gray-300 dark:hover:bg-gray-600 font-medium text-black dark:text-white">               
+                <td class="w-1/4">' . $row['First_Name'] . ' ' . $middleInitial . '. ' . $row['Last_Name'] . '</td>
+                <td>' . $row['RelationshipType'] . '</td>
+                <td class="w-1/12 pl-5"> 
+                    <button><i class="fa-regular fa-eye"></i></button>
+                    <button><i class="fa-solid fa-trash"></i></button>
+                </td>
+            </tr>';
+                      }
+                  }
+                  ?>
+
+                  </tbody>
+                </table>
+              </div>
+
+            </div>
+          </div>
+          <!-- Appointment Tab -->
+          <div id="appointmentHistory" class="flex-1 p-10 hidden">
+            <div class="bg-gray-200 dark:bg-gray-700 p-5 rounded-lg h-full">
+              <h3 class="text-2xl font-bold text-black dark:text-white mb-4">
+                Appointment History
+              </h3>
+              <div class="overflow-x-auto">
+                <table class="table">
+                  <!-- head -->
+                  <thead>
+                  <tr class="font-bold text-black dark:text-white text-base sm:text-lg">
+                    <th>Name</th>
+                    <th>Schedule </th>
+                    <th>Status</th>
+                    <th>Remarks</th>
+                    <th>Action</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <?php
+                  $sql = "
+                     SELECT `tbl_accountpatientmember`.*, `tbl_appointment`.*
+FROM `tbl_accountpatientmember` 
+JOIN `tbl_appointment` ON `tbl_appointment`.`Account_Patient_ID_Member` = `tbl_accountpatientmember`.`Account_Patient_ID_Member`
+WHERE `tbl_accountpatientmember`.`user_info_ID` = ?
 ORDER BY CASE WHEN `tbl_appointment`.`Status` = 'pending' THEN 0 ELSE 1 END, `tbl_appointment`.`AppointmentCreated`;
 ";
                   $stmt = $conn->prepare($sql);
-                  $stmt->bind_param('i', $user_id);
+                  $stmt->bind_param('i', $accountOwner_ID);
                   $stmt->execute();
                   $result = $stmt->get_result();
                   if ($result->num_rows > 0) {
@@ -398,7 +459,7 @@ ORDER BY CASE WHEN `tbl_appointment`.`Status` = 'pending' THEN 0 ELSE 1 END, `tb
                       <td>' . $row['Remarks'] . '</td>';
                           if ($row['Status'] == 'pending' || $row['Status'] == 'rescheduled') {
                               echo '<td class="w-1/12 pl-5"> 
-                          <button onclick="getPatientAppointmentInfo('.$row['Patient_ID'].') ;toggleDialog(\'viewAppointmentForm\')"><i class="fa-regular fa-eye"></i></button>
+                          <button onclick="getPatientAppointmentInfo('.$row['Account_Patient_ID_Member'].') ;toggleDialog(\'viewAppointmentForm\')"><i class="fa-regular fa-eye"></i></button>
                          <button onclick="toggleDialog(\'viewandCancel\');getAppointmentId(' . $row['Appointment_ID'] . ')" class="text-error ml-3"><i class="fa-solid fa-trash"></i></button>
                          
                         
@@ -408,82 +469,68 @@ ORDER BY CASE WHEN `tbl_appointment`.`Status` = 'pending' THEN 0 ELSE 1 END, `tb
                       }
                   }
                   ?>
-                    </tbody>
-                  </table>
-                </div>
+                  </tbody>
+                </table>
+              </div>
 
             </div>
           </div>
 
           <div id="recordHistory" class="flex-1 p-10 hidden">
-          <div class="bg-gray-200 dark:bg-gray-700 p-5 rounded-lg h-full">
+            <div class="bg-gray-200 dark:bg-gray-700 p-5 rounded-lg h-full">
               <h3 class="text-2xl font-bold text-black dark:text-white mb-4">
-                  Record History
+                Record History
               </h3>
               <div class="overflow-x-auto">
                 <table class="table">
                   <!-- head -->
                   <thead>
-                    <tr class="font-bold text-black dark:text-white text-base sm:text-lg">
-                      <th>Name</th>
-                      <th>Last visit</th>
-                      <th>Schedule </th>
-                      <th>Status</th>
-                      <th>Action</th>
-                    </tr>
+                  <tr class="font-bold text-black dark:text-white text-base sm:text-lg">
+                    <th>Name</th>
+                    <th>Last visit</th>
+                    <th>Schedule </th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
                   </thead>
-                    <tbody>
-                    <?php
-                    $getAccOwner_Info = "
-    SELECT * FROM account_user_info
-    WHERE User_ID = ?;
-";
-                    $getAccOwner_InfoSTMT = $conn->prepare($getAccOwner_Info);
-                    $getAccOwner_InfoSTMT->bind_param('i', $user_id);
-                    $getAccOwner_InfoSTMT->execute();
-                    $res = $getAccOwner_InfoSTMT->get_result();
-                    $row = $res->fetch_assoc();
+                  <tbody>
+                  <?php
 
-                    $accountOwner_ID = $row['user_info_ID'];
 
-                    $getaccOwnerPatientChart = "
-    SELECT 
-        pc.Chart_id, p.Patient_ID, p.First_Name, p.Middle_Name, p.Last_Name, 
-        pc.followUp_schedule, pc.patient_Status 
-    FROM tbl_patient_chart AS pc 
-    JOIN tbl_appointment AS a ON pc.Appointment_id = a.Appointment_ID 
-    JOIN tbl_patient AS p ON a.Patient_ID = p.Patient_ID 
-    WHERE p.user_info_ID = ? 
-    AND pc.patient_Status IN ('To be Seen', 'Follow Up', 'Completed')
-    ORDER BY pc.followUp_schedule;
+                  $getaccOwnerPatientChart = "
+    SELECT *
+    FROM tbl_patient_chart
+    WHERE user_info_ID = ? 
+    AND patient_Status IN ('To be Seen', 'Follow Up', 'Completed')
+    ORDER BY followUp_schedule;
 ";
 
-                    $stmt = $conn->prepare($getaccOwnerPatientChart);
-                    $stmt->bind_param('i', $accountOwner_ID);
-                    $stmt->execute();
-                    $result = $stmt->get_result();
-                    while ($row = $result->fetch_assoc()) {
-                        $middleInitial = strlen($row['Middle_Name']) >= 1 ? substr($row['Middle_Name'], 0, 1) : '';
-                        $date = date('F j, Y', strtotime($row['followUp_schedule']));
-                        $time = date('g:ia', strtotime($row['followUp_schedule']));
-                        $followUpschedule = ($date . ' ' . $time) == 'January 1, 1970 1:00am' ? 'No schedule' : $date . ' ' . $time;
+                  $stmt = $conn->prepare($getaccOwnerPatientChart);
+                  $stmt->bind_param('i', $accountOwner_ID);
+                  $stmt->execute();
+                  $result = $stmt->get_result();
+                  while ($row = $result->fetch_assoc()) {
+                      $middleInitial = strlen($row['Middle_Name']) >= 1 ? substr($row['Middle_Name'], 0, 1) : '';
+                      $date = date('F j, Y', strtotime($row['followUp_schedule']));
+                      $time = date('g:ia', strtotime($row['followUp_schedule']));
+                      $followUpschedule = ($date . ' ' . $time) == 'January 1, 1970 1:00am' ? 'No schedule' : $date . ' ' . $time;
 
-                        $statusClass = '';
-                        switch ($row['patient_Status']) {
-                            case 'To be Seen':
-                                $statusClass = 'text-yellow-600';
-                                break;
-                            case 'Follow Up':
-                                $statusClass = 'text-info';
-                                break;
-                            case 'Completed':
-                                $statusClass = 'text-green-500';
-                                break;
-                            default:
-                                $statusClass = ''; // Default class if none of the above match
-                                break;
-                        }
-                        echo '
+                      $statusClass = '';
+                      switch ($row['patient_Status']) {
+                          case 'To be Seen':
+                              $statusClass = 'text-yellow-600';
+                              break;
+                          case 'Follow Up':
+                              $statusClass = 'text-info';
+                              break;
+                          case 'Completed':
+                              $statusClass = 'text-green-500';
+                              break;
+                          default:
+                              $statusClass = ''; // Default class if none of the above match
+                              break;
+                      }
+                      echo '
     <tr class="text-base hover:bg-gray-300 dark:hover:bg-gray-600 font-medium text-black dark:text-white">
         <td>' . $row['First_Name'] . ' ' . $middleInitial . '. ' . $row['Last_Name'] . '</td>
         <td>' . getLastPatientVisit($row['Chart_id']) . '</td>
@@ -498,19 +545,20 @@ ORDER BY CASE WHEN `tbl_appointment`.`Status` = 'pending' THEN 0 ELSE 1 END, `tb
         -->
         <!-- view information -->
         <td class="pl-9">
-            <a href="patient-fullRecord.php?id=' . $row['Patient_ID'] . '&chart_id=' . $row['Chart_id'] . '"><i class="fa-regular fa-eye"></i></a>
+            <a href="patient-fullRecord.php?chart_id=' . $row['Chart_id'] . '"><i class="fa-regular fa-eye"></i></a>
         </td>
     </tr>
     ';
-                    }
-                    ?>
-                    </tbody>
-                  </table>
-                </div>
-
+                  }
+                  ?>
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
-          </div>
+
+
+        </div>
         </div>
       </div>
     <dialog id="viewAppointmentForm"  class="modal bg-opacity-50 bg-black">

@@ -1,5 +1,6 @@
 <?php
 include '../Database/database_conn.php';
+include "ReuseFunction.php";
 session_start();
 
 
@@ -147,9 +148,7 @@ if ($result->num_rows > 0) {
           <thead>
             <tr class="font-bold text-black dark:text-white text-base sm:text-lg">
               <th>Name</th>
-              <th>Age</th>
-              <th>Sex</th>
-              <th>Appointment Type</th>
+              <th>Last Visit</th>
               <th>Schedule</th>
               <th>Status</th>
               <th>Action</th>
@@ -160,14 +159,12 @@ if ($result->num_rows > 0) {
           <tbody class="text-black dark:text-white text-base sm:text-lg">
 
           <?php
-            $sql = "SELECT `tbl_patient`.*, `tbl_appointment`.*, `tbl_patient_chart`.*
-FROM `tbl_patient` 
-INNER JOIN `tbl_appointment` ON `tbl_appointment`.`Patient_ID` = `tbl_patient`.`Patient_ID` 
-INNER JOIN `tbl_patient_chart` ON `tbl_patient_chart`.`Appointment_id` = `tbl_appointment`.`Appointment_ID`
-where tbl_patient_chart.patient_Status = 'Archived'
+            $sql = "SELECT *
+FROM tbl_patient_chart
+where patient_Status = 'Archived'
 ORDER BY 
-    CASE WHEN `tbl_patient_chart`.`followUp_schedule` IS NULL THEN 1 ELSE 0 END, 
-    `tbl_patient_chart`.`followUp_schedule` ASC;
+    CASE WHEN followUp_schedule IS NULL THEN 1 ELSE 0 END, 
+    followUp_schedule ASC;
 ";
             $stmt = $conn->prepare($sql);
             $stmt->execute();
@@ -180,9 +177,8 @@ ORDER BY
                 $followUpschedule = $date . ' ' . $time == 'January 1, 1970 1:00am'  ? 'N/A' : $date . ' ' . $time;
                 echo '<tr class="text-base hover:bg-gray-300 dark:hover:bg-gray-600 font-medium text-black dark:text-white">
               <td>'.$row['First_Name'].' '.$middleInitial.'. '.$row['Last_Name'].'</td>
-              <td>'.$age.'</td>
-              <td>'.$row['Sex'].'</td>
-              <td>'.$row['Appointment_type'].'</td>
+              <td>'.getLastPatientVisit($row['Chart_id']).'</td>
+        
        
               <td>'.$followUpschedule.'</td>
               <td class="font-bold text-yellow-600 dark:text-yellow-300">'.$row['patient_Status'].'</td>
@@ -194,7 +190,7 @@ ORDER BY
 
               <!-- view information -->
               <td class="pl-9">
-                <a href="admin-patientFullRecord.php?id='.$row['Patient_ID'].'&chart_id='.$row['Chart_id'].'"><i class="fa-regular fa-eye"></i></a>
+                <a href="admin-patientFullRecord.php?chart_id='.$row['Chart_id'].'"><i class="fa-regular fa-eye"></i></a>
               </td>
               <td class="pl-10"><button onclick="unArchive('.$row['Chart_id'].')"><i class="fa-solid fa-address-book"></i></button></td>
               <td class="pl-9"><button onclick="delete_record.showModal();get_chartID('.$row['Chart_id'].')"><i class="fa-solid fa-trash text-red-500"></i></button></td>

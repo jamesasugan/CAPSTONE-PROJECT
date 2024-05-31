@@ -71,9 +71,7 @@ $staff_id = $row['Staff_ID'];
     <div id="patients-recordTab" class="p-10 pt-24 mx-auto w-full min-h-screen bg-[#ebf0f4] dark:bg-[#17222a]">
 
       <!-- add New patient button -->
-      <div class="flex justify-end mb-5">
-        <a href="addwalkInPatient.php" class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold py-2 px-4 rounded cursor-pointer border-none">Add New Patient</a>
-      </div>
+
 
       <div class="flex flex-col sm:flex-row justify-between items-center bg-gray-200 dark:bg-gray-700 p-5 border-b border-b-black">
         <h3 class="text-2xl sm:text-4xl font-bold text-black dark:text-white mb-4 sm:mb-0 uppercase mr-0 sm:mr-10">
@@ -120,11 +118,9 @@ $staff_id = $row['Staff_ID'];
           </thead>
           <tbody class="text-black dark:text-white text-base sm:text-lg">
           <?php
-          $sql = "SELECT `tbl_patient`.*, `tbl_appointment`.*, `tbl_patient_chart`.*
-FROM `tbl_patient`
-INNER JOIN `tbl_appointment` ON `tbl_appointment`.`Patient_ID` = `tbl_patient`.`Patient_ID`
-INNER JOIN `tbl_patient_chart` ON `tbl_patient_chart`.`Appointment_id` = `tbl_appointment`.`Appointment_ID` and `tbl_appointment`.`Staff_ID` = ?
-WHERE tbl_patient_chart.patient_Status != 'Archived' AND tbl_patient_chart.patient_Status != 'Deleted'
+          $sql = "SELECT *
+FROM tbl_patient_chart
+WHERE patient_Status != 'Archived' AND patient_Status != 'Deleted' and Consultant_id = ?
 ORDER BY 
     CASE 
         WHEN `tbl_patient_chart`.`followUp_schedule` IS NULL THEN 1 
@@ -133,7 +129,6 @@ ORDER BY
     `tbl_patient_chart`.`followUp_schedule` IS NULL, 
     FIELD(`tbl_patient_chart`.`patient_Status`, 'To be Seen', 'Follow Up', 'Unarchived', 'Completed'),
     `tbl_patient_chart`.`patient_Status` ASC;
-
 ";
           $stmt = $conn->prepare($sql);
           $stmt->bind_param('i', $staff_id);
@@ -178,7 +173,7 @@ ORDER BY
 
               <!-- view information -->
               <td>
-                <a href="staff-patientFullRecord.php?id='.$row['Patient_ID'] .'&chart_id='. $row['Chart_id'].'"><i class="fa-regular fa-eye"></i></a>
+                <a href="staff-patientFullRecord.php?chart_id='. $row['Chart_id'].'"><i class="fa-regular fa-eye"></i></a>
                 ';
                 if ($row['patient_Status'] == 'Follow Up' and $followUpschedule != 'No schedule'){
                   echo '<div class="tooltip tooltip-bottom ml-5" data-tip="Remove Schedule">

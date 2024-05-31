@@ -22,16 +22,13 @@ if ($result->num_rows > 0) {
     }
 }
 
-$patient_id = isset($_GET['id']) ?$_GET['id'] : '';
+
 $chart_id = isset($_GET['chart_id']) ? $_GET['chart_id'] : '';
 
-$sql = "SELECT `tbl_patient`.*, `tbl_appointment`.*, `tbl_patient_chart`.*
-        FROM `tbl_patient` 
-        INNER JOIN `tbl_appointment` ON `tbl_appointment`.`Patient_ID` = `tbl_patient`.`Patient_ID` 
-        INNER JOIN `tbl_patient_chart` ON `tbl_patient_chart`.`Appointment_id` = `tbl_appointment`.`Appointment_ID`
-        WHERE `tbl_appointment`.`Patient_ID` = ?";
+$sql = "SELECT  * FROM tbl_patient_chart
+        WHERE Chart_id = ?";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param('i', $patient_id);
+$stmt->bind_param('i', $chart_id);
 $stmt->execute();
 $result = $stmt->get_result(); // Fetch the result
 if ($result && $result->num_rows > 0){
@@ -52,6 +49,7 @@ if ($result && $result->num_rows > 0){
             $statusClass = 'text-warning';
             break;
     }
+    $staff_id = $row['Consultant_id'];
 
 }else{
     header("Location: admin-patientRecords.php");
@@ -135,15 +133,11 @@ if ($result && $result->num_rows > 0){
                 <div class="patientInfo mb-10 mt-5">
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-1 text-lg sm:text-xl">
                                 <h2 class="text-lg sm:text-xl font-bold">Status: <span class="<?php echo $statusClass;?>"><?php echo $row['patient_Status']?></span></h2>
-                              <p><strong>Appointment Type: </strong><?php echo $row['Appointment_type']; ?> </p>
                               <p><strong>Name: </strong> <?php echo $row['First_Name'] . ' ' . $middleInitial . '. ' . $row['Last_Name']; ?></p>
                               <p><strong>Contact Number: </strong> <?php echo $row[ 'Contact_Number']; ?></p>
                               <p><strong>Age: </strong> <?php echo (new DateTime($row['DateofBirth']))->diff(new DateTime)->y; ?></p>
-
-
                               <p><strong>Sex: </strong> <?php echo $row['Sex']; ?></p>
                               <p><strong>Email: </strong><?php echo $row['patientEmail']; ?></p>
-                              <p><strong>Vaccinated:</strong> <?php echo $row['Vaccination']; ?></p>
                               <p><strong>Address:</strong> <?php echo $row['Address']; ?></p>
                               <p><strong>Date of Birth: </strong><?php echo   date("F j, Y", strtotime($row['DateofBirth']));?></p>
                               <p><strong>Service Type: </strong><span id='availedService'>N/A</span> </p>
@@ -201,21 +195,21 @@ if ($result && $result->num_rows > 0){
                   <div>
                     <label class="block">
                       Consultant:
-                      <select name="consultant-name" class="select
+                      <select disabled name="consultant-name" class="select
                 select-bordered text-black dark:text-white w-full   bg-gray-300 dark:bg-gray-600
                 text-base sm:text-lg lg:text-xl focus:border-blue-500 focus:ring focus:ring-blue-500
                 focus:ring-opacity-50 mb-4 sm:mb-0 sm:mr-4 disabled:bg-white disabled:text-black dark:disabled:text-white border-none">
-                        <option  selected value='' disabled>Select consultant</option>
 
                           <?php
-                          $sql = "SELECT * FROM tbl_staff WHERE role = 'doctor'";
+                          $sql = "SELECT * FROM tbl_staff WHERE role = 'doctor' and Staff_ID = ?";
                           $stmt = $conn->prepare($sql);
+                          $stmt->bind_param('i', $staff_id);
                           $stmt->execute();
                           $result = $stmt->get_result();
-
-                          while ($row = $result->fetch_assoc()) {
+                          if ($result->num_rows === 1){
+                            $row = $result->fetch_assoc();
                               $middleInitial = substr($row['Middle_Name'], 0, 1);
-                              echo "<option value='{$row['Staff_ID']}' disabled>{$row['First_Name']} $middleInitial. {$row['Last_Name']}</option>";
+                              echo "<option selected value='{$row['Staff_ID']}' disabled>{$row['First_Name']} $middleInitial. {$row['Last_Name']}</option>";
                           }
                           ?>
 
@@ -328,7 +322,6 @@ if ($result && $result->num_rows > 0){
           $('#availedService').html(data.availedService);
           document.querySelector('#patientRecordForm input[name="consultation-date"]').value = data.consultationDate;
           document.querySelector('#patientRecordForm input[name="record_id"]').value = data.Record_ID;
-          document.querySelector('#patientRecordForm select[name="consultant-name"]').value = data.Consultant_Staff_ID;
           document.querySelector('#patientRecordForm input[name="weight"]').value = data.Weight;
           document.querySelector('#patientRecordForm input[name="blood-pressure"]').value = data.Blood_Pressure;
           document.querySelector('#patientRecordForm input[name="heart-rate"]').value = data.HeartRate;

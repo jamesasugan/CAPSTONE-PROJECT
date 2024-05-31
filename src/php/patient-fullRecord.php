@@ -22,18 +22,14 @@ $row = $res->fetch_assoc();
 $accountOwner_ID = $row['user_info_ID'];
 
 
-$patient_id = isset($_GET['id']) ?$_GET['id'] : '';
 $chart_id = isset($_GET['chart_id']) ? $_GET['chart_id'] : '';
 
-$sql = "SELECT `tbl_patient`.*, `tbl_appointment`.*, `tbl_patient_chart`.*
-        FROM `tbl_patient` 
-        INNER JOIN `tbl_appointment` ON `tbl_appointment`.`Patient_ID` = `tbl_patient`.`Patient_ID` 
-        INNER JOIN `tbl_patient_chart` ON `tbl_patient_chart`.`Appointment_id` = `tbl_appointment`.`Appointment_ID`
-        WHERE `tbl_appointment`.`Patient_ID` = ? and `tbl_patient`.`user_info_ID` = ?  ";
+$sql = "SELECT * FROM `tbl_patient_chart` 
+        WHERE Chart_id = ? and user_info_ID = ?";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param('ii', $patient_id,$accountOwner_ID);
+$stmt->bind_param('ii', $chart_id,$accountOwner_ID);
 $stmt->execute();
-$result = $stmt->get_result(); // Fetch the result
+$result = $stmt->get_result();
 if ($result && $result->num_rows == 1){
     $row = $result->fetch_assoc();
     $middleInitial = (strlen($row['Middle_Name']) >= 1) ? substr($row['Middle_Name'], 0, 1) : '';
@@ -136,14 +132,12 @@ if ($result && $result->num_rows == 1){
         <div class="patientInfo mb-10 mt-5">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-1 text-lg sm:text-xl">
             <h2 class="text-lg sm:text-xl font-bold">Status: <span class="<?php echo $statusClass;?>"><?php echo $row['patient_Status']?></span></h2>
-            <p><strong>Appointment Type: </strong><?php echo $row['Appointment_type']; ?> </p>
             <p><strong>Name: </strong> <?php echo $row['First_Name'] . ' ' . $middleInitial . '. ' . $row['Last_Name']; ?></p>
             <p><strong>Contact Number: </strong> <?php echo $row[ 'Contact_Number']; ?></p>
             <p><strong>Age: </strong> <?php echo (new DateTime($row['DateofBirth']))->diff(new DateTime)->y; ?></p>
 
             <p><strong>Sex: </strong> <?php echo $row['Sex']; ?></p>
             <p><strong>Email: </strong><?php echo $row['patientEmail']; ?></p>
-            <p><strong>Vaccinated:</strong> <?php echo $row['Vaccination']; ?></p>
             <p><strong>Address:</strong> <?php echo $row['Address']; ?></p>
             <p><strong>Date of Birth: </strong><?php echo   date("F j, Y", strtotime($row['DateofBirth']));?></p>
             <p><strong>Service Type: </strong><span id='availedService'>N/A</span> </p>

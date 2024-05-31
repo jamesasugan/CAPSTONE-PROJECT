@@ -8,6 +8,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] == 'patient') {
 }
 include "ReuseFunction.php";
 $user_id = $_SESSION['user_id'];
+
 $sql = 'SELECT * from tbl_staff where User_ID = ?';
 $stmt = $conn->prepare($sql);
 $stmt->bind_param('i', $user_id);
@@ -21,17 +22,14 @@ if ($result->num_rows > 0) {
 }
 $staff_id = $row['Staff_ID'];
 
-$patient_id = isset($_GET['id']) ?$_GET['id'] : null;
+
 $chart_id = isset($_GET['chart_id']) ? $_GET['chart_id'] : null;
 
 
-$sql = "SELECT `tbl_patient`.*, `tbl_appointment`.*, `tbl_patient_chart`.*
-        FROM `tbl_patient` 
-        INNER JOIN `tbl_appointment` ON `tbl_appointment`.`Patient_ID` = `tbl_patient`.`Patient_ID` 
-        INNER JOIN `tbl_patient_chart` ON `tbl_patient_chart`.`Appointment_id` = `tbl_appointment`.`Appointment_ID`
-        WHERE `tbl_appointment`.`Patient_ID` = ? and `tbl_appointment`.`Staff_ID` = ?";
+$sql = "SELECT * FROM `tbl_patient_chart` 
+        WHERE Chart_id = ? and Consultant_id = ?";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param('ii', $patient_id, $staff_id);
+$stmt->bind_param('ii', $chart_id, $staff_id);
 $stmt->execute();
 $result = $stmt->get_result();
 if ($result && $result->num_rows > 0) {
@@ -46,11 +44,10 @@ if ($result && $result->num_rows > 0) {
     $Patient_ContactNumber = $row['Contact_Number'];
     $Patient_Email = $row['patientEmail'];
     $Patient_address = $row['Address'];
-    $appointmentType = $row['Appointment_type'];
+    $appointmentType = '';
     $patientDOB =  $row['DateofBirth'];
-    $patientVacStat =  $row['Vaccination'];
+    $patientVacStat = '';
     $patient_Sex = $row['Sex'];
-    $Patient_address = $row['Address'];
     $patient_status = $row['patient_Status'];
     $statusClass = '';
     switch ($row['patient_Status']) {
@@ -151,14 +148,11 @@ if ($result && $result->num_rows > 0) {
               <div class="patientInfo mb-10 mt-5">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-1 text-lg sm:text-xl">
                   <h2 class="text-lg sm:text-xl font-bold">Status: <span class="<?php echo $statusClass;?>"><?php echo $row['patient_Status']?></span></h2>
-                  <p><strong>Appointment Type: </strong><?php echo $row['Appointment_type']; ?> </p>
                   <p><strong>Name: </strong> <?php echo $row['First_Name'] . ' ' . $middleInitial . '. ' . $row['Last_Name']; ?></p>
                   <p><strong>Contact Number: </strong> <?php echo $row[ 'Contact_Number']; ?></p>
                   <p><strong>Age: </strong> <?php echo (new DateTime($row['DateofBirth']))->diff(new DateTime)->y; ?></p>
-
                   <p><strong>Sex: </strong> <?php echo $row['Sex']; ?></p>
                   <p><strong>Email: </strong><?php echo $row['patientEmail']; ?></p>
-                  <p><strong>Vaccinated:</strong> <?php echo  ucfirst(strtolower($patientVacStat)); ?></p>
                   <p><strong>Address:</strong> <?php echo $row['Address']; ?></p>
                   <p><strong>Date of Birth: </strong><?php echo   date("F j, Y", strtotime($row['DateofBirth']));?></p>
                   <p><strong>Service Type: </strong><span id='availedService'>N/A</span></p>
@@ -424,7 +418,7 @@ if ($result && $result->num_rows > 0) {
                             <div>
                                 <label class="block">
                                     Consultant:
-                                  <select name="consultant-name" class="select
+                                  <select disabled name="consultant-name" class="select
                 select-bordered text-black dark:text-white w-full   bg-gray-300 dark:bg-gray-600
                 text-base sm:text-lg lg:text-xl focus:border-blue-500 focus:ring focus:ring-blue-500
                 focus:ring-opacity-50 mb-4 sm:mb-0 sm:mr-4 disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400">
@@ -600,7 +594,6 @@ if ($result && $result->num_rows > 0) {
                 <div class="modal-box w-11/12 max-w-5xl bg-gray-200 dark:bg-gray-700 text-[#0e1011] dark:text-[#eef0f1]">
                     <h3 class="font-bold text-2xl ">Edit Patient</h3>
                     <form id="EditpatientForm" >
-                      <input type='hidden' name='patient_id' value='<?php echo $patient_id?>'>
                       <input type='hidden' name='patient_chart_id' value='<?php echo $chart_id?>'>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 mt-5">
                                 <label class="block">
@@ -672,22 +665,7 @@ if ($result && $result->num_rows > 0) {
                                     class="input input-bordered w-full p-2 bg-white dark:bg-gray-600  text-black dark:text-white "/>
                                 </label>
                             </div>
-                            <div>
-                                <label class="block">
-                                    Vaccinated:
-                                    <div class="flex items-center space-x-4 p-2 bg-white dark:bg-gray-600  text-black dark:text-white rounded">
-                                      <label class="flex items-center">
-                                        <input type="radio" name="patient_vaccinated" value="Yes" class="radio radio-primary" <?php if ( ucfirst(strtolower($patientVacStat)) == 'Yes') echo 'checked'; ?> required>
-                                        <span class="ml-2">Yes</span>
-                                      </label>
-                                      <label class="flex items-center">
-                                        <input type="radio" name="patient_vaccinated" value="No" class="radio radio-primary" <?php if ( ucfirst(strtolower($patientVacStat))== 'No') echo 'checked'; ?> required>
-                                        <span class="ml-2">No</span>
-                                      </label>
 
-                                    </div>
-                                </label>
-                            </div>
                             <div>
                                 <label class="block">
                                     Address:
@@ -868,7 +846,7 @@ if ($result && $result->num_rows > 0) {
             }
 
             $.ajax({
-              url: 'ajax.php?action=' + endpoint + '&chart_id=' + encodeURIComponent(<?php echo $chart_id; ?>),
+              url: 'ajax.php?action=' + endpoint + '&chart_id=' + encodeURIComponent('<?php echo $chart_id; ?>'),
               type: 'POST',
               data: form_data,
               processData: false,
@@ -876,7 +854,7 @@ if ($result && $result->num_rows > 0) {
               success: function(response) {
                 if (parseInt(response) === 1) {
                   toggleDialog('SuccessAlert');
-                  window.location.href = 'staff-patientFullRecord.php?id=<?php echo $_GET['id']; ?>&chart_id=<?php echo $_GET['chart_id']; ?>';
+                  window.location.href = 'staff-patientFullRecord.php?chart_id=<?php echo $chart_id; ?>';
                 } else {
                   document.getElementById('error').innerHTML = response;
                   toggleDialog('errorAlert');
@@ -898,7 +876,7 @@ if ($result && $result->num_rows > 0) {
               success: function(response) {
                 if (parseInt(response) === 1) {
                   toggleDialog('SuccessAlert');
-                  window.location.href = 'staff-patientFullRecord.php?id=<?php echo $_GET['id'].'&chart_id='.$_GET['chart_id']; ?>';
+                  window.location.href = 'staff-patientFullRecord.php?<?php echo'chart_id='.$_GET['chart_id']; ?>';
                 } else {
                   document.getElementById('error').innerHTML = response;
                   toggleDialog('errorAlert');
@@ -945,13 +923,17 @@ if ($result && $result->num_rows > 0) {
 
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-          const printBtn = document.querySelector('.printform');
+/*
+  document.addEventListener('DOMContentLoaded', function(){
+    const printBtn = document.querySelector('.printform');
 
-          printBtn.addEventListener('click', function() {
-            window.print();
-          });
-        });
+    printBtn.addEventListener('click', function() {
+      window.print();
+    });
+  })
+
+ */
+
       </script>
 </body>
 </html>

@@ -62,10 +62,11 @@ $staff_id = $row['Staff_ID'];
   <body>
 
   <?php include 'staff-navbar.php'; ?>
-  <div
-    id="appointmentRecordsTab"
-    class="p-10 pt-32 mx-auto w-full min-h-screen bg-[#ebf0f4] dark:bg-[#17222a]"
-  >
+
+  <div id="appointmentRecordsTab" class="p-10 pt-32 mx-auto w-full min-h-screen bg-[#ebf0f4] dark:bg-[#17222a]">
+    <div class="flex justify-end mb-5">
+      <a href="addwalkInPatient.php" class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold py-2 px-4 rounded cursor-pointer border-none">Add Walk In patient</a>
+    </div>
     <div class="flex flex-col sm:flex-row justify-between items-center bg-gray-200 dark:bg-gray-700 p-5 border-b border-b-black">
       <h3 class="text-2xl sm:text-xl md:text-3xl font-bold text-black dark:text-white mb-4 sm:mb-0 uppercase mr-0 sm:mr-10">
         Appointments
@@ -113,21 +114,23 @@ $staff_id = $row['Staff_ID'];
         <tr
           class="font-bold text-black dark:text-white text-base sm:text-lg"
         >
-          <th class='cursor-pointer' onclick="sortTable(0)">Name</th>
-          <th class='cursor-pointer' onclick="sortTable(1)">Appointment Date</th>
-          <th class='cursor-pointer' onclick="sortTable(2)">Appointment Time</th>
-          <th class='cursor-pointer' onclick="sortTable(4)">Status</th>
+          <th class='cursor-pointer'>Name</th>
+          <th class='cursor-pointer' >Appointment Schedule</th>
+          <th class='cursor-pointer' >Visit Type</th>
+          <th class='cursor-pointer'>Appointment Type</th>
+
+
+          <th class='cursor-pointer'>Status</th>
           <th  >Action</th>
         </tr>
         </thead>
         <tbody class="text-black dark:text-white text-base sm:text-lg">
         <!-- sample row -->
         <?php
-        $sql = "SELECT `tbl_patient`.*, `tbl_appointment`.*, `tbl_patient_chart`.*
-FROM `tbl_patient` 
-INNER JOIN `tbl_appointment` ON `tbl_appointment`.`Patient_ID` = `tbl_patient`.`Patient_ID` 
-LEFT JOIN `tbl_patient_chart` ON `tbl_patient_chart`.`Appointment_id` = `tbl_appointment`.`Appointment_ID`
-WHERE `tbl_patient_chart`.`Appointment_id` IS NULL and `tbl_appointment`.`Staff_ID` = ?
+        $sql = "SELECT `tbl_accountpatientmember`.*, `tbl_appointment`.*
+FROM `tbl_accountpatientmember` 
+INNER JOIN `tbl_appointment` ON `tbl_appointment`.`Account_Patient_ID_Member` = `tbl_accountpatientmember`.`Account_Patient_ID_Member` 
+WHERE tbl_appointment.Staff_ID = ?
 ORDER BY 
     CASE WHEN `tbl_appointment`.`Status` = 'Pending' THEN 0 ELSE 1 END, 
     `tbl_appointment`.`Appointment_schedule` ASC;
@@ -135,13 +138,13 @@ ORDER BY
 ";
 
         $stmt = $conn->prepare($sql);
+
         $stmt->bind_param('i', $staff_id);
         $stmt->execute();
         $result = $stmt->get_result();
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
-                if ($row['Status']) {
-                }
+
                 $middleInitial =
                     strlen($row['Middle_Name']) >= 1
                         ? substr($row['Middle_Name'], 0, 1)
@@ -180,18 +183,12 @@ ORDER BY
                     '. ' .
                     $row['Last_Name'] .
                     '</td>
-                <td>' .
-                    $date .
-                    '</td>
-                <td class="pl-10">' .
-                    $time .
-                    '</td> <!-- alisin mo yung pl-10 pag nagoverlap yung ilalagay mo -->
-         
-                <td class="font-bold ' .
-                    $class .
-                    '">' .
-                    $status .
-                    '</td> 
+                <td>' . $date . ' ' . $time . '</td>
+                    <td class=" ">' . $row['VisitType'] . '</td> 
+           <td class=" ">' . $row['Appointment_type'] . '</td>    
+            
+               
+                <td class="font-bold ' . $class . '">' . $status . '</td> 
                 <!-- 
                 Completed - text-green-500
                 Cancelled - text-red-500
@@ -200,7 +197,7 @@ ORDER BY
                 <td>
                   <!-- yung modal name viewAppointment2,3,4,5 dapat sa mga susunod, bawal parehas kase di maoopen -->
                   <button onclick="viewAppointment.showModal();getAppointmentInfo(this.getAttribute(\'data-id\'))" data-id="' .
-                    $row['Patient_ID'] .
+                    $row['Account_Patient_ID_Member'] .
                     '">
                     <i class="fa-regular fa-eye"></i>
                   </button>';
@@ -284,6 +281,8 @@ ORDER BY
       </div>
 
       <!-- staff action -->
+      <h1 class="text-base sm:text-xl font-bold text-black dark:text-white">Appointment Type: <span class="font-bold " id='AppointmentType'></span></h1>  <!-- ayusin mo rin colors dito ah -->
+
       <h1 class="text-base sm:text-xl font-bold text-black dark:text-white">STATUS: <span id='appointment_status'>Pending</span></h1>  <!-- ayusin mo rin colors dito ah -->
 
       <h2 class="text-base sm:text-xl font-bold mt-5 text-black dark:text-white">Edit Status of this Appointment</h2>
@@ -535,7 +534,7 @@ ORDER BY
             <label for="dobHistory" class="block text-base sm:text-lg font-medium text-black dark:text-white">Date of Birth</label>
             <input type="date" id="dobHistory" name="dobHistory" disabled required class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark] disabled:bg-white disabled:text-black dark:disabled:text-white border-none" />
           </div>
-
+<!--
           <div>
             <div class="block text-base sm:text-lg font-medium text-black dark:text-white mb-1">Are you vaccinated?</div>
             <div class="flex items-center space-x-4 p-2 bg-gray-300 dark:bg-gray-600 rounded">
@@ -549,6 +548,7 @@ ORDER BY
               </label>
             </div>
           </div>
+          -->
           <div>
             <label for="addressHistory" class="block text-base sm:text-lg font-medium text-black dark:text-white">Address</label>
             <input type="text" id="addressHistory" name="addressHistory" disabled autocomplete="off" placeholder="Address" required class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 disabled:bg-white disabled:text-black dark:disabled:text-white border-none" />
@@ -610,6 +610,7 @@ ORDER BY
             }
             let status = data.Status.charAt(0).toUpperCase() + data.Status.slice(1).toLowerCase();
             document.querySelector('#appointment_status').textContent = status;
+            document.querySelector('#AppointmentType').textContent = data.Appointment_type;
 
             let statusClass = '';
             switch (status) {
@@ -620,7 +621,7 @@ ORDER BY
                 statusClass = 'text-info';
                 break;
               case 'Rescheduled':
-                statusClass = 'font-bold text-green-500';
+                statusClass = 'text-green-500';
                 break;
               case 'Cancelled':
                 statusClass = 'text-error';
@@ -655,8 +656,8 @@ ORDER BY
 
              */
             let reason;
-            if (data.reason !== null) {
-              reason = data.reason
+            if (data.ServiceType !== null) {
+              reason = data.ServiceType
             }else {
               reason = '';
             }
@@ -668,7 +669,7 @@ ORDER BY
             document.querySelector('#appointmentform input[name="first-nameHistory"]').value = data.First_Name;
             document.querySelector('#appointmentform input[name="middle-nameHistory"]').value = data.Middle_Name;
             document.querySelector('#appointmentform input[name="last-nameHistory"]').value = data.Last_Name;
-            document.querySelector('#appointmentform input[name="email"]').value = data.patientEmail;
+            document.querySelector('#appointmentform input[name="email"]').value = data.MemberPatientEmail;
             document.querySelector('#appointmentform input[name="contact-numberHistory"]').value = data.Contact_Number;
             document.querySelector('#appointmentform input[name="dobHistory"]').value = data.DateofBirth;
             document.querySelector('#appointmentform input[name="addressHistory"]').value = data.Address;
@@ -676,11 +677,6 @@ ORDER BY
             document.querySelector('#appointmentform select[name="sexHistory"]').value = data.Sex;
 
 
-            if (data.Vaccination === 'yes'){
-              document.getElementById('vaccinated').checked = true
-            }else if (data.Vaccination === 'No'){
-              document.getElementById('notvaccinated').checked = true
-            }
           }
         },
         error: function(xhr, status, error) {

@@ -113,11 +113,9 @@ include "ReuseFunction.php";
           </thead>
           <tbody class="text-black dark:text-white text-base sm:text-lg">
             <?php
-            $sql = "SELECT `tbl_patient`.*, `tbl_appointment`.*, `tbl_patient_chart`.*
-FROM `tbl_patient`
-INNER JOIN `tbl_appointment` ON `tbl_appointment`.`Patient_ID` = `tbl_patient`.`Patient_ID`
-INNER JOIN `tbl_patient_chart` ON `tbl_patient_chart`.`Appointment_id` = `tbl_appointment`.`Appointment_ID` 
-WHERE tbl_patient_chart.patient_Status != 'Archived' AND tbl_patient_chart.patient_Status != 'Deleted'
+            $sql = "SELECT *
+FROM tbl_patient_chart
+WHERE patient_Status != 'Archived' AND patient_Status != 'Deleted'
 ORDER BY 
     CASE 
         WHEN `tbl_patient_chart`.`followUp_schedule` IS NULL THEN 1 
@@ -163,7 +161,7 @@ ORDER BY
           
               <!-- view information -->
               <td class="pl-9">
-                <a href="admin-patientFullRecord.php?id='.$row['Patient_ID'].'&chart_id='.$row['Chart_id'].'"><i class="fa-regular fa-eye"></i></a>
+                <a href="admin-patientFullRecord.php?chart_id='.$row['Chart_id'].'"><i class="fa-regular fa-eye"></i></a>
               </td>
               <td class="pl-10"><button onclick="archive_record.showModal();get_chartID('.$row['Chart_id'].')"><i class="fa-solid fa-box-archive"></i></button></td>
             </tr>
