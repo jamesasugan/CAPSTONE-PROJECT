@@ -98,13 +98,12 @@ if (isset($_SESSION['user_type']) and $_SESSION['user_type'] == 'staff') {
 
         <form id='patient_bookAppointment' action="#" method="GET">
         <h3 class="text-xl font-bold mt-5">Service</h3>
-          <div class="w-full max-w-md">
+
+          <!-- <div class="w-full max-w-md">
             <label for="service-type" class="block text-lg font-medium mb-1">Reason/Purpose</label>
             <textarea   name="reason" placeholder="Type here" required class="textarea-bordered textarea w-full p-2 bg-gray-300 dark:bg-gray-600"></textarea>
-          </div>
+          </div> -->
         <fieldset class="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-
-          <!-- <legend class="text-xl font-bold mb-2 col-span-full">Service:</legend>
 
            <div class="flex flex-col w-full">
              <ul class="w-full text-lg font-medium text-gray-900 bg-gray-300 dark:bg-gray-600 border border-gray-200 rounded-lg dark:border-gray-600 dark:text-white">
@@ -132,7 +131,8 @@ if (isset($_SESSION['user_type']) and $_SESSION['user_type'] == 'staff') {
                </li>
              </ul>
            </div>
-           -->
+
+           <button class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none cursor-pointer" onclick="serviceModal.showModal()">Select a Service</button>
 
 
 
@@ -188,7 +188,7 @@ if (isset($_SESSION['user_type']) and $_SESSION['user_type'] == 'staff') {
 
 
 
-          <h3 class="text-xl font-bold mt-5 mb-2">Personal Information</h3>
+          <!-- <h3 class="text-xl font-bold mt-5 mb-2">Personal Information</h3>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
                 <label for="first-name" class="block text-base sm:text-lg font-medium">First Name</label>
@@ -247,7 +247,7 @@ if (isset($_SESSION['user_type']) and $_SESSION['user_type'] == 'staff') {
                 <label for="address" class="block text-base sm:text-lg font-medium">Address</label>
                 <input type="text" id="address" name="address" autocomplete="off" placeholder="Address" required class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600" />
             </div>
-        </div>
+        </div> -->
 
           
 
@@ -320,6 +320,115 @@ if (isset($_SESSION['user_type']) and $_SESSION['user_type'] == 'staff') {
             </div>
           </div>
         </dialog>
+
+         <!-- service modal -->
+         <dialog id="serviceModal" class="modal">
+            <div class="modal-box w-11/12 max-w-5xl bg-gray-200 dark:bg-gray-700 text-black dark:text-white overflow-auto p-0">
+              <div class="modal-header sticky top-0 bg-gray-200 dark:bg-gray-700 z-10 px-10 pt-10">
+                    <div class="flex justify-between">
+                      <h3 class="font-bold text-3xl mb-0 text-center">Select a Service</h3>
+                        <form method="dialog">
+                          <button class="btn bg-gray-400 dark:bg-white hover:bg-gray-500 dark:hover:bg-gray-400  text-black border-none mb-2">Close</button>
+                        </form>
+                    </div>           
+                  <div class="border border-gray-600 dark:border-slate-300"></div>
+              </div>
+             
+              
+
+              <!-- <div class="w-full sm:flex sm:items-center justify-end mb-5">
+                <div class="flex w-full sm:w-auto">
+                  <input
+                    id='search'
+                    type="text"
+                    name="text"
+                    class="input input-bordered appearance-none w-full px-3 py-2 rounded-none bg-white dark:bg-gray-600 text-black dark:text-white border border-black border-r-0 dark:border-white"
+                    placeholder="Search"
+                    onkeyup='handleSearch("search", "TableList")'
+                  />
+                  <button type="submit" class="btn btn-square bg-gray-400 hover:bg-gray-500  rounded-none dark:bg-gray-500 dark:hover:bg-gray-300 border border-black border-l-0 dark:border-white">
+                    <i class="fa-solid fa-magnifying-glass text-black dark:text-white"></i>
+                  </button>
+                </div>
+              </div> -->
+
+              <div class="text-xl font-medium p-10">
+                <div class="mb-4">
+                    <label class="flex items-center space-x-2 mb-2 hover:bg-slate-300 dark:hover:bg-gray-600 p-2 rounded-md transition duration-150">
+                        <input type="checkbox" name="service" value="internalMedicine" class="checkbox checkbox-info">
+                        <span>Internal Medicine</span>
+                    </label>
+                </div>
+                <div class="mb-4">
+                    <label class="flex items-center space-x-2 mb-2 hover:bg-slate-300 dark:hover:bg-gray-600 p-2 rounded-md transition duration-150">
+                        <input type="checkbox" name="service" value="generalMedicine" class="checkbox checkbox-info">
+                        <span>General Medicine</span>
+                    </label>
+                </div>
+                <div class="mb-4">
+                    <p class="font-bold mb-2 text-2xl">Pediatrics</p>
+                    <div class="pl-6">
+                        <label class="block flex items-center space-x-2 mb-2 hover:bg-slate-300 dark:hover:bg-gray-600 p-2 rounded-md transition duration-150">
+                            <input type="checkbox" name="pediatricsSubservice" value="fluVaccine" class="checkbox checkbox-info mr-2">
+                            <span>Flu Vaccine</span>
+                        </label>
+                        <label class="block flex items-center space-x-2 mb-2 hover:bg-slate-300 dark:hover:bg-gray-600 p-2 rounded-md transition duration-150">
+                            <input type="checkbox" name="pediatricsSubservice" value="monthlyImmunization" class="checkbox checkbox-info mr-2">
+                            <span>Monthly Immunization for babies</span>
+                        </label>
+                        <label class="block flex items-center space-x-2 mb-2 hover:bg-slate-300 dark:hover:bg-gray-600 p-2 rounded-md transition duration-150">
+                            <input type="checkbox" name="pediatricsSubservice" value="polioVaccine" class="checkbox checkbox-info mr-2">
+                            <span>Polio Vaccine</span>
+                        </label>
+                        <label class="block flex items-center space-x-2 mb-2 hover:bg-slate-300 dark:hover:bg-gray-600 p-2 rounded-md transition duration-150">
+                            <input type="checkbox" name="pediatricsSubservice" value="mmrVaccine" class="checkbox checkbox-info mr-2">
+                            <span>Measles, Mumps, and Rubella Vaccine</span>
+                        </label>
+                        <label class="block flex items-center space-x-2 mb-2 hover:bg-slate-300 dark:hover:bg-gray-600 p-2 rounded-md transition duration-150">
+                            <input type="checkbox" name="pediatricsSubservice" value="pneumococcalVaccine" class="checkbox checkbox-info mr-2">
+                            <span>Pneumococcal Vaccine</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <p class="font-bold mb-2 text-2xl">X-Ray</p>
+                    <div class="pl-6">
+                        <label class="block flex items-center space-x-2 mb-2 hover:bg-slate-300 dark:hover:bg-gray-600 p-2 rounded-md transition duration-150">
+                            <input type="checkbox" name="xraySubservice" value="skullXray" class="checkbox checkbox-info mr-2">
+                            <span>Skull X-Ray</span>
+                        </label>
+                        <label class="block flex items-center space-x-2 mb-2 hover:bg-slate-300 dark:hover:bg-gray-600 p-2 rounded-md transition duration-150">
+                            <input type="checkbox" name="xraySubservice" value="upperExtremities" class="checkbox checkbox-info mr-2">
+                            <span>Upper Extremities</span>
+                        </label>
+                        <label class="block flex items-center space-x-2 mb-2 hover:bg-slate-300 dark:hover:bg-gray-600 p-2 rounded-md transition duration-150">
+                            <input type="checkbox" name="xraySubservice" value="lowerExtremities" class="checkbox checkbox-info mr-2">
+                            <span>Lower Extremities 
+                              <span class="text-red-500">Not Available at the moment</span> <!-- itong line example na ilabas mo pag puno na tas disabled mo -->                  
+                            </span>
+                        </label>
+                        <label class="block flex items-center space-x-2 mb-2 hover:bg-slate-300 dark:hover:bg-gray-600 p-2 rounded-md transition duration-150">
+                            <input type="checkbox" name="xraySubservice" value="lungs" class="checkbox checkbox-info mr-2">
+                            <span>Lungs</span>
+                        </label>
+                        <label class="block flex items-center space-x-2 mb-2 hover:bg-slate-300 dark:hover:bg-gray-600 p-2 rounded-md transition duration-150">
+                            <input type="checkbox" name="xraySubservice" value="lumbosacral" class="checkbox checkbox-info mr-2">
+                            <span>Lumbosacral</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <p class="font-bold mb-2 text-2xl">Others</p>
+                    <label class="block flex items-center space-x-2 mb-2 hover:bg-slate-300 dark:hover:bg-gray-600 p-2 rounded-md transition duration-150">
+                    <textarea id="otherService" rows="4" name="otherService"  class="input input-bordered h-20 text-lg w-full bg-white dark:bg-gray-600 text-black dark:text-white border-none" placeholder="If none in the following, type your reason/purpose here"></textarea>
+                  </label>
+                </div>
+            </div>  
+              
+            </div>
+          </dialog>
+            <!-- service modal end -->
+
       </div>
     </section>
   </body>
@@ -435,6 +544,43 @@ if (isset($_SESSION['user_type']) and $_SESSION['user_type'] == 'staff') {
     }
     setSelectableDates(dates);
     */
-
   </script>
+
+  <!-- script for service list, lagay mo sa external css pag nakita mo to -->
+  <script>
+      document.addEventListener("DOMContentLoaded", function () {
+      const serviceCheckboxes = document.querySelectorAll('input[type="checkbox"][name="service"]');
+      const subserviceCheckboxes = document.querySelectorAll('input[type="checkbox"][name$="Subservice"]');
+      
+      serviceCheckboxes.forEach(function (checkbox) {
+          checkbox.addEventListener("change", function () {
+              if (this.checked) {
+                  // If a main service checkbox is checked, uncheck other main service checkboxes
+                  serviceCheckboxes.forEach(function (otherCheckbox) {
+                      if (otherCheckbox !== checkbox) {
+                          otherCheckbox.checked = false;
+                      }
+                  });
+                  
+                  // If a main service checkbox is checked, uncheck all subservice checkboxes
+                  subserviceCheckboxes.forEach(function (subCheckbox) {
+                      subCheckbox.checked = false;
+                  });
+              }
+          });
+      });
+
+      subserviceCheckboxes.forEach(function (checkbox) {
+          checkbox.addEventListener("change", function () {
+              if (this.checked) {
+                  // If a subservice checkbox is checked, uncheck main service checkboxes
+                  serviceCheckboxes.forEach(function (mainCheckbox) {
+                      mainCheckbox.checked = false;
+                  });
+              }
+          });
+      });
+  });
+  </script>
+  
 </html>
