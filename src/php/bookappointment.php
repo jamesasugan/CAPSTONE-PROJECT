@@ -2,6 +2,9 @@
 session_start();
 include_once '../Database/database_conn.php';
 
+if (!isset($_SESSION['user_type'])) {
+    header('Location: 404.php');
+}
 if (isset($_SESSION['user_type']) and $_SESSION['user_type'] == 'staff') {
     $user_id = $_SESSION['user_id'];
     $sql = 'SELECT role from tbl_staff where User_ID = ?';
@@ -18,6 +21,7 @@ if (isset($_SESSION['user_type']) and $_SESSION['user_type'] == 'staff') {
         }
     }
 }
+
 ?>
 
 <!doctype html>
@@ -60,34 +64,12 @@ if (isset($_SESSION['user_type']) and $_SESSION['user_type'] == 'staff') {
 
 
     <?php include 'navbar-main.php'; ?>
-
-
-    
-
-
-
     <section
       id="booking"
       class="book-appointment w-full flex justify-center items-center pt-24 pb-10 p-5
       bg-[#f6fafc] dark:bg-[#17222a]"
     >
       <div class="book-form w-full max-w-7xl mx-auto p-4 rounded-lg shadow-lg bg-gray-200 dark:bg-gray-700 text-[#0e1011] dark:text-[#eef0f1]" id='appointmentForm'>
-          <?php if (
-              isset($_SESSION['user_type']) and
-              $_SESSION['user_type'] == 'patient'
-          ): ?>
-
-            <dialog open class='modal bg-black bg-opacity-20' id='chooseBook'>
-              <div class="text-center font-bold text-xl mb-10 bg bg-gray-200 dark:bg-gray-700 text-[#0e1011] dark:text-[#eef0f1] h-36 rounded w-auto p-5">
-                <p>Are you booking for yourself?</p>
-                <button class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none mr-5 mt-4" onclick='toggleDialog("chooseBook");getAccountUserInfo()'>Yes</button>
-                <button class="btn bg-gray-400 text-black dark:bg-white hover:bg-gray-500 dark:hover:bg-gray-300 border-none" onclick='toggleDialog("chooseBook")'>No</button>
-              </div>
-            </dialog>
-
-          <?php endif; ?>
-      <!-- labas mo lang to pag naka log in tas hide mo pagtapos magsagot -->
-
 
         <h2 class="text-2xl font-bold mb-2">Set an Appointment</h2>
         <p class="mb-4 font-medium">
@@ -97,7 +79,35 @@ if (isset($_SESSION['user_type']) and $_SESSION['user_type'] == 'staff') {
         <p class="font-medium">View <a href="doctorschedule.php" target="_blank" class="link text-blue-400 font-bold">Doctor's Schedule</a> <span class="font-bold">FIRST</span>  for more information about the schedules.</p>
 
         <form id='patient_bookAppointment' action="#" method="GET">
-        <h3 class="text-xl font-bold mt-5">Service</h3>
+
+          <h3 class="text-xl font-bold mt-5">Select person for appointment</h3>
+          <div class="w-full md:w-auto md:col-span-1">
+            <select
+              id="doctor"
+              name="AppointPerson"
+              required
+              class="select select-bordered w-full p-2 text-base sm:text-lg bg-gray-300 dark:bg-gray-600"
+            >
+              <option value="" disabled selected>...</option>
+                <?php
+                $sql =
+                    "SELECT * FROM tbl_accountpatientmember where user_info_ID = ? ";
+                $stmt = $conn->prepare($sql);
+                $stmt->bind_param('i', $_SESSION['online_Account_owner_id']);
+                $stmt->execute();
+                $result = $stmt->get_result();
+                while ($row = $result->fetch_assoc()) {
+                    $middleInitial = strlen($row['Middle_Name']) >= 1 ? substr($row['Middle_Name'], 0, 1) : '';
+                    echo '<option value="' . $row['Account_Patient_ID_Member'] . '">' . $row['First_Name'] . ' ' . $middleInitial . '. ' . $row['Last_Name'] .'</option>';
+                }
+                ?>
+            </select>
+          </div>
+          <div class='flex justify-between'>
+            <div class='w-1/2 text-start'>
+              <h3 class="text-xl font-bold mt-5">Service</h3>
+            </div>
+          </div>
 
           <!-- <div class="w-full max-w-md">
             <label for="service-type" class="block text-lg font-medium mb-1">Reason/Purpose</label>
@@ -112,7 +122,7 @@ if (isset($_SESSION['user_type']) and $_SESSION['user_type'] == 'staff') {
                    <input id="horizontal-list-radio-license"
                    type="radio"
                    value="Consultation"
-                   name="service"
+                   name="VisitType"
                    class="radio radio-info [color-scheme:light] dark:[color-scheme:dark]"
                    required>
                    <span class="py-3 ml-2 text-lg font-medium ">Consultation</span>
@@ -123,7 +133,7 @@ if (isset($_SESSION['user_type']) and $_SESSION['user_type'] == 'staff') {
                    <input id="horizontal-list-radio-id"
                    type="radio"
                    value="Test/Procedure"
-                   name="service"
+                   name="VisitType"
                    class="radio radio-info [color-scheme:light] dark:[color-scheme:dark]"
                    required>
                    <span class="py-3 ml-2 text-lg font-medium ">Test/Procedure</span>
@@ -131,125 +141,48 @@ if (isset($_SESSION['user_type']) and $_SESSION['user_type'] == 'staff') {
                </li>
              </ul>
            </div>
-
-           <button class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none cursor-pointer" onclick="serviceModal.showModal()">Select a Service</button>
-
-
-
-        <div class="w-full md:w-auto md:col-span-1">
-          <label for="appointment-date" class="block text-base sm:text-lg font-medium">
-            Appointment Date<span id='appointmentDateNote' class='text-sm text-info hidden'> (Please check doctor schedule)</span>
-          </label>
-          <input
-            type="date"
-            id="appointment-date"
-            name="appointment-date"
-            required
-            class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark]"
-          />
-        </div>
-        <div class="w-full md:w-auto md:col-span-1">
-          <label for="appointment-time" class="block text-base sm:text-lg font-medium">
-            Appointment Time
-          </label>
-          <input
-            type="time"
-            id="appointment-time"
-            name="appointment-time"
-            required
-            min="08:00"
-            max="17:00"
-            class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark]"
-          />
-        </div>
-
-
-
-
-          <!-- Dapat kung anong pinili sa service, automatic yun na yung doctor na kung sino man sa service na yon
           <div class="w-full md:w-auto md:col-span-1">
-            <label for="doctor" class="block text-base sm:text-lg font-medium">
-              Your Doctor will be:
-            </label>
-            <select
+            <select onchange='getDoctorAvailability(this.value)'
               id="doctor"
               name="doctor"
               required
               class="select select-bordered w-full p-2 text-base sm:text-lg bg-gray-300 dark:bg-gray-600"
             >
-              <option value="" disabled selected>...</option>
-              <option value="Dr. Smith">Dr. Smith</option>
-              <option value="Dr. Johnson">Dr. Johnson</option>
-              <option value="Dr. Williams">Dr. Williams</option>
+              <option value="" disabled selected>Select doctor</option>
+                <?php
+                $sql =
+                    "SELECT * FROM tbl_staff where role = 'doctor' ";
+                $stmt = $conn->prepare($sql);
+                $stmt->execute();
+                $result = $stmt->get_result();
+                while ($row = $result->fetch_assoc()) {
+                    $middleInitial = strlen($row['Middle_Name']) >= 1 ? substr($row['Middle_Name'], 0, 1) : '';
+                    echo '<option  value="' . $row['Staff_ID'] . '">' . $row['First_Name'] . ' ' . $middleInitial . '. ' . $row['Last_Name'] . ' (' . $row['speciality'] . ')</option>';
+                }
+                ?>
             </select>
-          </div> -->
+            <a class="mt-2 btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none cursor-pointer w-full" onclick="serviceModal.showModal()">Select a Service</a>
+
+          </div>
+
+        <div class="w-full md:w-auto md:col-span-1">
+          <label for="appointment-date" class="block text-base sm:text-lg font-medium">
+            Appointment Date<span id='appointmentDateNote' class='text-sm text-info hidden'> (Please check doctor schedule)</span>
+          </label>
+          <input disabled type="date" id="appointment-date" name="appointment-date" required class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark]" />
+        </div>
+        <div class="w-full md:w-auto md:col-span-1">
+          <label for="appointment-time" class="block text-base sm:text-lg font-medium">
+            Available  Time
+          </label>
+          <select id="appointment-time" name="appointment-time" required class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark]">
+
+          </select>
+        </div>
 
         </fieldset>
 
 
-
-          <!-- <h3 class="text-xl font-bold mt-5 mb-2">Personal Information</h3>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-                <label for="first-name" class="block text-base sm:text-lg font-medium">First Name</label>
-                <input type="text" id="first-name" name="first-name" autocomplete="off" placeholder="First Name" required class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600" />
-            </div>
-            <div>
-                <label for="middle-name" class="block text-base sm:text-lg font-medium">Middle Name</label>
-                <input type="text" id="middle-name" name="middle-name" placeholder="Middle Name" required class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600" />
-            </div>
-
-            <div>
-                <label for="last-name" class="block text-base sm:text-lg font-medium">Last Name</label>
-                <input type="text" id="last-name" name="last-name" placeholder="Last Name" required class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600" />
-            </div>
-            <div>
-                <label
-                    for="email"
-                    class="block font-medium text-black dark:text-white text-base sm:text-lg overflow-hidden whitespace-nowrap text-overflow-ellipsis"
-                      >Email Address</label
-                  >
-                <input id="email" name="email" type="email" autocomplete="email" required placeholder="Email"
-                      class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600"/>
-            </div>
-            <div>
-                <label for="contact-number" class="block text-base sm:text-lg font-medium">Contact Number</label>
-                <input id="contact-number" name="contact-number" type="tel" required autocomplete="off" placeholder="Contact Number" pattern="[0-9]{1,11}" minlength="11" maxlength="11" title="Please enter up to 11 numeric characters." class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600" />
-            </div>
-
-            <div>
-                <label for="sex" class="block text-base sm:text-lg font-medium">Sex</label>
-                <select id="sex" required class="select select-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 text-lg" name="sex">
-                    <option value="" disabled selected>Select...</option>
-                    <option value="Male">Male</option>
-                    <option value="Female">Female</option>
-                </select>
-            </div>
-            <div>
-                <label for="dob" class="block text-base sm:text-lg font-medium">Date of Birth</label>
-                <input type="date" id="dob" name="dob" required class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark]" />
-            </div>
-
-            <div>
-                <div class="block text-base sm:text-lg font-medium mb-1">Are you vaccinated?</div>
-                <div class="flex items-center space-x-4 p-2 bg-gray-300 dark:bg-gray-600 rounded">
-                    <label class="flex items-center">
-                        <input type="radio" name="vaccinated" value="Yes" class="radio radio-primary" required>
-                        <span class="ml-2">Yes</span>
-                    </label>
-                    <label class="flex items-center">
-                        <input type="radio" name="vaccinated" value="No" class="radio radio-primary" required>
-                        <span class="ml-2">No</span>
-                    </label>
-                </div>
-            </div>
-            <div>
-                <label for="address" class="block text-base sm:text-lg font-medium">Address</label>
-                <input type="text" id="address" name="address" autocomplete="off" placeholder="Address" required class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600" />
-            </div>
-        </div> -->
-
-          
 
           <h3 class="text-xl font-bold mb-2 mt-5">Data Privacy Note</h3>
           <p class="mb-4">
@@ -280,10 +213,9 @@ if (isset($_SESSION['user_type']) and $_SESSION['user_type'] == 'staff') {
                 $result = $stmt->get_result();
                 $row = $result->fetch_assoc();
                 ?>
-            <input type='hidden' name='online_user_id' value='<?php echo $row[
-                'user_info_ID'
-            ]; ?>'>
-            <input type='hidden' name='book_status' value='pending'>
+            <input type='hidden' name='online_user_id' value='<?php echo $row['user_info_ID']; ?>'>
+            <input type='hidden' name='book_status' value='Pending'>
+            <input type='hidden' name='serviceType' value='' id='ServiceType'>
             <input type='hidden' name='appointment_type' value='Online'>
               <input
                 type="submit"
@@ -312,11 +244,12 @@ if (isset($_SESSION['user_type']) and $_SESSION['user_type'] == 'staff') {
               </div>
           </div>
         </dialog>
+
         <dialog id='bookFailed'  class='modal'  onclick='toggleDialog("bookFailed")'>
           <div  class="flex justify-center pointer-events-none">
             <div role="alert" class="inline-flex items-center bg-error border border-red-400 text-black px-4 py-3 rounded relative">
               <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-              <span>Appointment failed please contact support</span>
+              <span id='error'></span>
             </div>
           </div>
         </dialog>
@@ -330,13 +263,14 @@ if (isset($_SESSION['user_type']) and $_SESSION['user_type'] == 'staff') {
                         <form method="dialog">
                           <button class="btn bg-gray-400 dark:bg-white hover:bg-gray-500 dark:hover:bg-gray-400  text-black border-none mb-2">Close</button>
                         </form>
-                    </div>           
-                  <div class="border border-gray-600 dark:border-slate-300"></div>
+                    </div>
               </div>
-             
-              
+              <hr>
 
-              <!-- <div class="w-full sm:flex sm:items-center justify-end mb-5">
+
+
+<!--
+              <div class="w-full sm:flex sm:items-center justify-end mb-5 mt-5">
                 <div class="flex w-full sm:w-auto">
                   <input
                     id='search'
@@ -344,95 +278,76 @@ if (isset($_SESSION['user_type']) and $_SESSION['user_type'] == 'staff') {
                     name="text"
                     class="input input-bordered appearance-none w-full px-3 py-2 rounded-none bg-white dark:bg-gray-600 text-black dark:text-white border border-black border-r-0 dark:border-white"
                     placeholder="Search"
-                    onkeyup='handleSearch("search", "TableList")'
+                    onkeyup=''
                   />
                   <button type="submit" class="btn btn-square bg-gray-400 hover:bg-gray-500  rounded-none dark:bg-gray-500 dark:hover:bg-gray-300 border border-black border-l-0 dark:border-white">
                     <i class="fa-solid fa-magnifying-glass text-black dark:text-white"></i>
                   </button>
                 </div>
-              </div> -->
+              </div>
+-->
+              <div class="text-xl font-medium p-10" id='services'>
 
-              <div class="text-xl font-medium p-10">
-                <div class="mb-4">
-                    <label class="flex items-center space-x-2 mb-2 hover:bg-slate-300 dark:hover:bg-gray-600 p-2 rounded-md transition duration-150">
-                        <input type="checkbox" name="service" value="internalMedicine" class="checkbox checkbox-info">
-                        <span>Internal Medicine</span>
-                    </label>
-                </div>
-                <div class="mb-4">
-                    <label class="flex items-center space-x-2 mb-2 hover:bg-slate-300 dark:hover:bg-gray-600 p-2 rounded-md transition duration-150">
-                        <input type="checkbox" name="service" value="generalMedicine" class="checkbox checkbox-info">
-                        <span>General Medicine</span>
-                    </label>
-                </div>
-                <div class="mb-4">
-                    <p class="font-bold mb-2 text-2xl">Pediatrics</p>
-                    <div class="pl-6">
-                        <label class="block flex items-center space-x-2 mb-2 hover:bg-slate-300 dark:hover:bg-gray-600 p-2 rounded-md transition duration-150">
-                            <input type="checkbox" name="pediatricsSubservice" value="fluVaccine" class="checkbox checkbox-info mr-2">
-                            <span>Flu Vaccine</span>
-                        </label>
-                        <label class="block flex items-center space-x-2 mb-2 hover:bg-slate-300 dark:hover:bg-gray-600 p-2 rounded-md transition duration-150">
-                            <input type="checkbox" name="pediatricsSubservice" value="monthlyImmunization" class="checkbox checkbox-info mr-2">
-                            <span>Monthly Immunization for babies</span>
-                        </label>
-                        <label class="block flex items-center space-x-2 mb-2 hover:bg-slate-300 dark:hover:bg-gray-600 p-2 rounded-md transition duration-150">
-                            <input type="checkbox" name="pediatricsSubservice" value="polioVaccine" class="checkbox checkbox-info mr-2">
-                            <span>Polio Vaccine</span>
-                        </label>
-                        <label class="block flex items-center space-x-2 mb-2 hover:bg-slate-300 dark:hover:bg-gray-600 p-2 rounded-md transition duration-150">
-                            <input type="checkbox" name="pediatricsSubservice" value="mmrVaccine" class="checkbox checkbox-info mr-2">
-                            <span>Measles, Mumps, and Rubella Vaccine</span>
-                        </label>
-                        <label class="block flex items-center space-x-2 mb-2 hover:bg-slate-300 dark:hover:bg-gray-600 p-2 rounded-md transition duration-150">
-                            <input type="checkbox" name="pediatricsSubservice" value="pneumococcalVaccine" class="checkbox checkbox-info mr-2">
-                            <span>Pneumococcal Vaccine</span>
-                        </label>
-                    </div>
-                </div>
-                <div class="mb-4">
-                    <p class="font-bold mb-2 text-2xl">X-Ray</p>
-                    <div class="pl-6">
-                        <label class="block flex items-center space-x-2 mb-2 hover:bg-slate-300 dark:hover:bg-gray-600 p-2 rounded-md transition duration-150">
-                            <input type="checkbox" name="xraySubservice" value="skullXray" class="checkbox checkbox-info mr-2">
-                            <span>Skull X-Ray</span>
-                        </label>
-                        <label class="block flex items-center space-x-2 mb-2 hover:bg-slate-300 dark:hover:bg-gray-600 p-2 rounded-md transition duration-150">
-                            <input type="checkbox" name="xraySubservice" value="upperExtremities" class="checkbox checkbox-info mr-2">
-                            <span>Upper Extremities</span>
-                        </label>
-                        <label class="block flex items-center space-x-2 mb-2 hover:bg-slate-300 dark:hover:bg-gray-600 p-2 rounded-md transition duration-150">
-                            <input type="checkbox" name="xraySubservice" value="lowerExtremities" class="checkbox checkbox-info mr-2">
-                            <span>Lower Extremities 
-                              <span class="text-red-500">Not Available at the moment</span> <!-- itong line example na ilabas mo pag puno na tas disabled mo -->                  
-                            </span>
-                        </label>
-                        <label class="block flex items-center space-x-2 mb-2 hover:bg-slate-300 dark:hover:bg-gray-600 p-2 rounded-md transition duration-150">
-                            <input type="checkbox" name="xraySubservice" value="lungs" class="checkbox checkbox-info mr-2">
-                            <span>Lungs</span>
-                        </label>
-                        <label class="block flex items-center space-x-2 mb-2 hover:bg-slate-300 dark:hover:bg-gray-600 p-2 rounded-md transition duration-150">
-                            <input type="checkbox" name="xraySubservice" value="lumbosacral" class="checkbox checkbox-info mr-2">
-                            <span>Lumbosacral</span>
-                        </label>
-                    </div>
-                </div>
-                <div class="mb-4">
+                  <?php
+                  $sql = "SELECT specialty, Title, Service_Type, serviceStatus FROM tbl_services WHERE serviceStatus = 'Available' ORDER BY specialty, Service_Type";
+                  $result = $conn->query($sql);
+
+                  $services = [];
+
+                  if ($result->num_rows > 0) {
+                      while($row = $result->fetch_assoc()) {
+                          $specialty = $row['specialty'];
+                          $title = $row['Title'];
+
+                          if (!isset($services[$specialty])) {
+                              $services[$specialty] = [];
+                          }
+
+
+                          $services[$specialty][$title][] = $row;
+                      }
+                  } else {
+                      echo "0 results";
+                  }
+
+                  ?>
+
+                  <?php foreach ($services as $specialty => $titles): ?>
+                      <?php foreach ($titles as $title => $serviceItems): ?>
+                      <div class="mb-4">
+                        <p class="font-bold mb-2 text-2xl">
+                            <?= htmlspecialchars($title) ?><?= $title !== $specialty ? " (" . htmlspecialchars($specialty) . ")" : "" ?>
+                        </p>
+                        <div class="pl-6" id='<?= htmlspecialchars($specialty) ?>'>
+                            <?php foreach ($serviceItems as $service): ?>
+                              <label class="flex items-center space-x-2 mb-2 hover:bg-slate-300 dark:hover:bg-gray-600 p-2 rounded-md transition duration-150">
+                                <input type="checkbox" name="service" value="<?= htmlspecialchars($service['Service_Type']) ?>" class="checkbox checkbox-info" data-specialty="<?= htmlspecialchars($specialty) ?>">
+                                <span><?= htmlspecialchars($service['Service_Type']) ?></span>
+                              </label>
+                            <?php endforeach; ?>
+                        </div>
+                      </div>
+                      <?php endforeach; ?>
+                  <?php endforeach; ?>
+
+              </div>
+
+              <div class="mb-4">
                     <p class="font-bold mb-2 text-2xl">Others</p>
                     <label class="block flex items-center space-x-2 mb-2 hover:bg-slate-300 dark:hover:bg-gray-600 p-2 rounded-md transition duration-150">
                     <textarea id="otherService" rows="4" name="otherService"  class="input input-bordered h-20 text-lg w-full bg-white dark:bg-gray-600 text-black dark:text-white border-none" placeholder="If none in the following, type your reason/purpose here"></textarea>
                   </label>
                 </div>
-            </div>  
-              
+            </div>
             </div>
           </dialog>
-            <!-- service modal end -->
 
       </div>
     </section>
+
   </body>
   <script>
+
 
     function toggleDialog(id) {
       let dialog = document.getElementById(id);
@@ -447,6 +362,10 @@ if (isset($_SESSION['user_type']) and $_SESSION['user_type'] == 'staff') {
     document.getElementById('patient_bookAppointment').addEventListener('submit', function(e){
       e.preventDefault();
       let form_data = new FormData(e.target);
+      if (!form_data.get('serviceType')){
+        document.getElementById('error').innerHTML = 'Please select service';
+        toggleDialog('bookFailed')
+      }
       $.ajax({
         url: 'ajax.php?action=patientBookAppointment',
         type: 'POST',
@@ -458,6 +377,7 @@ if (isset($_SESSION['user_type']) and $_SESSION['user_type'] == 'staff') {
             toggleDialog('bookCompletAlert');
 
           }else {
+            document.getElementById('error').innerHTML = response;
             toggleDialog('bookFailed')
           }
           e.target.reset();
@@ -465,122 +385,113 @@ if (isset($_SESSION['user_type']) and $_SESSION['user_type'] == 'staff') {
         }
       });
     });
-<?php if (
-    isset($_SESSION['user_type']) and
-    $_SESSION['user_type'] == 'patient'
-): ?>
-    function getAccountUserInfo(){
+
+
+    function getDoctorAvailability(id) {
       $.ajax({
-        url: 'ajax.php?action=getOnlineUserInfo&onlineUser_id=' + encodeURIComponent('<?php echo $_SESSION[
-            'user_id'
-        ]; ?>'),
+        url: 'ajax.php?action=getDoctorAvailabilityDate&doctor_ID=' + encodeURIComponent(id),
         method: 'GET',
         dataType: 'json',
-        success: function(data) {
-          if (data) {
-            console.log(data);
-            document.querySelector('#patient_bookAppointment input[name="first-name"]').value = data.First_Name;
-            document.querySelector('#patient_bookAppointment input[name="middle-name"]').value = data.Middle_Name;
-            document.querySelector('#patient_bookAppointment input[name="last-name"]').value = data.Last_Name;
-            document.querySelector('#patient_bookAppointment input[name="email"]').value = data.Email;
-            document.querySelector('#patient_bookAppointment input[name="contact-number"]').value = data.Contact_Number;
-            document.querySelector('#patient_bookAppointment select[name="sex"]').value = data.Sex;
-            document.querySelector('#patient_bookAppointment input[name="dob"]').value = data.DateofBirth;
-            document.querySelector('#patient_bookAppointment input[name="address"]').value = data.Address;
-          }
-        },
-        error: function(xhr, status, error) {
-          console.error('Error fetching data:', error);
-        }
-      });
-    }
-
-    <?php endif; ?>
-
-
-
-
-
-    /*
-    function getDoctorSchedule() {
-      let schedule;
-      $.ajax({
-        url: 'ajax.php?action=getDoctorSched',
-        method: 'GET',
-        dataType: 'json',
-        async: false,
         success: function(response) {
-          schedule = response;
+          $('#appointment-time').html('');
+          const dateInput = document.getElementById('appointment-date');
+          const dateNote = document.getElementById('appointmentDateNote');
+          dateInput.value = "";
+          dateInput.disabled = true;
+          dateNote.innerHTML = '';
+          dateNote.classList.add('hidden');
+
+          if (response.message === 'No schedule') {
+            dateNote.innerHTML = '(This doctor has no schedule)';
+            dateNote.classList.remove('hidden');
+          } else if (Array.isArray(response)) {
+            dateInput.disabled = false;
+            checkDoctorAvailability(dateInput, response, id);
+          }
         },
         error: function(xhr, status, error) {
           console.error('Error fetching schedule:', error);
         }
       });
-      return schedule;
     }
 
-    let schedule = getDoctorSchedule();
-    let dates = [];
-    for (let date in schedule) {
-      dates.push(date);
-    }
-    function setSelectableDates(datesArray) {
-      let dateInput = document.getElementById('appointment-date');
-      dateInput.setAttribute('type', 'date');
-      let dateObjects = datesArray.map(date => new Date(date));
-      let minDate = new Date(Math.min.apply(null, dateObjects));
-      let maxDate = new Date(Math.max.apply(null, dateObjects));
-      dateInput.setAttribute('min', minDate.toISOString().slice(0,10));
-      dateInput.setAttribute('max', maxDate.toISOString().slice(0,10));
-      dateInput.addEventListener('input', function() {
-        let selectedDate = new Date(this.value);
-        if (!dateObjects.find(date => date.toISOString().slice(0,10) === selectedDate.toISOString().slice(0,10))) {
-          document.getElementById('appointmentDateNote').classList.remove('hidden');
-          this.value = ''; // Reset value if not in datesArray
-        }else {
-          document.getElementById('appointmentDateNote').classList.add('hidden');
+    function checkDoctorAvailability(dateInput, datesArray, doctor_id) {
+      const newDateInput = dateInput.cloneNode(true);
+      dateInput.parentNode.replaceChild(newDateInput, dateInput);
+      newDateInput.addEventListener('change', function() {
+        const dateNote = document.getElementById('appointmentDateNote');
+        if (!datesArray.includes(newDateInput.value)) {
+          dateNote.classList.remove('hidden');
+          dateNote.innerHTML = '(Please check doctor schedule)';
+          newDateInput.value = '';
+        } else {
+          getAvailableAppointmentTime(newDateInput.value, doctor_id);
+          dateNote.classList.add('hidden');
         }
       });
     }
-    setSelectableDates(dates);
-    */
-  </script>
 
-  <!-- script for service list, lagay mo sa external css pag nakita mo to -->
+
+
+
+    function getAvailableAppointmentTime(date, doctor_id){
+      $.ajax({
+        url: 'ajax.php?action=getDoctorAvailabilityTime&schedDate=' + encodeURIComponent(date) + '&doctor_id=' + encodeURIComponent(doctor_id),
+        method: 'GET',
+        dataType: 'html',
+        success: function(response) {
+          $('#appointment-time').html(response);
+          }
+        })
+    }
+
+  </script>
   <script>
-      document.addEventListener("DOMContentLoaded", function () {
-      const serviceCheckboxes = document.querySelectorAll('input[type="checkbox"][name="service"]');
-      const subserviceCheckboxes = document.querySelectorAll('input[type="checkbox"][name$="Subservice"]');
-      
-      serviceCheckboxes.forEach(function (checkbox) {
-          checkbox.addEventListener("change", function () {
-              if (this.checked) {
-                  // If a main service checkbox is checked, uncheck other main service checkboxes
-                  serviceCheckboxes.forEach(function (otherCheckbox) {
-                      if (otherCheckbox !== checkbox) {
-                          otherCheckbox.checked = false;
-                      }
-                  });
-                  
-                  // If a main service checkbox is checked, uncheck all subservice checkboxes
-                  subserviceCheckboxes.forEach(function (subCheckbox) {
-                      subCheckbox.checked = false;
-                  });
-              }
-          });
+
+    document.addEventListener('DOMContentLoaded', function() {
+      let services = document.getElementById('services');
+      const checkboxes = services.querySelectorAll('input[type="checkbox"]');
+      const otherServiceTextarea = document.getElementById('otherService');
+      const serviceTypeInput = document.getElementById('ServiceType');
+
+      otherServiceTextarea.addEventListener('input', function() {
+        checkboxes.forEach(checkbox => {
+          checkbox.checked = false;
+        });
+        serviceTypeInput.value = this.value;
       });
 
-      subserviceCheckboxes.forEach(function (checkbox) {
-          checkbox.addEventListener("change", function () {
-              if (this.checked) {
-                  // If a subservice checkbox is checked, uncheck main service checkboxes
-                  serviceCheckboxes.forEach(function (mainCheckbox) {
-                      mainCheckbox.checked = false;
-                  });
+      checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+          const selectedSpecialty = this.getAttribute('data-specialty');
+
+          if (this.checked) {
+            checkboxes.forEach(cb => {
+              if (cb !== this && cb.getAttribute('data-specialty') !== selectedSpecialty) {
+                cb.checked = false;
               }
-          });
+            });
+            otherServiceTextarea.value = '';
+          }
+
+          updateServiceTypeInput();
+        });
       });
-  });
+
+      function updateServiceTypeInput() {
+        serviceTypeInput.value = Array.from(checkboxes)
+          .filter(cb => cb.checked)
+          .map(cb => cb.value)
+          .join(';');
+      }
+    });
+
+
+
+
+
   </script>
+
+
   
 </html>
