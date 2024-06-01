@@ -21,3 +21,12 @@
     color: #1a73e8; /* Example color for schedule info */
     margin-top: 4px;
 }
+
+@media screen and (min-width: 1700px){
+    .timeSched{
+        font-size: 1.2rem;
+    }
+    .specialtySched{
+        font-size: 1.5rem;
+    }
+}
