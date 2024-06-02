@@ -1,3 +1,21 @@
+<?php
+$first_name = '';
+$last_name = '';
+if (isset($_SESSION['user_type']) && $_SESSION['user_type'] == 'staff'){
+    $sql = "SELECT * FROM tbl_staff WHERE User_id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $_SESSION['user_id']);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows === 1) {
+        $row = $result->fetch_assoc();
+        $first_name = $row['First_Name'];
+        $last_name = $row['Last_Name'];
+    }
+}
+?>
+
 <section
       class="header-main fixed w-full z-50 bg-white dark:bg-neutral text-neutral dark:text-gray-200 border-b border-gray-400 dark:border-gray-600"
     >
@@ -109,13 +127,14 @@
                   <li>
                     <details>
                       <summary>
-                        <small class="hidden sm:block">Doctor</small><i class="fa-solid fa-user text-3xl"></i>
+                        <i class="fa-solid fa-user text-3xl"></i>
+                        <!-- itong image show mo pag naka log in -->
+                        <!-- <img src="../images/defaultprofile.jpg" class="w-10 h-10 rounded-full object-cover">  -->
                       </summary>
                       <ul
-                        class="dropdown-content p-2 bg-gray-200 dark:bg-gray-700 rounded-t-none z-10 w-36 sm:right-1 translate-x-7 custom-dropdown-menu"
+                        class="dropdown-content p-2 bg-gray-200 dark:bg-gray-700 rounded-t-none z-10 w-60 sm:right-1 translate-x-7 custom-dropdown-menu"
                       >
-                        <li>
-                        
+                        <li class="hover:bg-gray-300 dark:hover:bg-gray-600 font-bold transition duration-300 ease-in-out">           
                           <label
                             class="cursor-pointer grid place-items-center gap-2"
                             style="
@@ -182,24 +201,24 @@
                         </li>
                         <!-- labas mo to pag di naka log in -->
                         <?php if (!isset($_SESSION['user_id'])): ?>
-                        <li>
+                        <li class="flex items-center justify-center hover:bg-gray-300 dark:hover:bg-gray-600 hover:font-bold transition duration-300 ease-in-out text-lg">
                           <a href="login.php"
-                            class="hover:bg-gray-300 dark:hover:bg-gray-600 hover:font-bold text-lg transition duration-300 ease-in-out"
+                            class="w-full h-full flex justify-center items-center"
                             >Log In</a
                           >
                         </li>
                         <!-- labas mo to pag di naka log in end -->
                         <?php else: ?>
                         <!-- ito nakalabas pag naka log in -->
-                        <li>
+                        <li class="flex items-center justify-center hover:bg-gray-300 dark:hover:bg-gray-600 font-bold transition duration-300 ease-in-out text-lg">
                           <a href="staff-profile.php"
-                            class="hover:bg-gray-300 dark:hover:bg-gray-600 hover:font-bold text-lg transition duration-300 ease-in-out"
-                            >Profile</a
+                            class="w-full h-full flex justify-center items-center"
+                            ><?php echo $first_name .' '. $last_name?></a
                           >
                         </li>
-                        <li>
+                        <li class="flex items-center justify-center hover:bg-gray-300 dark:hover:bg-gray-600 hover:font-bold transition duration-300 ease-in-out text-lg">
                           <a href='logout.php'
-                            class="hover:bg-gray-300 dark:hover:bg-gray-600 hover:font-bold text-lg transition duration-300 ease-in-out"
+                            class="w-full h-full flex justify-center items-center"
                             >Log Out</a
                           >
                         </li>  

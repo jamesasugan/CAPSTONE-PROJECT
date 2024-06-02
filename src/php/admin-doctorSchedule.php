@@ -57,7 +57,7 @@ if ($result->num_rows > 0) {
     <?php include 'admin-navbar.php'; ?>
     
     <section class="w-full min-h-screen bg-[#ebf0f4] dark:bg-[#17222a] text-[#0e1011] dark:text-[#eef0f1]">
-            <div class="mx-auto bg-white dark:bg-[#222f3a] shadow-lg p-5 pt-28 w-full max-w-full">
+            <div class="mx-auto bg-[#f6fafc] dark:bg-[#222f3a] shadow-lg p-5 pt-28 w-full max-w-full">
                 <div class="title flex text-center justify-center font-bold">
                     <h1 class="text-4xl mb-2">Doctor's Schedule</h1>
                 </div>
@@ -377,6 +377,25 @@ if ($result->num_rows > 0) {
                 </div>
 
 
+
+
+                <!-- pending card -->
+                <div class="flex justify-center items-center mb-5">
+                    <div class="flex flex-col w-full sm:w-96 shadow-xl bg-[#cadcec] dark:bg-[#0F1E2B] border border-[#35485a] dark:border-[#8c9caa]">
+                        <div class="flex-grow">
+                            <div class="card-body">
+                                <div class="icon flex justify-center">
+                                    <span class="font-bold text-6xl sm:text-7xl mt-2 overflow-hidden whitespace-nowrap text-overflow-ellipsis">35</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-actions justify-center mt-auto">
+                            <button class="btn text-base sm:text-lg rounded-none w-full bg-[#78afe2] dark:bg-[#1C3F61] uppercase text-[#0e1011] dark:text-[#eef0f1] hover:bg-[#224362] hover:text-[#eef0f1] dark:hover:bg-[#9dbedd] dark:hover:text-[#0e1011] border-[#35485a] dark:border-[#8c9caa] overflow-hidden whitespace-nowrap text-overflow-ellipsis" onclick="viewPendingSched.showModal()">View Pendings</button>
+                        </div>
+                    </div>
+                </div>
+
+                  <!-- calendar ui -->                       
                 <div class="flex flex-col lg:flex-row justify-between lg:items-stretch">
                     <div class="w-full lg:w-4/5 lg:pr-4">
                         <div class="flex flex-col md:flex-row justify-between items-center border-t border-t-black dark:border-t-white dark:border-x-white px-2 py-2 border-x border-x-black">     
@@ -425,6 +444,74 @@ if ($result->num_rows > 0) {
                         </div>
                     </div>
                 </div>
+
+
+                <!-- modal for view pending schedules -->
+                <dialog id="viewPendingSched" class="modal">
+                    <div class="modal-box w-11/12 max-w-7xl bg-gray-200 dark:bg-gray-700 text-[#0e1011] dark:text-[#eef0f1] p-0">
+                        <div class="modal-header sticky top-0 bg-gray-200 dark:bg-gray-700 z-10 px-10 pt-10">
+
+                        <!-- gawin mong "Pending Deletion Schedules" pag pinili sa dropdown yung Delete schedules -->
+                            <h3 class="font-bold text-3xl mb-0 text-center">Pending Schedules</h3>
+
+                                <div class="modal-action flex justify-end">
+                                    <form method="dialog">
+                                        <button class="btn bg-white text-black hover:bg-gray-400 border-none mb-3">Close</button>
+                                    </form>
+                                </div>      
+                            <div class="border border-gray-600 dark:border-slate-300"></div>
+                        </div>
+
+                    <div class="p-10">
+                        <div class="mt-5 w-2/4 mb-5">
+                            <label for="selectPending" class="block font-medium text-black dark:text-white text-base sm:text-lg">Select Pending Actions</label>
+                            <select id="selectPending" name="selectPending" class="select select-bordered appearance-none block w-full px-3 border-gray-300 rounded-md shadow-sm focus:outline-none text-base sm:text-lg bg-white dark:bg-gray-600 text-black dark:text-white " required>
+                                <option value="">Select...</option>
+                                <option value="Pending Add Schedules">Pending Add Schedules</option>
+                                <option value="Pending Delete Schedules">Pending Delete Schedules</option>
+                            </select>
+                        </div>
+                       
+                        <div class="overflow-x-auto">
+                            <table class="table">
+                                <thead>
+                                <tr class="font-bold text-black dark:text-white text-base sm:text-lg ">
+                                    <th>Name</th>
+                                    <th>Days in a Week</th>
+                                    <th>Start to End Time</th>
+                                    <th>Start to End Date</th>
+                                    <!-- <th>Status</th>  di ko sure kung need to-->
+                                    <th class="pl-16">Action</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr class="text-base hover:bg-gray-300 dark:hover:bg-gray-600 font-medium text-black dark:text-white">
+                                    <!-- dapat may Dr. sa bawat name ah -->
+                                    <td class="w-1/4">Dr. Hart Hagerty</td>
+                                    <td class="w-1/4">Monday, Tuesday, Wednesday, Thursday, Friday, Saturday</td>
+                                    <td class="w-1/4">10:00 AM to 03:00 PM</td>
+                                    <td class="w-1/4">June 2, 2024 to July 21, 2024</td>
+                                    
+                                    <!-- <td class="font-bold text-green-500">Accepted</td> -->
+                                    <!-- Declined = text-red-500 -->
+
+                                    <td class="w-1/4">
+                                        <div class="flex justify-between">
+                                            <button class="bg-blue-500 p-2 rounded-md mr-5 text-white font-medium">Accept</button>
+                                            <button class="bg-red-500 p-2 rounded-md text-white font-medium">Decline</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+
+
+                        
+                    </div>
+                </dialog>
 
         </section>
 </body>

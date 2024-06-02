@@ -58,7 +58,7 @@ $doctor_id = $row['Staff_ID'];
     <?php include 'staff-navbar.php'; ?>
     
     <section class="w-full min-h-screen bg-[#ebf0f4] dark:bg-[#17222a] text-[#0e1011] dark:text-[#eef0f1]">
-            <div class="mx-auto bg-white dark:bg-[#222f3a] shadow-lg p-5 pt-28 w-full max-w-full">
+            <div class="mx-auto bg-[#f6fafc] dark:bg-[#222f3a] shadow-lg p-5 pt-28 w-full max-w-full">
                 <div class="title flex text-center justify-center font-bold">
                     <h1 class="text-4xl mb-2">Doctor's Schedule</h1>
                 </div>
