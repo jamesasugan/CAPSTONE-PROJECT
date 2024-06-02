@@ -1,8 +1,8 @@
 function toggleDetails() {
   const followUpRadio = document.querySelector('input[name="followUp-radio"]:checked');
   const followUpDetails = document.getElementById('followUpDetails');
-  const followUpDateInput = document.getElementById('followUpDate');
-  const followUpTimeInput = document.getElementById('followUpTime');
+  const followUpDateInput = document.getElementById('appointment-date');
+  const followUpTimeInput = document.getElementById('appointment-time');
   const completedDetails = document.getElementById('completedDetails');
 
   // Toggle visibility of follow-up details

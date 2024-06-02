@@ -179,19 +179,21 @@ ORDER BY
                     $status = ucfirst(strtolower($row['Status']));
                     $class = '';
                     switch ($status) {
-                        case 'Completed':
-                            $class = 'text-green-500';
-                            break;
-                        case 'Cancelled':
-                            $class = 'text-red-500';
-                            break;
-                        case 'Approved':
-                            $class = 'text-blue-500';
-                            // Include additional part for Approved status
 
+                        case 'Completed':
+                          $class = 'text-green-500';
+                          break;
+                        case 'Cancelled':
+                          $class = 'text-red-500';
+                          break;
+                        case 'Approved':
+                          $class = 'text-blue-500';
+                          break;
+                        case 'Rescheduled':
+                            $class = 'text-warning';
                             break;
+
                         default:
-                            // default class if status doesn't match any of the cases
                             $class = 'text-yellow-600 dark:text-yellow-300';
                             break;
                     }
@@ -220,9 +222,7 @@ ORDER BY
                 -->
                 <td>
                   <!-- yung modal name viewAppointment2,3,4,5 dapat sa mga susunod, bawal parehas kase di maoopen -->
-                  <button onclick="viewAppointment.showModal();getAppointmentInfo(this.getAttribute(\'data-id\'))" data-id="' .
-                        $row['Account_Patient_ID_Member'] .
-                        '">
+                  <button onclick="viewAppointment.showModal();getAppointmentInfo(this.getAttribute(\'data-id\')); getDoctorAvailability('.$row['Staff_ID'].')" data-id="' . $row['Appointment_ID'] . '">
                     <i class="fa-regular fa-eye"></i>
                   </button>';
                     // Include the tooltip for Approved status here
@@ -307,7 +307,7 @@ ORDER BY
       <!-- staff action -->
       <h1 class="text-base sm:text-xl font-bold text-black dark:text-white">Appointment Type: <span class="font-bold " id='AppointmentType'></span></h1>  <!-- ayusin mo rin colors dito ah -->
 
-      <h1 class="text-base sm:text-xl font-bold text-black dark:text-white">STATUS: <span class="font-bold " id='appointment_status'>Pending</span></h1>  <!-- ayusin mo rin colors dito ah -->
+      <h1 class="text-base sm:text-xl font-bold text-black dark:text-white">STATUS: <span class="font-bold " id='appointment_status'></span></h1>  <!-- ayusin mo rin colors dito ah -->
 
       <h2 class="text-base sm:text-xl font-bold mt-5 text-black dark:text-white">Edit Status of this Appointment</h2>
       <form id='update_appointment' action="#" method="GET">
@@ -342,27 +342,17 @@ ORDER BY
         <div class="flex flex-col sm:flex-row justify-between gap-4" id="reschedule-section" style="display: none;">
           <div class="w-full">
             <label for="rescheduled-date" class="block text-base sm:text-lg font-medium text-black dark:text-white">
-              Rescheduled Date
+              Rescheduled Date<span id='appointmentDateNote' class='text-sm text-info hidden'> (Please check doctor schedule)</span>
             </label>
-            <input
-              type="date"
-              id="rescheduled-date"
-              name="rescheduled-date"
-              class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark] text-black dark:text-white"
-            />
+            <input disabled type="date" id="appointment-date" name="rescheduled-date" class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark] text-black dark:text-white" />
           </div>
           <div class="w-full">
-            <label for="rescheduled-time" class="block text-base sm:text-lg font-medium text-black dark:text-white">
+            <label for="appointment-time" class="block text-base sm:text-lg font-medium text-black dark:text-white">
               Rescheduled Time
             </label>
-            <input
-              type="time"
-              id="rescheduled-time"
-              name="rescheduled-time"
-              min="08:00"
-              max="17:00"
-              class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark] text-black dark:text-white"
-            />
+            <select id="appointment-time" name="rescheduled-time" required class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark]">
+
+            </select>
           </div>
         </div>
         <div id='doctorList' class="form-group mt-5">
@@ -375,8 +365,7 @@ ORDER BY
             id="appointDoctor"
             name="appointDoctor"
             class="select select-bordered appearance-none block w-full px-3 border-gray-300 rounded-md shadow-sm focus:outline-none text-base sm:text-lg bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400 disabled:border-gray-300"
-            required
-          >
+            required onchange='getDoctorAvailability(this.value)'>
             <option value="" disabled selected>Select a Doctor</option>
               <?php
               $sql = "SELECT * FROM tbl_staff where role = 'doctor' ";
@@ -384,19 +373,8 @@ ORDER BY
               $stmt->execute();
               $result = $stmt->get_result();
               while ($row = $result->fetch_assoc()) {
-                  $middleInitial =
-                      strlen($row['Middle_Name']) >= 1
-                          ? substr($row['Middle_Name'], 0, 1)
-                          : '';
-                  echo '<option value="' .
-                      $row['Staff_ID'] .
-                      '">' .
-                      $row['First_Name'] .
-                      ' ' .
-                      $middleInitial .
-                      '. ' .
-                      $row['Last_Name'] .
-                      '</option>';
+                  $middleInitial = strlen($row['Middle_Name']) >= 1 ? substr($row['Middle_Name'], 0, 1) : '';
+                  echo '<option value="' . $row['Staff_ID'] . '">' . $row['First_Name'] . ' ' . $middleInitial . '. ' . $row['Last_Name'] . '</option>';
               }
               ?>
           </select>
@@ -642,9 +620,9 @@ ORDER BY
         }
       }
     }
-    function getAppointmentInfo(patient_id){
+    function getAppointmentInfo(patientAppointment_ID){
       $.ajax({
-        url: 'ajax.php?action=getAppointmentInfo&patient_id=' + patient_id,
+        url: 'ajax.php?action=getAppointmentInfo&patientAppointment_ID=' + patientAppointment_ID,
         method: 'GET',
         dataType: 'json',
         success: function(data) {
@@ -659,6 +637,7 @@ ORDER BY
               time = parts[1];
             }
             let status = data.Status.charAt(0).toUpperCase() + data.Status.slice(1).toLowerCase();
+            console.log(status)
 
             document.querySelector('#appointment_status').textContent = status;
             let statusClass = '';
@@ -756,6 +735,7 @@ ORDER BY
 
 
   </script>
+  <script src='../js/doctorAppoimtmentAvailability.js'></script>
 
   <script>
   <?php if (isset($_GET['filter']) and $_GET['filter'] == 'Pending'): ?>

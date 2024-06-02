@@ -594,13 +594,13 @@ if ($action == 'editUserInfo'){
 }
 
 if ($action == 'getAppointmentInfo'){
-    $patient_id = $_GET['patient_id'];
+    $patientAppointment_ID = $_GET['patientAppointment_ID'];
     $sql = "SELECT *
             FROM `tbl_accountpatientmember` 
             JOIN `tbl_appointment` ON `tbl_appointment`.`Account_Patient_ID_Member` = `tbl_accountpatientmember`.`Account_Patient_ID_Member`
-            where `tbl_appointment`.`Account_Patient_ID_Member` = ?;";
+            where `tbl_appointment`.`Appointment_ID` = ?;";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param('i', $patient_id);
+    $stmt->bind_param('i', $patientAppointment_ID);
     $stmt->execute();
     $result = $stmt->get_result();
     if ($result && $result->num_rows > 0){

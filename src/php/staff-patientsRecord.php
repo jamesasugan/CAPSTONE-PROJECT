@@ -173,9 +173,9 @@ ORDER BY
 
               <!-- view information -->
               <td>
-                <a href="staff-patientFullRecord.php?chart_id='. $row['Chart_id'].'"><i class="fa-regular fa-eye"></i></a>
-                ';
-                if ($row['patient_Status'] == 'Follow Up' and $followUpschedule != 'No schedule'){
+                <a href="staff-patientFullRecord.php?chart_id='. $row['Chart_id'].'"><i class="fa-regular fa-eye"></i></a>';
+
+              if ($row['patient_Status'] == 'Follow Up' and $followUpschedule != 'No schedule'){
                   echo '<div class="tooltip tooltip-bottom ml-5" data-tip="Remove Schedule">
                   <a  data_id="'.$row['Chart_id'].'"  onclick="toggleDialog(\'RemoveSched\');getChart_id(this.getAttribute(\'data_id\'))" class="text-error cursor-pointer "> <i class="fa-solid fa-eraser"></i></a>
                   </div>';

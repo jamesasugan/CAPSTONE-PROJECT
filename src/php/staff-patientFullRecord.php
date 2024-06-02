@@ -529,29 +529,23 @@ if ($result && $result->num_rows > 0) {
                                 </div>
                                 <div id="followUpDetails" class="hidden">
                                     <h2 class="text-md mt-4 font-semibold">Schedule the patient for another check up:</h2>
-                                    <label for="followUpDate" class="block text-md font-medium">
-                                        Follow Up Date:
+                                    <label for="appointment-date" class="block text-md font-medium">
+                                        Follow Up Date: <span id='appointmentDateNote' class='text-sm text-info hidden'> (Please check doctor schedule)</span>
                                     </label>
-                                    <input
-                                      onclick=''
-                                        type="date"
-                                        id="followUpDate"
-                                        name="followUpDate"
-                                        required
+                                  <input
+                                    type="date"
+                                    id="appointment-date"
+                                    name="followUpDate"
+                                    required
                                         class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark]"
                                     />
-                                    <label for="followUpTime" class="block text-md font-medium">
+                                    <label for="appointment-time" class="block text-md font-medium">
                                         Follow Up Time:
                                         </label>
-                                        <input
-                                        type="time"
-                                        id="followUpTime"
-                                        name="followUpTime"
-                                        required
-                                        min="08:00"
-                                        max="17:00"
-                                        class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark]"
-                                        />
+                                  <select id="appointment-time"  required name="followUpTime" class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark]">
+
+                                  </select>
+
                                 </div>
                                 <div id="completedDetails" class="hidden">
                                     <h2 class="text-md mt-4 font-semibold">This patient will be marked as no schedule</h2>
@@ -796,16 +790,6 @@ if ($result && $result->num_rows > 0) {
 
                 if (data) {
 
-                  /*
-                  var availedServices = data.availedService;
-                  var checkboxes = document.querySelectorAll(".checkbox");
-                  checkboxes.forEach(function(checkbox) {
-                    if (availedServices.includes(checkbox.value)) {
-                      checkbox.checked = true;
-                    }
-                  })
-
-                   */
                   $('#availedService').html(data.availedService);
                   document.querySelector('#patientRecordForm input[name="serviceSelected"]').value = data.availedService;
                   document.querySelector('#patientRecordForm input[name="consultation-date"]').value = data.consultationDate;
@@ -918,7 +902,9 @@ if ($result && $result->num_rows > 0) {
             }
           });
 
-
+        document.addEventListener('DOMContentLoaded',function(){
+          getDoctorAvailability(<?php echo $staff_id?>)
+        })
         </script>
 
 
@@ -935,5 +921,6 @@ if ($result && $result->num_rows > 0) {
  */
 
       </script>
+        <script src='../js/doctorAppoimtmentAvailability.js' ></script>
 </body>
 </html>
