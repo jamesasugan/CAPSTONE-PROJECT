@@ -19,6 +19,20 @@ if (isset($_SESSION['user_type']) and $_SESSION['user_type'] == 'staff'){
         }
     }
 }
+if (isset($_SESSION['user_type']) and $_SESSION['user_type'] == 'patient'){
+    $user_id = $_SESSION['user_id'];
+    $getAccOwner_Info = "
+    SELECT * FROM account_user_info
+    WHERE User_ID = ?;
+";
+    $getAccOwner_InfoSTMT = $conn->prepare($getAccOwner_Info);
+    $getAccOwner_InfoSTMT->bind_param('i', $user_id);
+    $getAccOwner_InfoSTMT->execute();
+    $res = $getAccOwner_InfoSTMT->get_result();
+    $row = $res->fetch_assoc();
+    $_SESSION['online_Account_owner_id'] = $row['user_info_ID'];
+}
+
 
 ?>
 

@@ -70,15 +70,10 @@
                 class="hidden sm:block sm:ml-6 text-neutral dark:text-gray-100 content-center"
               >
                 <div class="nav-text flex justify-center flex-grow">
-                  <div
-                    class="flex space-x-4 uppercase font-bold text-xs md:text-xs lg:text-lg"
-                  >
-                    <a
-                      href="bookappointment.php"
-                      class="hover:bg-gray-300 dark:hover:bg-gray-700 dark:hover:text-white px-3 py-2 rounded-md transition duration-300 ease-in-out"
-                    >
-                      Book appointment
-                    </a>
+                  <div class="flex space-x-4 uppercase font-bold text-xs md:text-xs lg:text-lg">
+                      <?php if (isset($_SESSION['user_id']) ): ?>
+                    <a href="bookappointment.php" class="hover:bg-gray-300 dark:hover:bg-gray-700 dark:hover:text-white px-3 py-2 rounded-md transition duration-300 ease-in-out">Book appointment</a>
+                      <?php endif; ?>
                     <a
                       href="doctorschedule.php"
                       class="hover:bg-gray-300 dark:hover:bg-gray-700 dark:hover:text-white px-3 py-2 rounded-md transition duration-300 ease-in-out"

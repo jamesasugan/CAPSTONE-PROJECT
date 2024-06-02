@@ -1,9 +1,10 @@
 <?php
-
+/*
 if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] !== 'XMLHttpRequest') {
     header("Location: 404.php");
     exit();
 }
+*/
 
 
 
@@ -187,6 +188,103 @@ if ($action == 'getDoctorSched'){
     header('Content-Type: application/json');
     echo $schedules_json;
 }
+if ($action == 'getDoctorAvailabilityDate'){
+    $doctor_id = $_GET['doctor_ID'];
+    $getDoctorAvailability = "SELECT Date FROM tbl_availability WHERE Staff_ID = ?";
+    $getAvailabilitySTMT = $conn->prepare($getDoctorAvailability);
+    $getAvailabilitySTMT->bind_param('i', $doctor_id);
+    $getAvailabilitySTMT->execute();
+    $result = $getAvailabilitySTMT->get_result();
+    header('Content-Type: application/json');
+
+    if ($result->num_rows > 0){
+        $dates = array();
+        while($row = $result->fetch_assoc()){
+            $dates[] = $row['Date'];
+        }
+        echo json_encode($dates);
+    } else {
+        echo json_encode(['message' => 'No schedule']);
+    }
+}
+
+if ($action == 'getServices'){
+
+
+}
+
+if ($action == 'getDoctorAvailabilityTime'){
+    $doctor_id = $_GET['doctor_id'];
+    $schedDate = $_GET['schedDate'];
+
+    $schedDaySlot = array();
+    $getDoctorSchedDate = "SELECT * FROM tbl_availability WHERE Date = ? AND Staff_ID = ?";
+    $getDoctorSchedDateSTMT = $conn->prepare($getDoctorSchedDate);
+    $getDoctorSchedDateSTMT->bind_param('si', $schedDate, $doctor_id);
+    $getDoctorSchedDateSTMT->execute();
+    $getDateRes = $getDoctorSchedDateSTMT->get_result();
+
+    if ($getDateRes->num_rows > 0) {
+        $row = $getDateRes->fetch_assoc();
+        $startTime = strtotime($row['StartTime']);
+        $endTime = strtotime($row['EndTime']);
+
+        while ($startTime < $endTime) {
+            $endTimeInterval = min($endTime, $startTime + 1800);
+            $originalStartTime = date("H:i:s", $startTime);
+            $originalEndTime = date("H:i:s", $endTimeInterval);
+            $displayStartTime = date("h:i A", $startTime);
+            $displayEndTime = date("h:i A", $endTimeInterval);
+
+            $timeSlot = "$displayStartTime - $displayEndTime";
+
+            if ($originalStartTime !== $originalEndTime) {
+                $schedDaySlot[$originalStartTime] = $timeSlot;
+            }
+
+            $startTime += 1800;
+        }
+    }
+    $getDoctorAppointment = "SELECT Appointment_schedule FROM tbl_appointment WHERE Staff_ID = ? AND Appointment_schedule LIKE ?";
+    $getDoctorAppointmentStmt = $conn->prepare($getDoctorAppointment);
+    if (!$getDoctorAppointmentStmt) {
+        exit("Failed to prepare statement: " . $conn->error);
+    }
+    $schedDate = '%' . $schedDate . '%';
+    $getDoctorAppointmentStmt->bind_param('is', $doctor_id, $schedDate);
+    $getDoctorAppointmentStmt->execute();
+    $result = $getDoctorAppointmentStmt->get_result();
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+
+            $appointment_schedule = $row['Appointment_schedule'];
+            $time_only = (new DateTime($appointment_schedule))->format('H:i:s');
+            if (array_key_exists($time_only, $schedDaySlot)) {
+                unset($schedDaySlot[$time_only]);
+            }
+
+        }
+    }
+
+    $getchartSched = "SELECT * FROM tbl_patient_chart where Consultant_id = ? and followUp_schedule  LIKE ? ";
+    $getchartSchedSTMT  = $conn->prepare($getchartSched);
+    $getchartSchedSTMT->bind_param('is',$doctor_id, $schedDate);
+    $getchartSchedSTMT->execute();
+    $chartSchedRes = $getchartSchedSTMT->get_result();
+    if ($chartSchedRes->num_rows > 0){
+        $followUpSched = $row['followUp_schedule'];
+        $followUpSchedtimeOnly = (new DateTime($followUpSched))->format('H:i:s');
+        if (array_key_exists($followUpSchedtimeOnly,$schedDaySlot)) {
+            unset($schedDaySlot[$followUpSchedtimeOnly]);
+        }
+    }
+    foreach ($schedDaySlot as $time => $timeSlot) {
+        echo "<option value='$time'>$timeSlot</option>";
+    }
+}
+
+
+
 if ($action == 'getStaffinfo'){
     $staff_id = $_GET['staff_id'];
     $sql = 'SELECT tbl_staff.*, tbl_accounts.*
@@ -245,12 +343,32 @@ if ($action == 'DoctorSchedule') {
 
     if ($startSched !== '' && $endSched !== '' && isValidDate($startSched) && isValidDate($endSched)) {
         $dates = calculateDates($selectedDays, $startSched, $endSched);
-        foreach ($dates as $date) {
-            $sql = "INSERT INTO tbl_availability (Staff_ID, Date, StartTime, EndTime) VALUES (?, ?, ?, ?)";
-            $stmt = $conn->prepare($sql);
-            $stmt->bind_param("ssss", $staff_id, $date, $availability_time_In, $availability_time_end);
-            $stmt->execute();
+        $staffDateAvailability = array();
+        $getDoctorSchedAvailability = "SELECT * FROM tbl_availability where Staff_ID = ?";
+        $getDoctorSchedAvailabilitySTMT = $conn->prepare($getDoctorSchedAvailability);
+        $getDoctorSchedAvailabilitySTMT->bind_param('i',$staff_id);
+        $getDoctorSchedAvailabilitySTMT->execute();
+        $result = $getDoctorSchedAvailabilitySTMT->get_result();
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $staffDateAvailability[] = $row['Date'];
+            }
         }
+
+        foreach ($dates as $date) {
+            if (in_array($date, $staffDateAvailability)) {
+                $sql = "UPDATE tbl_availability SET StartTime = ?, EndTime = ? WHERE Staff_ID = ? AND Date = ?";
+                $stmt = $conn->prepare($sql);
+                $stmt->bind_param("ssss", $availability_time_In, $availability_time_end, $staff_id, $date);
+                $stmt->execute();
+            } else {
+                $sql = "INSERT INTO tbl_availability (Staff_ID, Date, StartTime, EndTime) VALUES (?, ?, ?, ?)";
+                $stmt = $conn->prepare($sql);
+                $stmt->bind_param("ssss", $staff_id, $date, $availability_time_In, $availability_time_end);
+                $stmt->execute();
+            }
+        }
+
 
         echo 1;
         exit();
@@ -311,66 +429,38 @@ if ($action == 'deleteSched'){
     }
 }
 if ($action == 'patientBookAppointment') {
-    $firstName = isset($_POST['first-name']) ? $_POST['first-name'] : '';
-    $middleName = isset($_POST['middle-name']) ? $_POST['middle-name'] : null;
-    $lastName = isset($_POST['last-name']) ? $_POST['last-name'] : '';
-    $dob = isset($_POST['dob']) ? $_POST['dob'] : '';
-    $sex = isset($_POST['sex']) ? $_POST['sex'] : '';
-    $contactNumber = isset($_POST['contact-number']) ? $_POST['contact-number'] : '';
-    $address = isset($_POST['address']) ? $_POST['address'] : '';
-    $user_id = isset($_POST['online_user_id']) ? $_POST['online_user_id'] : '';
-    $patient_email = isset($_POST['email']) ? $_POST['email'] : '';
+    $patientAccountMember = isset($_POST['AppointPerson']) ? $_POST['AppointPerson'] : '';
+    $appointDoctor  = isset($_POST['doctor']) ? $_POST['doctor'] : '';
     $appointment_date = isset($_POST['appointment-date']) ? $_POST['appointment-date'] : '';
     $appointment_time = isset($_POST['appointment-time']) ? $_POST['appointment-time'] : '';
-    $service_field = isset($_POST['service']) ? $_POST['service'] : '';
+    $visitType = isset($_POST['VisitType']) ? $_POST['VisitType'] : '';
     $status = isset($_POST['book_status']) ? $_POST['book_status'] : '';
     $appointment_type = isset($_POST['appointment_type']) ? $_POST['appointment_type'] : '';
-    $vaccination = isset($_POST['vaccinated']) ? $_POST['vaccinated'] : '';
     $agreement_approval = isset($_POST['privacy']) ? $_POST['privacy'] : '';
-    $reason = isset($_POST['reason']) ? $_POST['reason']: '';
-    $service_type = isset($_POST['service-type']) ? $_POST['service-type'] : null;
+    $service_type = isset($_POST['serviceType']) ? $_POST['serviceType'] : '';
 
-    if (!empty($firstName) && !empty($lastName) && !empty($dob)
-        && !empty($sex) && !empty($contactNumber)
-        && !empty($address) && !empty($user_id)
-        && !empty($patient_email) && !empty($appointment_date)
-        && !empty($appointment_time)
-        && !empty($status) && !empty($appointment_type)
-        && !empty($vaccination) && !empty($agreement_approval)
-    ) {
-        $mysqlDate = date('Y-m-d', strtotime($appointment_date));
-        $appointment_schedule = $mysqlDate . ' ' . $appointment_time;
+    if ($patientAccountMember !== '' && $appointDoctor !== '' && $visitType !== '' &&
+        $status !== '' && $appointment_type !== '' &&
+        $agreement_approval !== '' && $service_type !== '' && $appointment_date !== '' && $appointment_time !== '') {
 
-        $sqlPatient = 'INSERT INTO tbl_patient 
-            (user_info_ID, First_Name, Middle_Name, Last_Name, DateofBirth, Sex, Contact_Number, patientEmail, Address) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
-        $stmtPatient = $conn->prepare($sqlPatient);
-        $stmtPatient->bind_param("issssssss", $user_id, $firstName, $middleName, $lastName, $dob, $sex, $contactNumber, $patient_email, $address);
 
-        if ($stmtPatient->execute()) {
-            $patientID = $stmtPatient->insert_id;
+        $appointment_schedule = $appointment_date . ' ' . $appointment_time;
+        $sqlAppointment = "INSERT INTO tbl_appointment (Staff_ID, Account_Patient_ID_Member, Appointment_schedule, Status, AgreementApproval, ServiceType, Appointment_type, VisitType)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        $stmtAppointment = $conn->prepare($sqlAppointment);
+        $stmtAppointment->bind_param('iissssss', $appointDoctor, $patientAccountMember, $appointment_schedule, $status, $agreement_approval, $service_type, $appointment_type, $visitType);
 
-            $sqlAppointment = "INSERT INTO tbl_appointment 
-                (Patient_ID, Appointment_schedule,  Status, Appointment_type, Vaccination, reason, AgreementApproval) 
-                VALUES (?, ?, ?, ?,  ?, ?,?)";
-            $stmtAppointment = $conn->prepare($sqlAppointment);
-            $stmtAppointment->bind_param('issssss', $patientID,
-                $appointment_schedule,  $status,
-                $appointment_type, $vaccination, $reason, $agreement_approval);
-
-            if ($stmtAppointment->execute()) {
-                echo 1; // Success
-                exit();
-            } else {
-                echo 'Failed to insert appointment';
-            }
+        if ($stmtAppointment->execute()) {
+            echo 1;
+            exit();
         } else {
-            echo 'Failed to insert patient';
+            echo 'Failed to insert appointment';
         }
     } else {
-        echo "Error occurred while booking appointment.";
+        echo "Some input field are empty";
     }
 }
+
 
 if ($action == 'getUserInfo'){
     $UID = $_SESSION['user_id'];
@@ -504,13 +594,13 @@ if ($action == 'editUserInfo'){
 }
 
 if ($action == 'getAppointmentInfo'){
-    $patient_id = $_GET['patient_id'];
+    $patientAppointment_ID = $_GET['patientAppointment_ID'];
     $sql = "SELECT *
             FROM `tbl_accountpatientmember` 
             JOIN `tbl_appointment` ON `tbl_appointment`.`Account_Patient_ID_Member` = `tbl_accountpatientmember`.`Account_Patient_ID_Member`
-            where `tbl_appointment`.`Account_Patient_ID_Member` = ?;";
+            where `tbl_appointment`.`Appointment_ID` = ?;";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param('i', $patient_id);
+    $stmt->bind_param('i', $patientAppointment_ID);
     $stmt->execute();
     $result = $stmt->get_result();
     if ($result && $result->num_rows > 0){
