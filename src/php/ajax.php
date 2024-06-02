@@ -189,6 +189,67 @@ if ($action == 'getDoctorSched'){
     header('Content-Type: application/json');
     echo $schedules_json;
 }
+if ($action == 'DoctorSchedule') {
+    $staff_id = isset($_POST['DoctorID']) ? $_POST['DoctorID'] : '';
+    $monday = isset($_POST['monday']);
+    $tuesday = isset($_POST['tuesday']);
+    $wednesday = isset($_POST['wednesday']);
+    $thursday = isset($_POST['thursday']);
+    $friday = isset($_POST['friday']);
+    $saturday = isset($_POST['saturday']);
+    $availability_time_In = isset($_POST['availability-timeIn']) ? $_POST['availability-timeIn'] : '';
+    $availability_time_end = isset($_POST['availability-timeEnd']) ? $_POST['availability-timeEnd'] : '';
+    $startSched = isset($_POST['repeatStart']) ? $_POST['repeatStart'] : '';
+    $endSched = isset($_POST['repeatEnd']) ? $_POST['repeatEnd'] : '';
+
+    $selectedDays = [];
+    if ($monday) $selectedDays[] = 1; // Monday
+    if ($tuesday) $selectedDays[] = 2; // Tuesday
+    if ($wednesday) $selectedDays[] = 3; // Wednesday
+    if ($thursday) $selectedDays[] = 4; // Thursday
+    if ($friday) $selectedDays[] = 5; // Friday
+    if ($saturday) $selectedDays[] = 6; // Saturday
+
+    if ($startSched !== '' && $endSched !== '' && isValidDate($startSched) && isValidDate($endSched)) {
+        $dates = calculateDates($selectedDays, $startSched, $endSched);
+        $staffDateAvailability = array();
+        $getDoctorSchedAvailability = "SELECT * FROM tbl_availability where Staff_ID = ?";
+        $getDoctorSchedAvailabilitySTMT = $conn->prepare($getDoctorSchedAvailability);
+        $getDoctorSchedAvailabilitySTMT->bind_param('i',$staff_id);
+        $getDoctorSchedAvailabilitySTMT->execute();
+        $result = $getDoctorSchedAvailabilitySTMT->get_result();
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $staffDateAvailability[] = $row['Date'];
+            }
+        }
+
+        foreach ($dates as $date) {
+            if (in_array($date, $staffDateAvailability)) {
+                $sql = "UPDATE tbl_availability SET StartTime = ?, EndTime = ? WHERE Staff_ID = ? AND Date = ?";
+                $stmt = $conn->prepare($sql);
+                $stmt->bind_param("ssss", $availability_time_In, $availability_time_end, $staff_id, $date);
+                $stmt->execute();
+            } else {
+                $sql = "INSERT INTO tbl_availability (Staff_ID, Date, StartTime, EndTime) VALUES (?, ?, ?, ?)";
+                $stmt = $conn->prepare($sql);
+                $stmt->bind_param("ssss", $staff_id, $date, $availability_time_In, $availability_time_end);
+                $stmt->execute();
+            }
+        }
+
+
+        echo 1;
+        exit();
+    } else{
+        echo 'Some error occurred';
+    }
+
+}
+
+
+
+
 if ($action == 'getDoctorAvailabilityDate'){
     $doctor_id = $_GET['doctor_ID'];
     $getDoctorAvailability = "SELECT Date FROM tbl_availability WHERE Staff_ID = ?";
@@ -284,102 +345,6 @@ if ($action == 'getDoctorAvailabilityTime'){
     }
 }
 
-
-
-if ($action == 'getStaffinfo'){
-    $staff_id = $_GET['staff_id'];
-    $sql = 'SELECT tbl_staff.*, tbl_accounts.*
-            FROM tbl_staff
-            JOIN tbl_accounts ON tbl_staff.User_ID = tbl_accounts.User_ID
-            WHERE tbl_staff.Staff_ID = ?';
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param('i', $staff_id );
-    $stmt->execute();
-    $result = $stmt->get_result();
-    if ($result && $result->num_rows > 0){
-        $row = $result->fetch_assoc();
-        header('Content-Type: application/json');
-        echo json_encode($row);
-    }
-    exit();
-}
-if ($action == 'getPatientInfo'){
-    $patient_id = $_GET['online_user_id'];
-    $sql = "SELECT account_user_info.*, tbl_accounts.*
-            FROM account_user_info
-            JOIN tbl_accounts ON account_user_info.User_ID = tbl_accounts.User_ID
-            WHERE    
-           account_user_info.user_info_ID = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param('i', $patient_id );
-    $stmt->execute();
-    $result = $stmt->get_result();
-    if ($result && $result->num_rows > 0){
-        $row = $result->fetch_assoc();
-        header('Content-Type: application/json');
-        echo json_encode($row);
-    }
-    exit();
-}
-if ($action == 'DoctorSchedule') {
-    $staff_id = isset($_POST['DoctorID']) ? $_POST['DoctorID'] : '';
-    $monday = isset($_POST['monday']);
-    $tuesday = isset($_POST['tuesday']);
-    $wednesday = isset($_POST['wednesday']);
-    $thursday = isset($_POST['thursday']);
-    $friday = isset($_POST['friday']);
-    $saturday = isset($_POST['saturday']);
-    $availability_time_In = isset($_POST['availability-timeIn']) ? $_POST['availability-timeIn'] : '';
-    $availability_time_end = isset($_POST['availability-timeEnd']) ? $_POST['availability-timeEnd'] : '';
-    $startSched = isset($_POST['repeatStart']) ? $_POST['repeatStart'] : '';
-    $endSched = isset($_POST['repeatEnd']) ? $_POST['repeatEnd'] : '';
-
-    $selectedDays = [];
-    if ($monday) $selectedDays[] = 1; // Monday
-    if ($tuesday) $selectedDays[] = 2; // Tuesday
-    if ($wednesday) $selectedDays[] = 3; // Wednesday
-    if ($thursday) $selectedDays[] = 4; // Thursday
-    if ($friday) $selectedDays[] = 5; // Friday
-    if ($saturday) $selectedDays[] = 6; // Saturday
-
-    if ($startSched !== '' && $endSched !== '' && isValidDate($startSched) && isValidDate($endSched)) {
-        $dates = calculateDates($selectedDays, $startSched, $endSched);
-        $staffDateAvailability = array();
-        $getDoctorSchedAvailability = "SELECT * FROM tbl_availability where Staff_ID = ?";
-        $getDoctorSchedAvailabilitySTMT = $conn->prepare($getDoctorSchedAvailability);
-        $getDoctorSchedAvailabilitySTMT->bind_param('i',$staff_id);
-        $getDoctorSchedAvailabilitySTMT->execute();
-        $result = $getDoctorSchedAvailabilitySTMT->get_result();
-        if ($result->num_rows > 0) {
-            while ($row = $result->fetch_assoc()) {
-                $staffDateAvailability[] = $row['Date'];
-            }
-        }
-
-        foreach ($dates as $date) {
-            if (in_array($date, $staffDateAvailability)) {
-                $sql = "UPDATE tbl_availability SET StartTime = ?, EndTime = ? WHERE Staff_ID = ? AND Date = ?";
-                $stmt = $conn->prepare($sql);
-                $stmt->bind_param("ssss", $availability_time_In, $availability_time_end, $staff_id, $date);
-                $stmt->execute();
-            } else {
-                $sql = "INSERT INTO tbl_availability (Staff_ID, Date, StartTime, EndTime) VALUES (?, ?, ?, ?)";
-                $stmt = $conn->prepare($sql);
-                $stmt->bind_param("ssss", $staff_id, $date, $availability_time_In, $availability_time_end);
-                $stmt->execute();
-            }
-        }
-
-
-        echo 1;
-        exit();
-    } else{
-        echo 'Some error occurred';
-    }
-
-}
-
-
 if ($action == 'deleteSched'){
     $passWord_conf = $_POST['conf_passoword'];
     $sql = "SELECT * FROM tbl_accounts WHERE User_ID = ?";
@@ -429,6 +394,43 @@ if ($action == 'deleteSched'){
         echo 2;
     }
 }
+
+if ($action == 'getStaffinfo'){
+    $staff_id = $_GET['staff_id'];
+    $sql = 'SELECT tbl_staff.*, tbl_accounts.*
+            FROM tbl_staff
+            JOIN tbl_accounts ON tbl_staff.User_ID = tbl_accounts.User_ID
+            WHERE tbl_staff.Staff_ID = ?';
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param('i', $staff_id );
+    $stmt->execute();
+    $result = $stmt->get_result();
+    if ($result && $result->num_rows > 0){
+        $row = $result->fetch_assoc();
+        header('Content-Type: application/json');
+        echo json_encode($row);
+    }
+    exit();
+}
+if ($action == 'getPatientInfo'){
+    $patient_id = $_GET['online_user_id'];
+    $sql = "SELECT account_user_info.*, tbl_accounts.*
+            FROM account_user_info
+            JOIN tbl_accounts ON account_user_info.User_ID = tbl_accounts.User_ID
+            WHERE    
+           account_user_info.user_info_ID = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param('i', $patient_id );
+    $stmt->execute();
+    $result = $stmt->get_result();
+    if ($result && $result->num_rows > 0){
+        $row = $result->fetch_assoc();
+        header('Content-Type: application/json');
+        echo json_encode($row);
+    }
+    exit();
+}
+
 if ($action == 'patientBookAppointment') {
     $patientAccountMember = isset($_POST['AppointPerson']) ? $_POST['AppointPerson'] : '';
     $appointDoctor  = isset($_POST['doctor']) ? $_POST['doctor'] : '';
