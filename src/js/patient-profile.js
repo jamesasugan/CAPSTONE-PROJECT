@@ -6,6 +6,17 @@ document.addEventListener('DOMContentLoaded', function () {
   initializeSecurityForm();
 });
 
+// for dob in relative
+document.addEventListener('DOMContentLoaded', function () {
+  var inputDob = document.getElementById('relativeDob');
+  if (inputDob) {
+    // Check if the element exists
+    var today = new Date();
+    var maxDate = today.toISOString().split('T')[0]; // format yyyy-mm-dd
+    inputDob.max = maxDate;
+  }
+});
+
 function setupPasswordToggle(passwordId, iconId) {
   const passwordInput = document.getElementById(passwordId);
   const icon = document.getElementById(iconId);

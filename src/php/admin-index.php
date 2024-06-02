@@ -63,5 +63,7 @@ if ($result->num_rows > 0) {
 
      <?php include 'admin-dashboard.php'; ?>
 
+     <?php include 'admin-servicesList.php'; ?>
+
   </body>
 </html>

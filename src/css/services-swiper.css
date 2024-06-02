@@ -22,7 +22,7 @@
 .custom-slide img {
   display: block;
   width: 100%;
-  height: 100%;
+  justify-content: center;
   object-fit: cover; /* Ensures the image covers the slide */
   transition: transform 0.3s ease; /* Smooth transition for zoom effect */
 }
@@ -43,17 +43,16 @@
 .btn-card {
   position: absolute;
   bottom: 10%;
-  left: 50%;
-  transform: translateX(-50%);
+  left: 36%;
   z-index: 30;
-  padding: 0.5em 1em; /* Example padding, adjust as needed */
   margin: 0; /* Reset margin */
-  transition: 0.15s;
-  background-color: #78afe2;
-  color: white;
 }
-.btn-card:hover {
-  background-color: #658eb5;
+.btn-edit {
+  position: absolute;
+  bottom: 45%;
+  left: 43%;
+  z-index: 30;
+  margin: 0; /* Reset margin */
 }
 
 .custom-slide:hover img {
@@ -64,7 +63,6 @@
   flex-shrink: 0; /* Prevents the text section from shrinking */
   width: 100%; /* Full width */
   text-align: center;
-  padding: 0.5rem 1rem; /* Padding for spacing around text */
 }
 
 .swiper-container {

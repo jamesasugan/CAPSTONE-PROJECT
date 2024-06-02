@@ -78,7 +78,7 @@ $accountOwner_ID = $row['user_info_ID'];
                         Password
                     </li>
                   <li id="AccountMember" class="sidebar-item cursor-pointer text-black dark:text-white py-2 px-4 transition-colors duration-200">
-                    Account Appointment Member
+                    Account Members
                   </li>
                     <li id="appointmentHistoryTab" class="sidebar-item cursor-pointer text-black dark:text-white py-2 px-4 transition-colors duration-200">
                         Appointment History
@@ -172,11 +172,13 @@ $accountOwner_ID = $row['user_info_ID'];
                       required
                       disabled
                       placeholder="Contact Number"
-                      pattern="[0-9]{1,11}"
+                      pattern="[0-9]*"
                       minlength="11"
                       maxlength="11"
-                      class="input input-bordered appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none text-base sm:text-lg bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400 disabled:border-gray-300"
-                      
+                      title="Please enter a 11-digit contact number."
+                      class="numeric-input input input-bordered appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none text-base sm:text-lg bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400 disabled:border-gray-300"
+                      oninput="setCustomValidity('');"
+                      oninvalid="setCustomValidity(this.value.length < 11 ? 'Please enter 11 digits' : 'Please enter 11 digits, you are currently using ' + this.value.length + ' digits.');"
                     />
                   </div>
                   <!-- Date of Birth, Sex -->
@@ -347,9 +349,13 @@ $accountOwner_ID = $row['user_info_ID'];
 
           <div id="Memberstab" class="flex-1 p-10 hidden">
             <div class="bg-gray-200 dark:bg-gray-700 p-5 rounded-lg h-full">
-              <h3 class="text-2xl font-bold text-black dark:text-white mb-4">
-                Account Appointment Members
-              </h3>
+                <div class="flex justify-between mb-3">
+                  <h3 class="text-2xl font-bold text-black dark:text-white mb-4">
+                    Account Members
+                  </h3>
+                    <button class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none" onclick='toggleDialog("addRelative")'>Add a Relative</button>          
+                </div>
+                
               <div class="overflow-x-auto">
                 <table class="table">
                   <!-- head -->
@@ -636,6 +642,220 @@ ORDER BY CASE WHEN `tbl_appointment`.`Status` = 'pending' THEN 0 ELSE 1 END, `tb
       </div>
     </dialog>
 
+    <!-- add a relative modal -->
+    <dialog id="addRelative"  class="modal bg-opacity-50 bg-black">
+      <div class="modal-box w-11/12 max-w-7xl bg-gray-200 dark:bg-gray-700">
+
+        <div class="flex flex-col sm:flex-row justify-between items-center">
+          <div class="order-2 sm:order-1">
+            <h3 class="font-bold text-black dark:text-white text-2xl sm:text-4xl mb-2 sm:mb-0">Add a Relative</h3>
+          </div>
+          <div class="order-1 sm:order-2 mb-2 sm:mb-0">
+            <img src="../images/HCMC-blue.png" class="block h-10 lg:h-16 w-auto dark:hidden" alt="logo-light" />
+            <img src="../images/HCMC-white.png" class="h-10 lg:h-16 w-auto hidden dark:block" alt="logo-dark" />
+          </div>
+        </div>
+
+        <form id="addRelativeform" action="#" method="GET" class="space-y-6">
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">    
+              <div class="form-group">
+                    <label for="relation" class="block font-medium text-black dark:text-white text-base sm:text-lg">
+                      Relation to this person:
+                    </label>
+                    <select
+                      id="relation"
+                      name="relation"
+                      class="select select-bordered appearance-none block w-full px-3 border-gray-300 rounded-md shadow-sm focus:outline-none text-base sm:text-lg bg-white dark:bg-gray-600 text-black dark:text-white"
+                      required
+                      onchange="handleRelationChange()"
+                    >
+                      <option value="">Select...</option>
+                      <option value="Spouse">Spouse</option>
+                      <option value="Child">Child</option>
+                      <option value="Parent">Parent</option>
+                      <option value="Sibling">Sibling</option>
+                      <option value="Others">Others</option>
+                    </select>
+                </div>
+
+                <div class="form-group" id="otherRelationContainer" style="display: none;">
+                    <label for="otherRelation" class="block font-medium text-black dark:text-white text-base sm:text-lg">
+                      Please specify:
+                    </label>
+                    <input
+                      type="text"
+                      id="otherRelation"
+                      name="otherRelation"
+                      placeholder="Type here..."
+                      class="input input-bordered appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none text-base sm:text-lg bg-white dark:bg-gray-600 text-black dark:text-white  whitespace-nowrap overflow-hidden text-ellipsis"
+                    />
+                </div>
+          </div>
+              
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">           
+                  <div class="form-group">
+                    <label
+                      for="relativeFname"
+                      class="block font-medium text-black dark:text-white text-base sm:text-lg overflow-hidden whitespace-nowrap text-overflow-ellipsis"
+                      >First Name</label
+                    >
+                    <input
+                      id="relativeFname"
+                      name="relativeFname"
+                      type="text"
+                      value=""
+                      autocomplete="off"
+                      required
+                      placeholder="First Name"
+                      class="input input-bordered appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none text-base sm:text-lg bg-white dark:bg-gray-600 text-black dark:text-white  whitespace-nowrap overflow-hidden text-ellipsis"         
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label
+                      for="relativeMiddlename"
+                      class="block font-medium text-black dark:text-white text-base sm:text-lg whitespace-nowrap overflow-hidden text-ellipsis "
+                      >Middle Name</label
+                    >
+                    <input
+                      id="relativeMiddlename"
+                      name="relativeMiddlename"
+                      type="text"
+                      value=""
+                      autocomplete="off"
+                      required
+                      placeholder="Middle Name"
+                      class="input input-bordered appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none text-base sm:text-lg bg-white dark:bg-gray-600 text-black dark:text-white "
+                      
+                    />
+                  </div>
+                  <!-- Last Name & Contact Number -->
+                  <div class="form-group">
+                    <label
+                      for="relativeLastname"
+                      class="block font-medium text-black dark:text-white text-base sm:text-lg whitespace-nowrap overflow-hidden text-ellipsis"
+                      >Last Name</label
+                    >
+                    <input
+                      id="relativeLastname"
+                      name="relativeLastname"
+                      type="text"
+                      value=""
+                      autocomplete="off"
+                      required
+                      placeholder="Last Name"
+                      class="input input-bordered appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none text-base sm:text-lg bg-white dark:bg-gray-600 text-black dark:text-white "
+                      
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label
+                      for="relativeWeight"
+                      class="block font-medium text-black dark:text-white text-base sm:text-lg whitespace-nowrap overflow-hidden text-ellipsis"
+                      >Weight (optional)</label
+                    >
+                    <input
+                      id="relativeWeight"
+                      name="relativeWeight"
+                      type="number"
+                      value=""
+                      autocomplete="off"
+                      placeholder="Weight"
+                      class="input input-bordered appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none text-base sm:text-lg bg-white dark:bg-gray-600 text-black dark:text-white "
+                      
+                    />
+                  </div>
+                  <!-- Date of Birth, Sex -->
+                  <div class="form-group">
+                    <label
+                      for="relativeDob"
+                      class="block font-medium text-black dark:text-white text-base sm:text-lg whitespace-nowrap overflow-hidden text-ellipsis"
+                      >Date of Birth</label
+                    >
+                    <input
+                      id="relativeDob"
+                      name="relativeDob"
+                      type="date"
+                      class="input input-bordered w-full p-2 text-xs sm:text-lg bg-white dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark] text-black dark:text-white "
+                      required
+                      
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label
+                      for="relativeSex"
+                      class="block font-medium text-black dark:text-white text-base sm:text-lg"
+                      >Sex</label
+                    >
+                    <select
+                      id="relativeSex"
+                      name="sex"
+                      class="select select-bordered appearance-none block w-full px-3 border-gray-300 rounded-md shadow-sm focus:outline-none text-base sm:text-lg bg-white dark:bg-gray-600 text-black dark:text-white "
+                      required
+                    >
+                      <option value="">Select...</option>
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label
+                      for="relativeMedcondition"
+                      class="block font-medium text-black dark:text-white text-base sm:text-lg whitespace-nowrap overflow-hidden text-ellipsis"
+                      >Medical Conditions, if any:</label
+                    >
+                    <input
+                      id="relativeMedcondition"
+                      name="relativeMedcondition"
+                      type="text"
+                      value=""
+                      autocomplete="off"
+                      placeholder="Medical Conditions"
+                      class="input input-bordered appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none text-base sm:text-lg bg-white dark:bg-gray-600 text-black dark:text-white "
+                      
+                    />
+                  </div>
+
+                  <div class="form-group">
+                    <div class="block text-base sm:text-lg font-medium mb-1 text-black dark:text-white">Does this person live with you?</div>
+                    <div class="flex items-center space-x-4 p-2 bg-gray-300 dark:bg-gray-600 rounded">
+                      <label class="flex items-center">
+                        <input type="radio" name="addressInfo" value="Yes" class="radio radio-primary" required onchange="handleAddressChange()">
+                        <span class="ml-2 text-black dark:text-white">Yes</span>
+                      </label>
+                      <label class="flex items-center">
+                        <input type="radio" name="addressInfo" value="No" class="radio radio-primary" required onchange="handleAddressChange()">
+                        <span class="ml-2 text-black dark:text-white">No</span>
+                      </label>
+                    </div>
+                  </div>
+
+                  <!-- Address -->
+                  <div class="form-group col-span-1 md:col-span-2" id="addressContainer" style="display: none;">
+                    <label for="relativeAddress" class="block font-medium text-black dark:text-white text-base sm:text-lg">
+                      Address
+                    </label>
+                    <input
+                      id="relativeAddress"
+                      name="relativeAddress"
+                      type="text"
+                      placeholder="Address"
+                      class="input input-bordered appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none text-base sm:text-lg bg-white dark:bg-gray-600 text-black dark:text-white"
+                    />
+                  </div>
+                  <div class="flex justify-center">
+                    <input type="submit" value="Add" class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none px-8">         
+                  </div>  
+                </div>      
+                  
+              </form>
+
+        <div class="modal-action">
+            <button class="btn bg-gray-400 dark:bg-white hover:bg-gray-500 dark:hover:bg-gray-400  text-black  border-none" onclick='toggleDialog("addRelative")'>Close</button>
+        </div>
+      </div>
+    </dialog>
+
       <script src='../js/usersInfo.js' defer></script>
     <script>
       function getPatientAppointmentInfo(id) {
@@ -701,6 +921,31 @@ ORDER BY CASE WHEN `tbl_appointment`.`Status` = 'pending' THEN 0 ELSE 1 END, `tb
       }
 
 
+    </script>
+
+    <!-- script para sa others -->
+    <script>
+      function handleRelationChange() {
+      const relationSelect = document.getElementById('relation');
+      const otherRelationContainer = document.getElementById('otherRelationContainer');
+      
+      if (relationSelect.value === 'Others') {
+        otherRelationContainer.style.display = 'block';
+      } else {
+        otherRelationContainer.style.display = 'none';
+      }
+    }
+
+    function handleAddressChange() {
+      const addressInfo = document.querySelector('input[name="addressInfo"]:checked').value;
+      const addressContainer = document.getElementById('addressContainer');
+      
+      if (addressInfo === 'No') {
+        addressContainer.style.display = 'block';
+      } else {
+        addressContainer.style.display = 'none';
+      }
+    }
     </script>
 
     </body>
