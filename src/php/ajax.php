@@ -119,6 +119,7 @@ if ($action == "login"){
         if (password_verify($login_password, $row['Password'])) {
             $_SESSION['user_id'] = $row['User_ID'];
             $_SESSION['user_type'] = $row['userType'];
+            $_SESSION['userEmail'] = $row['Email'];
             echo 1;
         } else {
             echo 2;//invalid pass
@@ -1063,11 +1064,120 @@ if ($action === 'getPatientApppointmentInfoJSON') {
             header('Content-Type: application/json');
             echo json_encode($rows);
         } else {
-            // Handle the error for statement preparation failure
             echo json_encode(['error' => 'Statement preparation failed']);
         }
     } else {
-        // Handle the error for missing data_id parameter
+
         echo json_encode(['error' => 'Missing data_id parameter']);
     }
+}
+if ($action === 'AccountMemberPostReq'){
+    $accownerId = isset($_POST['onlineOwnerId']) ? intval($_POST['onlineOwnerId']) : 0;
+    $ownerAddress = '';
+    $ownerEmail = $_SESSION['userEmail'];
+    $ownerContact = '';
+    $getAccountInfoAddress = "SELECT * FROM account_user_info WHERE user_info_ID = ?";
+    $getAccountInfoAddressSTMT = $conn->prepare($getAccountInfoAddress);
+    $getAccountInfoAddressSTMT->bind_param('i', $accownerId);
+    $getAccountInfoAddressSTMT->execute();
+    $result = $getAccountInfoAddressSTMT->get_result();
+
+    if ($result->num_rows === 1) {
+        $row = $result->fetch_assoc();
+        $ownerAddress = $row['Address'];
+        $ownerContact = $row['Contact_Number'];
+
+    }else{
+        echo 'Getting Account owner info failed';
+        exit();
+    }
+    $relation = isset($_POST['relation']) && $_POST['relation'] != 'Others'? $_POST['relation'] : (isset($_POST['otherRelation']) ? $_POST['otherRelation'] : '');
+    $relativeFname = isset($_POST['relativeFname']) ? $_POST['relativeFname'] : '';
+    $relativeMiddlename = isset($_POST['relativeMiddlename']) ? $_POST['relativeMiddlename'] : '';
+    $relativeLastname = isset($_POST['relativeLastname']) ? $_POST['relativeLastname'] : '';
+    $relativeWeight = isset($_POST['relativeWeight']) ? $_POST['relativeWeight'] : '';
+    $relativeDob = isset($_POST['relativeDob']) ? $_POST['relativeDob'] : '';
+    $relativeSex = isset($_POST['sex']) ? $_POST['sex'] : '';
+    $relativeMedcondition = isset($_POST['relativeMedcondition']) ? $_POST['relativeMedcondition'] : 'N/A';
+    $addressInfo = (isset($_POST['addressInfo']) && $_POST['addressInfo'] === 'Yes') ? $ownerAddress : (isset($_POST['relativeAddress']) ? $_POST['relativeAddress'] : '');
+    $accountmemeberID = isset($_POST['accountmemeberID']) ? $_POST['accountmemeberID'] : '';
+    $actionType = isset($_POST['actionType']) ? $_POST['actionType'] : '';
+
+    if ($relation !== '' && $relativeFname !== '' && $relativeMiddlename !== '' && $relativeLastname !== '' && $relativeWeight !== '' &&
+    $relativeDob !== '' && $relativeSex !== '' && $addressInfo !== '' && $accownerId){
+
+        if ($actionType == 'Edit' and $accountmemeberID != 0){
+            $updateAccAppointmentMember = "UPDATE tbl_accountpatientmember 
+                                   SET First_Name=?, Middle_Name=?, Last_Name=?, DateofBirth=?, 
+                                       Sex=?, Contact_Number=?, MemberPatientEmail=?, 
+                                       Address=?, Medical_condition=?, RelationshipType=?
+                                   WHERE Account_Patient_ID_Member  = ?";
+            $updateAccAppointmentMemberSTMT = $conn->prepare($updateAccAppointmentMember);
+            $updateAccAppointmentMemberSTMT->bind_param('ssssssssssi', $relativeFname, $relativeMiddlename,
+                $relativeLastname, $relativeDob, $relativeSex,
+                $ownerContact, $ownerEmail, $addressInfo,
+                $relativeMedcondition, $relation, $accountmemeberID);
+
+            if ($updateAccAppointmentMemberSTMT->execute()){
+                echo 2;
+                exit();
+            }else{
+                echo $updateAccAppointmentMemberSTMT->error;
+            }
+        }elseif ($actionType == 'Add'){
+            $newAccAppointmentMember = "INSERT INTO tbl_accountpatientmember (user_info_ID,  First_Name	,
+                              Middle_Name	,Last_Name	,DateofBirth	,Sex	,Contact_Number
+                              	,MemberPatientEmail	,Address	,Medical_condition	,RelationshipType)
+    VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+            $newAccAppointmentMemberSTMT  = $conn->prepare($newAccAppointmentMember);
+            $newAccAppointmentMemberSTMT->bind_param('issssssssss', $accownerId, $relativeFname
+                ,$relativeMiddlename, $relativeLastname, $relativeDob, $relativeSex, $ownerContact, $ownerEmail,
+                $addressInfo, $relativeMedcondition, $relation);
+            if ($newAccAppointmentMemberSTMT->execute()){
+                echo 2;
+                exit();
+            }else{
+                echo $newAccAppointmentMemberSTMT->error;
+            }
+        }else{
+            echo $actionType;
+        }
+    } else {
+        echo "Some Fields are empty ";
+
+    }
+}
+if ($action == 'getAccountMemberDataJSON'){
+    $accountMemberID = $_GET['data_id'];
+    $accOwnerId = $_GET['SessionUserID'];
+    $getAccountMemberSql = "SELECT * FROM tbl_accountpatientmember where Account_Patient_ID_Member = ? and user_info_ID = ? where status = 'Active'";
+    $getAccountMemberSqlSTMT = $conn->prepare($getAccountMemberSql);
+    $getAccountMemberSqlSTMT->bind_param('ii',$accountMemberID, $accOwnerId);
+
+    if ($getAccountMemberSqlSTMT->execute()){
+        $result = $getAccountMemberSqlSTMT->get_result();
+        if ($result->num_rows === 1){
+            $row = $result->fetch_assoc();
+            header('Content-Type: application/json');
+            echo json_encode($row);
+            exit();
+        }else{
+            echo json_encode(['message' => 'No available Data']);
+        }
+    }
+}
+if ($action == 'DeleteAccountAppointmentMember'){
+    $accountMemberID = $_GET['data_id'];
+    $accOwnerId = $_GET['SessionUserID'];
+    $changeMemberStat = "UPDATE tbl_accountpatientmember SET status = 'Removed' where Account_Patient_ID_Member  = ? and  user_info_ID  = ?";
+    $changeMemberStatSTMT = $conn->prepare($changeMemberStat);
+    $changeMemberStatSTMT->bind_param('ii', $accountMemberID, $accOwnerId);
+    if ($changeMemberStatSTMT->execute()){
+        echo 1;
+        exit();
+    }else{
+        echo $changeMemberStatSTMT->error;
+        exit();
+    }
+
 }
