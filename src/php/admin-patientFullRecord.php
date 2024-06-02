@@ -33,7 +33,23 @@ $stmt->execute();
 $result = $stmt->get_result(); // Fetch the result
 if ($result && $result->num_rows > 0){
     $row = $result->fetch_assoc();
-    $middleInitial = (strlen($row['Middle_Name']) >= 1) ? substr($row['Middle_Name'], 0, 1) : '';
+    $middleInitial =
+        strlen($row['Middle_Name']) >= 1
+            ? substr($row['Middle_Name'], 0, 1)
+            : '';
+    $Patient_firstname = $row['First_Name'];
+    $Patient_lastname = $row['Last_Name'];
+    $Patient_middle_name = $row['Middle_Name'];
+    $Patient_ContactNumber = $row['Contact_Number'];
+    $Patient_Email = $row['patientEmail'];
+    $Patient_address = $row['Address'];
+    $appointmentType = '';
+    $patientDOB =  $row['DateofBirth'];
+    $patientVacStat = '';
+    $patient_Sex = $row['Sex'];
+
+    $patient_status = $row['patient_Status'];
+
     $statusClass = '';
     switch ($row['patient_Status']) {
         case 'To be Seen':
@@ -132,14 +148,14 @@ if ($result && $result->num_rows > 0){
                 
                 <div class="patientInfo mb-10 mt-5">
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-1 text-lg sm:text-xl">
-                                <h2 class="text-lg sm:text-xl font-bold">Status: <span class="<?php echo $statusClass;?>"><?php echo $row['patient_Status']?></span></h2>
-                              <p><strong>Name: </strong> <?php echo $row['First_Name'] . ' ' . $middleInitial . '. ' . $row['Last_Name']; ?></p>
+                                <h2 class="text-lg sm:text-xl font-bold">Status: <span class="<?php echo $statusClass;?>"><?php echo $patient_status?></span></h2>
+                              <p><strong>Name: </strong> <?php echo $Patient_firstname . ' ' . $middleInitial . '. ' . $Patient_lastname; ?></p>
                               <p><strong>Contact Number: </strong> <?php echo $row[ 'Contact_Number']; ?></p>
-                              <p><strong>Age: </strong> <?php echo (new DateTime($row['DateofBirth']))->diff(new DateTime)->y; ?></p>
+                              <p><strong>Age: </strong> <?php echo (new DateTime($patientDOB))->diff(new DateTime)->y; ?></p>
                               <p><strong>Sex: </strong> <?php echo $row['Sex']; ?></p>
-                              <p><strong>Email: </strong><?php echo $row['patientEmail']; ?></p>
-                              <p><strong>Address:</strong> <?php echo $row['Address']; ?></p>
-                              <p><strong>Date of Birth: </strong><?php echo   date("F j, Y", strtotime($row['DateofBirth']));?></p>
+                              <p><strong>Email: </strong><?php echo $Patient_Email; ?></p>
+                              <p><strong>Address:</strong> <?php echo $Patient_address; ?></p>
+                              <p><strong>Date of Birth: </strong><?php echo   date("F j, Y", strtotime($patientDOB));?></p>
                               <p><strong>Service Type: </strong><span id='availedService'>N/A</span> </p>
                             </div>
                         </div>

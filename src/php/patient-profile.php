@@ -356,7 +356,8 @@ $accountOwner_ID = $_SESSION['online_Account_owner_id'];
                   <h3 class="text-2xl font-bold text-black dark:text-white mb-4">
                     Account Members
                   </h3>
-                    <button class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none" onclick='toggleDialog("addRelative")'>Add a Relative</button>          
+                    <button class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none" onclick='toggleDialog("addRelative") ;
+                  changeInputvalue("actionType","Add");changeInputvalue("accountmemeberID","0") '>Add a Relative</button>
                 </div>
                 
               <div class="overflow-x-auto">
@@ -372,7 +373,7 @@ $accountOwner_ID = $_SESSION['online_Account_owner_id'];
                   <tbody>
                   <?php
                   $sql = "
-    SELECT * FROM tbl_accountpatientmember WHERE user_info_ID = ?";
+    SELECT * FROM tbl_accountpatientmember WHERE user_info_ID = ? and status = 'Active'";
                   $stmt = $conn->prepare($sql);
                   $stmt->bind_param('i', $accountOwner_ID);
                   $stmt->execute();
@@ -385,8 +386,8 @@ $accountOwner_ID = $_SESSION['online_Account_owner_id'];
                 <td class="w-1/4">' . $row['First_Name'] . ' ' . $middleInitial . '. ' . $row['Last_Name'] . '</td>
                 <td>' . $row['RelationshipType'] . '</td>
                 <td class="w-1/12 pl-5"> 
-                    <button><i class="fa-regular fa-eye"></i></button>
-                    <button><i class="fa-solid fa-trash"></i></button>
+                    <button  onclick="toggleDialog(\'addRelative\');getaccountMemberInfo('.$row['Account_Patient_ID_Member'].', '.$row['user_info_ID'].' )"><i class="fa-regular fa-eye"></i></button>
+                    <a class="text-error m-2 cursor-pointer" onclick="toggleDialog(\'RemoveAppointmentAccountMember\');getMember_id('.$row['Account_Patient_ID_Member'].')"><i class="fa-solid fa-trash"></i></a>
                 </td>
             </tr>';
                       }
@@ -450,16 +451,10 @@ ORDER BY CASE WHEN `tbl_appointment`.`Status` = 'pending' THEN 0 ELSE 1 END, `tb
                               $status_color = 'text-red-500';
                           }
                           $appointment_schedule = $row['Appointment_schedule'];
-                          $date = isset($appointment_schedule)
-                              ? date('F j, Y', strtotime($appointment_schedule))
-                              : 'N/A';
-                          $time = isset($appointment_schedule)
-                              ? date('g:ia', strtotime($appointment_schedule))
-                              : 'N/A';
+                          $date = isset($appointment_schedule) ? date('F j, Y', strtotime($appointment_schedule)) : 'N/A';$time = isset($appointment_schedule) ? date('g:ia', strtotime($appointment_schedule)) : 'N/A';
                           echo '
                          <tr class="text-base hover:bg-gray-300  dark:hover:bg-gray-600 font-medium text-black dark:text-white">               
-                        <td class="w-1/4">' . $row['First_Name'] . ' ' . $middleInitial . '. ' . $row['Last_Name'] .
-                              '</td>
+                        <td class="w-1/4">' . $row['First_Name'] . ' ' . $middleInitial . '. ' . $row['Last_Name'] . '</td>
           
                        <td class="w-1/4">' . $date . ' ' . $time . '</td>
                    
@@ -634,16 +629,7 @@ ORDER BY CASE WHEN `tbl_appointment`.`Status` = 'pending' THEN 0 ELSE 1 END, `tb
         </div>
 
       </dialog>
-    <dialog id='profileAlert' class='modal' onclick='toggleDialog("profileAlert");toggleSecurityEdit(false);toggleEdit(false)' >
-      <div class="flex justify-center" >
-        <div role="alert" class="inline-flex items-center bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative">
-          <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-          <span id='textInfo'></span>
-        </div>
-      </div>
-    </dialog>
+
 
     <!-- add a relative modal -->
     <dialog id="addRelative"  class="modal bg-opacity-50 bg-black">
@@ -659,20 +645,14 @@ ORDER BY CASE WHEN `tbl_appointment`.`Status` = 'pending' THEN 0 ELSE 1 END, `tb
           </div>
         </div>
 
-        <form id="addRelativeform" action="#" method="GET" class="space-y-6">
+        <form id="RelativeForm" action="#" method="GET" class="space-y-6">
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">    
               <div class="form-group">
                     <label for="relation" class="block font-medium text-black dark:text-white text-base sm:text-lg">
                       Relation to this person:
                     </label>
-                    <select
-                      id="relation"
-                      name="relation"
-                      class="select select-bordered appearance-none block w-full px-3 border-gray-300 rounded-md shadow-sm focus:outline-none text-base sm:text-lg bg-white dark:bg-gray-600 text-black dark:text-white"
-                      required
-                      onchange="handleRelationChange()"
-                    >
+                    <select id="relation" name="relation" class="select select-bordered appearance-none block w-full px-3 border-gray-300 rounded-md shadow-sm focus:outline-none text-base sm:text-lg bg-white dark:bg-gray-600 text-black dark:text-white" required onchange="handleRelationChange()">
                       <option value="">Select...</option>
                       <option value="Spouse">Spouse</option>
                       <option value="Child">Child</option>
@@ -686,13 +666,7 @@ ORDER BY CASE WHEN `tbl_appointment`.`Status` = 'pending' THEN 0 ELSE 1 END, `tb
                     <label for="otherRelation" class="block font-medium text-black dark:text-white text-base sm:text-lg">
                       Please specify:
                     </label>
-                    <input
-                      type="text"
-                      id="otherRelation"
-                      name="otherRelation"
-                      placeholder="Type here..."
-                      class="input input-bordered appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none text-base sm:text-lg bg-white dark:bg-gray-600 text-black dark:text-white  whitespace-nowrap overflow-hidden text-ellipsis"
-                    />
+                    <input type="text" id="otherRelation" name="otherRelation" placeholder="Type here..." class="input input-bordered appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none text-base sm:text-lg bg-white dark:bg-gray-600 text-black dark:text-white  whitespace-nowrap overflow-hidden text-ellipsis" />
                 </div>
           </div>
               
@@ -701,122 +675,41 @@ ORDER BY CASE WHEN `tbl_appointment`.`Status` = 'pending' THEN 0 ELSE 1 END, `tb
                     <label
                       for="relativeFname"
                       class="block font-medium text-black dark:text-white text-base sm:text-lg overflow-hidden whitespace-nowrap text-overflow-ellipsis"
-                      >First Name</label
-                    >
-                    <input
-                      id="relativeFname"
-                      name="relativeFname"
-                      type="text"
-                      value=""
-                      autocomplete="off"
-                      required
-                      placeholder="First Name"
-                      class="input input-bordered appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none text-base sm:text-lg bg-white dark:bg-gray-600 text-black dark:text-white  whitespace-nowrap overflow-hidden text-ellipsis"         
-                    />
+                      >First Name</label>
+                    <input id="relativeFname" name="relativeFname" type="text" value="" autocomplete="off" required placeholder="First Name"
+                      class="input input-bordered appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none text-base sm:text-lg bg-white dark:bg-gray-600 text-black dark:text-white  whitespace-nowrap overflow-hidden text-ellipsis" />
                   </div>
                   <div class="form-group">
-                    <label
-                      for="relativeMiddlename"
-                      class="block font-medium text-black dark:text-white text-base sm:text-lg whitespace-nowrap overflow-hidden text-ellipsis "
-                      >Middle Name</label
-                    >
-                    <input
-                      id="relativeMiddlename"
-                      name="relativeMiddlename"
-                      type="text"
-                      value=""
-                      autocomplete="off"
-                      required
-                      placeholder="Middle Name"
-                      class="input input-bordered appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none text-base sm:text-lg bg-white dark:bg-gray-600 text-black dark:text-white "
-                      
-                    />
+                    <label for="relativeMiddlename" class="block font-medium text-black dark:text-white text-base sm:text-lg whitespace-nowrap overflow-hidden text-ellipsis ">Middle Name</label>
+                    <input id="relativeMiddlename" name="relativeMiddlename" type="text" value="" autocomplete="off" required placeholder="Middle Name" class="input input-bordered appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none text-base sm:text-lg bg-white dark:bg-gray-600 text-black dark:text-white " />
                   </div>
                   <!-- Last Name & Contact Number -->
                   <div class="form-group">
-                    <label
-                      for="relativeLastname"
-                      class="block font-medium text-black dark:text-white text-base sm:text-lg whitespace-nowrap overflow-hidden text-ellipsis"
-                      >Last Name</label
-                    >
-                    <input
-                      id="relativeLastname"
-                      name="relativeLastname"
-                      type="text"
-                      value=""
-                      autocomplete="off"
-                      required
-                      placeholder="Last Name"
-                      class="input input-bordered appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none text-base sm:text-lg bg-white dark:bg-gray-600 text-black dark:text-white "
-                      
+                    <label for="relativeLastname" class="block font-medium text-black dark:text-white text-base sm:text-lg whitespace-nowrap overflow-hidden text-ellipsis">Last Name</label>
+                    <input id="relativeLastname" name="relativeLastname" type="text" value="" autocomplete="off" required placeholder="Last Name" class="input input-bordered appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none text-base sm:text-lg bg-white dark:bg-gray-600 text-black dark:text-white "
                     />
                   </div>
                   <div class="form-group">
-                    <label
-                      for="relativeWeight"
-                      class="block font-medium text-black dark:text-white text-base sm:text-lg whitespace-nowrap overflow-hidden text-ellipsis"
-                      >Weight (optional)</label
-                    >
-                    <input
-                      id="relativeWeight"
-                      name="relativeWeight"
-                      type="number"
-                      value=""
-                      autocomplete="off"
-                      placeholder="Weight"
-                      class="input input-bordered appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none text-base sm:text-lg bg-white dark:bg-gray-600 text-black dark:text-white "
-                      
-                    />
+                    <label for="relativeWeight" class="block font-medium text-black dark:text-white text-base sm:text-lg whitespace-nowrap overflow-hidden text-ellipsis">Weight (optional)</label>
+                    <input id="relativeWeight" name="relativeWeight" type="number" value="" autocomplete="off" placeholder="Weight" class="input input-bordered appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none text-base sm:text-lg bg-white dark:bg-gray-600 text-black dark:text-white " />
                   </div>
                   <!-- Date of Birth, Sex -->
                   <div class="form-group">
-                    <label
-                      for="relativeDob"
-                      class="block font-medium text-black dark:text-white text-base sm:text-lg whitespace-nowrap overflow-hidden text-ellipsis"
-                      >Date of Birth</label
+                    <label for="relativeDob" class="block font-medium text-black dark:text-white text-base sm:text-lg whitespace-nowrap overflow-hidden text-ellipsis">Date of Birth</label
                     >
-                    <input
-                      id="relativeDob"
-                      name="relativeDob"
-                      type="date"
-                      class="input input-bordered w-full p-2 text-xs sm:text-lg bg-white dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark] text-black dark:text-white "
-                      required
-                      
-                    />
+                    <input id="relativeDob" name="relativeDob" type="date" class="input input-bordered w-full p-2 text-xs sm:text-lg bg-white dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark] text-black dark:text-white " required />
                   </div>
                   <div class="form-group">
-                    <label
-                      for="relativeSex"
-                      class="block font-medium text-black dark:text-white text-base sm:text-lg"
-                      >Sex</label
-                    >
-                    <select
-                      id="relativeSex"
-                      name="sex"
-                      class="select select-bordered appearance-none block w-full px-3 border-gray-300 rounded-md shadow-sm focus:outline-none text-base sm:text-lg bg-white dark:bg-gray-600 text-black dark:text-white "
-                      required
-                    >
+                    <label for="relativeSex" class="block font-medium text-black dark:text-white text-base sm:text-lg">Sex</label>
+                    <select id="relativeSex" name="sex" class="select select-bordered appearance-none block w-full px-3 border-gray-300 rounded-md shadow-sm focus:outline-none text-base sm:text-lg bg-white dark:bg-gray-600 text-black dark:text-white " required>
                       <option value="">Select...</option>
                       <option value="Male">Male</option>
                       <option value="Female">Female</option>
                     </select>
                   </div>
                   <div class="form-group">
-                    <label
-                      for="relativeMedcondition"
-                      class="block font-medium text-black dark:text-white text-base sm:text-lg whitespace-nowrap overflow-hidden text-ellipsis"
-                      >Medical Conditions, if any:</label
-                    >
-                    <input
-                      id="relativeMedcondition"
-                      name="relativeMedcondition"
-                      type="text"
-                      value=""
-                      autocomplete="off"
-                      placeholder="Medical Conditions"
-                      class="input input-bordered appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none text-base sm:text-lg bg-white dark:bg-gray-600 text-black dark:text-white "
-                      
-                    />
+                    <label for="relativeMedcondition" class="block font-medium text-black dark:text-white text-base sm:text-lg whitespace-nowrap overflow-hidden text-ellipsis">Medical Conditions, if any:</label>
+                    <input id="relativeMedcondition" name="relativeMedcondition" type="text" value="" autocomplete="off" placeholder="Medical Conditions" class="input input-bordered appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none text-base sm:text-lg bg-white dark:bg-gray-600 text-black dark:text-white " />
                   </div>
 
                   <div class="form-group">
@@ -835,26 +728,42 @@ ORDER BY CASE WHEN `tbl_appointment`.`Status` = 'pending' THEN 0 ELSE 1 END, `tb
 
                   <!-- Address -->
                   <div class="form-group col-span-1 md:col-span-2" id="addressContainer" style="display: none;">
-                    <label for="relativeAddress" class="block font-medium text-black dark:text-white text-base sm:text-lg">
-                      Address
-                    </label>
-                    <input
-                      id="relativeAddress"
-                      name="relativeAddress"
-                      type="text"
-                      placeholder="Address"
-                      class="input input-bordered appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none text-base sm:text-lg bg-white dark:bg-gray-600 text-black dark:text-white"
-                    />
+                    <label for="relativeAddress" class="block font-medium text-black dark:text-white text-base sm:text-lg">Address</label>
+                    <input id="relativeAddress" name="relativeAddress" type="text" placeholder="Address" class="input input-bordered appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none text-base sm:text-lg bg-white dark:bg-gray-600 text-black dark:text-white" />
                   </div>
+                  <input type='hidden' value='' id='accountmemeberID' name='accountmemeberID'>
+                  <input type='hidden' id='actionType'  name='actionType' value="Add">
+                  <input type='hidden' name='onlineOwnerId' value='<?php echo $accountOwner_ID?>'>
                   <div class="flex justify-center">
-                    <input type="submit" value="Add" class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none px-8">         
+                    <input  type="submit"  value="Submit" class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none px-8">
                   </div>  
                 </div>      
-                  
+
               </form>
 
         <div class="modal-action">
-            <button class="btn bg-gray-400 dark:bg-white hover:bg-gray-500 dark:hover:bg-gray-400  text-black  border-none" onclick='toggleDialog("addRelative")'>Close</button>
+            <button class="btn bg-gray-400 dark:bg-white hover:bg-gray-500 dark:hover:bg-gray-400  text-black  border-none" onclick='toggleDialog("addRelative") '>Close</button>
+        </div>
+      </div>
+    </dialog>
+    <dialog id='profileAlert' class='modal' onclick='toggleDialog("profileAlert");toggleSecurityEdit(false);toggleEdit(false)' >
+      <div class="flex justify-center" >
+        <div role="alert" class="inline-flex items-center bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative">
+          <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <span id='textInfo'></span>
+        </div>
+      </div>
+    </dialog>
+    <dialog id="RemoveAppointmentAccountMember"   class="modal bg-black  bg-opacity-40 ">
+      <div class="card bg-slate-50 w-[80vw] absolute top-10 sm:w-[30rem] max-h-[35rem]  flex flex-col text-black">
+        <div  class=" card-title sticky  w-full grid place-items-center">
+          <h3 class="font-bold text-center text-lg  p-5 ">Remove this person from account appointment member?</h3>
+        </div>
+        <div class="p-4 w-full flex justify-evenly">
+          <a id="removeAppointmentAccountMemberLink"  class="btn btn-error w-1/4" onclick="removeAppointmentAccountMember(this.getAttribute('data_id'), <?php echo $accountOwner_ID?> )">Yes</a>
+          <button class="btn  btn-neutral  w-1/4 " onclick='toggleDialog("RemoveAppointmentAccountMember")'>Close</button>
         </div>
       </div>
     </dialog>
@@ -887,6 +796,70 @@ ORDER BY CASE WHEN `tbl_appointment`.`Status` = 'pending' THEN 0 ELSE 1 END, `tb
           }
         });
       }
+      function getMember_id(id) {
+        document.getElementById('removeAppointmentAccountMemberLink').setAttribute('data_id', id);
+      }
+      function getaccountMemberInfo(id, AccownerId) {
+        $.ajax({
+          url: 'ajax.php?action=getAccountMemberDataJSON&data_id=' + encodeURIComponent(id) + '&SessionUserID=' + encodeURIComponent(AccownerId),
+          method: 'GET',
+          dataType: 'json',
+          success: function(data) {
+            if (data) {
+              document.querySelector('#RelativeForm input[name="relativeFname"]').value = data.First_Name;
+              document.querySelector('#RelativeForm  input[name="relativeMiddlename"]').value = data.Middle_Name;
+              document.querySelector('#RelativeForm  input[name="relativeLastname"]').value = data.Last_Name;
+              document.querySelector('#RelativeForm  input[name="relativeDob"]').value = data.DateofBirth;
+              document.querySelector('#RelativeForm  input[name="relativeWeight"]').value = data.weight;
+              document.querySelector('#RelativeForm  input[name="accountmemeberID"]').value = data.Account_Patient_ID_Member;
+              document.querySelector('#RelativeForm  input[name="relativeMedcondition"]').value = data.Medical_condition;
+              document.querySelector('#RelativeForm  input[name="actionType"]').value = 'Edit';
+
+              document.querySelector('#RelativeForm  select[name="sex"]').value = data.Sex;
+              let selectElement = document.querySelector('#RelativeForm select[name="relation"]');
+              let dataExists = false;
+
+              for (let i = 0; i < selectElement.options.length; i++) {
+                if (selectElement.options[i].value === data.RelationshipType) {
+                  dataExists = true;
+                  break;
+                }
+              }
+
+              if (dataExists) {
+                selectElement.value = data.RelationshipType;
+              } else {
+                selectElement.value = 'Others'
+              }
+
+            } else {
+              console.error('No data found for the given patient ID');
+            }
+          },
+          error: function(xhr, status, error) {
+            console.error('Error fetching data:', error);
+          }
+        });
+      }
+      function removeAppointmentAccountMember(memberID, sessionUserID){
+        $.ajax({
+          url: 'ajax.php?action=DeleteAccountAppointmentMember&data_id=' + encodeURIComponent(memberID) + '&SessionUserID=' + encodeURIComponent(sessionUserID),
+          method: 'GET',
+          dataType: 'html',
+          success: function(response) {
+            if (parseInt(response) === 1) {
+              window.location.href = 'patient-profile.php?route=AccountMembers';
+
+
+            } else {
+              console.error('No data found for the given patient ID');
+            }
+          },
+          error: function(xhr, status, error) {
+            console.error('Error fetching data:', error);
+          }
+        });
+      }
 
 
       document.addEventListener('DOMContentLoaded', function () {
@@ -903,13 +876,13 @@ ORDER BY CASE WHEN `tbl_appointment`.`Status` = 'pending' THEN 0 ELSE 1 END, `tb
               item.classList.remove('text-black', 'dark:text-white');
             });
           });
-            <?php if (
-                isset($_GET['route']) and
-                $_GET['route'] == 'appointmentHistory'
-            ): ?>
-          // Set initial active state
-          document.getElementById('appointmentHistoryTab').click();
-            <?php else: ?>
+            <?php if (isset($_GET['route']) and $_GET['route'] == 'appointmentHistory'): ?>
+
+            document.getElementById('appointmentHistoryTab').click();
+            <?php elseif (isset($_GET['route']) and $_GET['route'] == 'AccountMembers'):?>
+             document.getElementById('AccountMember').click();
+
+      <?php else: ?>
           document.getElementById('personalInfoTab').click();
             <?php endif; ?>
         });
@@ -948,6 +921,9 @@ ORDER BY CASE WHEN `tbl_appointment`.`Status` = 'pending' THEN 0 ELSE 1 END, `tb
       } else {
         addressContainer.style.display = 'none';
       }
+    }
+    function changeInputvalue(inputID, value){
+        document.getElementById(inputID).value = value
     }
     </script>
 

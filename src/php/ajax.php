@@ -119,6 +119,7 @@ if ($action == "login"){
         if (password_verify($login_password, $row['Password'])) {
             $_SESSION['user_id'] = $row['User_ID'];
             $_SESSION['user_type'] = $row['userType'];
+            $_SESSION['userEmail'] = $row['Email'];
             echo 1;
         } else {
             echo 2;//invalid pass
@@ -188,6 +189,67 @@ if ($action == 'getDoctorSched'){
     header('Content-Type: application/json');
     echo $schedules_json;
 }
+if ($action == 'DoctorSchedule') {
+    $staff_id = isset($_POST['DoctorID']) ? $_POST['DoctorID'] : '';
+    $monday = isset($_POST['monday']);
+    $tuesday = isset($_POST['tuesday']);
+    $wednesday = isset($_POST['wednesday']);
+    $thursday = isset($_POST['thursday']);
+    $friday = isset($_POST['friday']);
+    $saturday = isset($_POST['saturday']);
+    $availability_time_In = isset($_POST['availability-timeIn']) ? $_POST['availability-timeIn'] : '';
+    $availability_time_end = isset($_POST['availability-timeEnd']) ? $_POST['availability-timeEnd'] : '';
+    $startSched = isset($_POST['repeatStart']) ? $_POST['repeatStart'] : '';
+    $endSched = isset($_POST['repeatEnd']) ? $_POST['repeatEnd'] : '';
+
+    $selectedDays = [];
+    if ($monday) $selectedDays[] = 1; // Monday
+    if ($tuesday) $selectedDays[] = 2; // Tuesday
+    if ($wednesday) $selectedDays[] = 3; // Wednesday
+    if ($thursday) $selectedDays[] = 4; // Thursday
+    if ($friday) $selectedDays[] = 5; // Friday
+    if ($saturday) $selectedDays[] = 6; // Saturday
+
+    if ($startSched !== '' && $endSched !== '' && isValidDate($startSched) && isValidDate($endSched)) {
+        $dates = calculateDates($selectedDays, $startSched, $endSched);
+        $staffDateAvailability = array();
+        $getDoctorSchedAvailability = "SELECT * FROM tbl_availability where Staff_ID = ?";
+        $getDoctorSchedAvailabilitySTMT = $conn->prepare($getDoctorSchedAvailability);
+        $getDoctorSchedAvailabilitySTMT->bind_param('i',$staff_id);
+        $getDoctorSchedAvailabilitySTMT->execute();
+        $result = $getDoctorSchedAvailabilitySTMT->get_result();
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $staffDateAvailability[] = $row['Date'];
+            }
+        }
+
+        foreach ($dates as $date) {
+            if (in_array($date, $staffDateAvailability)) {
+                $sql = "UPDATE tbl_availability SET StartTime = ?, EndTime = ? WHERE Staff_ID = ? AND Date = ?";
+                $stmt = $conn->prepare($sql);
+                $stmt->bind_param("ssss", $availability_time_In, $availability_time_end, $staff_id, $date);
+                $stmt->execute();
+            } else {
+                $sql = "INSERT INTO tbl_availability (Staff_ID, Date, StartTime, EndTime) VALUES (?, ?, ?, ?)";
+                $stmt = $conn->prepare($sql);
+                $stmt->bind_param("ssss", $staff_id, $date, $availability_time_In, $availability_time_end);
+                $stmt->execute();
+            }
+        }
+
+
+        echo 1;
+        exit();
+    } else{
+        echo 'Some error occurred';
+    }
+
+}
+
+
+
+
 if ($action == 'getDoctorAvailabilityDate'){
     $doctor_id = $_GET['doctor_ID'];
     $getDoctorAvailability = "SELECT Date FROM tbl_availability WHERE Staff_ID = ?";
@@ -283,102 +345,6 @@ if ($action == 'getDoctorAvailabilityTime'){
     }
 }
 
-
-
-if ($action == 'getStaffinfo'){
-    $staff_id = $_GET['staff_id'];
-    $sql = 'SELECT tbl_staff.*, tbl_accounts.*
-            FROM tbl_staff
-            JOIN tbl_accounts ON tbl_staff.User_ID = tbl_accounts.User_ID
-            WHERE tbl_staff.Staff_ID = ?';
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param('i', $staff_id );
-    $stmt->execute();
-    $result = $stmt->get_result();
-    if ($result && $result->num_rows > 0){
-        $row = $result->fetch_assoc();
-        header('Content-Type: application/json');
-        echo json_encode($row);
-    }
-    exit();
-}
-if ($action == 'getPatientInfo'){
-    $patient_id = $_GET['online_user_id'];
-    $sql = "SELECT account_user_info.*, tbl_accounts.*
-            FROM account_user_info
-            JOIN tbl_accounts ON account_user_info.User_ID = tbl_accounts.User_ID
-            WHERE    
-           account_user_info.user_info_ID = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param('i', $patient_id );
-    $stmt->execute();
-    $result = $stmt->get_result();
-    if ($result && $result->num_rows > 0){
-        $row = $result->fetch_assoc();
-        header('Content-Type: application/json');
-        echo json_encode($row);
-    }
-    exit();
-}
-if ($action == 'DoctorSchedule') {
-    $staff_id = isset($_POST['DoctorID']) ? $_POST['DoctorID'] : '';
-    $monday = isset($_POST['monday']);
-    $tuesday = isset($_POST['tuesday']);
-    $wednesday = isset($_POST['wednesday']);
-    $thursday = isset($_POST['thursday']);
-    $friday = isset($_POST['friday']);
-    $saturday = isset($_POST['saturday']);
-    $availability_time_In = isset($_POST['availability-timeIn']) ? $_POST['availability-timeIn'] : '';
-    $availability_time_end = isset($_POST['availability-timeEnd']) ? $_POST['availability-timeEnd'] : '';
-    $startSched = isset($_POST['repeatStart']) ? $_POST['repeatStart'] : '';
-    $endSched = isset($_POST['repeatEnd']) ? $_POST['repeatEnd'] : '';
-
-    $selectedDays = [];
-    if ($monday) $selectedDays[] = 1; // Monday
-    if ($tuesday) $selectedDays[] = 2; // Tuesday
-    if ($wednesday) $selectedDays[] = 3; // Wednesday
-    if ($thursday) $selectedDays[] = 4; // Thursday
-    if ($friday) $selectedDays[] = 5; // Friday
-    if ($saturday) $selectedDays[] = 6; // Saturday
-
-    if ($startSched !== '' && $endSched !== '' && isValidDate($startSched) && isValidDate($endSched)) {
-        $dates = calculateDates($selectedDays, $startSched, $endSched);
-        $staffDateAvailability = array();
-        $getDoctorSchedAvailability = "SELECT * FROM tbl_availability where Staff_ID = ?";
-        $getDoctorSchedAvailabilitySTMT = $conn->prepare($getDoctorSchedAvailability);
-        $getDoctorSchedAvailabilitySTMT->bind_param('i',$staff_id);
-        $getDoctorSchedAvailabilitySTMT->execute();
-        $result = $getDoctorSchedAvailabilitySTMT->get_result();
-        if ($result->num_rows > 0) {
-            while ($row = $result->fetch_assoc()) {
-                $staffDateAvailability[] = $row['Date'];
-            }
-        }
-
-        foreach ($dates as $date) {
-            if (in_array($date, $staffDateAvailability)) {
-                $sql = "UPDATE tbl_availability SET StartTime = ?, EndTime = ? WHERE Staff_ID = ? AND Date = ?";
-                $stmt = $conn->prepare($sql);
-                $stmt->bind_param("ssss", $availability_time_In, $availability_time_end, $staff_id, $date);
-                $stmt->execute();
-            } else {
-                $sql = "INSERT INTO tbl_availability (Staff_ID, Date, StartTime, EndTime) VALUES (?, ?, ?, ?)";
-                $stmt = $conn->prepare($sql);
-                $stmt->bind_param("ssss", $staff_id, $date, $availability_time_In, $availability_time_end);
-                $stmt->execute();
-            }
-        }
-
-
-        echo 1;
-        exit();
-    } else{
-        echo 'Some error occurred';
-    }
-
-}
-
-
 if ($action == 'deleteSched'){
     $passWord_conf = $_POST['conf_passoword'];
     $sql = "SELECT * FROM tbl_accounts WHERE User_ID = ?";
@@ -428,6 +394,43 @@ if ($action == 'deleteSched'){
         echo 2;
     }
 }
+
+if ($action == 'getStaffinfo'){
+    $staff_id = $_GET['staff_id'];
+    $sql = 'SELECT tbl_staff.*, tbl_accounts.*
+            FROM tbl_staff
+            JOIN tbl_accounts ON tbl_staff.User_ID = tbl_accounts.User_ID
+            WHERE tbl_staff.Staff_ID = ?';
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param('i', $staff_id );
+    $stmt->execute();
+    $result = $stmt->get_result();
+    if ($result && $result->num_rows > 0){
+        $row = $result->fetch_assoc();
+        header('Content-Type: application/json');
+        echo json_encode($row);
+    }
+    exit();
+}
+if ($action == 'getPatientInfo'){
+    $patient_id = $_GET['online_user_id'];
+    $sql = "SELECT account_user_info.*, tbl_accounts.*
+            FROM account_user_info
+            JOIN tbl_accounts ON account_user_info.User_ID = tbl_accounts.User_ID
+            WHERE    
+           account_user_info.user_info_ID = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param('i', $patient_id );
+    $stmt->execute();
+    $result = $stmt->get_result();
+    if ($result && $result->num_rows > 0){
+        $row = $result->fetch_assoc();
+        header('Content-Type: application/json');
+        echo json_encode($row);
+    }
+    exit();
+}
+
 if ($action == 'patientBookAppointment') {
     $patientAccountMember = isset($_POST['AppointPerson']) ? $_POST['AppointPerson'] : '';
     $appointDoctor  = isset($_POST['doctor']) ? $_POST['doctor'] : '';
@@ -1063,11 +1066,120 @@ if ($action === 'getPatientApppointmentInfoJSON') {
             header('Content-Type: application/json');
             echo json_encode($rows);
         } else {
-            // Handle the error for statement preparation failure
             echo json_encode(['error' => 'Statement preparation failed']);
         }
     } else {
-        // Handle the error for missing data_id parameter
+
         echo json_encode(['error' => 'Missing data_id parameter']);
     }
+}
+if ($action === 'AccountMemberPostReq'){
+    $accownerId = isset($_POST['onlineOwnerId']) ? intval($_POST['onlineOwnerId']) : 0;
+    $ownerAddress = '';
+    $ownerEmail = $_SESSION['userEmail'];
+    $ownerContact = '';
+    $getAccountInfoAddress = "SELECT * FROM account_user_info WHERE user_info_ID = ?";
+    $getAccountInfoAddressSTMT = $conn->prepare($getAccountInfoAddress);
+    $getAccountInfoAddressSTMT->bind_param('i', $accownerId);
+    $getAccountInfoAddressSTMT->execute();
+    $result = $getAccountInfoAddressSTMT->get_result();
+
+    if ($result->num_rows === 1) {
+        $row = $result->fetch_assoc();
+        $ownerAddress = $row['Address'];
+        $ownerContact = $row['Contact_Number'];
+
+    }else{
+        echo 'Getting Account owner info failed';
+        exit();
+    }
+    $relation = isset($_POST['relation']) && $_POST['relation'] != 'Others'? $_POST['relation'] : (isset($_POST['otherRelation']) ? $_POST['otherRelation'] : '');
+    $relativeFname = isset($_POST['relativeFname']) ? $_POST['relativeFname'] : '';
+    $relativeMiddlename = isset($_POST['relativeMiddlename']) ? $_POST['relativeMiddlename'] : '';
+    $relativeLastname = isset($_POST['relativeLastname']) ? $_POST['relativeLastname'] : '';
+    $relativeWeight = isset($_POST['relativeWeight']) ? $_POST['relativeWeight'] : '';
+    $relativeDob = isset($_POST['relativeDob']) ? $_POST['relativeDob'] : '';
+    $relativeSex = isset($_POST['sex']) ? $_POST['sex'] : '';
+    $relativeMedcondition = isset($_POST['relativeMedcondition']) ? $_POST['relativeMedcondition'] : 'N/A';
+    $addressInfo = (isset($_POST['addressInfo']) && $_POST['addressInfo'] === 'Yes') ? $ownerAddress : (isset($_POST['relativeAddress']) ? $_POST['relativeAddress'] : '');
+    $accountmemeberID = isset($_POST['accountmemeberID']) ? $_POST['accountmemeberID'] : '';
+    $actionType = isset($_POST['actionType']) ? $_POST['actionType'] : '';
+
+    if ($relation !== '' && $relativeFname !== '' && $relativeMiddlename !== '' && $relativeLastname !== '' && $relativeWeight !== '' &&
+    $relativeDob !== '' && $relativeSex !== '' && $addressInfo !== '' && $accownerId){
+
+        if ($actionType == 'Edit' and $accountmemeberID != 0){
+            $updateAccAppointmentMember = "UPDATE tbl_accountpatientmember 
+                                   SET First_Name=?, Middle_Name=?, Last_Name=?, DateofBirth=?, 
+                                       Sex=?, Contact_Number=?, MemberPatientEmail=?, 
+                                       Address=?, Medical_condition=?, RelationshipType=?
+                                   WHERE Account_Patient_ID_Member  = ?";
+            $updateAccAppointmentMemberSTMT = $conn->prepare($updateAccAppointmentMember);
+            $updateAccAppointmentMemberSTMT->bind_param('ssssssssssi', $relativeFname, $relativeMiddlename,
+                $relativeLastname, $relativeDob, $relativeSex,
+                $ownerContact, $ownerEmail, $addressInfo,
+                $relativeMedcondition, $relation, $accountmemeberID);
+
+            if ($updateAccAppointmentMemberSTMT->execute()){
+                echo 2;
+                exit();
+            }else{
+                echo $updateAccAppointmentMemberSTMT->error;
+            }
+        }elseif ($actionType == 'Add'){
+            $newAccAppointmentMember = "INSERT INTO tbl_accountpatientmember (user_info_ID,  First_Name	,
+                              Middle_Name	,Last_Name	,DateofBirth	,Sex	,Contact_Number
+                              	,MemberPatientEmail	,Address	,Medical_condition	,RelationshipType)
+    VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+            $newAccAppointmentMemberSTMT  = $conn->prepare($newAccAppointmentMember);
+            $newAccAppointmentMemberSTMT->bind_param('issssssssss', $accownerId, $relativeFname
+                ,$relativeMiddlename, $relativeLastname, $relativeDob, $relativeSex, $ownerContact, $ownerEmail,
+                $addressInfo, $relativeMedcondition, $relation);
+            if ($newAccAppointmentMemberSTMT->execute()){
+                echo 2;
+                exit();
+            }else{
+                echo $newAccAppointmentMemberSTMT->error;
+            }
+        }else{
+            echo $actionType;
+        }
+    } else {
+        echo "Some Fields are empty ";
+
+    }
+}
+if ($action == 'getAccountMemberDataJSON'){
+    $accountMemberID = $_GET['data_id'];
+    $accOwnerId = $_GET['SessionUserID'];
+    $getAccountMemberSql = "SELECT * FROM tbl_accountpatientmember where Account_Patient_ID_Member = ? and user_info_ID = ? where status = 'Active'";
+    $getAccountMemberSqlSTMT = $conn->prepare($getAccountMemberSql);
+    $getAccountMemberSqlSTMT->bind_param('ii',$accountMemberID, $accOwnerId);
+
+    if ($getAccountMemberSqlSTMT->execute()){
+        $result = $getAccountMemberSqlSTMT->get_result();
+        if ($result->num_rows === 1){
+            $row = $result->fetch_assoc();
+            header('Content-Type: application/json');
+            echo json_encode($row);
+            exit();
+        }else{
+            echo json_encode(['message' => 'No available Data']);
+        }
+    }
+}
+if ($action == 'DeleteAccountAppointmentMember'){
+    $accountMemberID = $_GET['data_id'];
+    $accOwnerId = $_GET['SessionUserID'];
+    $changeMemberStat = "UPDATE tbl_accountpatientmember SET status = 'Removed' where Account_Patient_ID_Member  = ? and  user_info_ID  = ?";
+    $changeMemberStatSTMT = $conn->prepare($changeMemberStat);
+    $changeMemberStatSTMT->bind_param('ii', $accountMemberID, $accOwnerId);
+    if ($changeMemberStatSTMT->execute()){
+        echo 1;
+        exit();
+    }else{
+        echo $changeMemberStatSTMT->error;
+        exit();
+    }
+
 }

@@ -39,6 +39,7 @@ document.addEventListener('submit',function(e){
   let form_data = new FormData(e.target);
   let endpoint
   let infoText;
+  let tab;
   if (e.target.id === 'personal-info'){
     infoText = 'Information Updated';
     endpoint = 'editUserInfo';
@@ -50,6 +51,12 @@ document.addEventListener('submit',function(e){
   else if (e.target.id === 'cancel_appoinment'){
     endpoint = 'cancelAppointment';
     infoText = 'Appointment has been cancelled';
+    tab = 'appointmentHistory';
+  }
+  else if (e.target.id === 'RelativeForm'){
+    infoText = 'Account members has been updated';
+    endpoint = 'AccountMemberPostReq'
+    tab = 'AccountMembers'
 
   }
   document.getElementById('textInfo').innerHTML = infoText;
@@ -61,16 +68,18 @@ document.addEventListener('submit',function(e){
     contentType: false,
     success: function(response) {
       if (parseInt(response) === 1) {
+
         toggleDialog('profileAlert');
         getUserInfo()
       }if (parseInt(response) === 2) {
         toggleDialog('profileAlert');
-        window.location.href = 'patient-profile.php?route=appointmentHistory'
+        window.location.href = 'patient-profile.php?route=' + tab;
       }else {
         document.getElementById('errorAlert').innerHTML = response;
-        toggleDialog('errorAlert');
 
+        toggleDialog('errorAlert');
       }
+      console.log(response)
     }
   });
 })
