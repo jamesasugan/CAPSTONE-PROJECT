@@ -604,7 +604,7 @@
             });
         }
 
-        // dito listahan ng nasa dropdown search
+        // dito listahan ng nasa dropdown search, gawa kang bagong const na array pag bagong search dropdown
         const specialties = [
             "Internal Medicine",
             "General Medicine",
