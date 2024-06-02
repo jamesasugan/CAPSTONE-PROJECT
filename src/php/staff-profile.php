@@ -100,12 +100,19 @@ if ($result->num_rows > 0) {
               <h3 class="text-2xl font-bold text-black dark:text-white mb-4">
                 Personal Information
               </h3>
-              <form
-                id="personal-info"
-                action="#"
-                method="POST"
-                class="space-y-6"
-              >                       
+              <form id="personal-info" action="#" method="POST" class="space-y-6">    
+
+                <!-- for profile image -->
+                <div class="flex flex-col items-center">
+                    <div class="w-32 h-32 relative">
+                        <img src="../images/defaultprofile.jpg" alt="Profile Picture" class="w-full h-full rounded-full object-cover">
+                        <!-- yang image na yan yung default profile kapag kakagawa lang ng account -->
+                    </div>
+                    <label class="block">
+                      <input type="file" class="file-input bg-gray-400 text-black dark:text-white dark:bg-gray-600 border-none mt-3 file-input-bordered file-input-sm w-full max-w-xs cursor-pointer disabled:bg-gray-200 disabled:border-none" accept="image/*" disabled/>
+                    </label>
+                </div>
+
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div class="form-group">
                     <label
