@@ -116,26 +116,26 @@ if (isset($_SESSION['user_type'])) {
                   </div>
 
                   <div class="login-form">
-                    <label for="contact-number" class="block font-medium text-black">
-                        Contact Number
-                    </label>
-                    <input
-                        id="contact-number"
-                        name="contact_number"
-                        type="tel"
-                        value=""
-                        required
-                        autocomplete="off"
-                        placeholder="Contact Number"
-                        pattern="[0-9]*"
-                        minlength="11"
-                        maxlength="11"
-                        title="Please enter a 11-digit contact number."
-                        class="numeric-input input input-bordered appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none sm:text-sm bg-white text-black"
-                        oninput="validateNumericInput(this); setCustomValidity('');"
-                        oninvalid="setCustomValidity(this.value.length < 11 ? 'Please enter 11 numbers only' : 'Please enter 11 digits, you are currently using ' + this.value.length + ' digits.');"
-                    />
-                </div>
+                      <label for="contact-number" class="block font-medium text-black">
+                          Contact Number
+                      </label>
+                      <input
+                          id="contact-number"
+                          name="contact_number"
+                          type="tel"
+                          value=""
+                          required
+                          autocomplete="off"
+                          placeholder="Contact Number"
+                          pattern="^\d{11}$"
+                          minlength="11"
+                          maxlength="11"
+                          title="Please enter an 11-digit contact number."
+                          class="numeric-input input input-bordered appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none sm:text-sm bg-white text-black"
+                          oninput="validateNumericInput(this); setCustomValidity('');"
+                          oninvalid="setCustomValidity(this.value.length !== 11 ? 'Please enter exactly 11 digits.' : '');"
+                      />
+                  </div>
 
                 </div>
 
@@ -343,6 +343,13 @@ if (isset($_SESSION['user_type'])) {
         </div>
       </div>
     </section>
+
+    <!-- para wala na letters sa contact number -->
+    <script>
+    function validateNumericInput(input) {
+        input.value = input.value.replace(/\D/g, '');
+    }
+    </script>
 
     <script>
       function toggle_signUp_notif(notification_type){
