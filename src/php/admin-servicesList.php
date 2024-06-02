@@ -9,12 +9,15 @@
     <button class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold cursor-pointer border-none" onclick="addnewService.showModal()">Add Service</button>
   </div>
 
-  <!-- ito yung dropdown na may search, gayahin mo to sa patient chart -->
+  <!-- ito yung dropdown na may search, gayahin mo to sa patient chart
+
+  searchInput1,2,3,4 label at id kung magdadagdag ka, tas optionsList1,2,3,4 kung magdadagdag ka
+-->
     <div class="container mx-auto w-2/4 mb-3">
-        <label for="specialtySearch" class="block font-medium text-gray-800 dark:text-white text-lg">Search Service</label>
+        <label for="searchInput1" class="block font-medium text-gray-800 dark:text-white text-lg">Search Service</label>
         <div class="relative">
-            <input type="text" id="specialtySearch" placeholder="Search services..." class="input input-bordered w-full px-3 py-2 mb-1 bg-white dark:bg-gray-800 text-gray-800 dark:text-white">
-                <ul id="specialtyOptions" class="absolute z-10 hidden w-full py-1 bg-white border border-gray-300 rounded-md shadow-md dark:bg-gray-800 dark:border-gray-700"></ul>
+            <input type="text" id="searchInput1" placeholder="Search services..." class="input input-bordered w-full px-3 py-2 mb-1 bg-white dark:bg-gray-800 text-gray-800 dark:text-white">
+                <ul id="optionsList1" class="absolute z-10 hidden w-full py-1 bg-white border border-gray-300 rounded-md shadow-md dark:bg-gray-800 dark:border-gray-700"></ul>
         </div>
     </div>
 
@@ -553,6 +556,55 @@
 
   <!-- script for dropdown na may search, pwede mo to gamitin sa patient chart -->
   <script>
+         function createSearchableDropdown(items, searchInputId, optionsListId) {
+            const searchInput = document.getElementById(searchInputId);
+            const optionsList = document.getElementById(optionsListId);
+
+            // Function to filter items based on search input
+            function filterItems(searchTerm) {
+                return items.filter(item =>
+                    item.toLowerCase().includes(searchTerm.toLowerCase())
+                );
+            }
+
+            // Function to update the list of options
+            function updateOptionsList(searchTerm) {
+                optionsList.innerHTML = "";
+                const filteredItems = filterItems(searchTerm);
+                filteredItems.forEach(item => {
+                    const option = document.createElement("li");
+                    option.textContent = item;
+                    option.className = "px-3 py-2 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700";
+                    option.addEventListener("click", () => {
+                        searchInput.value = item;
+                        optionsList.classList.add("hidden");
+                    });
+                    optionsList.appendChild(option);
+                });
+                if (filteredItems.length === 0) {
+                    const noResult = document.createElement("li");
+                    noResult.textContent = "No results found";
+                    noResult.className = "px-3 py-2 cursor-not-allowed text-gray-400 dark:text-gray-500";
+                    optionsList.appendChild(noResult);
+                }
+            }
+
+            // Event listener for search input
+            searchInput.addEventListener("input", () => {
+                const searchTerm = searchInput.value.trim();
+                updateOptionsList(searchTerm);
+                optionsList.classList.remove("hidden");
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener("click", (event) => {
+                if (!event.target.closest(`#${optionsListId}`) && !event.target.closest(`#${searchInputId}`)) {
+                    optionsList.classList.add("hidden");
+                }
+            });
+        }
+
+        // dito listahan ng nasa dropdown search
         const specialties = [
             "Internal Medicine",
             "General Medicine",
@@ -567,51 +619,8 @@
             // Add more specialties as needed
         ];
 
-        const searchInput = document.getElementById("specialtySearch");
-        const specialtyOptions = document.getElementById("specialtyOptions");
-
-        // Function to filter specialties based on search input
-        function filterSpecialties(searchTerm) {
-            return specialties.filter(specialty =>
-                specialty.toLowerCase().includes(searchTerm.toLowerCase())
-            );
-        }
-
-        // Function to update the list of specialty options
-        function updateSpecialtyOptions(searchTerm) {
-            specialtyOptions.innerHTML = "";
-            const filteredSpecialties = filterSpecialties(searchTerm);
-            filteredSpecialties.forEach(specialty => {
-                const option = document.createElement("li");
-                option.textContent = specialty;
-                option.className = "px-3 py-2 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700";
-                option.addEventListener("click", () => {
-                    searchInput.value = specialty;
-                    specialtyOptions.classList.add("hidden");
-                });
-                specialtyOptions.appendChild(option);
-            });
-            if (filteredSpecialties.length === 0) {
-                const noResult = document.createElement("li");
-                noResult.textContent = "No results found";
-                noResult.className = "px-3 py-2 cursor-not-allowed text-gray-400 dark:text-gray-500";
-                specialtyOptions.appendChild(noResult);
-            }
-        }
-
-        // Event listener for search input
-        searchInput.addEventListener("input", () => {
-            const searchTerm = searchInput.value.trim();
-            updateSpecialtyOptions(searchTerm);
-            specialtyOptions.classList.remove("hidden");
-        });
-
-        // Close dropdown when clicking outside
-        document.addEventListener("click", (event) => {
-            if (!event.target.closest("#specialtyOptions") && !event.target.closest("#specialtySearch")) {
-                specialtyOptions.classList.add("hidden");
-            }
-        });
+        // dito mo call
+        createSearchableDropdown(specialties, 'searchInput1', 'optionsList1');
     </script>
 
 
