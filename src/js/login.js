@@ -64,3 +64,27 @@ if (passwordInput) {
 if (confirmPasswordInput) {
   confirmPasswordInput.addEventListener('input', updateRequirements);
 }
+
+
+// for dob
+document.addEventListener('DOMContentLoaded', function () {
+  const dobInputs = document.querySelectorAll('input[type="date"].dob-input');
+  const today = new Date();
+  const maxDate = today.toISOString().split('T')[0]; // format yyyy-mm-dd
+
+  dobInputs.forEach(function (inputDob) {
+      inputDob.max = maxDate;
+  });
+});
+
+// for input type tel para walang letters
+function validateNumericInput(event) {
+  event.target.value = event.target.value.replace(/\D/g, '');
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+  const telInputs = document.querySelectorAll('input[type="tel"]');
+  telInputs.forEach(function (input) {
+      input.addEventListener('input', validateNumericInput);
+  });
+});

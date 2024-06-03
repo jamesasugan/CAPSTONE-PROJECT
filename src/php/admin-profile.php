@@ -184,10 +184,12 @@ if ($result->num_rows > 0) {
                     required
                     disabled
                     placeholder="Contact Number"
-                    pattern="[0-9]{1,11}"
+                    pattern="^\d{11}$"
                     minlength="11"
                     maxlength="11"
                     class="input input-bordered appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none text-base sm:text-lg bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400 disabled:border-gray-300"
+                    oninput="validateNumericInput(this); setCustomValidity('');"
+                    oninvalid="setCustomValidity(this.value.length !== 11 ? 'Please enter exactly 11 digits.' : '');"
                   />
                 </div>
                 <div class="form-group">
@@ -221,7 +223,7 @@ if ($result->num_rows > 0) {
                     required
                     autocomplete="off"
                     placeholder="Address"
-                    class="input input-bordered appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none text-base sm:text-lg bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400 disabled:border-gray-300"
+                    class="dob-input input input-bordered appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none text-base sm:text-lg bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400 disabled:border-gray-300"
                   />
                 </div>
                 <div class="form-group">

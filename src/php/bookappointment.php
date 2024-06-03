@@ -81,12 +81,12 @@ if (isset($_SESSION['user_type']) and $_SESSION['user_type'] == 'staff') {
         <form id='patient_bookAppointment' action="#" method="GET">
 
           <h3 class="text-xl font-bold mt-5">Select person for appointment</h3>
-          <div class="w-full md:w-auto md:col-span-1">
+          <div class="w-full sm:w-2/4">
             <select
               id="doctor"
               name="AppointPerson"
               required
-              class="select select-bordered w-full p-2 text-base sm:text-lg bg-gray-300 dark:bg-gray-600"
+              class="select select-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 text-lg sm:text-xl text-black dark:text-white"
             >
               <option value="" disabled selected>...</option>
                 <?php
@@ -146,7 +146,7 @@ if (isset($_SESSION['user_type']) and $_SESSION['user_type'] == 'staff') {
               id="doctor"
               name="doctor"
               required
-              class="select select-bordered w-full p-2 text-base sm:text-lg bg-gray-300 dark:bg-gray-600"
+              class="select select-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 text-lg sm:text-xl text-black dark:text-white"
             >
               <option value="" disabled selected>Select doctor</option>
                 <?php
@@ -169,13 +169,13 @@ if (isset($_SESSION['user_type']) and $_SESSION['user_type'] == 'staff') {
           <label for="appointment-date" class="block text-base sm:text-lg font-medium">
             Appointment Date<span id='appointmentDateNote' class='text-sm text-info hidden'> (Please check doctor schedule)</span>
           </label>
-          <input disabled type="date" id="appointment-date" name="appointment-date" required class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark]" />
+          <input disabled type="date" id="appointment-date" name="appointment-date" required class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark] text-lg text-black dark:text-white disabled:bg-gray-200 disabled:text-gray-400 dark:disabled:text-gray-400 disabled:border-gray-300" />
         </div>
         <div class="w-full md:w-auto md:col-span-1">
           <label for="appointment-time" class="block text-base sm:text-lg font-medium">
             Available  Time
           </label>
-          <select id="appointment-time" name="appointment-time" required class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark]">
+          <select id="appointment-time" name="appointment-time" required class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark] text-lg text-black dark:text-white">
 
           </select>
         </div>
@@ -264,8 +264,8 @@ if (isset($_SESSION['user_type']) and $_SESSION['user_type'] == 'staff') {
                           <button class="btn bg-gray-400 dark:bg-white hover:bg-gray-500 dark:hover:bg-gray-400  text-black border-none mb-2">Close</button>
                         </form>
                     </div>
+                    <div class="border border-gray-600 dark:border-slate-300"></div>
               </div>
-              <hr>
 
 
 
@@ -332,7 +332,7 @@ if (isset($_SESSION['user_type']) and $_SESSION['user_type'] == 'staff') {
 
               </div>
 
-              <div class="mb-4">
+              <div class="mb-4 p-10">
                     <p class="font-bold mb-2 text-2xl">Others</p>
                     <label class="block flex items-center space-x-2 mb-2 hover:bg-slate-300 dark:hover:bg-gray-600 p-2 rounded-md transition duration-150">
                     <textarea id="otherService" rows="4" name="otherService"  class="input input-bordered h-20 text-lg w-full bg-white dark:bg-gray-600 text-black dark:text-white border-none" placeholder="If none in the following, type your reason/purpose here"></textarea>

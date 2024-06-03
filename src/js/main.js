@@ -130,11 +130,23 @@ document.addEventListener('DOMContentLoaded', function () {
 
 // for date of birth only
 document.addEventListener('DOMContentLoaded', function () {
-  var inputDob = document.getElementById('dob');
-  if (inputDob) {
-    // Check if the element exists
-    var today = new Date();
-    var maxDate = today.toISOString().split('T')[0]; // format yyyy-mm-dd
-    inputDob.max = maxDate;
-  }
+  const dobInputs = document.querySelectorAll('input[type="date"].dob-input');
+  const today = new Date();
+  const maxDate = today.toISOString().split('T')[0]; // format yyyy-mm-dd
+
+  dobInputs.forEach(function (inputDob) {
+      inputDob.max = maxDate;
+  });
+});
+
+// for input type tel para walang letters
+function validateNumericInput(event) {
+  event.target.value = event.target.value.replace(/\D/g, '');
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+  const telInputs = document.querySelectorAll('input[type="tel"]');
+  telInputs.forEach(function (input) {
+      input.addEventListener('input', validateNumericInput);
+  });
 });

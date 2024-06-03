@@ -60,7 +60,7 @@ if (isset($_SESSION['user_type'])) {
                     for="email"
                     class="block text-base font-medium text-gray-700"
                   >
-                    Email Address
+                    Email or Contact Number
                   </label>
                   <input
                     id="email"
@@ -68,7 +68,7 @@ if (isset($_SESSION['user_type'])) {
                     type="email"
                     autocomplete="email"
                     required
-                    placeholder="Email"
+                    placeholder="Enter email or contact number"
                     class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none sm:text-sm bg-white text-black"
                   />
                 </div>

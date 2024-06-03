@@ -149,7 +149,7 @@ if (isset($_SESSION['user_type'])) {
                       name="dob"
                       type="date"
                       required
-                      class="input input-bordered [color-scheme:light] appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none sm:text-sm bg-white text-black"
+                      class="dob-input input input-bordered [color-scheme:light] appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none sm:text-sm bg-white text-black"
                     />
                   </div>
 
@@ -344,13 +344,6 @@ if (isset($_SESSION['user_type'])) {
       </div>
     </section>
 
-    <!-- para wala na letters sa contact number -->
-    <script>
-    function validateNumericInput(input) {
-        input.value = input.value.replace(/\D/g, '');
-    }
-    </script>
-
     <script>
       function toggle_signUp_notif(notification_type){
         let notif_type = document.getElementById('alert');
@@ -412,16 +405,6 @@ if (isset($_SESSION['user_type'])) {
           }
         }
       }
-
-      document.addEventListener('DOMContentLoaded', function () {
-        var inputDob = document.getElementById('dob');
-        if (inputDob) {
-          // Check if the element exists
-          var today = new Date();
-          var maxDate = today.toISOString().split('T')[0]; // format yyyy-mm-dd
-          inputDob.max = maxDate;
-        }
-      });
     </script>
   </body>
 </html>

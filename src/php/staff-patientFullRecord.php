@@ -423,7 +423,7 @@ if ($result && $result->num_rows > 0) {
                                   <select disabled name="consultant-name" class="select
                 select-bordered text-black dark:text-white w-full   bg-gray-300 dark:bg-gray-600
                 text-base sm:text-lg lg:text-xl focus:border-blue-500 focus:ring focus:ring-blue-500
-                focus:ring-opacity-50 mb-4 sm:mb-0 sm:mr-4 disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400">
+                focus:ring-opacity-50 mb-4 sm:mb-0 sm:mr-4 disabled:bg-white dark:disabled:bg-gray-600 disabled:text-black dark:disabled:text-white">
                                     <option  selected value='' disabled>Select consultant</option>
                                       <?php
                                       $sql =
@@ -452,7 +452,7 @@ if ($result && $result->num_rows > 0) {
                             <div>
                                 <label class="block">
                                     Weight:
-                                    <input type="text" 
+                                    <input type="number" 
                                     name="weight"
                                     required
                                     placeholder="Weight"
@@ -588,11 +588,11 @@ if ($result && $result->num_rows > 0) {
             <!-- modal content for edit patient information -->
             <dialog id="editpatient_info" class="modal bg-opacity-30 bg-black">
                 <div class="modal-box w-11/12 max-w-5xl bg-gray-200 dark:bg-gray-700 text-[#0e1011] dark:text-[#eef0f1]">
-                    <h3 class="font-bold text-2xl ">Edit Patient</h3>
+                    <h3 class="font-bold text-3xl">Edit Patient</h3>
                     <form id="EditpatientForm" >
                       <input type='hidden' name='patient_chart_id' value='<?php echo $chart_id?>'>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 mt-5">
-                                <label class="block">
+                                <label class="block text-lg">
                                     First Name:
                                     <input type="text" 
                                         name="patient_first-name"
@@ -601,7 +601,7 @@ if ($result && $result->num_rows > 0) {
                                         placeholder="Name"
                                         class="input input-bordered w-full p-2 bg-white dark:bg-gray-600  text-black dark:text-white " />
                                 </label>
-                              <label class="block">
+                              <label class="block text-lg">
                                 Middle Name:
                                 <input type="text"
                                        name="patient_middle-name"
@@ -610,7 +610,7 @@ if ($result && $result->num_rows > 0) {
                                        placeholder="Name"
                                        class="input input-bordered w-full p-2 bg-white dark:bg-gray-600  text-black dark:text-white " />
                               </label>
-                              <label class="block">
+                              <label class="block text-lg">
                                 Last Name:
                                 <input type="text"
                                        name="patient_last-name"
@@ -621,7 +621,7 @@ if ($result && $result->num_rows > 0) {
                               </label>
 
                             <div>
-                                <label class="block">
+                                <label class="block text-lg">
                                     Contact Number:
                                     <input type="tel"
                                     name="patient_contact-number"
@@ -629,15 +629,17 @@ if ($result && $result->num_rows > 0) {
                                     required 
                                     autocomplete="off"
                                     placeholder="Contact Number" 
-                                    pattern="[0-9]{1,11}" 
+                                    pattern="^\d{11}$" 
                                     minlength="11" 
                                     maxlength="11" 
                                     title="Please enter up to 11 numeric characters." 
-                                    class="input input-bordered w-full p-2 bg-white dark:bg-gray-600  text-black dark:text-white " />
+                                    class="input input-bordered w-full p-2 bg-white dark:bg-gray-600  text-black dark:text-white"
+                                    oninput="validateNumericInput(this); setCustomValidity('');"
+                                    oninvalid="setCustomValidity(this.value.length !== 11 ? 'Please enter exactly 11 digits.' : '');"/>
                                 </label>
                             </div>           
                             <div>
-                                <label class="block">
+                                <label class="block text-lg">
                                     Sex:
                                     <select id="sex"
                                             required
@@ -650,7 +652,7 @@ if ($result && $result->num_rows > 0) {
                                 </label>
                             </div>
                             <div>
-                                <label class="block">
+                                <label class="block text-lg">
                                     Email:
                                     <input type="email"
                                     name="patient_email"
@@ -663,7 +665,7 @@ if ($result && $result->num_rows > 0) {
                             </div>
 
                             <div>
-                                <label class="block">
+                                <label class="block text-lg">
                                     Address:
                                     <input type="text" 
                                     name="patient_address"
@@ -675,20 +677,20 @@ if ($result && $result->num_rows > 0) {
                                 </label>
                             </div>
                             <div>
-                                <label class="block">
+                                <label class="block text-lg">
                                     Date of Birth:
                                     <input type="date"
                                     id="dob"
                                            value='<?php echo $patientDOB?>'
                                     name="patient_dob"
                                     required 
-                                    class="input input-bordered w-full p-2 bg-white dark:bg-gray-600  text-black dark:text-white [color-scheme:light] dark:[color-scheme:dark]" />
+                                    class="dob-input input input-bordered w-full p-2 bg-white dark:bg-gray-600  text-black dark:text-white [color-scheme:light] dark:[color-scheme:dark]" />
                                 </label>
                             </div>
 
 
                           <div>
-                            <label class="block">
+                            <label class="block text-lg">
                               Patient Status
                               <select id="patient_status"
                                       required

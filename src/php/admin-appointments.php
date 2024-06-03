@@ -344,13 +344,13 @@ ORDER BY
             <label for="rescheduled-date" class="block text-base sm:text-lg font-medium text-black dark:text-white">
               Rescheduled Date<span id='appointmentDateNote' class='text-sm text-info hidden'> (Please check doctor schedule)</span>
             </label>
-            <input disabled type="date" id="appointment-date" name="rescheduled-date" class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark] text-black dark:text-white" />
+            <input disabled type="date" id="appointment-date" name="rescheduled-date" class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark] text-black dark:text-white text-lg" />
           </div>
           <div class="w-full">
             <label for="appointment-time" class="block text-base sm:text-lg font-medium text-black dark:text-white">
               Rescheduled Time
             </label>
-            <select id="appointment-time" name="rescheduled-time" required class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark]">
+            <select id="appointment-time" name="rescheduled-time" required class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark] text-lg text-black dark:text-white">
 
             </select>
           </div>

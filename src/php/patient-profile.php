@@ -175,13 +175,13 @@ $accountOwner_ID = $_SESSION['online_Account_owner_id'];
                       required
                       disabled
                       placeholder="Contact Number"
-                      pattern="[0-9]*"
+                      pattern="^\d{11}$"
                       minlength="11"
                       maxlength="11"
                       title="Please enter a 11-digit contact number."
                       class="numeric-input input input-bordered appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none text-base sm:text-lg bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400 disabled:border-gray-300"
-                      oninput="setCustomValidity('');"
-                      oninvalid="setCustomValidity(this.value.length < 11 ? 'Please enter 11 digits' : 'Please enter 11 digits, you are currently using ' + this.value.length + ' digits.');"
+                      oninput="validateNumericInput(this); setCustomValidity('');"
+                      oninvalid="setCustomValidity(this.value.length !== 11 ? 'Please enter exactly 11 digits.' : '');"
                     />
                   </div>
                   <!-- Date of Birth, Sex -->
@@ -196,7 +196,7 @@ $accountOwner_ID = $_SESSION['online_Account_owner_id'];
                       name="dob"
                       type="date"
                       disabled
-                      class="input input-bordered w-full p-2 text-xs sm:text-lg bg-white dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark] text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400 disabled:border-gray-300"
+                      class="dob-input input input-bordered w-full p-2 text-xs sm:text-lg bg-white dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark] text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400 disabled:border-gray-300"
                       required
                       
                     />
@@ -357,7 +357,7 @@ $accountOwner_ID = $_SESSION['online_Account_owner_id'];
                     Account Members
                   </h3>
                     <button class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none" onclick='toggleDialog("addRelative") ;
-                  changeInputvalue("actionType","Add");changeInputvalue("accountmemeberID","0") '>Add a Relative</button>
+                  changeInputvalue("actionType","Add");changeInputvalue("accountmemeberID","0") '>Add a Member</button>
                 </div>
                 
               <div class="overflow-x-auto">
@@ -637,7 +637,7 @@ ORDER BY CASE WHEN `tbl_appointment`.`Status` = 'pending' THEN 0 ELSE 1 END, `tb
 
         <div class="flex flex-col sm:flex-row justify-between items-center">
           <div class="order-2 sm:order-1">
-            <h3 class="font-bold text-black dark:text-white text-2xl sm:text-4xl mb-2 sm:mb-0">Add a Relative</h3>
+            <h3 class="font-bold text-black dark:text-white text-2xl sm:text-4xl mb-2 sm:mb-0">Add a Member</h3>
           </div>
           <div class="order-1 sm:order-2 mb-2 sm:mb-0">
             <img src="../images/HCMC-blue.png" class="block h-10 lg:h-16 w-auto dark:hidden" alt="logo-light" />
@@ -695,9 +695,8 @@ ORDER BY CASE WHEN `tbl_appointment`.`Status` = 'pending' THEN 0 ELSE 1 END, `tb
                   </div>
                   <!-- Date of Birth, Sex -->
                   <div class="form-group">
-                    <label for="relativeDob" class="block font-medium text-black dark:text-white text-base sm:text-lg whitespace-nowrap overflow-hidden text-ellipsis">Date of Birth</label
-                    >
-                    <input id="relativeDob" name="relativeDob" type="date" class="input input-bordered w-full p-2 text-xs sm:text-lg bg-white dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark] text-black dark:text-white " required />
+                    <label for="relativeDob" class="block font-medium text-black dark:text-white text-base sm:text-lg whitespace-nowrap overflow-hidden text-ellipsis">Date of Birth</label>
+                    <input id="relativeDob" name="relativeDob" type="date" class="dob-input input input-bordered w-full p-2 text-xs sm:text-lg bg-white dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark] text-black dark:text-white " required />
                   </div>
                   <div class="form-group">
                     <label for="relativeSex" class="block font-medium text-black dark:text-white text-base sm:text-lg">Sex</label>
@@ -757,13 +756,13 @@ ORDER BY CASE WHEN `tbl_appointment`.`Status` = 'pending' THEN 0 ELSE 1 END, `tb
       </div>
     </dialog>
     <dialog id="RemoveAppointmentAccountMember"   class="modal bg-black  bg-opacity-40 ">
-      <div class="card bg-slate-50 w-[80vw] absolute top-10 sm:w-[30rem] max-h-[35rem]  flex flex-col text-black">
+      <div class="card bg-gray-200 dark:bg-gray-700 text-[#0e1011] dark:text-[#eef0f1] w-[80vw] absolute top-10 sm:w-[30rem] max-h-[35rem]  flex flex-col">
         <div  class=" card-title sticky  w-full grid place-items-center">
-          <h3 class="font-bold text-center text-lg  p-5 ">Remove this person from account appointment member?</h3>
+          <h3 class="font-bold text-center text-lg  p-5 ">Remove this person from Account Members?</h3>
         </div>
         <div class="p-4 w-full flex justify-evenly">
           <a id="removeAppointmentAccountMemberLink"  class="btn btn-error w-1/4" onclick="removeAppointmentAccountMember(this.getAttribute('data_id'), <?php echo $accountOwner_ID?> )">Yes</a>
-          <button class="btn  btn-neutral  w-1/4 " onclick='toggleDialog("RemoveAppointmentAccountMember")'>Close</button>
+          <button class="btn bg-gray-400 dark:bg-white hover:bg-gray-500 dark:hover:bg-gray-400  text-black border-none" onclick='toggleDialog("RemoveAppointmentAccountMember")'>Close</button>
         </div>
       </div>
     </dialog>

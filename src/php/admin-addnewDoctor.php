@@ -90,11 +90,9 @@ if ($result->num_rows > 0) {
                         name="specialty">
                 <option value="" disabled selected>Select...</option>
                 <option value="Internal Medicine">Internal Medicine</option>
-                <option value="OB-GYNE">OB-GYNE</option>
-                <option value="Family Medicine">Family Medicine</option>
-                <option value="Pediatrics">Pediatrics</option>
                 <option value="General Medicine">General Medicine</option>
-                <option value="Surgery">Surgery</option>
+                <option value="Pediatrician">Pediatrician</option>
+                <option value="Radiologist">Radiologist</option>
                 </select>
             </div>
             </div>
@@ -126,7 +124,9 @@ if ($result->num_rows > 0) {
             </div>
             <div>
                 <label for="contact-number" class="block text-base sm:text-lg font-medium">Contact Number</label>
-                <input id="contact-number" name="contact_number" type="tel" required autocomplete="off" placeholder="Contact Number" pattern="[0-9]{1,11}" minlength="11" maxlength="11" title="Please enter up to 11 numeric characters." class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600" />
+                <input id="contact-number" name="contact_number" type="tel" required autocomplete="off" placeholder="Contact Number" pattern="^\d{11}$" minlength="11" maxlength="11" title="Please enter up to 11 numeric characters." class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600" 
+                oninput="validateNumericInput(this); setCustomValidity('');"
+                oninvalid="setCustomValidity(this.value.length !== 11 ? 'Please enter exactly 11 digits.' : '');"/>
             </div>
 
             <div>
@@ -139,7 +139,7 @@ if ($result->num_rows > 0) {
             </div>
             <div>
                 <label for="dob" class="block text-base sm:text-lg font-medium">Date of Birth</label>
-                <input type="date" id="dob" name="dob" required class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark]" />
+                <input type="date" id="dob" name="dob" required class="dob-input input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark]" />
             </div>
 
             <div>

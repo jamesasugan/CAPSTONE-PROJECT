@@ -257,7 +257,7 @@ if ($result->num_rows > 0) {
                         <button id="deleteButton" class="btn btn-error mt-5" onclick="deleteSched.showModal()">Delete Schedule</button>                   
                         <dialog id="deleteSched" class="modal">
                             <div class="modal-box w-11/12 max-w-5xl bg-gray-200 dark:bg-gray-700 text-[#0e1011] dark:text-[#eef0f1]">
-                                <h3 class="font-bold text-xl sm:text-3xl">Delete/Reset Schedule</h3>
+                                <h3 class="font-bold text-xl sm:text-3xl">Delete Schedule</h3>
                                 
                                 
                               <form id='deleteSchedForm' action="#" method="GET" class="space-y-4">
@@ -350,10 +350,10 @@ if ($result->num_rows > 0) {
 
                                     <!-- Confirmation and Password Input -->
                                     <div class="form-group">  
-                                        <p class="text-black dark:text-white mt-16">Are you sure you want to delete your schedule?
+                                        <p class="text-black dark:text-white mt-16">Are you sure you want to delete this schedule?
                                             <br><span class="font-bold text-red-400">This action is permanent and cannot be undone.</span>
                                         </p>
-                                        <p class="text-black dark:text-white mt-2 mb-1">Please enter your password to avoid accidentally deleting your schedule</p>
+                                        <p class="text-black dark:text-white mt-2 mb-1">Please enter your password to confirm deleting schedule</p>
                                         <label for="dlt-password" class="block font-medium text-black dark:text-white">Confirm Password</label>
                                         <div class="relative">
                                             <input name='conf_passoword' id="dlt-password" type="password" required autocomplete="off" placeholder="Enter your password"
@@ -472,6 +472,7 @@ if ($result->num_rows > 0) {
                             </select>
                         </div>
                        
+                        <!-- table for Adding Schedules -->
                         <div class="overflow-x-auto">
                             <table class="table">
                                 <thead>
@@ -505,6 +506,47 @@ if ($result->num_rows > 0) {
                                 </tbody>
                             </table>
                         </div>
+                        <!-- table for Adding Schedules end-->
+
+                        <!-- table for Deleting Schedules -->
+                        <div class="overflow-x-auto">
+                            <table class="table">
+                                <thead>
+                                <tr class="font-bold text-black dark:text-white text-base sm:text-lg ">
+                                    <th>Name</th>
+                                    <th>Deletion Type</th>
+                                    <th>Date</th>
+                                    <th class="pl-16">Action</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr class="text-base hover:bg-gray-300 dark:hover:bg-gray-600 font-medium text-black dark:text-white">
+                                    <!-- dapat may Dr. sa bawat name ah -->
+                                    <td class="w-1/4">Dr. Hart Hagerty</td>
+                                    <td>All</td>
+                                    <!--  ito mga values sa Deletion Type
+                                          All, Day, Custom Range -->
+
+                                    <td class="w-1/4">All</td>
+                                    <!--  ito mga values sa Date
+                                          All(kapag all), 
+                                          July 1, 2024(kapag Delete Day)
+                                          August 1, 2024 to September 2, 2024(kapag delete custom range)
+                                          -->
+
+                                    <td class="w-1/4">
+                                        <div>
+                                            <button class="bg-blue-500 p-2 rounded-md mr-5 text-white font-medium">Accept</button>
+                                            <button class="bg-red-500 p-2 rounded-md text-white font-medium">Decline</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- table for Deleting Schedules end -->
+
+
                     </div>
 
 

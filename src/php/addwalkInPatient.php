@@ -208,14 +208,16 @@ if ($result->num_rows > 0) {
                 <label
                     for="email"
                     class="block font-medium text-black dark:text-white text-base sm:text-lg overflow-hidden whitespace-nowrap text-overflow-ellipsis"
-                      >Email Address</label
+                      >Email (optional)</label
                   >
-                <input id="email" name="email" type="email" autocomplete="email" required placeholder="Email"
+                <input id="email" name="email" type="email" autocomplete="email" placeholder="Email"
                       class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600"/>
             </div>
             <div>
                 <label for="contact-number" class="block text-base sm:text-lg font-medium">Contact Number</label>
-                <input id="contact-number" name="contact-number" type="tel" required autocomplete="off" placeholder="Contact Number" pattern="[0-9]{1,11}" minlength="11" maxlength="11" title="Please enter up to 11 numeric characters." class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600" />
+                <input id="contact-number" name="contact-number" type="tel" required autocomplete="off" placeholder="Contact Number" pattern="^\d{11}$" minlength="11" maxlength="11" title="Please enter up to 11 numeric characters." class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600" 
+                oninput="validateNumericInput(this); setCustomValidity('');"
+                oninvalid="setCustomValidity(this.value.length !== 11 ? 'Please enter exactly 11 digits.' : '');" />
             </div>
 
             <div>
@@ -228,22 +230,9 @@ if ($result->num_rows > 0) {
             </div>
             <div>
                 <label for="dob" class="block text-base sm:text-lg font-medium">Date of Birth</label>
-                <input type="date" id="dob" name="dob" required class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark]" />
+                <input type="date" id="dob" name="dob" required class="dob-input input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark]" />
             </div>
 
-            <div>
-                <div class="block text-base sm:text-lg font-medium mb-1">Is the Patient vaccinated?</div>
-                <div class="flex items-center space-x-4 p-2 bg-gray-300 dark:bg-gray-600 rounded">
-                    <label class="flex items-center">
-                        <input type="radio" name="vaccinated" value="Yes" class="radio radio-primary" required>
-                        <span class="ml-2">Yes</span>
-                    </label>
-                    <label class="flex items-center">
-                        <input type="radio" name="vaccinated" value="No" class="radio radio-primary" required>
-                        <span class="ml-2">No</span>
-                    </label>
-                </div>
-            </div>
             <div>
                 <label for="address" class="block text-base sm:text-lg font-medium">Address</label>
                 <input type="text" id="address" name="address" autocomplete="off" placeholder="Address" required class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600" />

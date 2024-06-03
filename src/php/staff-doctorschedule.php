@@ -209,7 +209,7 @@ $doctor_id = $row['Staff_ID'];
                         <button id="deleteButton" class="btn btn-error mt-5" onclick="deleteSched.showModal()">Delete Schedule</button>                   
                         <dialog id="deleteSched" class="modal">
                             <div class="modal-box w-11/12 max-w-5xl bg-gray-200 dark:bg-gray-700 text-[#0e1011] dark:text-[#eef0f1]">
-                                <h3 class="font-bold text-xl sm:text-3xl">Delete/Reset Schedule</h3>
+                                <h3 class="font-bold text-xl sm:text-3xl">Delete Schedule</h3>
                                 <p class="py-4 text-lg sm:text-xl font-medium">How do you want to delete your schedule?</p>
                                 
                                 <form id='deleteSchedForm' action="#" method="GET" class="space-y-4">
@@ -243,7 +243,7 @@ $doctor_id = $row['Staff_ID'];
 
                                   <!-- Delete Day -->
                                   <div id="deleteDayNote" class="note font-medium text-gray-700 dark:text-white text-lg" style="display: none;">
-                                    <p><span class="font-bold text-blue-500 mb-1">NOTE:</span> This will delete your selected date. This is best when you are not available on the set schedule.</p>
+                                    <p><span class="font-bold text-blue-500 mb-1">NOTE:</span> This will delete your selected day.</p>
                                     <label for="deleteDayDate">Select Date:</label>
                                     <input type="date" id="deleteDayDate" name="delete-dayDate" class="input input-bordered w-full bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark]">
                                   </div>
@@ -261,10 +261,7 @@ $doctor_id = $row['Staff_ID'];
 
                                   <!-- Confirmation and Password Input -->
                                   <div class="form-group">
-                                    <p class="text-black dark:text-white mt-16">Are you sure you want to delete your schedule?
-                                      <br><span class="font-bold text-red-400">This action is permanent and cannot be undone.</span>
-                                    </p>
-                                    <p class="text-black dark:text-white mt-2 mb-1">Please enter your password to avoid accidentally deleting your schedule</p>
+                                    <p class="text-black dark:text-white mt-10 mb-1">Please enter your password to confirm deleting your schedule</p>
                                     <label for="dlt-password" class="block font-medium text-black dark:text-white">Confirm Password</label>
                                     <div class="relative">
                                       <input name='conf_passoword' id="dlt-password" type="password" required autocomplete="off" placeholder="Enter your password"
@@ -291,6 +288,10 @@ $doctor_id = $row['Staff_ID'];
                     </div>
                 </div>
 
+
+                <div class="flex justify-center mb-5">
+                  <button class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none" onclick="viewRequest.showModal()">View Schedule Requests</button>
+                </div>
 
                 <!-- calendar section -->
                 <div class="flex flex-col lg:flex-row justify-between lg:items-stretch">
@@ -341,6 +342,95 @@ $doctor_id = $row['Staff_ID'];
                         </div>
                     </div>
                 </div>
+
+          <!-- modal for view pending schedules -->
+              <dialog id="viewRequest" class="modal">
+                    <div class="modal-box w-11/12 max-w-7xl bg-gray-200 dark:bg-gray-700 text-[#0e1011] dark:text-[#eef0f1] p-0">
+                        <div class="modal-header sticky top-0 bg-gray-200 dark:bg-gray-700 z-10 px-10 pt-10">
+
+                        <!-- gawin mong "Pending Deletion Schedules" pag pinili sa dropdown yung Delete schedules -->
+                            <h3 class="font-bold text-3xl mb-0 text-center">Pending Schedules</h3>
+
+                                <div class="modal-action flex justify-end">
+                                    <form method="dialog">
+                                        <button class="btn bg-white text-black hover:bg-gray-400 border-none mb-3">Close</button>
+                                    </form>
+                                </div>      
+                            <div class="border border-gray-600 dark:border-slate-300"></div>
+                        </div>
+
+                    <div class="p-10">
+                        <div class="mt-5 w-2/4 mb-5">
+                            <label for="selectPending" class="block font-medium text-black dark:text-white text-base sm:text-lg">View Pending Actions</label>
+                            <select id="selectPending" name="selectPending" class="select select-bordered appearance-none block w-full px-3 border-gray-300 rounded-md shadow-sm focus:outline-none text-base sm:text-lg bg-white dark:bg-gray-600 text-black dark:text-white " required>
+                                <option value="">Select...</option>
+                                <option value="Pending Add Schedules">Pending Add Schedules</option>
+                                <option value="Pending Delete Schedules">Pending Delete Schedules</option>
+                            </select>
+                        </div>
+                       
+                        <!-- table for Adding Schedules -->
+                        <div class="overflow-x-auto">
+                            <table class="table">
+                                <thead>
+                                <tr class="font-bold text-black dark:text-white text-base sm:text-lg ">
+                                    <th>Days in a Week</th>
+                                    <th>Start to End Time</th>
+                                    <th>Start to End Date</th>
+                                    <th>Status</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr class="text-base hover:bg-gray-300 dark:hover:bg-gray-600 font-medium text-black dark:text-white">
+                                    <td class="w-1/4">Monday, Tuesday, Wednesday, Thursday, Friday, Saturday</td>
+                                    <td class="w-1/4">10:00 AM to 03:00 PM</td>
+                                    <td class="w-1/4">June 2, 2024 to July 21, 2024</td>
+                                    
+
+                                    <td class="font-bold text-green-500">Accepted</td>
+                                    <!-- Declined = text-red-500 -->
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- table for Adding Schedules end-->
+
+                        <!-- table for Deleting Schedules -->
+                        <div class="overflow-x-auto">
+                            <table class="table">
+                                <thead>
+                                <tr class="font-bold text-black dark:text-white text-base sm:text-lg ">
+                                    <th>Deletion Type</th>
+                                    <th>Date</th>
+                                    <th>Action</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr class="text-base hover:bg-gray-300 dark:hover:bg-gray-600 font-medium text-black dark:text-white">
+                                    <td>All</td>
+                                    <!--  ito mga values sa Deletion Type
+                                          All, Day, Custom Range -->
+
+                                    <td class="w-1/4">All</td>
+                                    <!--  ito mga values sa Date
+                                          All(kapag all), 
+                                          July 1, 2024(kapag Delete Day)
+                                          August 1, 2024 to September 2, 2024(kapag delete custom range)
+                                          -->
+
+                                    <td class="font-bold text-green-500">Accepted</td>
+                                    <!-- Declined = text-red-500 -->
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- table for Deleting Schedules end -->
+                        
+                    </div>
+
+                    </div>
+                </dialog>
+
         </section>
 
 </body>
