@@ -366,9 +366,9 @@ if ($action == 'deleteSched'){
 
             }elseif (isset($_POST['list-radio']) && $_POST['list-radio'] == 'deleteDay'){
                 $selectd_date = $_POST['delete-dayDate'];
-                $del = "DELETE FROM tbl_availability where Date = ?";
+                $del = "DELETE FROM tbl_availability where Date = ? and Staff_ID = ?";
                 $del_stmt = $conn->prepare($del);
-                $del_stmt->bind_param('s', $selectd_date);
+                $del_stmt->bind_param('si', $selectd_date, $delDoc_id);
                 $del_stmt->execute();
                 echo 1;
                 exit() ;
@@ -376,9 +376,9 @@ if ($action == 'deleteSched'){
             elseif (isset($_POST['list-radio']) && $_POST['list-radio'] == 'customDelete'){
                 $range_start_date = $_POST['start-date'];
                 $range_end_date = $_POST['end-date'];
-                $del_range = "DELETE FROM tbl_availability WHERE Date BETWEEN ? AND ?";
+                $del_range = "DELETE FROM tbl_availability WHERE Date BETWEEN ? AND ? and Staff_ID = ?";
                 $del_range_stmt = $conn->prepare($del_range);
-                $del_range_stmt->bind_param('ss', $range_start_date, $range_end_date);
+                $del_range_stmt->bind_param('ssi', $range_start_date, $range_end_date, $delDoc_id);
                 $del_range_stmt->execute();
                 echo 1;
                 exit() ;

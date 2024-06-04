@@ -91,7 +91,7 @@ if (isset($_SESSION['user_type']) and $_SESSION['user_type'] == 'staff') {
               <option value="" disabled selected>...</option>
                 <?php
                 $sql =
-                    "SELECT * FROM tbl_accountpatientmember where user_info_ID = ? ";
+                    "SELECT * FROM tbl_accountpatientmember  where user_info_ID = ? ";
                 $stmt = $conn->prepare($sql);
                 $stmt->bind_param('i', $_SESSION['online_Account_owner_id']);
                 $stmt->execute();
