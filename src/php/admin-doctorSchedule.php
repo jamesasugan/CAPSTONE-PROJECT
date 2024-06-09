@@ -173,18 +173,7 @@ if ($result->num_rows > 0) {
                                         <span>Please select at least one day.</span>
                                     </div>
                                 </div>
-                              <dialog id="scheSet" class='modal'>
-                                <div class='absolute top-20'>
-                                  <div  class="flex justify-center  mt-2">
-                                    <div role="alert" class="alert alert-success w-auto font-medium">
-                                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                      </svg>
-                                      <span>Schedule successfully set</span>
-                                    </div>
-                                  </div>
-                                </div>
-                              </dialog>
+
 
 
                             </fieldset>
@@ -356,7 +345,7 @@ if ($result->num_rows > 0) {
                                         <p class="text-black dark:text-white mt-2 mb-1">Please enter your password to confirm deleting schedule</p>
                                         <label for="dlt-password" class="block font-medium text-black dark:text-white">Confirm Password</label>
                                         <div class="relative">
-                                            <input name='conf_passoword' id="dlt-password" type="password" required autocomplete="off" placeholder="Enter your password"
+                                            <input name='conf_password' id="dlt-password" type="password" required autocomplete="off" placeholder="Enter your password"
                                             class="input input-bordered w-full border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:outline-none sm:text-sm bg-white dark:bg-gray-600 text-black dark:text-white">
                                         </div>
                                     </div>                                       
@@ -390,7 +379,7 @@ if ($result->num_rows > 0) {
                             </div>
                         </div>
                         <div class="card-actions justify-center mt-auto">
-                            <button class="btn text-base sm:text-lg rounded-none w-full bg-[#78afe2] dark:bg-[#1C3F61] uppercase text-[#0e1011] dark:text-[#eef0f1] hover:bg-[#224362] hover:text-[#eef0f1] dark:hover:bg-[#9dbedd] dark:hover:text-[#0e1011] border-[#35485a] dark:border-[#8c9caa] overflow-hidden whitespace-nowrap text-overflow-ellipsis" onclick="viewPendingSched.showModal()">View Pendings</button>
+                            <button class="btn text-base sm:text-lg rounded-none w-full bg-[#78afe2] dark:bg-[#1C3F61] uppercase text-[#0e1011] dark:text-[#eef0f1] hover:bg-[#224362] hover:text-[#eef0f1] dark:hover:bg-[#9dbedd] dark:hover:text-[#0e1011] border-[#35485a] dark:border-[#8c9caa] overflow-hidden whitespace-nowrap text-overflow-ellipsis" onclick="viewPendingSched.showModal(); getReqRec(); getDelRec()">View Pendings</button>
                         </div>
                     </div>
                 </div>
@@ -427,7 +416,7 @@ if ($result->num_rows > 0) {
                                     type="text" 
                                     name="text"
                                     class="input input-bordered appearance-none w-full px-3 py-2 rounded-none bg-white dark:bg-gray-600 text-black dark:text-white border border-black border-r-0 dark:border-white" 
-                                    placeholder="Search" onkeyup="handleSearch('Search_input', getVisibleTableId())"
+                                    placeholder="Search" onkeyup="//handleSearch('Search_input', getVisibleTableId())"
                                     />
                                     <button type="submit" class="btn btn-square bg-gray-400 hover:bg-gray-500  rounded-none dark:bg-gray-500 dark:hover:bg-gray-300 border border-black border-l-0 dark:border-white">
                                     <i class="fa-solid fa-magnifying-glass text-black dark:text-white"></i>
@@ -465,15 +454,14 @@ if ($result->num_rows > 0) {
                     <div class="p-10">
                         <div class="mt-5 w-2/4 mb-5">
                             <label for="selectPending" class="block font-medium text-black dark:text-white text-base sm:text-lg">Select Pending Actions</label>
-                            <select id="selectPending" name="selectPending" class="select select-bordered appearance-none block w-full px-3 border-gray-300 rounded-md shadow-sm focus:outline-none text-base sm:text-lg bg-white dark:bg-gray-600 text-black dark:text-white " required>
-                                <option value="">Select...</option>
-                                <option value="Pending Add Schedules">Pending Add Schedules</option>
+                            <select onchange='switchTable()' id="chooseTable" name="chooseTable" class="select select-bordered appearance-none block w-full px-3 border-gray-300 rounded-md shadow-sm focus:outline-none text-base sm:text-lg bg-white dark:bg-gray-600 text-black dark:text-white " required>
+                                <option selected value="Pending Add Schedules">Pending Add Schedules</option>
                                 <option value="Pending Delete Schedules">Pending Delete Schedules</option>
                             </select>
                         </div>
                        
                         <!-- table for Adding Schedules -->
-                        <div class="overflow-x-auto">
+                        <div id='addSched' class="overflow-x-auto">
                             <table class="table">
                                 <thead>
                                 <tr class="font-bold text-black dark:text-white text-base sm:text-lg ">
@@ -485,14 +473,14 @@ if ($result->num_rows > 0) {
                                     <th class="pl-16">Action</th>
                                 </tr>
                                 </thead>
-                                <tbody>
+                                <tbody id='schedReqRec'>
                                 <tr class="text-base hover:bg-gray-300 dark:hover:bg-gray-600 font-medium text-black dark:text-white">
                                     <!-- dapat may Dr. sa bawat name ah -->
                                     <td class="w-1/4">Dr. Hart Hagerty</td>
                                     <td class="w-1/4">Monday, Tuesday, Wednesday, Thursday, Friday, Saturday</td>
                                     <td class="w-1/4">10:00 AM to 03:00 PM</td>
                                     <td class="w-1/4">June 2, 2024 to July 21, 2024</td>
-                                    
+
                                     <!-- <td class="font-bold text-green-500">Accepted</td> -->
                                     <!-- Declined = text-red-500 -->
 
@@ -509,7 +497,7 @@ if ($result->num_rows > 0) {
                         <!-- table for Adding Schedules end-->
 
                         <!-- table for Deleting Schedules -->
-                        <div class="overflow-x-auto">
+                        <div id='deleteSchedTBL' class="overflow-x-auto hidden">
                             <table class="table">
                                 <thead>
                                 <tr class="font-bold text-black dark:text-white text-base sm:text-lg ">
@@ -519,7 +507,7 @@ if ($result->num_rows > 0) {
                                     <th class="pl-16">Action</th>
                                 </tr>
                                 </thead>
-                                <tbody>
+                                <tbody id='PendingDelSched'>
                                 <tr class="text-base hover:bg-gray-300 dark:hover:bg-gray-600 font-medium text-black dark:text-white">
                                     <!-- dapat may Dr. sa bawat name ah -->
                                     <td class="w-1/4">Dr. Hart Hagerty</td>
@@ -545,20 +533,185 @@ if ($result->num_rows > 0) {
                             </table>
                         </div>
                         <!-- table for Deleting Schedules end -->
-
-
                     </div>
 
 
 
                         
                     </div>
+                  <dialog id="declineSchedAlert" class='modal bg-black bg-opacity-50' onclick='toggleDialog(this.id); getReqRec(); getDelRec()'>
+                    <div class='absolute top-20'>
+                      <div  class="flex justify-center  mt-2">
+                        <div role="alert" class="alert alert-error w-auto font-medium">
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                          </svg>
+                          <span>Schedule Request has been declined</span>
+                        </div>
+                      </div>
+                    </div>
+                  </dialog>
+                  <dialog id="declineDelSchedAlert" class='modal bg-black bg-opacity-50' onclick='toggleDialog(this.id); getReqRec(); getDelRec()'>
+                    <div class='absolute top-20'>
+                      <div  class="flex justify-center  mt-2">
+                        <div role="alert" class="alert alert-warning w-auto font-medium">
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                          </svg>
+                          <span>Delete schedule request has been declined</span>
+                        </div>
+                      </div>
+                    </div>
+                  </dialog>
                 </dialog>
 
         </section>
+    <dialog id="scheSet" class='modal bg-opacity-50 bg-black'>
+      <div class='absolute top-20'>
+        <div  class="flex justify-center  mt-2">
+          <div role="alert" class="alert alert-success w-auto font-medium">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <span>Schedule successfully set</span>
+          </div>
+        </div>
+      </div>
+    </dialog>
+    <dialog id="delSchedApprove" class='modal bg-opacity-50 bg-black'>
+      <div class='absolute top-20'>
+        <div  class="flex justify-center  mt-2">
+          <div role="alert" class="alert alert-error w-auto font-medium">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <span>Schedule has been deleted</span>
+          </div>
+        </div>
+      </div>
+    </dialog>
+
 </body>
 
 <script>
+  function ApproveSchedReq(sched_id , staff_id) {
+    $.ajax({
+      url: 'ajax.php?action=approveSchedReq&sched_id=' + encodeURIComponent(sched_id) + '&staff_id=' +encodeURIComponent(staff_id),
+      type: 'GET',
+      dataType: 'html',
+      success: function(response) {
+        if (parseInt(response) === 1) {
+          toggleDialog('viewPendingSched');
+          toggleDialog('scheSet');
+          window.location.href = 'admin-doctorSchedule.php';
+
+        } else {
+          console.log(response);
+        }
+      },
+      error: function(xhr, status, error) {
+        console.error('Error:', error);
+      }
+    });
+  }
+
+  function declineSchedReq(sched_id) {
+    $.ajax({
+      url: 'ajax.php?action=schedReqdecline&data_id=' + encodeURIComponent(sched_id),
+      type: 'GET',
+      dataType: 'html',
+      success: function(response) {
+        if (parseInt(response) === 1) {
+          toggleDialog('declineSchedAlert');
+        } else {
+          console.log(response);
+        }
+      },
+      error: function(xhr, status, error) {
+        console.error('Error:', error);
+      }
+    });
+  }
+
+
+  function ApproveDelSchedReq(Del_sched_id , staff_id) {
+    $.ajax({
+      url: 'ajax.php?action=approveDelSchedReq&del_sched_id=' + encodeURIComponent(Del_sched_id) + '&staff_id=' +encodeURIComponent(staff_id),
+      type: 'GET',
+      dataType: 'html',
+      success: function(response) {
+        if (parseInt(response) === 1) {
+          toggleDialog('viewPendingSched');
+          toggleDialog('delSchedApprove');
+          window.location.href = 'admin-doctorSchedule.php';
+
+
+        } else {
+          console.log(response);
+        }
+      },
+      error: function(xhr, status, error) {
+        console.error('Error:', error);
+      }
+    });
+  }
+  function declineDelSchedReq(delSchedID) {
+    $.ajax({
+      url: 'ajax.php?action=declineDel&data_id=' + encodeURIComponent(delSchedID),
+      type: 'GET',
+      dataType: 'html',
+      success: function(response) {
+        if (parseInt(response) === 1) {
+          toggleDialog('declineDelSchedAlert');
+        } else {
+          console.log(response);
+        }
+      },
+      error: function(xhr, status, error) {
+        console.error('Error:', error);
+      }
+    });
+  }
+
+  function getReqRec(){
+    $.ajax({
+      url: 'ajax.php?action=DoctorSchedRec',
+      type: 'GET',
+      data: 'html',
+
+      success: function(response) {
+        if (response) {
+          $('#schedReqRec').html(response);
+        }
+      },
+    });
+  }
+  function getDelRec(){
+    $.ajax({
+      url: 'ajax.php?action=getPendingDelSched',
+      type: 'GET',
+      data: 'html',
+
+      success: function(response) {
+        if (response) {
+          $('#PendingDelSched').html(response);
+        }
+      },
+    });
+  }
+  function switchTable() {
+    let select = document.querySelector("select[name='chooseTable']");
+    let addSched = document.getElementById("addSched");
+    let delSched = document.getElementById("deleteSchedTBL");
+
+    if (select.value === "Pending Add Schedules") {
+      delSched.classList.add('hidden');
+      addSched.classList.remove('hidden')
+    } else if (select.value === "Pending Delete Schedules") {
+      addSched.classList.add('hidden');
+      delSched.classList.remove('hidden');
+    }
+  }
   document.getElementById('DoctorName').addEventListener('change', function() {
     var selectedStaffId = this.value;
     if (selectedStaffId) {
@@ -616,7 +769,7 @@ if ($result->num_rows > 0) {
 
       let form_data = new FormData(e.target);
       $.ajax({
-        url: 'ajax.php?action=DoctorSchedule',
+        url: 'ajax.php?action=AdminAddDoctorAvailability',
         type: 'POST',
         data: form_data,
         processData: false,

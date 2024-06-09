@@ -160,3 +160,59 @@ function getLastPatientVisit($chart_id) {
     $stmt->close();
 }
 
+
+function UpdateDoctorAvailabiity($selectedDays, $startTime, $endTime, $startSched, $endSched, $staff_id){
+    include "../Database/database_conn.php";
+    $dates = calculateDates($selectedDays, $startSched, $endSched);
+    $staffDateAvailability = array();
+    $getDoctorSchedAvailability = "SELECT * FROM tbl_availability where Staff_ID = ?";
+    $getDoctorSchedAvailabilitySTMT = $conn->prepare($getDoctorSchedAvailability);
+    $getDoctorSchedAvailabilitySTMT->bind_param('i',$staff_id);
+    $getDoctorSchedAvailabilitySTMT->execute();
+    $result = $getDoctorSchedAvailabilitySTMT->get_result();
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $staffDateAvailability[] = $row['Date'];
+        }
+    }
+
+    foreach ($dates as $date) {
+        if (in_array($date, $staffDateAvailability)) {
+            $sql = "UPDATE tbl_availability SET StartTime = ?, EndTime = ? WHERE Staff_ID = ? AND Date = ?";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("ssss", $startTime, $endTime, $staff_id, $date);
+            $stmt->execute();
+        } else {
+            $sql = "INSERT INTO tbl_availability (Staff_ID, Date, StartTime, EndTime) VALUES (?, ?, ?, ?)";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("ssss", $staff_id, $date, $startTime, $endTime);
+            $stmt->execute();
+        }
+    }
+    return 1;
+
+}
+
+function DeleteAllDoctorAvailability($doctor_id){
+    include "../Database/database_conn.php";
+
+    $del = "DELETE FROM tbl_availability WHERE Staff_ID = ?";
+    $del_stmt = $conn->prepare($del);
+    $del_stmt->bind_param('i', $doctor_id);
+    $del_stmt->execute();
+}
+function DeleteSpecificDoctoAvailability($selectd_date, $doctor_id){
+    include "../Database/database_conn.php";
+    $del = "DELETE FROM tbl_availability WHERE Date = ? AND Staff_ID = ?";
+    $del_stmt = $conn->prepare($del);
+    $del_stmt->bind_param('si', $selectd_date, $doctor_id);
+    $del_stmt->execute();
+}
+function DeleteRangeDoctorAvailability($range_start_date, $range_end_date, $delDoc_id){
+    include "../Database/database_conn.php";
+
+    $del_range = "DELETE FROM tbl_availability WHERE Date BETWEEN ? AND ? AND Staff_ID = ?";
+    $del_range_stmt = $conn->prepare($del_range);
+    $del_range_stmt->bind_param('ssi', $range_start_date, $range_end_date, $delDoc_id);
+    $del_range_stmt->execute();
+}

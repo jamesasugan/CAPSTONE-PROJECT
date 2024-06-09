@@ -127,18 +127,7 @@ $doctor_id = $row['Staff_ID'];
                                   <span>Please select at least one day.</span>
                                 </div>
                               </div>
-                              <dialog id="scheSet" class='modal'>
-                                <div class='absolute top-20'>
-                                  <div  class="flex justify-center  mt-2">
-                                    <div role="alert" class="alert alert-success w-auto font-medium">
-                                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                      </svg>
-                                      <span>Schedule successfully set</span>
-                                    </div>
-                                  </div>
-                                </div>
-                              </dialog>
+
 
                             </fieldset>
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -206,8 +195,8 @@ $doctor_id = $row['Staff_ID'];
                         
 
                         <!-- Delete Schedule. tatlo may pangalang deleteSched dito ah -->
-                        <button id="deleteButton" class="btn btn-error mt-5" onclick="deleteSched.showModal()">Delete Schedule</button>                   
-                        <dialog id="deleteSched" class="modal">
+                        <button id="deleteButton" class="btn btn-error mt-5" onclick="toggleDialog('deleteSched')">Delete Schedule</button>
+                        <dialog id="deleteSched" class="modal" >
                             <div class="modal-box w-11/12 max-w-5xl bg-gray-200 dark:bg-gray-700 text-[#0e1011] dark:text-[#eef0f1]">
                                 <h3 class="font-bold text-xl sm:text-3xl">Delete Schedule</h3>
                                 <p class="py-4 text-lg sm:text-xl font-medium">How do you want to delete your schedule?</p>
@@ -264,7 +253,7 @@ $doctor_id = $row['Staff_ID'];
                                     <p class="text-black dark:text-white mt-10 mb-1">Please enter your password to confirm deleting your schedule</p>
                                     <label for="dlt-password" class="block font-medium text-black dark:text-white">Confirm Password</label>
                                     <div class="relative">
-                                      <input name='conf_passoword' id="dlt-password" type="password" required autocomplete="off" placeholder="Enter your password"
+                                      <input name='conf_password' id="dlt-password" type="password" required autocomplete="off" placeholder="Enter your password"
                                              class="input input-bordered w-full border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:outline-none sm:text-sm bg-white dark:bg-gray-600 text-black dark:text-white">
                                     </div>
                                   </div>
@@ -290,7 +279,7 @@ $doctor_id = $row['Staff_ID'];
 
 
                 <div class="flex justify-center mb-5">
-                  <button class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none" onclick="viewRequest.showModal()">View Schedule Requests</button>
+                  <button class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none" onclick="viewRequest.showModal(); getReqRec(); getDelRec();">View Schedule Requests</button>
                 </div>
 
                 <!-- calendar section -->
@@ -361,16 +350,15 @@ $doctor_id = $row['Staff_ID'];
 
                     <div class="p-10">
                         <div class="mt-5 w-2/4 mb-5">
-                            <label for="selectPending" class="block font-medium text-black dark:text-white text-base sm:text-lg">View Pending Actions</label>
-                            <select id="selectPending" name="selectPending" class="select select-bordered appearance-none block w-full px-3 border-gray-300 rounded-md shadow-sm focus:outline-none text-base sm:text-lg bg-white dark:bg-gray-600 text-black dark:text-white " required>
-                                <option value="">Select...</option>
-                                <option value="Pending Add Schedules">Pending Add Schedules</option>
-                                <option value="Pending Delete Schedules">Pending Delete Schedules</option>
+                            <label for="chooseTable" class="block font-medium text-black dark:text-white text-base sm:text-lg">View Pending Actions</label>
+                            <select onchange='switchTable()' id="chooseTable" name="chooseTable" class="select select-bordered appearance-none block w-full px-3 border-gray-300 rounded-md shadow-sm focus:outline-none text-base sm:text-lg bg-white dark:bg-gray-600 text-black dark:text-white " required>
+                              <option selected value="Pending Add Schedules">Pending Add Schedules</option>
+                              <option value="Pending Delete Schedules">Pending Delete Schedules</option>>
                             </select>
                         </div>
                        
                         <!-- table for Adding Schedules -->
-                        <div class="overflow-x-auto">
+                        <div id='addSched' class="overflow-x-auto ">
                             <table class="table">
                                 <thead>
                                 <tr class="font-bold text-black dark:text-white text-base sm:text-lg ">
@@ -380,7 +368,7 @@ $doctor_id = $row['Staff_ID'];
                                     <th>Status</th>
                                 </tr>
                                 </thead>
-                                <tbody>
+                                <tbody id='schedReqRec'>
                                 <tr class="text-base hover:bg-gray-300 dark:hover:bg-gray-600 font-medium text-black dark:text-white">
                                     <td class="w-1/4">Monday, Tuesday, Wednesday, Thursday, Friday, Saturday</td>
                                     <td class="w-1/4">10:00 AM to 03:00 PM</td>
@@ -396,7 +384,7 @@ $doctor_id = $row['Staff_ID'];
                         <!-- table for Adding Schedules end-->
 
                         <!-- table for Deleting Schedules -->
-                        <div class="overflow-x-auto">
+                        <div id='deleteSchedTBL' class="overflow-x-auto hidden">
                             <table class="table">
                                 <thead>
                                 <tr class="font-bold text-black dark:text-white text-base sm:text-lg ">
@@ -405,7 +393,7 @@ $doctor_id = $row['Staff_ID'];
                                     <th>Action</th>
                                 </tr>
                                 </thead>
-                                <tbody>
+                                <tbody id='PendingDelSched'>
                                 <tr class="text-base hover:bg-gray-300 dark:hover:bg-gray-600 font-medium text-black dark:text-white">
                                     <td>All</td>
                                     <!--  ito mga values sa Deletion Type
@@ -430,10 +418,49 @@ $doctor_id = $row['Staff_ID'];
 
                     </div>
                 </dialog>
-
         </section>
+    <dialog id="scheSet"  class='modal bg-black bg-opacity-50' onclick='toggleDialog(this.id)'>
+      <div class='absolute top-20'>
+        <div  class="flex justify-center  mt-2">
+          <div role="alert" class="alert alert-success w-auto font-medium">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <span>Schedule successfully set Please wait for admin approval</span>
+          </div>
+        </div>
+      </div>
+    </dialog>
+    <dialog id="DelSchedReqNotif"  class='modal bg-black bg-opacity-50' onclick='toggleDialog("DelSchedReqNotif"); console.log("asdasdasd")'>
+      <div class='absolute top-20'>
+        <div  class="flex justify-center  mt-2">
+          <div role="alert" class="alert alert-error w-auto font-medium">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <span>Delete Request has been submitted Please wait for admin approval</span>
+          </div>
+        </div>
+      </div>
+    </dialog>
 
 </body>
+<script>
+
+  function switchTable() {
+    let select = document.querySelector("select[name='chooseTable']");
+    let addSched = document.getElementById("addSched");
+    let delSched = document.getElementById("deleteSchedTBL");
+
+    if (select.value === "Pending Add Schedules") {
+      delSched.classList.add('hidden');
+      addSched.classList.remove('hidden')
+    } else if (select.value === "Pending Delete Schedules") {
+      addSched.classList.add('hidden');
+      delSched.classList.remove('hidden');
+    }
+  }
+</script>
 <script>
   function checkCheckboxes(form) {
     const checkboxes = document.querySelectorAll( '#'+ form + ' input[type="checkbox"]');
@@ -450,8 +477,8 @@ $doctor_id = $row['Staff_ID'];
       return  false;
     }
   }
-  function toggleDialog() {
-    let dialog = document.getElementById('scheSet');
+  function toggleDialog(id) {
+    let dialog = document.getElementById(id);
     if (dialog) {
       if (dialog.hasAttribute('open')) {
         dialog.removeAttribute('open');
@@ -460,6 +487,34 @@ $doctor_id = $row['Staff_ID'];
       }
     }
   }
+  function getReqRec(){
+    $.ajax({
+      url: 'ajax.php?action=DoctorSchedRec',
+      type: 'GET',
+      data: 'html',
+
+      success: function(response) {
+        if (response) {
+          $('#schedReqRec').html(response);
+        }
+      },
+    });
+  }
+  function getDelRec(){
+    $.ajax({
+      url: 'ajax.php?action=getPendingDelSched',
+      type: 'GET',
+      data: 'html',
+
+      success: function(response) {
+        if (response) {
+          $('#PendingDelSched').html(response);
+        }
+      },
+    });
+  }
+
+
   document.getElementById('availability-form').addEventListener('submit',function(e){
     e.preventDefault();
     if (checkCheckboxes('availability-form')){
@@ -473,13 +528,7 @@ $doctor_id = $row['Staff_ID'];
         contentType: false,
         success: function(response) {
           if (parseInt(response) === 1) {
-            toggleDialog()
-            e.target.reset();
-            setTimeout(function() {
-              toggleDialog()
-              window.location.href='staff-doctorschedule.php';
-            }, 1000);
-
+            toggleDialog('scheSet');
           }
         },
       });
@@ -497,7 +546,8 @@ $doctor_id = $row['Staff_ID'];
       contentType: false,
       success: function(response) {
         if (parseInt(response) === 1) {
-          window.location.href='staff-doctorschedule.php';
+          toggleDialog('deleteSched');
+          toggleDialog('DelSchedReqNotif')
         }
         console.log(response);
       },

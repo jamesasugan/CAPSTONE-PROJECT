@@ -1,10 +1,10 @@
 <?php
-/*
+
 if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] !== 'XMLHttpRequest') {
     header("Location: 404.php");
     exit();
 }
-*/
+
 
 
 
@@ -189,18 +189,195 @@ if ($action == 'getDoctorSched'){
     header('Content-Type: application/json');
     echo $schedules_json;
 }
-if ($action == 'DoctorSchedule') {
+if ($action == 'DoctorSchedule'){//staff side add sched
     $staff_id = isset($_POST['DoctorID']) ? $_POST['DoctorID'] : '';
-    $monday = isset($_POST['monday']);
-    $tuesday = isset($_POST['tuesday']);
-    $wednesday = isset($_POST['wednesday']);
-    $thursday = isset($_POST['thursday']);
-    $friday = isset($_POST['friday']);
-    $saturday = isset($_POST['saturday']);
-    $availability_time_In = isset($_POST['availability-timeIn']) ? $_POST['availability-timeIn'] : '';
-    $availability_time_end = isset($_POST['availability-timeEnd']) ? $_POST['availability-timeEnd'] : '';
-    $startSched = isset($_POST['repeatStart']) ? $_POST['repeatStart'] : '';
-    $endSched = isset($_POST['repeatEnd']) ? $_POST['repeatEnd'] : '';
+    $monday = isset($_POST['monday']) ? 'Monday':'';
+    $tuesday = isset($_POST['tuesday']) ? 'Tuesday':'';
+    $wednesday = isset($_POST['wednesday']) ? 'Wednesday':'';
+    $thursday = isset($_POST['thursday']) ? 'Thursday':'';
+    $friday = isset($_POST['friday']) ? 'Friday':'';
+    $saturday = isset($_POST['saturday']) ? 'Saturday':'';
+    $availability_time_In = $_POST['availability-timeIn'] ?? '';
+    $availability_time_end = $_POST['availability-timeEnd'] ?? '';
+    $startSched = $_POST['repeatStart'] ?? '';
+    $endSched = $_POST['repeatEnd'] ?? '';
+
+    $weekdaysArray = array_filter([$monday, $tuesday, $wednesday, $thursday, $friday, $saturday]);
+    $weekdays = implode(',', $weekdaysArray);
+    if ($startSched !== '' && $endSched !== '' && isValidDate($startSched) && isValidDate($endSched)) {
+        $newSched = "INSERT INTO tbl_schedule (Staff_ID,	weekDays,	startTime,	endTime,	startDate,	endDate)
+    values (?,?,?,?,?,?)";
+        $newSchedSTMT = $conn->prepare($newSched);
+        $newSchedSTMT->bind_param('isssss', $staff_id, $weekdays, $availability_time_In, $availability_time_end, $startSched, $endSched);
+        if ($newSchedSTMT->execute()){
+            echo 1;
+        }else {
+            echo $newSchedSTMT->error;
+        }
+        $newSchedSTMT->close();
+        exit();
+
+    }
+}
+
+if ($action == 'DoctorSchedRec') {
+    $login_user = $_SESSION['user_id'];
+    $getstaffID = "SELECT * FROM tbl_staff WHERE User_ID = ?";
+    $getstaffIDSTMT = $conn->prepare($getstaffID);
+    $getstaffIDSTMT->bind_param("i", $login_user);
+    $getstaffIDSTMT->execute();
+    $result = $getstaffIDSTMT->get_result();
+    if ($result->num_rows === 1) {
+        $staff = $result->fetch_assoc();
+        $staff_id = $staff['Staff_ID'];
+        $staffRole = $staff['Role'];
+
+
+        if ($staffRole == 'doctor') {
+            $getDocReq = "SELECT * FROM tbl_schedule WHERE Staff_ID = ? and status = 'Pending'";
+            $getDocReqSTMT = $conn->prepare($getDocReq);
+            $getDocReqSTMT->bind_param('i', $staff_id);
+            $getDocReqSTMT->execute();
+        } elseif ($staffRole == 'admin') {
+            $getDocReq = "SELECT  * FROM tbl_schedule JOIN tbl_staff on tbl_staff.Staff_ID = tbl_schedule.Staff_ID  WHERE status = 'Pending'";
+            $getDocReqSTMT = $conn->prepare($getDocReq);
+            $getDocReqSTMT->execute();
+        }else{
+            exit();
+        }
+
+        $result = $getDocReqSTMT->get_result();
+        if ($result->num_rows > 0) {
+
+            while ($row = $result->fetch_assoc()) {
+
+                $formattedStartTime = date("h:i A", strtotime($row['startTime']));
+                $formattedEndTime = date("h:i A", strtotime($row['endTime']));
+                $formattedStartDate = date("F j, Y", strtotime($row['startDate']));
+                $formattedEndDate = date("F j, Y", strtotime($row['endDate']));
+                $status_class = '';
+
+                if ($row['status'] == 'Approved') {
+                    $status_class = 'text-green-500';
+                } elseif ($row['status'] == 'Pending') {
+                    $status_class = 'text-yellow-500';
+                } else {
+                    $status_class = 'text-red-500';
+                }
+                if ($staffRole == 'admin'){
+                    if (!empty($row['Middle_Name'])) {
+                        $doctorName = 'Dr. ' . $row['First_Name'] . ' ' . substr($row['Middle_Name'], 0, 1) . '. ' . $row['Last_Name'];
+                    } else {
+                        $doctorName = 'Dr. ' . $row['First_Name'] . ' ' . $row['Last_Name'];
+                    }
+                    echo '<tr class="text-base hover:bg-gray-300 dark:hover:bg-gray-600 font-medium text-black dark:text-white">
+                        
+                          <td class="w-1/4">'.$doctorName.'</td>
+                        <td class="w-1/4">' . $row['weekDays'] . '</td>
+                        <td class="w-1/4">' . $formattedStartTime . ' to ' . $formattedEndTime . '</td>
+                        <td class="w-1/4">' . $formattedStartDate . ' to ' . $formattedEndDate . '</td>
+                        <td class="w-1/4">
+                          <div class="flex justify-between">
+                             <button class="bg-blue-500 p-2 rounded-md mr-5 text-white font-medium" onclick="ApproveSchedReq(' . $row['sched_ID'] . ',  ' . $row['Staff_ID'] . ')">Accept</button>
+                             <button class="bg-red-500 p-2 rounded-md text-white font-medium" onclick="declineSchedReq(' . $row['sched_ID'] . ')">Decline</button>
+
+                          </div>
+                        </td>
+                    </tr>';
+                }else if ($staffRole == 'doctor'){
+                    echo '<tr class="text-base hover:bg-gray-300 dark:hover:bg-gray-600 font-medium text-black dark:text-white">
+                        <td class="w-1/4">' . $row['weekDays'] . '</td>
+                        <td class="w-1/4">' . $formattedStartTime . ' to ' . $formattedEndTime . '</td>
+                        <td class="w-1/4">' . $formattedStartDate . ' to ' . $formattedEndDate . '</td>
+                        <td class="font-bold ' . $status_class . '">' . $row['status'] . '</td>
+                    </tr>';
+                }
+            }
+        } else {
+            echo ' <h1 class="text-center">No Pending Request</h1>';
+
+        }
+    } else {
+        exit();
+    }
+}
+
+if ($action == 'schedReqdecline'){
+    $sched_id = $_GET['data_id'];
+    $updateSched = "UPDATE tbl_schedule SET status = 'Declined' where sched_ID = ?";
+    $updateSchedSTMT = $conn->prepare($updateSched);
+    $updateSchedSTMT->bind_param('i', $sched_id);
+    if($updateSchedSTMT->execute()){
+        echo 1;
+    }
+}
+if ($action == 'approveSchedReq'){
+    $sched_id = $_GET['sched_id'];
+    $staff_id = $_GET['staff_id'];
+    $getDoctorSchedReq = "SELECT * FROM tbl_schedule where sched_ID = ? ";
+    $getDoctorSchedReqSTMT = $conn->prepare($getDoctorSchedReq);
+    $getDoctorSchedReqSTMT->bind_param('i',$sched_id);
+    if ($getDoctorSchedReqSTMT->execute()){
+        $result = $getDoctorSchedReqSTMT->get_result();
+        if ($result ->num_rows === 1){
+            $selectedDays = [];
+            $schedule = $result->fetch_assoc();
+            $weekDayString = $schedule['weekDays'];
+            $startTime = $schedule['startTime'];
+            $endTime = $schedule['endTime'];
+            $startSched = $schedule['startDate'];
+            $endSched = $schedule['endDate'];
+            $weekDaysArray = explode(',', $weekDayString);
+            foreach ($weekDaysArray as $day) {
+                switch ($day) {
+                    case 'Monday':
+                        $selectedDays[] = 1;
+                        break;
+                    case 'Tuesday':
+                        $selectedDays[] = 2;
+                        break;
+                    case 'Wednesday':
+                        $selectedDays[] = 3;
+                        break;
+                    case 'Thursday':
+                        $selectedDays[] = 4;
+                        break;
+                    case 'Friday':
+                        $selectedDays[] = 5;
+                        break;
+                    case 'Saturday':
+                        $selectedDays[] = 6;
+                        break;
+                }
+
+            }
+            if (isValidDate($startSched) && isValidDate($endSched)){
+                if (UpdateDoctorAvailabiity($selectedDays, $startTime, $endTime, $startSched, $endSched, $staff_id) == 1){
+                    $updateSched = "UPDATE tbl_schedule SET status = 'Approved' where sched_ID = ?";
+                    $updateSchedSTMT = $conn->prepare($updateSched);
+                    $updateSchedSTMT->bind_param('i', $sched_id);
+                    if($updateSchedSTMT->execute()){
+                        echo 1;
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+if ($action == 'AdminAddDoctorAvailability') {//admin side add sched no need approval, no record on doctor schedule request
+    $staff_id = isset($_POST['DoctorID']) ? $_POST['DoctorID'] : '';
+    $monday = isset($_POST['monday']) ? 'Monday':'';
+    $tuesday = isset($_POST['tuesday']) ? 'Tuesday':'';
+    $wednesday = isset($_POST['wednesday']) ? 'Wednesday':'';
+    $thursday = isset($_POST['thursday']) ? 'Thursday':'';
+    $friday = isset($_POST['friday']) ? 'Friday':'';
+    $saturday = isset($_POST['saturday']) ? 'Saturday':'';
+    $availability_time_In = $_POST['availability-timeIn'] ?? '';
+    $availability_time_end = $_POST['availability-timeEnd'] ?? '';
+    $startSched = $_POST['repeatStart'] ?? '';
+    $endSched = $_POST['repeatEnd'] ?? '';
 
     $selectedDays = [];
     if ($monday) $selectedDays[] = 1; // Monday
@@ -211,40 +388,11 @@ if ($action == 'DoctorSchedule') {
     if ($saturday) $selectedDays[] = 6; // Saturday
 
     if ($startSched !== '' && $endSched !== '' && isValidDate($startSched) && isValidDate($endSched)) {
-        $dates = calculateDates($selectedDays, $startSched, $endSched);
-        $staffDateAvailability = array();
-        $getDoctorSchedAvailability = "SELECT * FROM tbl_availability where Staff_ID = ?";
-        $getDoctorSchedAvailabilitySTMT = $conn->prepare($getDoctorSchedAvailability);
-        $getDoctorSchedAvailabilitySTMT->bind_param('i',$staff_id);
-        $getDoctorSchedAvailabilitySTMT->execute();
-        $result = $getDoctorSchedAvailabilitySTMT->get_result();
-        if ($result->num_rows > 0) {
-            while ($row = $result->fetch_assoc()) {
-                $staffDateAvailability[] = $row['Date'];
-            }
-        }
-
-        foreach ($dates as $date) {
-            if (in_array($date, $staffDateAvailability)) {
-                $sql = "UPDATE tbl_availability SET StartTime = ?, EndTime = ? WHERE Staff_ID = ? AND Date = ?";
-                $stmt = $conn->prepare($sql);
-                $stmt->bind_param("ssss", $availability_time_In, $availability_time_end, $staff_id, $date);
-                $stmt->execute();
-            } else {
-                $sql = "INSERT INTO tbl_availability (Staff_ID, Date, StartTime, EndTime) VALUES (?, ?, ?, ?)";
-                $stmt = $conn->prepare($sql);
-                $stmt->bind_param("ssss", $staff_id, $date, $availability_time_In, $availability_time_end);
-                $stmt->execute();
-            }
-        }
-
-
-        echo 1;
+        echo UpdateDoctorAvailabiity($selectedDays, $availability_time_In, $availability_time_end, $startSched, $endSched, $staff_id);
         exit();
     } else{
         echo 'Some error occurred';
     }
-
 }
 
 
@@ -345,8 +493,29 @@ if ($action == 'getDoctorAvailabilityTime'){
     }
 }
 
+
+
+
 if ($action == 'deleteSched'){
-    $passWord_conf = $_POST['conf_passoword'];
+    $login_user = $_SESSION['user_id'];
+
+    // Get staff information
+    $getstaffID = "SELECT * FROM tbl_staff WHERE User_ID = ?";
+    $getstaffIDSTMT = $conn->prepare($getstaffID);
+    $getstaffIDSTMT->bind_param("i", $login_user);
+    $getstaffIDSTMT->execute();
+    $result = $getstaffIDSTMT->get_result();
+    if ($result->num_rows === 1) {
+        $staff = $result->fetch_assoc();
+        $staff_id = $staff['Staff_ID'];
+        $staffRole = $staff['Role'];
+    } else {
+        exit();
+    }
+
+    $passWord_conf = $_POST['conf_password'];
+
+    // Verify password
     $sql = "SELECT * FROM tbl_accounts WHERE User_ID = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("i", $_SESSION['user_id']);
@@ -357,44 +526,212 @@ if ($action == 'deleteSched'){
         if (password_verify($passWord_conf, $row['Password'])) {
             $delDoc_id = $_POST['dltDoctorSched'];
             if (isset($_POST['list-radio']) && $_POST['list-radio'] == 'deleteAll') {
-                $del = "DELETE FROM tbl_availability where Staff_ID = ?";
-                $del_stmt = $conn->prepare($del);
-                $del_stmt->bind_param('i', $delDoc_id);
-                $del_stmt->execute();
+                if ($staffRole == 'admin'){
+                    DeleteAllDoctorAvailability($delDoc_id);
+                } elseif ($staffRole == 'doctor'){
+                    $doctorDelSched = "INSERT INTO tbl_delschedactivity (delType, Staff_ID) VALUES ('deleteAll', ?)";
+                    $doctorDelSchedSTMT = $conn->prepare($doctorDelSched);
+                    $doctorDelSchedSTMT->bind_param('i', $delDoc_id);
+                    if (!$doctorDelSchedSTMT->execute()) {
+                        echo $doctorDelSchedSTMT->error;
+                        exit();
+                    }
+                }
                 echo 1;
-                exit() ;
-
-            }elseif (isset($_POST['list-radio']) && $_POST['list-radio'] == 'deleteDay'){
+                exit();
+            } elseif (isset($_POST['list-radio']) && $_POST['list-radio'] == 'deleteDay') {
                 $selectd_date = $_POST['delete-dayDate'];
-                $del = "DELETE FROM tbl_availability where Date = ? and Staff_ID = ?";
-                $del_stmt = $conn->prepare($del);
-                $del_stmt->bind_param('si', $selectd_date, $delDoc_id);
-                $del_stmt->execute();
+                if ($staffRole == 'admin'){
+                    DeleteSpecificDoctoAvailability($selectd_date, $delDoc_id);
+
+                } elseif ($staffRole == 'doctor'){
+                    $doctorDelSched = "INSERT INTO tbl_delschedactivity (delType, Staff_ID, startDate, endDate) VALUES ('deleteDay', ?, ?, ?)";
+                    $doctorDelSchedSTMT = $conn->prepare($doctorDelSched);
+                    $doctorDelSchedSTMT->bind_param('iss', $delDoc_id, $selectd_date, $selectd_date);
+                    if (!$doctorDelSchedSTMT->execute()) {
+                        echo $doctorDelSchedSTMT->error;
+                        exit();
+                    }
+                }
                 echo 1;
-                exit() ;
-            }
-            elseif (isset($_POST['list-radio']) && $_POST['list-radio'] == 'customDelete'){
+                exit();
+            } elseif (isset($_POST['list-radio']) && $_POST['list-radio'] == 'customDelete') {
                 $range_start_date = $_POST['start-date'];
                 $range_end_date = $_POST['end-date'];
-                $del_range = "DELETE FROM tbl_availability WHERE Date BETWEEN ? AND ? and Staff_ID = ?";
-                $del_range_stmt = $conn->prepare($del_range);
-                $del_range_stmt->bind_param('ssi', $range_start_date, $range_end_date, $delDoc_id);
-                $del_range_stmt->execute();
+                if ($staffRole == 'admin'){
+                    DeleteRangeDoctorAvailability($range_start_date,$range_end_date, $delDoc_id );
+                } elseif ($staffRole == 'doctor'){
+                    $doctorDelSched = "INSERT INTO tbl_delschedactivity (delType, Staff_ID, startDate, endDate) VALUES ('customDelete', ?, ?, ?)";
+                    $doctorDelSchedSTMT = $conn->prepare($doctorDelSched);
+                    $doctorDelSchedSTMT->bind_param('iss', $delDoc_id, $range_start_date, $range_end_date);
+                    if (!$doctorDelSchedSTMT->execute()) {
+                        echo $doctorDelSchedSTMT->error;
+                        exit();
+                    }
+                }
                 echo 1;
-                exit() ;
-            }else{
+                exit();
+            } else {
                 echo 2;
                 exit();
             }
-        }
-        else{
+        } else {
             echo 2;
         }
-    }else{
+    } else {
         echo 2;
     }
 }
 
+
+if ($action == "getPendingDelSched"){
+    $login_user = $_SESSION['user_id'];
+    $getstaffID = "SELECT * FROM tbl_staff WHERE User_ID = ?";
+    $getstaffIDSTMT = $conn->prepare($getstaffID);
+    $getstaffIDSTMT->bind_param("i", $login_user);
+    $getstaffIDSTMT->execute();
+    $result = $getstaffIDSTMT->get_result();
+    if ($result->num_rows === 1) {
+        $staff = $result->fetch_assoc();
+        $staff_id = $staff['Staff_ID'];
+        $staffRole = $staff['Role'];
+    }else{
+        exit();
+    }
+
+    if ($staffRole == 'admin'){
+        $getPendingDelete = "SELECT * FROM tbl_delschedactivity
+    JOIN tbl_staff on tbl_staff.Staff_ID = tbl_delschedactivity.Staff_ID where delStat = 'Pending' ";
+        $getPendingDeleteSTMT = $conn->prepare($getPendingDelete);
+        $getPendingDeleteSTMT->execute();
+    }elseif ($staffRole == 'doctor'){
+        $getPendingDelete = "SELECT * FROM tbl_delschedactivity where Staff_ID = ?  order by delStat = 'Pending' desc ";
+        $getPendingDeleteSTMT = $conn->prepare($getPendingDelete);
+        $getPendingDeleteSTMT->bind_param('i',$staff_id);
+        $getPendingDeleteSTMT->execute();
+    }
+    $result = $getPendingDeleteSTMT->get_result();
+    if ($result->num_rows > 0){
+        while ($row = $result->fetch_assoc()){
+            $delType = $row['delType'];
+            $deletionType = '';
+            $date = '';
+            switch ($delType) {
+                case 'deleteAll':
+                    $deletionType = 'All';
+                    $date = "All";
+                    break;
+                case 'deleteDay':
+                    $deletionType = 'Day';
+                    $date = (new DateTime($row['startDate']))->format('F j, Y');
+                    break;
+                case 'customDelete':
+                    $deletionType = 'Custom Range';
+                    $date = (new DateTime($row['startDate']))->format('F j, Y') . ' to ' . (new DateTime($row['endDate']))->format('F j, Y');
+                    break;
+                default:
+                    $deletionType = 'N/A';
+                    break;
+            }
+            $statusClas = '';
+            switch ($row['delStat']){
+                case 'Pending':
+                    $statusClas = 'text-yellow-500';
+                    break;
+                case 'Declined':
+                    $statusClas = 'text-red-500';
+                    break;
+                case 'Approved':
+                    $statusClas = 'text-green-500';
+                    break;
+            }
+
+
+
+            if ($staffRole == 'admin'){
+                if (!empty($row['Middle_Name'])) {
+                    $doctorName = 'Dr. ' . $row['First_Name'] . ' ' . substr($row['Middle_Name'], 0, 1) . '. ' . $row['Last_Name'];
+                } else {
+                    $doctorName = 'Dr. ' . $row['First_Name'] . ' ' . $row['Last_Name'];
+                }
+            echo '<tr class="text-base hover:bg-gray-300 dark:hover:bg-gray-600 font-medium text-black dark:text-white">           
+                                  <td class="w-1/4">'.$doctorName.'</td>
+                                    <td>'.$deletionType.'
+                                    <td class="w-1/4">'.$date.'</td>
+                               
+                                    <td class="w-1/4">
+                                        <div>
+                                            <button class="bg-blue-500 p-2 rounded-md mr-5 text-white font-medium" onclick="ApproveDelSchedReq('.$row['delSchedID'].', '.$row['Staff_ID'].')">Accept</button>
+                                            <button class="bg-red-500 p-2 rounded-md text-white font-medium" onclick="declineDelSchedReq('.$row['delSchedID'].')">Decline</button>
+                                        </div>
+                                    </td>
+                                </tr>';
+            }elseif ($staffRole == 'doctor'){
+                echo '<tr class="text-base hover:bg-gray-300 dark:hover:bg-gray-600 font-medium text-black dark:text-white">
+                                   <td>'.$deletionType.'
+                                    <!--  ito mga values sa Deletion Type
+                                          All, Day, Custom Range -->
+
+                            <td class="w-1/4">'.$date.'</td>
+                                    <!--  ito mga values sa Date
+                                          All(kapag all), 
+                                          July 1, 2024(kapag Delete Day)
+                                          August 1, 2024 to September 2, 2024(kapag delete custom range)
+                                          -->
+                                    <td class="font-bold '.$statusClas.'">'.$row['delStat'].'</td>
+                                    <!-- Declined = text-red-500 -->
+                                </tr>';
+            }
+        }
+    }
+}
+
+if ($action == 'approveDelSchedReq'){
+    $delSched_id = $_GET['del_sched_id'];
+    $staff_id = $_GET['staff_id'];
+    $getDelReq = "SELECT * from tbl_delschedactivity where delSchedID = ?";
+    $getDelReqSTMT = $conn->prepare($getDelReq);
+    $getDelReqSTMT->bind_param('i', $delSched_id);
+    if (!$getDelReqSTMT->execute()){
+        echo $getDelReqSTMT->error;
+        exit();
+    }
+    $result = $getDelReqSTMT->get_result();
+    if ($result->num_rows === 1){
+        $delSchedrequest = $result->fetch_assoc();
+        if ($delSchedrequest['delType'] == 'deleteAll'){
+            DeleteAllDoctorAvailability($staff_id);
+
+        }elseif ($delSchedrequest['delType'] == 'deleteDay'){
+            DeleteSpecificDoctoAvailability($delSchedrequest['startDate'], $staff_id);
+
+        }elseif ($delSchedrequest['delType'] == 'customDelete'){
+            DeleteRangeDoctorAvailability($delSchedrequest['startDate'],$delSchedrequest['endDate'] , $staff_id);
+        }
+        $declineReq = "UPDATE tbl_delschedactivity SET delStat = 'Approved' where delSchedID = ?";
+        $declineReqSTMT = $conn->prepare($declineReq);
+        $declineReqSTMT->bind_param('i', $delSched_id);
+        if (!$declineReqSTMT->execute()){
+            echo $declineReqSTMT->error;
+            exit();
+        }
+        echo 1;
+        exit();
+    }
+}
+if ($action == 'declineDel'){
+    $delSched_ID = $_GET['data_id'];
+    $declineReq = "UPDATE tbl_delschedactivity SET delStat = 'Declined' where delSchedID = ?";
+    $declineReqSTMT = $conn->prepare($declineReq);
+    $declineReqSTMT->bind_param('i', $delSched_ID);
+    if (!$declineReqSTMT->execute()){
+        echo $declineReqSTMT->error;
+        exit();
+    }
+    echo 1;
+    exit();
+
+}
 if ($action == 'getStaffinfo'){
     $staff_id = $_GET['staff_id'];
     $sql = 'SELECT tbl_staff.*, tbl_accounts.*
