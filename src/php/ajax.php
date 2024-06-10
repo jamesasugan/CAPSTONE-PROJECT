@@ -683,6 +683,9 @@ if ($action == "getPendingDelSched"){
                                 </tr>';
             }
         }
+    }else {
+        echo ' <h1 class="text-center">No Pending Request</h1>';
+
     }
 }
 
