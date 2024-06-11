@@ -733,10 +733,12 @@ ORDER BY CASE WHEN `tbl_appointment`.`Status` = 'pending' THEN 0 ELSE 1 END, `tb
                   <input type='hidden' value='' id='accountmemeberID' name='accountmemeberID'>
                   <input type='hidden' id='actionType'  name='actionType' value="Add">
                   <input type='hidden' name='onlineOwnerId' value='<?php echo $accountOwner_ID?>'>
-                  <div class="flex justify-center">
+                  
+                </div>  
+                
+                <div class="flex justify-center">
                     <input  type="submit"  value="Submit" class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none px-8">
-                  </div>  
-                </div>      
+                  </div>      
 
               </form>
 

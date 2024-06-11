@@ -5660,6 +5660,10 @@ details.collapse summary::-webkit-details-marker {
     width: 10rem;
   }
 
+  .sm\:w-44 {
+    width: 11rem;
+  }
+
   .sm\:w-48 {
     width: 12rem;
   }
@@ -5682,6 +5686,10 @@ details.collapse summary::-webkit-details-marker {
 
   .sm\:w-auto {
     width: auto;
+  }
+
+  .sm\:w-52 {
+    width: 13rem;
   }
 
   .sm\:grid-cols-2 {

@@ -72,7 +72,7 @@ $staff_id = $row['Staff_ID'];
         Appointments
       </h3>
       <div class="w-full sm:flex sm:items-center justify-end">
-        <select onchange='if (this.value === "none") { resetSearch("TableList"); } else { handleSearch("dropDownSort", "TableList", this.value); }' id='dropDownSort' name="sort" class="select select-bordered text-black dark:text-white w-full sm:w-40 bg-gray-300 dark:bg-gray-600 text-base sm:text-lg lg:text-xl focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 mb-4 sm:mb-0 sm:mr-4">
+        <select onchange='if (this.value === "none") { resetSearch("TableList"); } else { handleSearch("dropDownSort", "TableList", this.value); }' id='dropDownSort' name="sort" class="select select-bordered w-full sm:w-48 bg-[#0b6c95] font-medium text-white text-base sm:text-lg lg:text-xl mb-4 sm:mb-0 sm:mr-4">
           <option value='none'>Filter</option>
           <optgroup label="Status">
             <option value='Pending' <?php echo isset($_GET['filter']) &&

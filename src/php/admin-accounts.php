@@ -81,7 +81,7 @@ if ($result->num_rows > 0) {
           <span id='accounts_title'>Doctor Accounts</span>
         </h3>
         <form action="#" method="POST" class="w-full sm:flex sm:items-center justify-end">
-          <select onchange='switchTable()' name="chooseAccount" class="select select-bordered text-black dark:text-white w-full sm:w-60 bg-gray-300 dark:bg-gray-600 text-base sm:text-lg lg:text-xl focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 mb-4 sm:mb-0 sm:mr-4">
+          <select onchange='switchTable()' name="chooseAccount" class="select select-bordered w-full sm:w-60 bg-[#0b6c95] font-medium text-white text-base sm:text-lg lg:text-xl mb-4 sm:mb-0 sm:mr-4">
               <option selected>Doctor Accounts</option>
               <option>Patient Accounts</option>
           </select>
