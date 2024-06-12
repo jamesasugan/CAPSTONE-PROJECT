@@ -4401,6 +4401,11 @@ details.collapse summary::-webkit-details-marker {
   border-radius: 0px;
 }
 
+.rounded-t-lg {
+  border-top-left-radius: 0.5rem;
+  border-top-right-radius: 0.5rem;
+}
+
 .rounded-t-none {
   border-top-left-radius: 0px;
   border-top-right-radius: 0px;
@@ -5686,10 +5691,6 @@ details.collapse summary::-webkit-details-marker {
 
   .sm\:w-auto {
     width: auto;
-  }
-
-  .sm\:w-52 {
-    width: 13rem;
   }
 
   .sm\:grid-cols-2 {

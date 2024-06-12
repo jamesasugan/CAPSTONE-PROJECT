@@ -277,320 +277,395 @@ ORDER BY
     </dialog>
     <div
       id="patient-content"
-      class="modal-box h-auto w-11/12 max-w-7xl bg-gray-200 dark:bg-gray-700"
-    >
-      <div
-        class="flex flex-col sm:flex-row justify-between items-center"
-      >
-        <div class="order-2 sm:order-1">
-          <h3
-            class="font-bold text-black dark:text-white text-base sm:text-2xl md:text-3xl mb-2 sm:mb-0"
-          >
-            Patient's Appointment Form
-          </h3>
-        </div>
-        <div class="order-1 sm:order-2 mb-2 sm:mb-0">
-          <!-- Toggle between different logos for light/dark mode -->
-          <img
-            src="../images/HCMC-blue.png"
-            class="block h-10 lg:h-16 w-auto dark:hidden"
-            alt="logo-light"
-          />
-          <img
-            src="../images/HCMC-white.png"
-            class="h-10 lg:h-16 w-auto hidden dark:block"
-            alt="logo-dark"
-          />
-        </div>
+      class="modal-box h-auto w-11/12 max-w-7xl bg-gray-200 dark:bg-gray-700 p-0">
+      
+      <div class="sticky top-0 bg-gray-200 dark:bg-gray-700 z-10 px-10 pt-10">
+          <div class="flex flex-col sm:flex-row justify-between items-center">
+              <div class="order-2 sm:order-1">
+                  <h3 class="font-bold text-black dark:text-white text-base sm:text-2xl md:text-3xl mb-2 sm:mb-0">
+                      Patient's Appointment Form
+                  </h3>
+              </div>
+              <div class="order-1 sm:order-2 mb-2 sm:mb-0">
+                  <img src="../images/HCMC-blue.png" class="block h-10 lg:h-16 w-auto dark:hidden" alt="logo-light" />
+                  <img src="../images/HCMC-white.png" class="h-10 lg:h-16 w-auto hidden dark:block" alt="logo-dark" />
+              </div>
+          </div>
+          <div class="modal-action flex justify-end mb-2">
+              <form method="dialog">
+                  <button id="modalAppointmentbtn" class="btn bg-gray-400 dark:bg-white hover:bg-gray-500 dark:hover:bg-gray-400  text-black  border-none">
+                      Close
+                  </button>
+              </form>
+          </div>
+          <div class="border border-gray-600 dark:border-slate-300"></div>
       </div>
+
 
       <!-- staff action -->
-      <h1 class="text-base sm:text-xl font-bold text-black dark:text-white">Appointment Type: <span class="font-bold " id='AppointmentType'></span></h1>  <!-- ayusin mo rin colors dito ah -->
+      <div class="p-10">
+        <h1 class="text-base sm:text-xl font-bold text-black dark:text-white">Appointment Type: <span class="font-bold " id='AppointmentType'></span></h1>  <!-- ayusin mo rin colors dito ah -->
 
-      <h1 class="text-base sm:text-xl font-bold text-black dark:text-white">STATUS: <span class="font-bold " id='appointment_status'></span></h1>  <!-- ayusin mo rin colors dito ah -->
+        <h1 class="text-base sm:text-xl font-bold text-black dark:text-white">STATUS: <span class="font-bold " id='appointment_status'></span></h1>  <!-- ayusin mo rin colors dito ah -->
 
-      <h2 class="text-base sm:text-xl font-bold mt-5 text-black dark:text-white">Edit Status of this Appointment</h2>
-      <form id='update_appointment' action="#" method="GET">
-        <ul class="items-center w-full text-lg font-medium text-gray-900 bg-white border border-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white rounded-lg sm:flex mb-2">
-          <li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
-            <div class="flex items-center ps-3">
-              <input id="pending"  type="radio" required name="list-status" class="radio radio-info" value="pending">
-              <label for="pending" class="w-full py-3 ms-2">Pending</label>
-            </div>
-          </li>
-          <li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
-            <div class="flex items-center ps-3">
-              <input id="approve"  type="radio" required name="list-status" class="radio radio-info" value="approved">
-              <label for="approve" class="w-full py-3 ms-2">Approve</label>
-            </div>
-          </li>
+        <h2 class="text-base sm:text-xl font-bold mt-5 text-black dark:text-white">Edit Status of this Appointment</h2>
+        <form id='update_appointment' action="#" method="GET">
+          <ul class="items-center w-full text-lg font-medium text-gray-900 bg-white border border-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white rounded-lg sm:flex mb-2">
+            <li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
+              <div class="flex items-center ps-3">
+                <input id="pending"  type="radio" required name="list-status" class="radio radio-info" value="pending">
+                <label for="pending" class="w-full py-3 ms-2">Pending</label>
+              </div>
+            </li>
+            <li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
+              <div class="flex items-center ps-3">
+                <input id="approve"  type="radio" required name="list-status" class="radio radio-info" value="approved">
+                <label for="approve" class="w-full py-3 ms-2">Approve</label>
+              </div>
+            </li>
 
-          <li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
-            <div class="flex items-center ps-3">
-              <input id="reschedule" type="radio" required name="list-status" class="radio radio-info" value="rescheduled">
-              <label for="reschedule" class="w-full py-3 ms-2">Reschedule</label>
-            </div>
-          </li>
-          <li class="w-full dark:border-gray-600">
-            <div class="flex items-center ps-3">
-              <input id="cancel" type="radio" required name="list-status" class="radio radio-info" value="cancelled">
-              <label for="cancel" class="w-full py-3 ms-2">Cancel</label>
-            </div>
-          </li>
-        </ul>
+            <li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
+              <div class="flex items-center ps-3">
+                <input id="reschedule" type="radio" required name="list-status" class="radio radio-info" value="rescheduled">
+                <label for="reschedule" class="w-full py-3 ms-2">Reschedule</label>
+              </div>
+            </li>
+            <li class="w-full dark:border-gray-600">
+              <div class="flex items-center ps-3">
+                <input id="cancel" type="radio" required name="list-status" class="radio radio-info" value="cancelled">
+                <label for="cancel" class="w-full py-3 ms-2">Cancel</label>
+              </div>
+            </li>
+          </ul>
 
-        <div class="flex flex-col sm:flex-row justify-between gap-4" id="reschedule-section" style="display: none;">
-          <div class="w-full">
-            <label for="rescheduled-date" class="block text-base sm:text-lg font-medium text-black dark:text-white">
-              Rescheduled Date<span id='appointmentDateNote' class='text-sm text-info hidden'> (Please check doctor schedule)</span>
-            </label>
-            <input disabled type="date" id="appointment-date" name="rescheduled-date" class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark] text-black dark:text-white text-lg" />
+          <div class="flex flex-col sm:flex-row justify-between gap-4" id="reschedule-section" style="display: none;">
+            <div class="w-full">
+              <label for="rescheduled-date" class="block text-base sm:text-lg font-medium text-black dark:text-white">
+                Rescheduled Date<span id='appointmentDateNote' class='text-sm text-info hidden'> (Please check doctor schedule)</span>
+              </label>
+              <input disabled type="date" id="appointment-date" name="rescheduled-date" class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark] text-black dark:text-white text-lg" />
+            </div>
+            <div class="w-full">
+              <label for="appointment-time" class="block text-base sm:text-lg font-medium text-black dark:text-white">
+                Rescheduled Time
+              </label>
+              <select id="appointment-time" name="rescheduled-time" required class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark] text-lg text-black dark:text-white">
+
+              </select>
+            </div>
           </div>
-          <div class="w-full">
-            <label for="appointment-time" class="block text-base sm:text-lg font-medium text-black dark:text-white">
-              Rescheduled Time
-            </label>
-            <select id="appointment-time" name="rescheduled-time" required class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark] text-lg text-black dark:text-white">
-
+          <div id='doctorList' class="form-group mt-5">
+            <label
+              for="appointDoctor"
+              class="block font-medium text-black dark:text-white text-base sm:text-lg"
+            >Select Doctor's Name:</label
+            >
+            <select
+              id="appointDoctor"
+              name="appointDoctor"
+              class="select select-bordered appearance-none block w-full px-3 border-gray-300 rounded-md shadow-sm focus:outline-none text-base sm:text-lg bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400 disabled:border-gray-300"
+              required onchange='getDoctorAvailability(this.value)'>
+              <option value="" disabled selected>Select a Doctor</option>
+                <?php
+                $sql = "SELECT * FROM tbl_staff where role = 'doctor' ";
+                $stmt = $conn->prepare($sql);
+                $stmt->execute();
+                $result = $stmt->get_result();
+                while ($row = $result->fetch_assoc()) {
+                    $middleInitial = strlen($row['Middle_Name']) >= 1 ? substr($row['Middle_Name'], 0, 1) : '';
+                    echo '<option value="' . $row['Staff_ID'] . '">' . $row['First_Name'] . ' ' . $middleInitial . '. ' . $row['Last_Name'] . '</option>';
+                }
+                ?>
             </select>
           </div>
-        </div>
-        <div id='doctorList' class="form-group mt-5">
-          <label
-            for="appointDoctor"
-            class="block font-medium text-black dark:text-white text-base sm:text-lg"
-          >Select Doctor's Name:</label
-          >
-          <select
-            id="appointDoctor"
-            name="appointDoctor"
-            class="select select-bordered appearance-none block w-full px-3 border-gray-300 rounded-md shadow-sm focus:outline-none text-base sm:text-lg bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400 disabled:border-gray-300"
-            required onchange='getDoctorAvailability(this.value)'>
-            <option value="" disabled selected>Select a Doctor</option>
-              <?php
-              $sql = "SELECT * FROM tbl_staff where role = 'doctor' ";
-              $stmt = $conn->prepare($sql);
-              $stmt->execute();
-              $result = $stmt->get_result();
-              while ($row = $result->fetch_assoc()) {
-                  $middleInitial = strlen($row['Middle_Name']) >= 1 ? substr($row['Middle_Name'], 0, 1) : '';
-                  echo '<option value="' . $row['Staff_ID'] . '">' . $row['First_Name'] . ' ' . $middleInitial . '. ' . $row['Last_Name'] . '</option>';
-              }
-              ?>
-          </select>
-        </div>
-        <!--
-        <div id="services-container">
-          <div class="service-dropdown">
-            <label class="block font-medium text-black dark:text-white text-base sm:text-lg mb-2 mt-2">
-              Service Type:
-              <select
-                class="select select-bordered w-full bg-white dark:bg-gray-600 text-black dark:text-white text-base sm:text-lg lg:text-xl focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
-                name="service-type"
-              >
-                <option value="" disabled selected>Select service type...</option>
-                <option value="OB-Gyne">OB-Gyne</option>
-                <option value="Pregnancy Testing">Pregnancy Testing</option>
-                <option value="Dengue Test">Dengue Test</option>
-                <option value="Covid-19 Rapid Testing">Covid-19 Rapid Testing</option>
-                <option value="Family Medicine">Family Medicine</option>
-                <option value="Internal Medicine">Internal Medicine</option>
-                <option value="Medical Consultation">Medical Consultation</option>
-                <option value="Vaccination">Vaccination</option>
-                <option value="BP Monitoring">BP Monitoring</option>
-                <option value="Blood Glucose Determination">Blood Glucose Determination</option>
-                <option value="Nebulization">Nebulization</option>
-                <option value="Complete Blood Count (CBC)">Complete Blood Count (CBC)</option>
-                <option value="Fecalysis">Fecalysis</option>
-                <option value="Electrocardiogram (ECG)">Electrocardiogram (ECG)</option>
-                <option value="X-RAY">X-RAY</option>
-                <option value="Pre-Employment Package">Pre-Employment Package</option>
-                <option value="Annual Physical Examination">Annual Physical Examination</option>
-                <option value="FBS">FBS</option>
-                <option value="Lipid Profile">Lipid Profile</option>
-                <option value="AST/ALT">AST/ALT</option>
-                <option value="Uric Acid">Uric Acid</option>
-                <option value="Blood Typing">Blood Typing</option>
-                <option value="Electrolytes">Electrolytes</option>
-                <option value="Syphilis Screening">Syphilis Screening</option>
-                <option value="Pregnant Screening">Pregnant Screening</option>
-                <option value="FT4/TSH">FT4/TSH</option>
-              </select>
-            </label>
+          <!--
+          <div id="services-container">
+            <div class="service-dropdown">
+              <label class="block font-medium text-black dark:text-white text-base sm:text-lg mb-2 mt-2">
+                Service Type:
+                <select
+                  class="select select-bordered w-full bg-white dark:bg-gray-600 text-black dark:text-white text-base sm:text-lg lg:text-xl focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
+                  name="service-type"
+                >
+                  <option value="" disabled selected>Select service type...</option>
+                  <option value="OB-Gyne">OB-Gyne</option>
+                  <option value="Pregnancy Testing">Pregnancy Testing</option>
+                  <option value="Dengue Test">Dengue Test</option>
+                  <option value="Covid-19 Rapid Testing">Covid-19 Rapid Testing</option>
+                  <option value="Family Medicine">Family Medicine</option>
+                  <option value="Internal Medicine">Internal Medicine</option>
+                  <option value="Medical Consultation">Medical Consultation</option>
+                  <option value="Vaccination">Vaccination</option>
+                  <option value="BP Monitoring">BP Monitoring</option>
+                  <option value="Blood Glucose Determination">Blood Glucose Determination</option>
+                  <option value="Nebulization">Nebulization</option>
+                  <option value="Complete Blood Count (CBC)">Complete Blood Count (CBC)</option>
+                  <option value="Fecalysis">Fecalysis</option>
+                  <option value="Electrocardiogram (ECG)">Electrocardiogram (ECG)</option>
+                  <option value="X-RAY">X-RAY</option>
+                  <option value="Pre-Employment Package">Pre-Employment Package</option>
+                  <option value="Annual Physical Examination">Annual Physical Examination</option>
+                  <option value="FBS">FBS</option>
+                  <option value="Lipid Profile">Lipid Profile</option>
+                  <option value="AST/ALT">AST/ALT</option>
+                  <option value="Uric Acid">Uric Acid</option>
+                  <option value="Blood Typing">Blood Typing</option>
+                  <option value="Electrolytes">Electrolytes</option>
+                  <option value="Syphilis Screening">Syphilis Screening</option>
+                  <option value="Pregnant Screening">Pregnant Screening</option>
+                  <option value="FT4/TSH">FT4/TSH</option>
+                </select>
+              </label>
+            </div>
           </div>
+          <button id="add-service" class="btn mt-1 mr-2 bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none px-7 mb-2">Add Another Service</button><small class="font-medium text-black dark:text-white">If needed</small>
+  -->
+          <div class="mb-3 mt-10">
+            <label for="remarks" class="block text-base sm:text-lg font-medium mt-2 text-black dark:text-white">
+              Reason:
+            </label>
+            <input
+              type="text"
+              id="remarks"
+              name="remarks"
+              placeholder="Remarks here..."
+              required
+              class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 text-black dark:text-white"
+            />
+          </div>
+          <input type='hidden' name='appointment_id' value=''>
+
+
+          <!-- reason section -->   
+          <div class="w-full mb-5">
+            <label for="reason" class="block font-medium text-black dark:text-white text-base sm:text-lg">
+            Select a Reason:
+            </label>
+            <ul class="w-full text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+
+              <!-- para sa approve. hide mo to kapag iba pinili. vice versa sa ibang choices-->
+              <li class="border-b border-gray-200 rounded-t-lg dark:border-gray-600 w-full">
+                  <div class="flex items-center ps-3">
+                      <input id="firstApprove" type="radio" value="" name="approveReason" class="radio radio-info">
+                      <label for="firstApprove" class="w-full py-3 ms-2 text-base sm:text-lg font-medium text-black dark:text-white">Your appointment is now listed, comply on the set date and time.</label>
+                  </div>
+              </li>
+              <li class="border-b border-gray-200 rounded-t-lg dark:border-gray-600 w-full">
+                  <div class="flex items-center ps-3">
+                      <input id="othersApprove" type="radio" value="" name="approveReason" class="radio radio-info">
+                      <label for="othersApprove" class="w-full py-3 ms-2 text-base sm:text-lg font-medium text-black dark:text-white">Others</label>
+                  </div>
+              </li>
+              <!-- para sa approve end -->
+
+              <!-- para sa reschedule -->
+              <li class="border-b border-gray-200 rounded-t-lg dark:border-gray-600 w-full">
+                  <div class="flex items-center ps-3">
+                      <input id="firstResched" type="radio" value="" name="reschedReason" class="radio radio-info">
+                      <label for="firstResched" class="w-full py-3 ms-2 text-base sm:text-lg font-medium text-black dark:text-white">The doctor is unavailable due to unforeseen circumstances. Your appointment has been rescheduled. Please confirm in your profile settings if the new time and date works for you.</label>
+                  </div>
+              </li>
+              <li class="border-b border-gray-200 rounded-t-lg dark:border-gray-600 w-full">
+                  <div class="flex items-center ps-3">
+                      <input id="secondResched" type="radio" value="" name="reschedReason" class="radio radio-info">
+                      <label for="secondResched" class="w-full py-3 ms-2 text-base sm:text-lg font-medium text-black dark:text-white">Due to weather conditions, your appointment has been rescheduled. Please confirm in your profile settings if the new time and date works for you.</label>
+                  </div>
+              </li>
+              <li class="border-b border-gray-200 rounded-t-lg dark:border-gray-600 w-full">
+                  <div class="flex items-center ps-3">
+                      <input id="thirdResched" type="radio" value="" name="reschedReason" class="radio radio-info">
+                      <label for="thirdResched" class="w-full py-3 ms-2 text-base sm:text-lg font-medium text-black dark:text-white">There will be maintenance in the clinic and your appointment has been rescheduled. Please confirm in your profile settings if the new time and date works for you.</label>
+                  </div>
+              </li>
+              <li class="border-b border-gray-200 rounded-t-lg dark:border-gray-600 w-full">
+                  <div class="flex items-center ps-3">
+                      <input id="fourResched" type="radio" value="" name="reschedReason" class="radio radio-info">
+                      <label for="fourResched" class="w-full py-3 ms-2 text-base sm:text-lg font-medium text-black dark:text-white">Due to a scheduling conflict, your appointment has been rescheduled. Please confirm in your profile settings if the new time and date works for you.</label>
+                  </div>
+              </li>
+              <li class="border-b border-gray-200 rounded-t-lg dark:border-gray-600 w-full">
+                  <div class="flex items-center ps-3">
+                      <input id="othersResched" type="radio" value="" name="reschedReason" class="radio radio-info">
+                      <label for="othersResched" class="w-full py-3 ms-2 text-base sm:text-lg font-medium text-black dark:text-white">Others</label>
+                  </div>
+              </li>
+
+              <!-- para sa reschedule end -->
+              <li class="border-b border-gray-200 rounded-t-lg dark:border-gray-600 w-full">
+                  <div class="flex items-center ps-3">
+                      <input id="firstCancel" type="radio" value="" name="cancelReason" class="radio radio-info">
+                      <label for="firstCancel" class="w-full py-3 ms-2 text-base sm:text-lg font-medium text-black dark:text-white">Your appointment has been canceled due incomplete or missing patient information.</label>
+                  </div>
+              </li>
+              <li class="border-b border-gray-200 rounded-t-lg dark:border-gray-600 w-full">
+                  <div class="flex items-center ps-3">
+                      <input id="secondCancel" type="radio" value="" name="cancelReason" class="radio radio-info">
+                      <label for="secondCancel" class="w-full py-3 ms-2 text-base sm:text-lg font-medium text-black dark:text-white">Your appointment has been canceled due to double booking.</label>
+                  </div>
+              </li>
+              <li class="border-b border-gray-200 rounded-t-lg dark:border-gray-600 w-full">
+                  <div class="flex items-center ps-3">
+                      <input id="othersCancel" type="radio" value="" name="cancelReason" class="radio radio-info">
+                      <label for="othersCancel" class="w-full py-3 ms-2 text-base sm:text-lg font-medium text-black dark:text-white">Others</label>
+                  </div>
+              </li>
+              <!-- para sa cancel -->
+
+          </ul>
+              <div id="otherReasoncontainer" class="mt-2">
+                <label for="otherReason" class="block font-medium text-black dark:text-white text-base sm:text-lg">
+                  Please specify your reason:
+                </label>
+                <input type="text" id="otherReason" name="otherReason" placeholder="Type here..." class="input input-bordered appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none text-base sm:text-lg bg-white dark:bg-gray-600 text-black dark:text-white  whitespace-nowrap overflow-hidden text-ellipsis" />
+              </div>
         </div>
-        <button id="add-service" class="btn mt-1 mr-2 bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none px-7 mb-2">Add Another Service</button><small class="font-medium text-black dark:text-white">If needed</small>
--->
-        <div class="mb-3 mt-10">
-          <p class="text-black dark:text-white"><span class="font-bold text-blue-400">NOTE: </span>Remarks is set to default, if you want custom message, you can edit the text directly in the input field provided.</p>
-          <label for="remarks" class="block text-base sm:text-lg font-medium mt-2 text-black dark:text-white">
-            Remarks:
-          </label>
-          <input
-            type="text"
-            id="remarks"
-            name="remarks"
-            placeholder="Remarks here..."
-            required
-            class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 text-black dark:text-white"
-          />
-        </div>
-        <input type='hidden' name='appointment_id' value=''>
+          <!-- reason end -->
 
-        <p class="text-black dark:text-white"><span class="font-bold text-red-500">NOTE: </span>Once you click the submit button, it cannot be undone. Please confirm all the fields before submitting.</p>
-        <input type="submit" value="Submit" class="btn mt-1 bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none px-7 mb-2">
-      </form>
+          <p class="text-black dark:text-white"><span class="font-bold text-red-500">NOTE: </span>Once you click the submit button, it cannot be undone. Please confirm all the fields before submitting.</p>
+          <input type="submit" value="Submit" class="btn mt-1 bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none px-7 mb-2">
+        </form>
 
 
 
 
-      <div class="mb-10"></div>
-      <div class="modal-action">
-        <form method="dialog">
-          <button
-            id="modalAppointmentbtn"
-            class="btn bg-gray-400 dark:bg-white hover:bg-gray-500 dark:hover:bg-gray-400  text-black  border-none"
-          >
-            Close
-          </button>
+        <div class="mb-10"></div>    
+        <!-- appointment form patient info. Nilagyan ko rin "History" sa ID dito katulad sa patient-profile appointment form -->
+        <form id='appointmentform' action="#" method="GET">
+
+          <div>
+            <label for="reason" class="block text-base sm:text-lg font-medium text-black dark:text-white">Reason/Purpose:</label>
+
+            <textarea name="reason" placeholder="Type here" disabled required class="textarea-bordered textarea w-full p-2 h-20 bg-gray-300 dark:bg-gray-600 text-black dark:text-white text-base disabled:bg-white disabled:text-black dark:disabled:text-white border-none "></textarea>
+
+          </div>
+          <fieldset class="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+
+            <!--
+            <legend class="text-xl font-bold mb-2 col-span-full">Service:</legend>
+            <div class="flex flex-col w-full">
+              <ul class="w-full text-lg font-medium text-gray-900 bg-gray-300 dark:bg-gray-600 border border-gray-200 rounded-lg dark:border-gray-600 dark:text-white">
+                <li class="border-b border-gray-400 dark:border-slate-300">
+                  <label class="flex items-center pl-3 w-full cursor-pointer">
+                    <input id="horizontal-list-radio-license"
+                          type="radio"
+                          value="Consultation"
+                          name="service"
+                          disabled
+                          class="radio radio-info [color-scheme:light] dark:[color-scheme:dark] disabled:bg-white disabled:text-black dark:disabled:text-white border-none disabled:border-gray-300"
+                          required>
+                    <span class="py-3 ml-2 text-lg font-medium ">Consultation</span>
+                  </label>
+                </li>
+                <li>
+                  <label class="flex items-center pl-3 w-full cursor-pointer">
+                    <input id="horizontal-list-radio-id"
+                          type="radio"
+                          value="Test/Procedure"
+                          name="service"
+                          disabled
+                          class="radio radio-info [color-scheme:light] dark:[color-scheme:dark] disabled:bg-white disabled:text-black dark:disabled:text-white border-none disabled:border-gray-300"
+                          required>
+                    <span class="py-3 ml-2 text-lg font-medium ">Test/Procedure</span>
+                  </label>
+                </li>
+              </ul>
+            </div>
+            -->
+
+
+
+
+
+            <div class="w-full md:w-auto md:col-span-1">
+              <label for="appointment-dateHistory" class="block text-base sm:text-lg font-medium text-black dark:text-white">
+                Appointment Date:
+              </label>
+              <input
+                type="date"
+                id="appointment-dateHistory"
+                name="appointment-dateHistory"
+                disabled
+                required
+                class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark] disabled:bg-white disabled:text-black dark:disabled:text-white border-none disabled:border-gray-300"
+              />
+
+            </div>
+            <div class="w-full md:w-auto md:col-span-1">
+              <label for="appointment-timeHistory" class="block text-base sm:text-lg font-medium text-black dark:text-white">
+                Appointment Time:
+              </label>
+              <input
+                type="time"
+                id="appointment-timeHistory"
+                name="appointment-timeHistory"
+                required
+                disabled
+                min="08:00"
+                max="17:00"
+                class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark] disabled:bg-white disabled:text-black dark:disabled:text-white border-none disabled:border-gray-300"
+              />
+
+            </div>
+          </fieldset>
+          <h3 class="text-xl font-bold mt-5 mb-2 text-black dark:text-white">Personal Information</h3>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label for="first-nameHistory" class="block text-base sm:text-lg font-medium text-black dark:text-white">First Name</label>
+              <input type="text" id="first-nameHistory" name="first-nameHistory" disabled autocomplete="off"
+                    placeholder="First Name" required class="input input-bordered
+                      w-full p-2 bg-gray-300 dark:bg-gray-600 disabled:bg-white disabled:text-black dark:disabled:text-white border-none" />
+            </div>
+            <div>
+              <label for="middle-nameHistory" class="block text-base sm:text-lg font-medium text-black dark:text-white">Middle Name</label>
+              <input type="text" id="middle-nameHistory" name="middle-nameHistory" disabled placeholder="Middle Name" required class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 disabled:bg-white disabled:text-black dark:disabled:text-white border-none disabled:border-gray-300" />
+            </div>
+
+            <div>
+              <label for="last-nameHistory" class="block text-base sm:text-lg font-medium text-black dark:text-white">Last Name</label>
+              <input type="text" id="last-nameHistory" name="last-nameHistory" disabled placeholder="Last Name" required class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 disabled:bg-white disabled:text-black dark:disabled:text-white border-none disabled:border-gray-300" />
+            </div>
+            <div>
+              <label
+                for="email"
+                class="block font-medium text-black dark:text-white text-base sm:text-lg overflow-hidden whitespace-nowrap text-overflow-ellipsis"
+              >Email Address</label
+              >
+              <input
+                id="email"
+                name="email"
+                type="email"
+                disabled
+                autocomplete="email"
+                required
+                placeholder="Email"
+                class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 disabled:bg-white disabled:text-black dark:disabled:text-white border-none disabled:border-gray-300"
+              />
+            </div>
+            <div>
+              <label for="contact-numberHistory" class="block text-base sm:text-lg font-medium text-black dark:text-white">Contact Number</label>
+              <input id="contact-numberHistory" name="contact-numberHistory" disabled type="tel" required autocomplete="off" placeholder="Contact Number" pattern="[0-9]{1,11}" minlength="11" maxlength="11" title="Please enter up to 11 numeric characters." class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 disabled:bg-white disabled:text-black dark:disabled:text-white border-none disabled:border-gray-300" />
+            </div>
+
+            <div>
+              <label for="sexHistory" class="block text-base sm:text-lg font-medium text-black dark:text-white">Sex</label>
+              <select id="sexHistory" required class="select select-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 text-lg disabled:bg-white disabled:text-black dark:disabled:text-white border-none disabled:border-gray-300" name="sexHistory" disabled>
+                <option value="" disabled selected>Select...</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+              </select>
+            </div>
+            <div>
+              <label for="dobHistory" class="block text-base sm:text-lg font-medium text-black dark:text-white">Date of Birth</label>
+              <input type="date" id="dobHistory" name="dobHistory" disabled required class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark] disabled:bg-white disabled:text-black dark:disabled:text-white border-none disabled:border-gray-300" />
+            </div>
+
+            <div>
+              <label for="addressHistory" class="block text-base sm:text-lg font-medium text-black dark:text-white">Address</label>
+              <input type="text" id="addressHistory" name="addressHistory" disabled autocomplete="off" placeholder="Address" required class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 disabled:bg-white disabled:text-black dark:disabled:text-white border-none disabled:border-gray-300" />
+            </div>
+          </div>
         </form>
       </div>
-      <!-- appointment form patient info. Nilagyan ko rin "History" sa ID dito katulad sa patient-profile appointment form -->
-      <form id='appointmentform' action="#" method="GET">
-
-        <div>
-          <label for="reason" class="block text-base sm:text-lg font-medium text-black dark:text-white">Reason/Purpose:</label>
-
-          <textarea name="reason" placeholder="Type here" disabled required class="textarea-bordered textarea w-full p-2 h-20 bg-gray-300 dark:bg-gray-600 text-black dark:text-white text-base disabled:bg-white disabled:text-black dark:disabled:text-white border-none "></textarea>
-
-        </div>
-        <fieldset class="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-
-          <!--
-          <legend class="text-xl font-bold mb-2 col-span-full">Service:</legend>
-          <div class="flex flex-col w-full">
-            <ul class="w-full text-lg font-medium text-gray-900 bg-gray-300 dark:bg-gray-600 border border-gray-200 rounded-lg dark:border-gray-600 dark:text-white">
-              <li class="border-b border-gray-400 dark:border-slate-300">
-                <label class="flex items-center pl-3 w-full cursor-pointer">
-                  <input id="horizontal-list-radio-license"
-                         type="radio"
-                         value="Consultation"
-                         name="service"
-                         disabled
-                         class="radio radio-info [color-scheme:light] dark:[color-scheme:dark] disabled:bg-white disabled:text-black dark:disabled:text-white border-none disabled:border-gray-300"
-                         required>
-                  <span class="py-3 ml-2 text-lg font-medium ">Consultation</span>
-                </label>
-              </li>
-              <li>
-                <label class="flex items-center pl-3 w-full cursor-pointer">
-                  <input id="horizontal-list-radio-id"
-                         type="radio"
-                         value="Test/Procedure"
-                         name="service"
-                         disabled
-                         class="radio radio-info [color-scheme:light] dark:[color-scheme:dark] disabled:bg-white disabled:text-black dark:disabled:text-white border-none disabled:border-gray-300"
-                         required>
-                  <span class="py-3 ml-2 text-lg font-medium ">Test/Procedure</span>
-                </label>
-              </li>
-            </ul>
-          </div>
-          -->
-
-
-
-
-
-          <div class="w-full md:w-auto md:col-span-1">
-            <label for="appointment-dateHistory" class="block text-base sm:text-lg font-medium text-black dark:text-white">
-              Appointment Date:
-            </label>
-            <input
-              type="date"
-              id="appointment-dateHistory"
-              name="appointment-dateHistory"
-              disabled
-              required
-              class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark] disabled:bg-white disabled:text-black dark:disabled:text-white border-none disabled:border-gray-300"
-            />
-
-          </div>
-          <div class="w-full md:w-auto md:col-span-1">
-            <label for="appointment-timeHistory" class="block text-base sm:text-lg font-medium text-black dark:text-white">
-              Appointment Time:
-            </label>
-            <input
-              type="time"
-              id="appointment-timeHistory"
-              name="appointment-timeHistory"
-              required
-              disabled
-              min="08:00"
-              max="17:00"
-              class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark] disabled:bg-white disabled:text-black dark:disabled:text-white border-none disabled:border-gray-300"
-            />
-
-          </div>
-        </fieldset>
-        <h3 class="text-xl font-bold mt-5 mb-2 text-black dark:text-white">Personal Information</h3>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label for="first-nameHistory" class="block text-base sm:text-lg font-medium text-black dark:text-white">First Name</label>
-            <input type="text" id="first-nameHistory" name="first-nameHistory" disabled autocomplete="off"
-                   placeholder="First Name" required class="input input-bordered
-                    w-full p-2 bg-gray-300 dark:bg-gray-600 disabled:bg-white disabled:text-black dark:disabled:text-white border-none" />
-          </div>
-          <div>
-            <label for="middle-nameHistory" class="block text-base sm:text-lg font-medium text-black dark:text-white">Middle Name</label>
-            <input type="text" id="middle-nameHistory" name="middle-nameHistory" disabled placeholder="Middle Name" required class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 disabled:bg-white disabled:text-black dark:disabled:text-white border-none disabled:border-gray-300" />
-          </div>
-
-          <div>
-            <label for="last-nameHistory" class="block text-base sm:text-lg font-medium text-black dark:text-white">Last Name</label>
-            <input type="text" id="last-nameHistory" name="last-nameHistory" disabled placeholder="Last Name" required class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 disabled:bg-white disabled:text-black dark:disabled:text-white border-none disabled:border-gray-300" />
-          </div>
-          <div>
-            <label
-              for="email"
-              class="block font-medium text-black dark:text-white text-base sm:text-lg overflow-hidden whitespace-nowrap text-overflow-ellipsis"
-            >Email Address</label
-            >
-            <input
-              id="email"
-              name="email"
-              type="email"
-              disabled
-              autocomplete="email"
-              required
-              placeholder="Email"
-              class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 disabled:bg-white disabled:text-black dark:disabled:text-white border-none disabled:border-gray-300"
-            />
-          </div>
-          <div>
-            <label for="contact-numberHistory" class="block text-base sm:text-lg font-medium text-black dark:text-white">Contact Number</label>
-            <input id="contact-numberHistory" name="contact-numberHistory" disabled type="tel" required autocomplete="off" placeholder="Contact Number" pattern="[0-9]{1,11}" minlength="11" maxlength="11" title="Please enter up to 11 numeric characters." class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 disabled:bg-white disabled:text-black dark:disabled:text-white border-none disabled:border-gray-300" />
-          </div>
-
-          <div>
-            <label for="sexHistory" class="block text-base sm:text-lg font-medium text-black dark:text-white">Sex</label>
-            <select id="sexHistory" required class="select select-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 text-lg disabled:bg-white disabled:text-black dark:disabled:text-white border-none disabled:border-gray-300" name="sexHistory" disabled>
-              <option value="" disabled selected>Select...</option>
-              <option value="Male">Male</option>
-              <option value="Female">Female</option>
-            </select>
-          </div>
-          <div>
-            <label for="dobHistory" class="block text-base sm:text-lg font-medium text-black dark:text-white">Date of Birth</label>
-            <input type="date" id="dobHistory" name="dobHistory" disabled required class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark] disabled:bg-white disabled:text-black dark:disabled:text-white border-none disabled:border-gray-300" />
-          </div>
-
-          <div>
-            <label for="addressHistory" class="block text-base sm:text-lg font-medium text-black dark:text-white">Address</label>
-            <input type="text" id="addressHistory" name="addressHistory" disabled autocomplete="off" placeholder="Address" required class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 disabled:bg-white disabled:text-black dark:disabled:text-white border-none disabled:border-gray-300" />
-          </div>
-        </div>
-      </form>
       <!-- <button id="print-content">Print</button> wag muna -->
     </div>
   </dialog>
