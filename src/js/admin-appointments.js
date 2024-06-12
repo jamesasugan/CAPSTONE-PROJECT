@@ -1,10 +1,14 @@
 document.addEventListener('DOMContentLoaded', function () {
   const rescheduleSection = document.getElementById('reschedule-section');
+  const remarksInput = document.getElementById('remarks'); 
   const approveReason = document.querySelectorAll('input[name="approveReason"]');
   const reschedReason = document.querySelectorAll('input[name="reschedReason"]');
   const cancelReason = document.querySelectorAll('input[name="cancelReason"]');
   const otherReasonContainer = document.getElementById('otherReasoncontainer');
   const otherReasonInput = document.getElementById('otherReason');
+  const appointmentDate = document.getElementById('appointment-date');
+  const appointmentTime = document.getElementById('appointment-time');
+  const rescheduledTime = document.getElementById('appointment-time'); // Added this line
 
   function clearRadioButtons(radioButtons) {
     radioButtons.forEach(input => {
@@ -38,14 +42,32 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function hideAllReasonOptions() {
-    approveReason.forEach(input => input.closest('li').style.display = 'none');
-    reschedReason.forEach(input => input.closest('li').style.display = 'none');
-    cancelReason.forEach(input => input.closest('li').style.display = 'none');
+    approveReason.forEach(input => {
+      input.closest('li').style.display = 'none';
+      input.required = false; // Remove required attribute
+    });
+    reschedReason.forEach(input => {
+      input.closest('li').style.display = 'none';
+      input.required = false; // Remove required attribute
+    });
+    cancelReason.forEach(input => {
+      input.closest('li').style.display = 'none';
+      input.required = false; // Remove required attribute
+    });
+    rescheduledTime.required = false; // Remove required attribute for rescheduled time
     hideOtherReasonContainer();
   }
 
   function hideRescheduleSection() {
     rescheduleSection.style.display = 'none';
+    appointmentDate.disabled = true;
+    appointmentTime.disabled = true;
+  }
+
+  function showRescheduleSection() {
+    rescheduleSection.style.display = 'flex';
+    appointmentDate.disabled = false;
+    appointmentTime.disabled = false;
   }
 
   function hideAllReasonOptionsInitially() {
@@ -56,14 +78,30 @@ document.addEventListener('DOMContentLoaded', function () {
   function handleStatusChange(status) {
     hideAllReasonOptions();
     switch (status) {
+      case 'pending':
+        hideRescheduleSection();
+        break;
       case 'approved':
-        approveReason.forEach(input => input.closest('li').style.display = 'block');
+        approveReason.forEach(input => {
+          input.closest('li').style.display = 'block';
+          input.required = true; // Add required attribute
+        });
+        hideRescheduleSection();
         break;
       case 'rescheduled':
-        reschedReason.forEach(input => input.closest('li').style.display = 'block');
+        reschedReason.forEach(input => {
+          input.closest('li').style.display = 'block';
+          input.required = true; // Add required attribute
+        });
+        rescheduledTime.required = true; // Add required attribute for rescheduled time
+        showRescheduleSection();
         break;
       case 'cancelled':
-        cancelReason.forEach(input => input.closest('li').style.display = 'block');
+        cancelReason.forEach(input => {
+          input.closest('li').style.display = 'block';
+          input.required = true; // Add required attribute
+        });
+        hideRescheduleSection();
         break;
     }
   }
@@ -72,17 +110,13 @@ document.addEventListener('DOMContentLoaded', function () {
     input.addEventListener('change', function () {
       if (this.checked) {
         handleStatusChange(this.value);
-        if (this.value === 'rescheduled') {
-          rescheduleSection.style.display = 'flex';
-        } else {
-          rescheduleSection.style.display = 'none';
-        }
       }
     });
   });
 
   document.querySelectorAll('input[name="approveReason"], input[name="reschedReason"], input[name="cancelReason"]').forEach(input => {
     input.addEventListener('change', function () {
+      remarksInput.value = this.value; // Update hidden input value
       if (this.id.includes('others')) {
         showOtherReasonContainer();
       } else {

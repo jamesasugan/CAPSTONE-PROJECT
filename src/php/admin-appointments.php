@@ -420,7 +420,7 @@ ORDER BY
           </div>
           <button id="add-service" class="btn mt-1 mr-2 bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none px-7 mb-2">Add Another Service</button><small class="font-medium text-black dark:text-white">If needed</small>
   -->
-          <div class="mb-3 mt-10">
+          <!-- <div class="mb-3 mt-10">
             <label for="remarks" class="block text-base sm:text-lg font-medium mt-2 text-black dark:text-white">
               Reason:
             </label>
@@ -433,26 +433,27 @@ ORDER BY
               class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 text-black dark:text-white"
             />
           </div>
-          <input type='hidden' name='appointment_id' value=''>
+          -->
+          <input type='hidden' name='appointment_id' value=''> 
 
 
           <!-- reason section -->   
-          <div class="w-full mb-5">
+          <input type="hidden" id="remarks" name="remarks" value=''>
+          <div class="w-full mb-5 mt-3">
             <label for="reason" class="block font-medium text-black dark:text-white text-base sm:text-lg">
             Select a Reason:
             </label>
             <ul class="w-full text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-
               <!-- para sa approve. hide mo to kapag iba pinili. vice versa sa ibang choices-->
               <li class="border-b border-gray-200 rounded-t-lg dark:border-gray-600 w-full">
                   <div class="flex items-center ps-3">
-                      <input id="firstApprove" type="radio" value="" name="approveReason" class="radio radio-info">
+                      <input id="firstApprove" type="radio" value="Your appointment is now listed, comply on the set date and time." name="approveReason" required class="radio radio-info">
                       <label for="firstApprove" class="w-full py-3 ms-2 text-base sm:text-lg font-medium text-black dark:text-white">Your appointment is now listed, comply on the set date and time.</label>
                   </div>
               </li>
               <li class="border-b border-gray-200 rounded-t-lg dark:border-gray-600 w-full">
                   <div class="flex items-center ps-3">
-                      <input id="othersApprove" type="radio" value="" name="approveReason" class="radio radio-info">
+                      <input id="othersApprove" type="radio" value="" name="approveReason" required class="radio radio-info">
                       <label for="othersApprove" class="w-full py-3 ms-2 text-base sm:text-lg font-medium text-black dark:text-white">Others</label>
                   </div>
               </li>
@@ -461,62 +462,62 @@ ORDER BY
               <!-- para sa reschedule -->
               <li class="border-b border-gray-200 rounded-t-lg dark:border-gray-600 w-full">
                   <div class="flex items-center ps-3">
-                      <input id="firstResched" type="radio" value="" name="reschedReason" class="radio radio-info">
+                      <input id="firstResched" type="radio" value="The doctor is unavailable due to unforeseen circumstances. Your appointment has been rescheduled. Please confirm in your profile settings if the new time and date works for you." name="reschedReason" required class="radio radio-info">
                       <label for="firstResched" class="w-full py-3 ms-2 text-base sm:text-lg font-medium text-black dark:text-white">The doctor is unavailable due to unforeseen circumstances. Your appointment has been rescheduled. Please confirm in your profile settings if the new time and date works for you.</label>
                   </div>
               </li>
               <li class="border-b border-gray-200 rounded-t-lg dark:border-gray-600 w-full">
                   <div class="flex items-center ps-3">
-                      <input id="secondResched" type="radio" value="" name="reschedReason" class="radio radio-info">
+                      <input id="secondResched" type="radio" value="Due to weather conditions, your appointment has been rescheduled. Please confirm in your profile settings if the new time and date works for you." name="reschedReason" required class="radio radio-info">
                       <label for="secondResched" class="w-full py-3 ms-2 text-base sm:text-lg font-medium text-black dark:text-white">Due to weather conditions, your appointment has been rescheduled. Please confirm in your profile settings if the new time and date works for you.</label>
                   </div>
               </li>
               <li class="border-b border-gray-200 rounded-t-lg dark:border-gray-600 w-full">
                   <div class="flex items-center ps-3">
-                      <input id="thirdResched" type="radio" value="" name="reschedReason" class="radio radio-info">
+                      <input id="thirdResched" type="radio" value="There will be maintenance in the clinic and your appointment has been rescheduled. Please confirm in your profile settings if the new time and date works for you." name="reschedReason" required class="radio radio-info">
                       <label for="thirdResched" class="w-full py-3 ms-2 text-base sm:text-lg font-medium text-black dark:text-white">There will be maintenance in the clinic and your appointment has been rescheduled. Please confirm in your profile settings if the new time and date works for you.</label>
                   </div>
               </li>
               <li class="border-b border-gray-200 rounded-t-lg dark:border-gray-600 w-full">
                   <div class="flex items-center ps-3">
-                      <input id="fourResched" type="radio" value="" name="reschedReason" class="radio radio-info">
+                      <input id="fourResched" type="radio" value="Due to a scheduling conflict, your appointment has been rescheduled. Please confirm in your profile settings if the new time and date works for you." name="reschedReason" required class="radio radio-info">
                       <label for="fourResched" class="w-full py-3 ms-2 text-base sm:text-lg font-medium text-black dark:text-white">Due to a scheduling conflict, your appointment has been rescheduled. Please confirm in your profile settings if the new time and date works for you.</label>
                   </div>
               </li>
               <li class="border-b border-gray-200 rounded-t-lg dark:border-gray-600 w-full">
                   <div class="flex items-center ps-3">
-                      <input id="othersResched" type="radio" value="" name="reschedReason" class="radio radio-info">
+                      <input id="othersResched" type="radio" value="" name="reschedReason" required class="radio radio-info">
                       <label for="othersResched" class="w-full py-3 ms-2 text-base sm:text-lg font-medium text-black dark:text-white">Others</label>
                   </div>
               </li>
-
               <!-- para sa reschedule end -->
+
+              <!-- para sa cancel -->
               <li class="border-b border-gray-200 rounded-t-lg dark:border-gray-600 w-full">
                   <div class="flex items-center ps-3">
-                      <input id="firstCancel" type="radio" value="" name="cancelReason" class="radio radio-info">
+                      <input id="firstCancel" type="radio" value="Your appointment has been canceled due incomplete or missing patient information." name="cancelReason" required class="radio radio-info">
                       <label for="firstCancel" class="w-full py-3 ms-2 text-base sm:text-lg font-medium text-black dark:text-white">Your appointment has been canceled due incomplete or missing patient information.</label>
                   </div>
               </li>
               <li class="border-b border-gray-200 rounded-t-lg dark:border-gray-600 w-full">
                   <div class="flex items-center ps-3">
-                      <input id="secondCancel" type="radio" value="" name="cancelReason" class="radio radio-info">
+                      <input id="secondCancel" type="radio" value="Your appointment has been canceled due to double booking." name="cancelReason" required class="radio radio-info">
                       <label for="secondCancel" class="w-full py-3 ms-2 text-base sm:text-lg font-medium text-black dark:text-white">Your appointment has been canceled due to double booking.</label>
                   </div>
               </li>
               <li class="border-b border-gray-200 rounded-t-lg dark:border-gray-600 w-full">
                   <div class="flex items-center ps-3">
-                      <input id="othersCancel" type="radio" value="" name="cancelReason" class="radio radio-info">
+                      <input id="othersCancel" type="radio" value="" name="cancelReason" required class="radio radio-info">
                       <label for="othersCancel" class="w-full py-3 ms-2 text-base sm:text-lg font-medium text-black dark:text-white">Others</label>
                   </div>
               </li>
-              <!-- para sa cancel -->
-
+              <!-- para sa cancel end -->
           </ul>
               <div id="otherReasoncontainer" class="mt-2">
                 <label for="otherReason" class="block font-medium text-black dark:text-white text-base sm:text-lg">
                   Please specify your reason:
                 </label>
-                <input type="text" id="otherReason" name="otherReason" placeholder="Type here..." class="input input-bordered appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none text-base sm:text-lg bg-white dark:bg-gray-600 text-black dark:text-white  whitespace-nowrap overflow-hidden text-ellipsis" />
+                <input type="text" id="otherReason" name="otherReason" required placeholder="Type here..." class="input input-bordered appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none text-base sm:text-lg bg-white dark:bg-gray-600 text-black dark:text-white  whitespace-nowrap overflow-hidden text-ellipsis" />
               </div>
         </div>
           <!-- reason end -->
