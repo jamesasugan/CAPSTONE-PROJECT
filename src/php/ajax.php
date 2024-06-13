@@ -1399,10 +1399,7 @@ if ($action === 'getPatientApppointmentInfoJSON') {
             $stmt->bind_param('i', $patient_id);
             $stmt->execute();
             $result = $stmt->get_result();
-            $rows = [];
-            while ($row = $result->fetch_assoc()) {
-                $rows[] = $row;
-            }
+            $rows = $result->fetch_assoc();
             header('Content-Type: application/json');
             echo json_encode($rows);
         } else {
@@ -1492,7 +1489,7 @@ if ($action === 'AccountMemberPostReq'){
 if ($action == 'getAccountMemberDataJSON'){
     $accountMemberID = $_GET['data_id'];
     $accOwnerId = $_GET['SessionUserID'];
-    $getAccountMemberSql = "SELECT * FROM tbl_accountpatientmember where Account_Patient_ID_Member = ? and user_info_ID = ? where status = 'Active'";
+    $getAccountMemberSql = "SELECT * FROM tbl_accountpatientmember where Account_Patient_ID_Member = ? and user_info_ID = ? and status = 'Active'";
     $getAccountMemberSqlSTMT = $conn->prepare($getAccountMemberSql);
     $getAccountMemberSqlSTMT->bind_param('ii',$accountMemberID, $accOwnerId);
 
