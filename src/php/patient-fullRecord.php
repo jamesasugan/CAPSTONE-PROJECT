@@ -144,13 +144,12 @@ if ($result && $result->num_rows == 1){
           <div class="grid grid-cols-1 md:grid-cols-2 gap-1 text-lg sm:text-xl">
             <h2 class="text-lg sm:text-xl font-bold">Status: <span class="<?php echo $statusClass;?>"><?php echo $patient_status?></span></h2>
             <p><strong>Name: </strong> <?php echo $Patient_firstname . ' ' . $middleInitial . '. ' . $Patient_lastname; ?></p>
-            <p><strong>Contact Number: </strong> <?php echo $row[ 'Contact_Number']; ?></p>
+            <p><strong>Contact Number: </strong> <?php echo $Patient_ContactNumber ?></p>
             <p><strong>Age: </strong> <?php echo (new DateTime($patientDOB))->diff(new DateTime)->y; ?></p>
-            <p><strong>Sex: </strong> <?php echo $row['Sex']; ?></p>
+            <p><strong>Sex: </strong> <?php echo $patient_Sex ?></p>
             <p><strong>Email: </strong><?php echo $Patient_Email; ?></p>
             <p><strong>Address:</strong> <?php echo $Patient_address; ?></p>
             <p><strong>Date of Birth: </strong><?php echo   date("F j, Y", strtotime($patientDOB));?></p>
-            <p><strong>Service Type: </strong><span id='availedService'>N/A</span> </p>
           </div>
         </div>
 
@@ -166,7 +165,7 @@ if ($result && $result->num_rows == 1){
         <div class="flex flex-col sm:flex-row justify-between sm:items-center">
           <select id="visitDropdown" onchange="if(this.value !== 'newRecord')
                 { getRecords(this.value); getResImg(this.value);} else { document.getElementById('patientRecordForm').reset();
-                  document.getElementById('record_id').value = ''; resetImgDisplay();}" name="sort" class="select
+                  document.getElementById('record_id').value = ''; resetImgDisplay(); $('#availedService').empty()}" name="sort" class="select
                 select-bordered text-black dark:text-white w-full   bg-gray-300 dark:bg-gray-600
                 text-base sm:text-lg lg:text-xl focus:border-blue-500 focus:ring focus:ring-blue-500
                 focus:ring-opacity-50 mb-4 sm:mb-0 sm:mr-4 disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400">
@@ -180,7 +179,7 @@ if ($result && $result->num_rows == 1){
               $result = $recordStmt->get_result();
               if ($result->num_rows > 0) {
                   while ($row = $result->fetch_assoc()) {
-                      echo '<option value="'.$row['Record_ID'].'">Visit '.$visitNUmber++.'</option>';
+                      echo '<option value="'.$row['Record_ID'].'">Consultation: '.$row['consultationDate'].'</option>';
 
                   }
               }
@@ -189,7 +188,11 @@ if ($result && $result->num_rows == 1){
         </div>
         <!-- lalabas lang to sa follow up stage end -->
 
+
+
         <form id="patientRecordForm" action="#" method="POST" enctype='multipart/form-data'>
+          <p id='availedService' class='mt-5'></p>
+
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 mt-5">
             <div>
               <label class="block">
@@ -329,7 +332,7 @@ if ($result && $result->num_rows == 1){
       dataType: 'json',
       success: function(data) {
         if (data) {
-          $('#availedService').html(data.availedService);
+          $('#availedService').html(' <strong>Service Type: </strong><span >'+data.availedService+'</span>');
           document.querySelector('#patientRecordForm input[name="consultation-date"]').value = data.consultationDate;
           document.querySelector('#patientRecordForm input[name="record_id"]').value = data.Record_ID;
           document.querySelector('#patientRecordForm select[name="consultant-name"]').value = data.Consultant_Staff_ID;

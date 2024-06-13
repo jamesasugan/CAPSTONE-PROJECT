@@ -805,7 +805,7 @@ ORDER BY CASE WHEN `tbl_appointment`.`Status` = 'pending' THEN 0 ELSE 1 END, `tb
           method: 'GET',
           dataType: 'json',
           success: function(data) {
-            if (Array.isArray(data) && data.length > 0) {
+            if (data) {
               const patientData = data[0];
               let formattedDateOfBirth = (new Date(patientData.DateofBirth)).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
               document.querySelector('#Patient_name').textContent = patientData.First_Name + ' ' + patientData.Middle_Name + ' ' + patientData.Last_Name;
@@ -816,8 +816,6 @@ ORDER BY CASE WHEN `tbl_appointment`.`Status` = 'pending' THEN 0 ELSE 1 END, `tb
               document.querySelector('#Patient_dateOfBirth').textContent = formattedDateOfBirth;
               document.querySelector('#Patient_vacStat').textContent = patientData.Vaccination;
               document.querySelector('#Patient_reasonn').textContent = patientData.reason;
-            } else {
-              console.error('No data found for the given patient ID');
             }
           },
           error: function(xhr, status, error) {

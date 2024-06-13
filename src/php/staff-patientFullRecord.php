@@ -150,14 +150,12 @@ if ($result && $result->num_rows > 0) {
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-1 text-lg sm:text-xl">
                   <h2 class="text-lg sm:text-xl font-bold">Status: <span class="<?php echo $statusClass;?>"><?php echo $patient_status?></span></h2>
                   <p><strong>Name: </strong> <?php echo $Patient_firstname . ' ' . $middleInitial . '. ' . $Patient_lastname; ?></p>
-                  <p><strong>Contact Number: </strong> <?php echo $row[ 'Contact_Number']; ?></p>
+                  <p><strong>Contact Number: </strong> <?php echo $Patient_ContactNumber ?></p>
                   <p><strong>Age: </strong> <?php echo (new DateTime($patientDOB))->diff(new DateTime)->y; ?></p>
-                  <p><strong>Sex: </strong> <?php echo $row['Sex']; ?></p>
+                  <p><strong>Sex: </strong> <?php echo $patient_Sex; ?></p>
                   <p><strong>Email: </strong><?php echo $Patient_Email; ?></p>
                   <p><strong>Address:</strong> <?php echo $Patient_address; ?></p>
                   <p><strong>Date of Birth: </strong><?php echo   date("F j, Y", strtotime($patientDOB));?></p>
-                  <p><strong>Date of Birth: </strong><?php echo   date("F j, Y", strtotime($row['DateofBirth']));?></p>
-                  <p><strong>Service Type: </strong><span id='availedService'>N/A</span></p>
 
                 </div>
               </div>
@@ -192,11 +190,8 @@ if ($result && $result->num_rows > 0) {
                     $result = $recordStmt->get_result();
                     if ($result->num_rows > 0) {
                         while ($row = $result->fetch_assoc()) {
-                            echo '<option value="' .
-                                $row['Record_ID'] .
-                                '">Visit ' .
-                                $visitNUmber++ .
-                                '</option>';
+                            echo '<option value="'.$row['Record_ID'].'">Consultation: '.$row['consultationDate'].'</option>';
+
                         }
                     }
                     ?>
@@ -205,6 +200,8 @@ if ($result && $result->num_rows > 0) {
 
               <form id="patientRecordForm" enctype='multipart/form-data'>
                 <a class='btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none mt-6' onclick='toggleDialog("services")' id='serviceTypeBTN'>Select Service Type</a>
+                <p id='availedService'></p>
+
                 <dialog class='modal bg-black bg-opacity-20' id='services'>
                   <div id='ServiceList'  class="modal-box w-11/12 max-w-5xl bg-gray-200 dark:bg-gray-700 overflow-auto">
                     <h1 class="text-2xl text-center text-black dark:text-white font-bold mb-5">Select Service:</h1>
@@ -239,6 +236,7 @@ if ($result && $result->num_rows > 0) {
 
                       <!-- if there is a button, it will close the modal -->
                       <a class="btn bg-gray-400 dark:bg-white hover:bg-gray-500 dark:hover:bg-gray-400  text-black  border-none" onclick='toggleDialog("services")'>Close</a>
+
 
                     </div>
                   </div>
@@ -633,7 +631,7 @@ if ($result && $result->num_rows > 0) {
 
                 if (data) {
 
-                  $('#availedService').html(data.availedService);
+                  $('#availedService').html('<strong>Service Type: </strong><span >'+data.availedService+'</span>');
                   document.querySelector('#patientRecordForm input[name="serviceSelected"]').value = data.availedService;
                   document.querySelector('#patientRecordForm input[name="consultation-date"]').value = data.consultationDate;
 
@@ -724,7 +722,7 @@ if ($result && $result->num_rows > 0) {
                   .join(', ');
 
                 hiddenInput.value = selectedServices;
-                $('#availedService').html(selectedServices);
+                $('#availedService').html('<strong>Service Type: </strong><span >'+ selectedServices +'</span>');
               });
             });
           });
@@ -736,7 +734,7 @@ if ($result && $result->num_rows > 0) {
               $('#serviceTypeBTN').html('Edit Service Type');
             } else {
               document.getElementById('patientRecordForm').reset();
-              $('#availedService').html('N/A');
+              $('#availedService').empty();
               document.getElementById('record_id').value = '';
               resetImgDisplay();
               $('#serviceTypeBTN').html('Select Service Type');
