@@ -83,9 +83,9 @@ $accountOwner_ID = $_SESSION['online_Account_owner_id'];
           </div>
 
 
-          <div id="personalInfo" class="flex-1 p-10">
+          <div id="personalInfo" class="flex-1 p-0 sm:p-10">
             <div class="bg-gray-200 dark:bg-gray-700 p-5 rounded-lg h-full">
-              <h3 class="text-2xl font-bold text-black dark:text-white mb-4">
+              <h3 class="text-2xl sm:text-3xl font-bold text-black dark:text-white mb-4">
                 Personal Information
               </h3>
               <form id="personal-info" action="#" method="POST" class="space-y-6">
@@ -276,9 +276,9 @@ $accountOwner_ID = $_SESSION['online_Account_owner_id'];
           </div>
 
           <!-- Password tab -->
-          <div id="passwordSection" class="flex-1 p-10 hidden">
+          <div id="passwordSection" class="flex-1 p-0 sm:p-10 hidden">
           <div class="bg-gray-200 dark:bg-gray-700 p-5 rounded-lg h-full">
-              <h3 class="text-2xl font-bold text-black dark:text-white mb-4">
+              <h3 class="text-2xl sm:text-3xl font-bold text-black dark:text-white mb-4">
                   Password
               </h3>
               <form id="security-form" action="#" method="POST" class="space-y-6">
@@ -350,10 +350,10 @@ $accountOwner_ID = $_SESSION['online_Account_owner_id'];
         </div>
 
 
-          <div id="Memberstab" class="flex-1 p-10 hidden">
+          <div id="Memberstab" class="flex-1 p-0 sm:p-10 hidden">
             <div class="bg-gray-200 dark:bg-gray-700 p-5 rounded-lg h-full">
-                <div class="flex justify-between mb-3">
-                  <h3 class="text-2xl font-bold text-black dark:text-white mb-4">
+                <div class="flex flex-col sm:flex-row sm:justify-between mb-3">
+                  <h3 class="text-2xl sm:text-3xl font-bold text-black dark:text-white mb-4 sm:mb-0">
                     Account Members
                   </h3>
                     <button class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none" onclick='toggleDialog("addRelative") ;
@@ -401,11 +401,36 @@ $accountOwner_ID = $_SESSION['online_Account_owner_id'];
             </div>
           </div>
           <!-- Appointment Tab -->
-          <div id="appointmentHistory" class="flex-1 p-10 hidden">
+          <div id="appointmentHistory" class="flex-1 p-0 sm:p-10 hidden">
             <div class="bg-gray-200 dark:bg-gray-700 p-5 rounded-lg h-full">
-              <h3 class="text-2xl font-bold text-black dark:text-white mb-4">
+              <h3 class="text-2xl sm:text-3xl font-bold text-black dark:text-white mb-4">
                 Appointment History
               </h3>
+
+              <div class="container mx-auto">
+                <div class="flex flex-col gap-4 h-[calc(100vh-18rem)] overflow-y-auto">
+                  <!-- card 1 -->
+                  <div class="card bg-white dark:bg-gray-800 shadow-md rounded-lg p-4">
+                  <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center">
+                    <h3 class="text-base sm:text-2xl font-semibold text-gray-900 dark:text-white">John Doe Emmanuel L. Asugan</h3>
+                    <p class="text-base sm:text-lg text-black dark:text-white font-bold">Status: <span class="text-blue-500">Approved</span></p>
+                  </div>
+                    <div class="mt-2  text-sm sm:text-lg text-black dark:text-white">
+                      <p><strong>Schedule:</strong> June 14, 2024, 10:00 AM</p>
+                      <p><strong>Service:</strong> General Check-up</p>
+                      <p><strong>Remarks:</strong> Due to a scheduling conflict, your appointment has been rescheduled. Please confirm in your profile settings if the new time and date works for you.</p>
+                    </div>
+                    <div class="mt-4 flex justify-end">
+                      <!-- <button class="btn btn-error">Cancel Appointment</button> -->
+                      <button class="btn btn-success mr-3">Accept</button>
+                      <button class="btn btn-error ">Decline</button>
+                    </div>
+                  </div>
+                  <!-- card 1 end -->    
+                </div>
+              </div>
+
+              <!-- remove mo to pag nakita mo na code -->
               <div class="overflow-x-auto">
                 <table class="table">
                   <!-- head -->
@@ -476,13 +501,16 @@ ORDER BY CASE WHEN `tbl_appointment`.`Status` = 'pending' THEN 0 ELSE 1 END, `tb
                   </tbody>
                 </table>
               </div>
+              <!-- remove mo to pag nakita mo na code end -->
 
+
+             
             </div>
           </div>
 
-          <div id="recordHistory" class="flex-1 p-10 hidden">
+          <div id="recordHistory" class="flex-1 p-0 sm:p-10 hidden">
             <div class="bg-gray-200 dark:bg-gray-700 p-5 rounded-lg h-full">
-              <h3 class="text-2xl font-bold text-black dark:text-white mb-4">
+              <h3 class="text-2xl sm:text-3xl font-bold text-black dark:text-white mb-4">
                 Record History
               </h3>
               <div class="overflow-x-auto">
