@@ -71,12 +71,12 @@ if (isset($_SESSION['user_type']) and $_SESSION['user_type'] == 'staff') {
     >
       <div class="book-form w-full max-w-7xl mx-auto p-4 rounded-lg shadow-lg bg-gray-200 dark:bg-gray-700 text-[#0e1011] dark:text-[#eef0f1]" id='appointmentForm'>
 
-        <h2 class="text-2xl font-bold mb-2">Set an Appointment</h2>
-        <p class="mb-4 font-medium">
+        <h2 class="text-3xl font-bold mb-2 text-center">Set an Appointment</h2>
+        <p class="font-medium text-center">
           Kindly answer the form to set a face-to-face appointment for
           consultation, test, or procedure in our clinic.
         </p>
-        <p class="font-medium">View <a href="doctorschedule.php" target="_blank" class="link text-blue-400 font-bold">Doctor's Schedule</a> <span class="font-bold">FIRST</span>  for more information about the schedules.</p>
+        <p class="font-medium  text-center">View <a href="doctorschedule.php" target="_blank" class="link text-blue-400 font-bold">Doctor's Schedule</a>  for more information about the schedules.</p>
 
         <form id='patient_bookAppointment' action="#" method="GET">
 
@@ -161,9 +161,11 @@ if (isset($_SESSION['user_type']) and $_SESSION['user_type'] == 'staff') {
                 }
                 ?>
             </select>
-            <a class="mt-2 btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none cursor-pointer w-full" onclick="serviceModal.showModal()">Select a Service</a>
-
           </div>
+
+          <a class="mt-2 btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none cursor-pointer w-full" onclick="serviceModal.showModal()">Choose a Service</a>
+          <!-- dito mo lagay kung ano piniling service, hide mo kapag wala pa. yung naka strong yung specialty -->
+          <p class="font-medium text-lg mt-1"><strong>Pediatrics:</strong> Flu Vaccine, Measles, Mumps, and Rubella Vaccine, Monthly Immunization for babies, Pneumococcal Vaccine, Polio Vaccine</p>
 
         <div class="w-full md:w-auto md:col-span-1">
           <label for="appointment-date" class="block text-base sm:text-lg font-medium">

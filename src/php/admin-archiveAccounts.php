@@ -71,10 +71,10 @@ if ($result->num_rows > 0) {
 
             <dialog id="deleteAll_records" class="modal">
                 <div class="modal-box bg-gray-200 dark:bg-gray-700 text-[#0e1011] dark:text-[#eef0f1]">
-                    <h3 class="font-bold text-xl">Delete All Patient Records</h3>
+                    <h3 class="font-bold text-xl text-center">Delete All Patient Records</h3>
                     <form action="#" method="POST">
                         <div class="form-group">  
-                            <p class="text-black dark:text-white mt-5 font-medium mb-1">Are you sure you want to permanently Delete all Archived Patient Records?
+                            <p class="text-black dark:text-white mt-3 font-medium mb-1">Are you sure you want to permanently Delete all Archived Patient Records?
                                 <br><span class="font-bold text-red-400">This action is permanent and cannot be undone.</span>
                             </p>
                             <p class="text-black dark:text-white mt-2 mb-1">Please enter your password to avoid accidental deletion</p>
@@ -85,7 +85,9 @@ if ($result->num_rows > 0) {
                                     class="input input-bordered w-full border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:outline-none sm:text-sm bg-white dark:bg-gray-600 text-black dark:text-white mb-2">
                                 </div>
                                 <!-- delete button -->
-                            <input type="submit" value="Delete All" class="btn btn-error">   
+                            <div class="flex justify-center">
+                              <input type="submit" value="Delete All" class="btn btn-error w-full">   
+                            </div>
                         </div> 
                     </form>                                      
                       
@@ -205,8 +207,8 @@ ORDER BY
     </div>
     <dialog id="delete_record" class="modal">
       <div class="modal-box bg-gray-200 dark:bg-gray-700 text-[#0e1011] dark:text-[#eef0f1]">
-        <h3 class="font-bold text-xl">Are you sure you want to permanently <span class="text-red-500">Delete</span>  this Patient Record?</h3>
-        <button id='deleteBTN' class="btn btn-error mt-5" onclick='delPatientChart(this.getAttribute("data-chart-id"))'>Delete Record</button>
+        <h3 class="font-bold text-xl text-center">Are you sure you want to permanently <span class="text-red-500">Delete</span>  this Patient Record?</h3>
+        <button id='deleteBTN' class="btn btn-error mt-5 w-full" onclick='delPatientChart(this.getAttribute("data-chart-id"))'>Delete Record</button>
 
         <div class="modal-action">
           <form method="dialog">

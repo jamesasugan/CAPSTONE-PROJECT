@@ -533,12 +533,16 @@ ORDER BY
         <!-- appointment form patient info. Nilagyan ko rin "History" sa ID dito katulad sa patient-profile appointment form -->
         <form id='appointmentform' action="#" method="GET">
 
-          <div>
+          <!-- <div>
             <label for="reason" class="block text-base sm:text-lg font-medium text-black dark:text-white">Reason/Purpose:</label>
 
             <textarea name="reason" placeholder="Type here" disabled required class="textarea-bordered textarea w-full p-2 h-20 bg-gray-300 dark:bg-gray-600 text-black dark:text-white text-base disabled:bg-white disabled:text-black dark:disabled:text-white border-none "></textarea>
+          </div> -->
 
-          </div>
+          <h3 class="text-xl font-bold mt-5 mb-2 text-black dark:text-white">Service</h3>
+          <p class="font-medium text-lg mt-1 w-full mb-2 text-black dark:text-white"><strong>Pediatrics:</strong> Flu Vaccine, Measles, Mumps, and Rubella Vaccine, Monthly Immunization for babies, Pneumococcal Vaccine, Polio Vaccine</p>
+
+
           <fieldset class="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
 
             <!--

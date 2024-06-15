@@ -65,12 +65,53 @@ if ($result->num_rows > 0) {
       <div
         class="w-full max-w-7xl mx-auto p-4 rounded-lg shadow-lg bg-gray-200 dark:bg-gray-700 text-[#0e1011] dark:text-[#eef0f1]"
       >
-        <h2 class="text-3xl font-bold mb-10">Add new walk in patient appointment</h2>
+        <h2 class="text-3xl sm:text-4xl font-bold mb-10 text-center">Add Walk In Patient</h2>
 
         <form id='walkInPatientForm' action="#" method="GET">
-        <fieldset class="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-          <!--
+        <fieldset class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          
           <legend class="text-xl font-bold mb-2 col-span-full">Service:</legend>
+
+          <div class="w-full">
+            <label
+              for="appointDoctor"
+              class="block font-medium text-black dark:text-white text-base sm:text-lg"
+            >
+              Choose a Doctor:</label
+            >
+            <select
+              id="appointDoctor"
+              name="appointDoctor"
+              class="select select-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 text-lg"
+              required
+            >
+              <option value="" disabled selected>Select...</option>
+                <?php
+                $sql = "SELECT * FROM tbl_staff where role = 'doctor' ";
+                $stmt = $conn->prepare($sql);
+                $stmt->execute();
+                $result = $stmt->get_result();
+                while ($row = $result->fetch_assoc()) {
+                    $middleInitial =
+                        strlen($row['Middle_Name']) >= 1
+                            ? substr($row['Middle_Name'], 0, 1)
+                            : '';
+                    echo '<option value="' .
+                        $row['Staff_ID'] .
+                        '">' .
+                        $row['First_Name'] .
+                        ' ' .
+                        $middleInitial .
+                        '. ' .
+                        $row['Last_Name'] .
+                        '</option>';
+                }
+                ?>
+            </select>
+
+          </div>
+          <div id='doctorList' class="form-group mt-5">
+
           <div class="flex flex-col w-full">           
             <ul class="w-full text-lg font-medium text-gray-900 bg-gray-300 dark:bg-gray-600 border border-gray-200 rounded-lg dark:border-gray-600 dark:text-white">
               <li class="border-b border-gray-400 dark:border-slate-300">
@@ -98,94 +139,14 @@ if ($result->num_rows > 0) {
             </ul>
           </div>
 
-          <div class="w-full">
-            <label for="service-type" class="block text-lg font-medium mb-1">What type of service?</label>
-            <select
-                id="service-type"
-                required
-                class="select select-bordered w-full bg-gray-300 dark:bg-gray-600 text-base sm:text-lg lg:text-xl focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
-                name="service-type"
-            >
-                <option value="" disabled selected>Select service type...</option>
-                <option value="OB-Gyne">OB-Gyne</option>
-                <option value="Pregnancy Testing">Pregnancy Testing</option>
-                <option value="Dengue Test">Dengue Test</option>
-                <option value="Covid-19 Rapid Testing">Covid-19 Rapid Testing</option>
-                <option value="Family Medicine">Family Medicine</option>
-                <option value="Internal Medicine">Internal Medicine</option>
-                <option value="Medical Consultation">Medical Consultation</option>
-                <option value="Vaccination">Vaccination</option>
-                <option value="BP Monitoring">BP Monitoring</option>
-                <option value="Blood Glucose Determination">Blood Glucose Determination</option>
-                <option value="Nebulization">Nebulization</option>
-                <option value="Complete Blood Count (CBC)">Complete Blood Count (CBC)</option>
-                <option value="Fecalysis">Fecalysis</option>
-                <option value="Electrocardiogram (ECG)">Electrocardiogram (ECG)</option>
-                <option value="X-RAY">X-RAY</option>
-                <option value="Pre-Employment Package">Pre-Employment Package</option>
-                <option value="Annual Physical Examination">Annual Physical Examination</option>
-                <option value="FBS">FBS</option>
-                <option value="Lipid Profile">Lipid Profile</option>
-                <option value="AST/ALT">AST/ALT</option>
-                <option value="Uric Acid">Uric Acid</option>
-                <option value="Blood Typing">Blood Typing</option>
-                <option value="Electrolytes">Electrolytes</option>
-                <option value="Syphilis Screening">Syphilis Screening</option>
-                <option value="Pregnant Screening">Pregnant Screening</option>
-                <option value="FT4/TSH">FT4/TSH</option>
-            </select>
-        </div>
-        -->
-          <div class="w-full">
-            <label
-              for="appointDoctor"
-              class="block font-medium text-black dark:text-white text-base sm:text-lg"
-            >
-              Select Doctor's Name:</label
-            >
-            <select
-              id="appointDoctor"
-              name="appointDoctor"
-              class="select select-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 text-lg"
-              required
-            >
-              <option value="" disabled selected>Select a Doctor</option>
-                <?php
-                $sql = "SELECT * FROM tbl_staff where role = 'doctor' ";
-                $stmt = $conn->prepare($sql);
-                $stmt->execute();
-                $result = $stmt->get_result();
-                while ($row = $result->fetch_assoc()) {
-                    $middleInitial =
-                        strlen($row['Middle_Name']) >= 1
-                            ? substr($row['Middle_Name'], 0, 1)
-                            : '';
-                    echo '<option value="' .
-                        $row['Staff_ID'] .
-                        '">' .
-                        $row['First_Name'] .
-                        ' ' .
-                        $middleInitial .
-                        '. ' .
-                        $row['Last_Name'] .
-                        '</option>';
-                }
-                ?>
-            </select>
-
           </div>
+          
 
+          <a class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none cursor-pointer w-full" onclick="serviceModal.showModal()">Choose a Service</a>
+          <!-- dito mo lagay kung ano piniling service, hide mo kapag wala pa. yung naka strong yung specialty -->
+          <p class="font-medium text-lg mt-1 text-black dark:text-white"><strong>Pediatrics:</strong> Flu Vaccine, Measles, Mumps, and Rubella Vaccine, Monthly Immunization for babies, Pneumococcal Vaccine, Polio Vaccine</p>
 
-
-          <div id='doctorList' class="form-group mt-5">
-
-          </div>
-
-          <div>
-              <label for="reason" class="block text-base sm:text-lg font-medium">Reason/Purpose:</label>
-              <textarea id='reason' name="reason" autocomplete="off" placeholder="Type here..." required class="textarea p-2 textarea-bordered bg-gray-300 dark:bg-gray-600 text-base sm:text-lg w-full" ></textarea>
-            </div>
-        </fieldset>
+          </fieldset>
 
 
 
@@ -266,6 +227,138 @@ if ($result->num_rows > 0) {
 
       </div>
     </section>
+
+    <!-- service modal -->
+    <dialog id="serviceModal" class="modal">
+            <div class="modal-box w-11/12 max-w-5xl bg-gray-200 dark:bg-gray-700 text-black dark:text-white overflow-auto p-0">
+              <div class="modal-header sticky top-0 bg-gray-200 dark:bg-gray-700 z-10 px-10 pt-10">
+                    <div class="flex justify-between">
+                      <h3 class="font-bold text-3xl mb-0 text-center">Select a Service</h3>
+                        <form method="dialog">
+                          <button class="btn bg-gray-400 dark:bg-white hover:bg-gray-500 dark:hover:bg-gray-400  text-black border-none mb-2">Close</button>
+                        </form>
+                    </div>
+                    <div class="border border-gray-600 dark:border-slate-300"></div>
+              </div>
+
+
+
+<!--
+              <div class="w-full sm:flex sm:items-center justify-end mb-5 mt-5">
+                <div class="flex w-full sm:w-auto">
+                  <input
+                    id='search'
+                    type="text"
+                    name="text"
+                    class="input input-bordered appearance-none w-full px-3 py-2 rounded-none bg-white dark:bg-gray-600 text-black dark:text-white border border-black border-r-0 dark:border-white"
+                    placeholder="Search"
+                    onkeyup=''
+                  />
+                  <button type="submit" class="btn btn-square bg-gray-400 hover:bg-gray-500  rounded-none dark:bg-gray-500 dark:hover:bg-gray-300 border border-black border-l-0 dark:border-white">
+                    <i class="fa-solid fa-magnifying-glass text-black dark:text-white"></i>
+                  </button>
+                </div>
+              </div>
+-->
+              <div class="text-xl font-medium p-10" id='services'>
+
+                  <?php
+                  $sql = "SELECT specialty, Title, Service_Type, serviceStatus FROM tbl_services WHERE serviceStatus = 'Available' ORDER BY specialty, Service_Type";
+                  $result = $conn->query($sql);
+
+                  $services = [];
+
+                  if ($result->num_rows > 0) {
+                      while($row = $result->fetch_assoc()) {
+                          $specialty = $row['specialty'];
+                          $title = $row['Title'];
+
+                          if (!isset($services[$specialty])) {
+                              $services[$specialty] = [];
+                          }
+
+
+                          $services[$specialty][$title][] = $row;
+                      }
+                  } else {
+                      echo "0 results";
+                  }
+
+                  ?>
+
+                  <?php foreach ($services as $specialty => $titles): ?>
+                      <?php foreach ($titles as $title => $serviceItems): ?>
+                      <div class="mb-4">
+                        <p class="font-bold mb-2 text-2xl">
+                            <?= htmlspecialchars($title) ?><?= $title !== $specialty ? " (" . htmlspecialchars($specialty) . ")" : "" ?>
+                        </p>
+                        <div class="pl-6" id='<?= htmlspecialchars($specialty) ?>'>
+                            <?php foreach ($serviceItems as $service): ?>
+                              <label class="flex items-center space-x-2 mb-2 hover:bg-slate-300 dark:hover:bg-gray-600 p-2 rounded-md transition duration-150">
+                                <input type="checkbox" name="service" value="<?= htmlspecialchars($service['Service_Type']) ?>" class="checkbox checkbox-info" data-specialty="<?= htmlspecialchars($specialty) ?>">
+                                <span><?= htmlspecialchars($service['Service_Type']) ?></span>
+                              </label>
+                            <?php endforeach; ?>
+                        </div>
+                      </div>
+                      <?php endforeach; ?>
+                  <?php endforeach; ?>
+
+              </div>
+
+              <div class="mb-4 p-10">
+                    <p class="font-bold mb-2 text-2xl">Others</p>
+                    <label class="block flex items-center space-x-2 mb-2 hover:bg-slate-300 dark:hover:bg-gray-600 p-2 rounded-md transition duration-150">
+                    <textarea id="otherService" rows="4" name="otherService"  class="input input-bordered h-20 text-lg w-full bg-white dark:bg-gray-600 text-black dark:text-white border-none" placeholder="If none in the following, type your reason/purpose here"></textarea>
+                  </label>
+                </div>
+            </div>
+            </div>
+          </dialog>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+          let services = document.getElementById('services');
+          const checkboxes = services.querySelectorAll('input[type="checkbox"]');
+          const otherServiceTextarea = document.getElementById('otherService');
+          const serviceTypeInput = document.getElementById('ServiceType');
+
+          otherServiceTextarea.addEventListener('input', function() {
+            checkboxes.forEach(checkbox => {
+              checkbox.checked = false;
+            });
+            serviceTypeInput.value = this.value;
+          });
+
+          checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+              const selectedSpecialty = this.getAttribute('data-specialty');
+
+              if (this.checked) {
+                checkboxes.forEach(cb => {
+                  if (cb !== this && cb.getAttribute('data-specialty') !== selectedSpecialty) {
+                    cb.checked = false;
+                  }
+                });
+                otherServiceTextarea.value = '';
+              }
+
+              updateServiceTypeInput();
+            });
+          });
+
+          function updateServiceTypeInput() {
+            serviceTypeInput.value = Array.from(checkboxes)
+              .filter(cb => cb.checked)
+              .map(cb => cb.value)
+              .join(';');
+          }
+        });
+  </script>
+
+  <!-- services modal and javascript end -->
+
+
     <script>
 
       document.getElementById('walkInPatientForm').addEventListener('submit', function(e){

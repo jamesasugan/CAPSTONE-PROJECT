@@ -175,11 +175,11 @@ ORDER BY
            <!-- modal content for archive record -->
             <dialog id="archive_record" class="modal">
                 <div class="modal-box bg-gray-200 dark:bg-gray-700 text-[#0e1011] dark:text-[#eef0f1]">
-                    <h3 class="font-bold text-xl">Are you sure you want to Archive this Patient Record?</h3>
+                    <h3 class="font-bold text-xl text-center">Are you sure you want to Archive this Patient Record?</h3>
 
                     <!-- <p class="text-black dark:text-white mt-2 mb-1 font-medium">
                       This record will be moved to the <a href="admin-archiveAccounts.php" class="text-blue-500 underline">Archived Patient Records</a></p> -->
-                      <a class="btn btn-error mt-5" data-chart-id="" id='archiveBtn' onclick='archivePatientChart(this.getAttribute("data-chart-id"))'>Archive this Patient Record</a>
+                      <a class="btn btn-error mt-5 w-full" data-chart-id="" id='archiveBtn' onclick='archivePatientChart(this.getAttribute("data-chart-id"))'>Archive this Patient Record</a>
 
                     <div class="modal-action">
                         <form method="dialog">
