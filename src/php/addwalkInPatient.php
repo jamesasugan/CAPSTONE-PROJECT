@@ -35,6 +35,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] == 'patient') {
     <link rel="stylesheet" href="../css/services-swiper.css">
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script src="../js/main.js" defer></script>
+    <script src="../js/admin-addwalkInPatient.js" defer></script>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
 </head>
@@ -68,10 +69,36 @@ if ($result->num_rows > 0) {
         <h2 class="text-3xl sm:text-4xl font-bold mb-10 text-center">Add Walk In Patient</h2>
 
         <form id='walkInPatientForm' action="#" method="GET">
-        <fieldset class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          
-          <legend class="text-xl font-bold mb-2 col-span-full">Service:</legend>
 
+       
+
+        <fieldset class="grid grid-cols-1 md:grid-cols-2 gap-4">   
+
+
+          <div>
+            <div class="block text-base sm:text-lg font-medium mb-1">Does this Patient already have an Online Account?</div>
+            <div class="flex items-center space-x-4 p-2 bg-gray-300 dark:bg-gray-600 rounded">
+              <label class="flex items-center">
+                <input type="radio" name="recordExist" value="Yes" class="radio radio-primary" required>
+                <span class="ml-2">Yes</span>
+              </label>
+              <label class="flex items-center">
+                <input type="radio" name="recordExist" value="No" class="radio radio-primary" required>
+                <span class="ml-2">No</span>
+              </label>
+            </div>
+          </div>
+
+          <div id="searchPatientRecord" class="hidden">
+            <label for="searchInput1" class="block font-medium text-gray-800 dark:text-white text-lg">Search Patient Record</label>
+            <div class="relative">
+              <input type="text" id="searchInput1" placeholder="Search..." class="input input-bordered w-full px-3 py-2 mb-1 bg-white dark:bg-gray-800 text-gray-800 dark:text-white">
+              <ul id="optionsList1" class="absolute z-10 hidden w-full py-1 bg-white border border-gray-300 rounded-md shadow-md dark:bg-gray-800 dark:border-gray-700"></ul>
+            </div>
+          </div>
+
+
+          <h3 class="text-xl font-bold col-span-full">Service:</h3>
           <div class="w-full">
             <label
               for="appointDoctor"
@@ -315,49 +342,7 @@ if ($result->num_rows > 0) {
             </div>
             </div>
           </dialog>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-          let services = document.getElementById('services');
-          const checkboxes = services.querySelectorAll('input[type="checkbox"]');
-          const otherServiceTextarea = document.getElementById('otherService');
-          const serviceTypeInput = document.getElementById('ServiceType');
-
-          otherServiceTextarea.addEventListener('input', function() {
-            checkboxes.forEach(checkbox => {
-              checkbox.checked = false;
-            });
-            serviceTypeInput.value = this.value;
-          });
-
-          checkboxes.forEach(checkbox => {
-            checkbox.addEventListener('change', function() {
-              const selectedSpecialty = this.getAttribute('data-specialty');
-
-              if (this.checked) {
-                checkboxes.forEach(cb => {
-                  if (cb !== this && cb.getAttribute('data-specialty') !== selectedSpecialty) {
-                    cb.checked = false;
-                  }
-                });
-                otherServiceTextarea.value = '';
-              }
-
-              updateServiceTypeInput();
-            });
-          });
-
-          function updateServiceTypeInput() {
-            serviceTypeInput.value = Array.from(checkboxes)
-              .filter(cb => cb.checked)
-              .map(cb => cb.value)
-              .join(';');
-          }
-        });
-  </script>
-
-  <!-- services modal and javascript end -->
-
+  <!-- services modal  end -->
 
     <script>
 
