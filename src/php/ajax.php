@@ -70,6 +70,17 @@ if ($action == 'signup'){
             $stmt_patient = $conn->prepare($sql_patient);
             $stmt_patient->bind_param("isssssss", $user_id, $first_name, $middle_name, $last_name, $date_of_birth, $sex, $contact_number, $address);
             $stmt_patient->execute();
+            $usrInfoID = $stmt_patient->insert_id;
+            $relation = 'Self';
+            $newAccAppointmentMember = "INSERT INTO tbl_accountpatientmember (user_info_ID,  First_Name	,
+                              Middle_Name	,Last_Name	,DateofBirth	,Sex	,Contact_Number
+                              	,MemberPatientEmail	,Address	,RelationshipType)
+    VALUES (?,?,?,?,?,?,?,?,?,?)";
+            $newAccAppointmentMemberSTMT  = $conn->prepare($newAccAppointmentMember);
+            $newAccAppointmentMemberSTMT->bind_param('isssssssss', $usrInfoID,
+                $first_name, $middle_name, $last_name, $date_of_birth, $sex, $contact_number, $email,
+                $address,  $relation);
+            $newAccAppointmentMemberSTMT->execute();
 
         }else{
             $role = isset($_POST['role']) ? $_POST['role']: '';
@@ -809,10 +820,13 @@ if ($action == 'getUserInfo'){
     $UID = $_SESSION['user_id'];
     $user_type = $_SESSION['user_type'];
     if ($user_type == 'patient'){
-        $sql = "SELECT account_user_info.*, tbl_accounts.*
+        $sql = "SELECT account_user_info.*, tbl_accounts.*, tbl_accountpatientmember.weight,
+       tbl_accountpatientmember.Medical_condition 
                 FROM account_user_info 
-                JOIN tbl_accounts ON account_user_info.User_ID = tbl_accounts.User_ID where tbl_accounts.User_ID = ?;
-            ";
+                JOIN tbl_accounts ON account_user_info.User_ID = tbl_accounts.User_ID 
+                JOIN tbl_accountpatientmember on tbl_accountpatientmember.user_info_ID = account_user_info.user_info_ID
+                where tbl_accounts.User_ID = ? and tbl_accountpatientmember.RelationshipType = 'Self'
+                  and tbl_accountpatientmember.status = 'Active';";
     }elseif($user_type == 'staff') {
         $sql = "SELECT tbl_accounts.*, tbl_staff.*
 FROM tbl_accounts 
@@ -879,9 +893,34 @@ if ($action == 'editUserInfo'){
                     WHERE tbl_accounts.User_ID = ?;
                 ";
 
+            $getSelfAppointmentAccMember = "SELECT * FROM tbl_accountpatientmember where user_info_ID = ? and RelationshipType = 'Self' and status = 'Active'";
+            $getSelfAppointmentAccMemberSTMT = $conn->prepare($getSelfAppointmentAccMember);
+            $getSelfAppointmentAccMemberSTMT->bind_param('i', $_SESSION['online_Account_owner_id']);
+            $getSelfAppointmentAccMemberSTMT->execute();
+
+            $accmemberId = $getSelfAppointmentAccMemberSTMT->get_result();
+            $accountmemeberID = $accmemberId->fetch_assoc()['Account_Patient_ID_Member'];
+
+
             $stmt =$conn->prepare($sql);
             $stmt->bind_param('ssssssssi', $acc_Email,$accFirstName,$accMiddleName,$accLastName,$accDOB,$accSex,$accContactNumber,$accAddress,$UID);
             $stmt->execute();
+            $relativeMedcondition = $_POST['medicalCondition'] ?? 'N/A';
+            $UserWeight = $_POST['weight'] ??  Null;
+            $updateAccAppointmentMember = "UPDATE tbl_accountpatientmember 
+                                   SET First_Name=?, Middle_Name=?, Last_Name=?, DateofBirth=?, 
+                                       Sex=?, Contact_Number=?, MemberPatientEmail=?, 
+                                       Address=?, Medical_condition=?, weight= ?
+                                   WHERE Account_Patient_ID_Member  = ?";
+            $updateAccAppointmentMemberSTMT = $conn->prepare($updateAccAppointmentMember);
+            $updateAccAppointmentMemberSTMT->bind_param('ssssssssssi', $accFirstName, $accMiddleName,
+                $accLastName, $accDOB, $accSex,
+                $accContactNumber, $acc_Email, $accAddress,
+                $relativeMedcondition,$UserWeight, $accountmemeberID);
+
+            if (!$updateAccAppointmentMemberSTMT->execute()){
+                echo $updateAccAppointmentMemberSTMT->error;
+            }
             echo 1;
             exit();
 
@@ -933,7 +972,6 @@ if ($action == 'editUserInfo'){
         }
 
     }
-
 }
 
 if ($action == 'getAppointmentInfo'){
@@ -980,6 +1018,12 @@ if ($action == 'updateAppointment'){
             WHERE Appointment_ID = ?';
         $stmt = $conn->prepare($sql);
         $stmt->bind_param('issi', $doctor_id, $appointment_status,  $remark, $appointment_id);
+    }else if ($appointment_status == 'completed'){
+        $sql = 'UPDATE tbl_appointment SET Staff_ID = ?, 
+            Status = ?
+            WHERE Appointment_ID = ?';
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param('isi', $doctor_id, $appointment_status, $appointment_id);
     }else if ($appointment_status == 'pending'){
         $sql = 'UPDATE tbl_appointment SET Staff_ID = ?, 
             Status = ?,
@@ -1033,16 +1077,18 @@ if ($action == 'createPatientChart') {
         $chartSex = $row['Sex'];
         $chartContactNum = $row['Contact_Number'];
         $chartAddress = $row['Address'];
-        $chartEmail = $row['MemberPatientEmail']; // Adding email if it's required
+        $chartEmail = $row['MemberPatientEmail'];
+        $chartWeight = $row['weight'];
+        $chartMDCondition = $row['Medical_condition'];
         $patientStatus = 'To be Seen';
         $followUpSchedule = $row['Appointment_schedule'];
 
         $sql = "INSERT INTO tbl_patient_chart (user_info_ID, Consultant_id, First_Name,
-                    Middle_Name, Last_Name, DateofBirth, Sex, Contact_Number, patientEmail, Address, patient_Status, followUp_schedule) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    Middle_Name, Last_Name, DateofBirth, Sex, Contact_Number, patientEmail, Address, patient_Status, followUp_schedule, Weight, Medical_condition) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param('iissssssssss', $chartOnlineUser_Id, $chartConsultant, $chartFname,
-            $chartMname, $chartLname, $chartDob, $chartSex, $chartContactNum, $chartEmail, $chartAddress, $patientStatus, $followUpSchedule);
+        $stmt->bind_param('iissssssssssds', $chartOnlineUser_Id, $chartConsultant, $chartFname,
+            $chartMname, $chartLname, $chartDob, $chartSex, $chartContactNum, $chartEmail, $chartAddress, $patientStatus, $followUpSchedule, $chartWeight, $chartMDCondition);
         if ($stmt->execute()) {
             echo 1;
             exit();
@@ -1074,7 +1120,6 @@ if ($action == 'createPatientRecord') {
     try {
         $record_id = 0;
         $consultation_date = $_POST['consultation-date'];
-        $weight = $_POST['weight'];
         $heart_rate = $_POST['heart-rate'];
         $temperature = $_POST['temperature'];
         $blood_pressure = $_POST['blood-pressure'];
@@ -1100,7 +1145,7 @@ if ($action == 'createPatientRecord') {
                        
                        Temperature = ?, 
                        HeartRate = ?,
-                       Weight = ?, 
+             
                        Blood_Pressure = ?, 
                        Saturation = ?, 
                        Chief_complaint = ?, 
@@ -1111,8 +1156,8 @@ if ($action == 'createPatientRecord') {
                        WHERE Record_ID = ?
                        ";
                 $stmt = $conn->prepare($sql);
-                $stmt->bind_param('sdddsssssssi', $consultation_date, $temperature,
-                    $heart_rate, $weight, $blood_pressure,
+                $stmt->bind_param('sddsssssssi', $consultation_date, $temperature,
+                    $heart_rate,  $blood_pressure,
                     $saturation, $chief_comp, $physical_exam,
                     $assesment, $availed_Service, $treatment_plan, $record_id);
                 if (!$stmt->execute()){
@@ -1133,10 +1178,10 @@ if ($action == 'createPatientRecord') {
                 exit();
             }
         }else {
-            $sql = "INSERT INTO tbl_records (Chart_ID,consultationDate, availedService,Temperature, HeartRate, Weight, Blood_Pressure, Saturation, Chief_complaint, Physical_Examination, Assessment, Treatment_Plan) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?,?, ?, ?, ?)";
+            $sql = "INSERT INTO tbl_records (Chart_ID,consultationDate, availedService,Temperature, HeartRate, Blood_Pressure, Saturation, Chief_complaint, Physical_Examination, Assessment, Treatment_Plan) 
+                VALUES (?, ?, ?, ?, ?, ?, ?,?, ?, ?, ?)";
             $stmt = $conn->prepare($sql);
-            $stmt->bind_param("issdddssssss", $Chart_ID,  $consultation_date, $availed_Service,$temperature, $heart_rate, $weight, $blood_pressure, $saturation, $chief_comp, $physical_exam, $assesment, $treatment_plan);
+            $stmt->bind_param("issddssssss", $Chart_ID,  $consultation_date, $availed_Service,$temperature, $heart_rate, $blood_pressure, $saturation, $chief_comp, $physical_exam, $assesment, $treatment_plan);
             if (!$stmt->execute()){
                 if ($stmt->errno == 1265){
                     echo "Data insert mismatch error";
@@ -1248,6 +1293,7 @@ if ($action == 'cancelAppointment'){
     if (password_verify($conf_password, $row['Password'])) {
         $sql = "UPDATE tbl_appointment 
             SET Status = 'cancelled',
+
                 Appointment_schedule = NULL
             WHERE Appointment_ID = ?";
         $stmt = $conn->prepare($sql);
@@ -1258,6 +1304,20 @@ if ($action == 'cancelAppointment'){
         echo 'Incorrect Password';
     }
 }
+if ($action == 'AcceptResched'){
+    $appointment_id = $_GET['appointment_id'];
+    $sql = "UPDATE tbl_appointment 
+            SET Status = 'approved',
+                Remarks = 'Your appointment is now listed, comply on the set date and time.'
+            WHERE Appointment_ID = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param('i', $appointment_id);
+    $stmt->execute();
+    echo 1;
+}
+
+
+
 if ($action == 'AddWalkInPatient') {
 
     $reason = isset($_POST['reason']) ? $_POST['reason'] : '';
@@ -1425,12 +1485,12 @@ if ($action === 'AccountMemberPostReq'){
         $row = $result->fetch_assoc();
         $ownerAddress = $row['Address'];
         $ownerContact = $row['Contact_Number'];
-
-    }else{
+    } else {
         echo 'Getting Account owner info failed';
         exit();
     }
-    $relation = isset($_POST['relation']) && $_POST['relation'] != 'Others'? $_POST['relation'] : (isset($_POST['otherRelation']) ? $_POST['otherRelation'] : '');
+
+    $relation = isset($_POST['relation']) && $_POST['relation'] != 'Others' ? $_POST['relation'] : (isset($_POST['otherRelation']) ? $_POST['otherRelation'] : '');
     $relativeFname = isset($_POST['relativeFname']) ? $_POST['relativeFname'] : '';
     $relativeMiddlename = isset($_POST['relativeMiddlename']) ? $_POST['relativeMiddlename'] : '';
     $relativeLastname = isset($_POST['relativeLastname']) ? $_POST['relativeLastname'] : '';
@@ -1442,10 +1502,15 @@ if ($action === 'AccountMemberPostReq'){
     $accountmemeberID = isset($_POST['accountmemeberID']) ? $_POST['accountmemeberID'] : '';
     $actionType = isset($_POST['actionType']) ? $_POST['actionType'] : '';
 
-    if ($relation !== '' && $relativeFname !== '' && $relativeMiddlename !== '' && $relativeLastname !== '' && $relativeWeight !== '' &&
-    $relativeDob !== '' && $relativeSex !== '' && $addressInfo !== '' && $accownerId){
+    if ($relation === 'Self') {
+        echo "Invalid Relationship Type";
+        exit();
+    }
 
-        if ($actionType == 'Edit' and $accountmemeberID != 0){
+    if ($relation !== '' && $relativeFname !== '' && $relativeMiddlename !== '' && $relativeLastname !== '' && $relativeWeight !== '' &&
+        $relativeDob !== '' && $relativeSex !== '' && $addressInfo !== '' && $accownerId) {
+
+        if ($actionType == 'Edit' && $accountmemeberID != 0) {
             $updateAccAppointmentMember = "UPDATE tbl_accountpatientmember 
                                    SET First_Name=?, Middle_Name=?, Last_Name=?, DateofBirth=?, 
                                        Sex=?, Contact_Number=?, MemberPatientEmail=?, 
@@ -1457,35 +1522,32 @@ if ($action === 'AccountMemberPostReq'){
                 $ownerContact, $ownerEmail, $addressInfo,
                 $relativeMedcondition, $relation, $accountmemeberID);
 
-            if ($updateAccAppointmentMemberSTMT->execute()){
+            if ($updateAccAppointmentMemberSTMT->execute()) {
                 echo 2;
                 exit();
-            }else{
+            } else {
                 echo $updateAccAppointmentMemberSTMT->error;
             }
-        }elseif ($actionType == 'Add'){
-            $newAccAppointmentMember = "INSERT INTO tbl_accountpatientmember (user_info_ID,  First_Name	,
-                              Middle_Name	,Last_Name	,DateofBirth	,Sex	,Contact_Number
-                              	,MemberPatientEmail	,Address	,Medical_condition	,RelationshipType)
-    VALUES (?,?,?,?,?,?,?,?,?,?,?)";
-            $newAccAppointmentMemberSTMT  = $conn->prepare($newAccAppointmentMember);
-            $newAccAppointmentMemberSTMT->bind_param('issssssssss', $accownerId, $relativeFname
-                ,$relativeMiddlename, $relativeLastname, $relativeDob, $relativeSex, $ownerContact, $ownerEmail,
-                $addressInfo, $relativeMedcondition, $relation);
-            if ($newAccAppointmentMemberSTMT->execute()){
+        } elseif ($actionType == 'Add') {
+            $newAccAppointmentMember = "INSERT INTO tbl_accountpatientmember (user_info_ID,  First_Name, Middle_Name, Last_Name, DateofBirth, Sex, Contact_Number, MemberPatientEmail, Address, Medical_condition, RelationshipType)
+                                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            $newAccAppointmentMemberSTMT = $conn->prepare($newAccAppointmentMember);
+            $newAccAppointmentMemberSTMT->bind_param('issssssssss', $accownerId, $relativeFname, $relativeMiddlename, $relativeLastname, $relativeDob, $relativeSex, $ownerContact, $ownerEmail, $addressInfo, $relativeMedcondition, $relation);
+
+            if ($newAccAppointmentMemberSTMT->execute()) {
                 echo 2;
                 exit();
-            }else{
+            } else {
                 echo $newAccAppointmentMemberSTMT->error;
             }
-        }else{
+        } else {
             echo $actionType;
         }
     } else {
-        echo "Some Fields are empty ";
-
+        echo "Some Fields are empty";
     }
 }
+
 if ($action == 'getAccountMemberDataJSON'){
     $accountMemberID = $_GET['data_id'];
     $accOwnerId = $_GET['SessionUserID'];
@@ -1520,3 +1582,77 @@ if ($action == 'DeleteAccountAppointmentMember'){
     }
 
 }
+if ($action == 'getDoctorServices'){
+    $getDoctorSpecialty = "SELECT speciality FROM tbl_staff where Staff_ID = ?";
+    $getDoctorSpecialtySTMT = $conn->prepare($getDoctorSpecialty);
+    $getDoctorSpecialtySTMT->bind_param('i', $_GET['staff_id']);
+    $getDoctorSpecialtySTMT->execute();
+    $getSpecialtyRes = $getDoctorSpecialtySTMT->get_result();
+    $doctorSpecialty = $getSpecialtyRes->fetch_assoc()['speciality'];
+
+    $sql = "SELECT * FROM tbl_services WHERE serviceStatus = 'Available' AND serviceVisitType = ? and specialty = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param('ss',$_GET['VisitType'], $doctorSpecialty);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    $services = [];
+
+    if ($result->num_rows > 0) {
+        while($row = $result->fetch_assoc()) {
+            $specialty = $row['specialty'];
+            $title = $row['Title'];
+
+            if (!isset($services[$specialty])) {
+                $services[$specialty] = [];
+            }
+
+
+            $services[$specialty][$title][] = $row;
+        }
+    } else {
+        echo "No Available Service";
+        exit();
+    }
+    foreach ($services as $specialty => $titles){
+        foreach ($titles as $title => $serviceItems){
+            echo '   <div class="mb-4">
+                        <p class="font-bold mb-2 text-2xl"> ';
+            if ($title !== $specialty){
+                echo $title.' ('.$specialty.')';
+            }
+            echo '</p>
+                              <div class="pl-6" id="'.$specialty.'" </div>';
+            foreach ($serviceItems as $service) {
+                echo
+                    '<label class="flex items-center space-x-2 mb-2 hover:bg-slate-300 dark:hover:bg-gray-600 p-2 rounded-md transition duration-150">
+                              <input type="checkbox" name="service" value="' . htmlspecialchars($service['Service_Type']) . '" class="checkbox checkbox-info" data-specialty="' . htmlspecialchars($specialty) . '" data-ServiceTitle="' . htmlspecialchars($title) . '">
+                              <span>' . htmlspecialchars($service['Service_Type']) . '</span>
+                          </label>';
+            }
+            echo ' </div>
+                      </div>';
+        }
+    }
+}
+
+if ($action == 'bookAppointmentDoctor'){
+    $sql = "SELECT DISTINCT tbl_staff.* 
+        FROM tbl_staff 
+        JOIN tbl_services ON tbl_services.specialty = tbl_staff.speciality 
+        WHERE tbl_staff.role = 'doctor' 
+          AND tbl_services.serviceVisitType = ?;";
+
+
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param('s',$_GET['VisitType']);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    echo '<option value="" disabled selected>Select doctor</option>';
+    while ($row = $result->fetch_assoc()) {
+        $middleInitial = strlen($row['Middle_Name']) >= 1 ? substr($row['Middle_Name'], 0, 1) : '';
+        echo '<option  value="' . $row['Staff_ID'] . '">' . $row['First_Name'] . ' ' . $middleInitial . '. ' . $row['Last_Name'] . ' (' . $row['speciality'] . ')</option>';
+    }
+}
+
+

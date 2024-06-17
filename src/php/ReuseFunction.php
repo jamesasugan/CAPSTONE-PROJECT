@@ -159,6 +159,27 @@ function getLastPatientVisit($chart_id) {
     }
     $stmt->close();
 }
+function getPatientChartDoctor($ChartID) {
+    include "../Database/database_conn.php";
+    $getConsultant = "SELECT tbl_staff.* FROM tbl_patient_chart 
+    JOIN tbl_staff on tbl_staff.Staff_ID = tbl_patient_chart.Consultant_id  
+         where tbl_patient_chart.Chart_id = ? ";
+    $getConsultantSTMT = $conn->prepare($getConsultant);
+    $getConsultantSTMT->bind_param("i", $ChartID);
+    $getConsultantSTMT->execute();
+    $result = $getConsultantSTMT->get_result();
+    $getConsultantSTMT->close();
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+
+        $middleInitial =
+            strlen($row['Middle_Name']) >= 1 ? substr($row['Middle_Name'], 0, 1).'.' : '';
+        return 'Dr. '.$row['First_Name']. ' '. $middleInitial. ' '. $row['Last_Name'];
+    }else {
+        return "No record";
+    }
+
+}
 
 
 function UpdateDoctorAvailabiity($selectedDays, $startTime, $endTime, $startSched, $endSched, $staff_id){

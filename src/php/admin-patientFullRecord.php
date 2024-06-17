@@ -43,10 +43,10 @@ if ($result && $result->num_rows > 0){
     $Patient_ContactNumber = $row['Contact_Number'];
     $Patient_Email = $row['patientEmail'];
     $Patient_address = $row['Address'];
-    $appointmentType = '';
     $patientDOB =  $row['DateofBirth'];
-    $patientVacStat = '';
     $patient_Sex = $row['Sex'];
+    $patient_weight = $row['Weight'];
+    $patient_MdCondition = $row['Medical_condition'];
 
     $patient_status = $row['patient_Status'];
 
@@ -153,6 +153,8 @@ if ($result && $result->num_rows > 0){
                               <p><strong>Contact Number: </strong> <?php echo $Patient_ContactNumber ?></p>
                               <p><strong>Age: </strong> <?php echo (new DateTime($patientDOB))->diff(new DateTime)->y; ?></p>
                               <p><strong>Sex: </strong> <?php echo $patient_Sex ?></p>
+                              <p><strong>Weight: </strong> <?php echo $patient_weight; ?></p>
+                              <p><strong>Medical Condition: </strong> <?php echo $patient_MdCondition; ?></p>
                               <p><strong>Email: </strong><?php echo $Patient_Email; ?></p>
                               <p><strong>Address:</strong> <?php echo $Patient_address; ?></p>
                               <p><strong>Date of Birth: </strong><?php echo   date("F j, Y", strtotime($patientDOB));?></p>
@@ -236,17 +238,7 @@ if ($result && $result->num_rows > 0){
                       </select>
                     </label>
                   </div>
-                  <div>
-                    <label class="block">
-                      Weight:
-                      <input type="text"
-                             name="weight"
-                             required
-                             disabled
-                             placeholder="Weight"
-                             class="input input-bordered w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-black dark:disabled:text-white border-none" />
-                    </label>
-                  </div>
+
                   <div>
                     <label class="block">
                       Heart Rate:
@@ -339,10 +331,9 @@ if ($result && $result->num_rows > 0){
       dataType: 'json',
       success: function(data) {
         if (data) {
-          $('#availedService').html(' <strong>Service Type: </strong><span >'+data.availedService+'</span>');
+          $('#availedService').html(' <strong>Service Type: </strong><span >'+ data.availedService +'</span>');
           document.querySelector('#patientRecordForm input[name="consultation-date"]').value = data.consultationDate;
           document.querySelector('#patientRecordForm input[name="record_id"]').value = data.Record_ID;
-          document.querySelector('#patientRecordForm input[name="weight"]').value = data.Weight;
           document.querySelector('#patientRecordForm input[name="blood-pressure"]').value = data.Blood_Pressure;
           document.querySelector('#patientRecordForm input[name="heart-rate"]').value = data.HeartRate;
           document.querySelector('#patientRecordForm input[name="saturation"]').value = data.Saturation;

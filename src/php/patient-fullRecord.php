@@ -43,6 +43,9 @@ if ($result && $result->num_rows == 1){
     $patientDOB =  $row['DateofBirth'];
     $patient_Sex = $row['Sex'];
     $patient_status = $row['patient_Status'];
+    $patient_weight = $row['Weight'];
+    $patient_MdCondition = $row['Medical_condition'];
+    $staff_id = $row['Consultant_id'];
 
 
     switch ($row['patient_Status']) {
@@ -147,6 +150,8 @@ if ($result && $result->num_rows == 1){
             <p><strong>Contact Number: </strong> <?php echo $Patient_ContactNumber ?></p>
             <p><strong>Age: </strong> <?php echo (new DateTime($patientDOB))->diff(new DateTime)->y; ?></p>
             <p><strong>Sex: </strong> <?php echo $patient_Sex ?></p>
+            <p><strong>Weight: </strong> <?php echo $patient_weight; ?></p>
+            <p><strong>Medical Condition: </strong> <?php echo $patient_MdCondition; ?></p>
             <p><strong>Email: </strong><?php echo $Patient_Email; ?></p>
             <p><strong>Address:</strong> <?php echo $Patient_address; ?></p>
             <p><strong>Date of Birth: </strong><?php echo   date("F j, Y", strtotime($patientDOB));?></p>
@@ -192,7 +197,6 @@ if ($result && $result->num_rows == 1){
 
         <form id="patientRecordForm" action="#" method="POST" enctype='multipart/form-data'>
           <p id='availedService' class='mt-5'></p>
-
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 mt-5">
             <div>
               <label class="block">
@@ -208,38 +212,28 @@ if ($result && $result->num_rows == 1){
             <div>
               <label class="block">
                 Consultant:
-                <select name="consultant-name" class="select
+                <select disabled name="consultant-name" class="select
                 select-bordered text-black dark:text-white w-full   bg-gray-300 dark:bg-gray-600
                 text-base sm:text-lg lg:text-xl focus:border-blue-500 focus:ring focus:ring-blue-500
                 focus:ring-opacity-50 mb-4 sm:mb-0 sm:mr-4 disabled:bg-white disabled:text-black dark:disabled:text-white border-none">
-                  <option  selected value='' disabled>Select consultant</option>
 
                     <?php
-                    $sql = "SELECT * FROM tbl_staff WHERE role = 'doctor'";
+                    $sql = "SELECT * FROM tbl_staff WHERE role = 'doctor' and Staff_ID = ?";
                     $stmt = $conn->prepare($sql);
+                    $stmt->bind_param('i', $staff_id);
                     $stmt->execute();
                     $result = $stmt->get_result();
-
-                    while ($row = $result->fetch_assoc()) {
+                    if ($result->num_rows === 1){
+                        $row = $result->fetch_assoc();
                         $middleInitial = substr($row['Middle_Name'], 0, 1);
-                        echo "<option value='{$row['Staff_ID']}' disabled>{$row['First_Name']} $middleInitial. {$row['Last_Name']}</option>";
+                        echo "<option selected value='{$row['Staff_ID']}' disabled>{$row['First_Name']} $middleInitial. {$row['Last_Name']}</option>";
                     }
                     ?>
 
                 </select>
               </label>
             </div>
-            <div>
-              <label class="block">
-                Weight:
-                <input type="text"
-                       name="weight"
-                       required
-                       disabled
-                       placeholder="Weight"
-                       class="input input-bordered w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-black dark:disabled:text-white border-none" />
-              </label>
-            </div>
+
             <div>
               <label class="block">
                 Heart Rate:
@@ -332,11 +326,9 @@ if ($result && $result->num_rows == 1){
       dataType: 'json',
       success: function(data) {
         if (data) {
-          $('#availedService').html(' <strong>Service Type: </strong><span >'+data.availedService+'</span>');
+          $('#availedService').html(' <strong>Service Type: </strong><span >'+ data.availedService +'</span>');
           document.querySelector('#patientRecordForm input[name="consultation-date"]').value = data.consultationDate;
           document.querySelector('#patientRecordForm input[name="record_id"]').value = data.Record_ID;
-          document.querySelector('#patientRecordForm select[name="consultant-name"]').value = data.Consultant_Staff_ID;
-          document.querySelector('#patientRecordForm input[name="weight"]').value = data.Weight;
           document.querySelector('#patientRecordForm input[name="blood-pressure"]').value = data.Blood_Pressure;
           document.querySelector('#patientRecordForm input[name="heart-rate"]').value = data.HeartRate;
           document.querySelector('#patientRecordForm input[name="saturation"]').value = data.Saturation;

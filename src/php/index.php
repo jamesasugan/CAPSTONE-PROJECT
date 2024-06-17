@@ -31,6 +31,7 @@ if (isset($_SESSION['user_type']) and $_SESSION['user_type'] == 'patient'){
     $res = $getAccOwner_InfoSTMT->get_result();
     $row = $res->fetch_assoc();
     $_SESSION['online_Account_owner_id'] = $row['user_info_ID'];
+    //echo  $_SESSION['user_id'];
 }
 
 

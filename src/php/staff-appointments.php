@@ -112,9 +112,10 @@ $staff_id = $row['Staff_ID'];
           class="font-bold text-black dark:text-white text-base sm:text-lg"
         >
           <th class='cursor-pointer'>Name</th>
-          <th class='cursor-pointer' >Appointment Schedule</th>
+          <th class='cursor-pointer' >Date</th>
+          <th class='cursor-pointer'>Time</th>
           <th class='cursor-pointer' >Visit Type</th>
-          <th class='cursor-pointer'>Appointment Type</th>
+
 
 
           <th class='cursor-pointer'>Status</th>
@@ -126,11 +127,19 @@ $staff_id = $row['Staff_ID'];
         <?php
         $sql = "SELECT `tbl_accountpatientmember`.*, `tbl_appointment`.*
 FROM `tbl_accountpatientmember` 
-INNER JOIN `tbl_appointment` ON `tbl_appointment`.`Account_Patient_ID_Member` = `tbl_accountpatientmember`.`Account_Patient_ID_Member` 
+INNER JOIN `tbl_appointment` 
+    ON `tbl_appointment`.`Account_Patient_ID_Member` = `tbl_accountpatientmember`.`Account_Patient_ID_Member`
 WHERE tbl_appointment.Staff_ID = ?
 ORDER BY 
-    CASE WHEN `tbl_appointment`.`Status` = 'Pending' THEN 0 ELSE 1 END, 
+    CASE 
+        WHEN `tbl_appointment`.`Status` = 'pending' THEN 0
+        WHEN `tbl_appointment`.`Status` = 'reschedule' THEN 1
+        WHEN `tbl_appointment`.`Status` = 'approved' THEN 2
+        WHEN `tbl_appointment`.`Status` = 'completed' THEN 3
+        ELSE 4
+    END, 
     `tbl_appointment`.`Appointment_schedule` ASC;
+
 
 ";
 
@@ -146,7 +155,9 @@ ORDER BY
                     strlen($row['Middle_Name']) >= 1 ? substr($row['Middle_Name'], 0, 1) : '';
                 $appointment_schedule = $row['Appointment_schedule'];
                 $date = isset($appointment_schedule) ? date('F j, Y', strtotime($appointment_schedule)) : 'N/A';
-                $time = isset($appointment_schedule) ? date('g:ia', strtotime($appointment_schedule)) : 'N/A';
+                $time = isset($appointment_schedule)
+                    ? date('g:ia', strtotime($appointment_schedule)) . ' - ' . date('g:ia', strtotime($appointment_schedule . ' +30 minutes'))
+                    : 'N/A';
                 $status = ucfirst(strtolower($row['Status']));
                 $class = '';
                 switch ($status) {
@@ -168,9 +179,10 @@ ORDER BY
                 }
                 echo '<tr class="text-base hover:bg-gray-300 dark:hover:bg-gray-600 font-medium text-black dark:text-white">
                 <td>' . $row['First_Name'] . ' ' . $middleInitial . '. ' . $row['Last_Name'] . '</td>
-                <td>' . $date . ' ' . $time . '</td>
+                <td>' . $date . ' </td>
+                <td class=" ">' . $time . '</td> 
                     <td class=" ">' . $row['VisitType'] . '</td> 
-           <td class=" ">' . $row['Appointment_type'] . '</td>    
+              
             
                
             <td class="font-bold ' . $class . '">' . $status . '</td> 
@@ -185,7 +197,7 @@ ORDER BY
                    <i class="fa-regular fa-eye"></i>
                   </button>';
                 // Include the tooltip for Approved status here
-                if ($status === 'Approved') {
+                if ($status === 'Completed') {
                     echo '<div class="ml-2 tooltip tooltip-bottom" data-tip="Create patient chart">
                                 <a class="ml-5 hover:cursor-pointer" onclick="toggleDialog(\'addPatient\');setAppointmentId(this.getAttribute(\'data-appointment-id\'))" data-appointment-id="' .
                         $row['Appointment_ID'] .
@@ -267,10 +279,15 @@ ORDER BY
         <h1 class="text-base sm:text-xl font-bold text-black dark:text-white">STATUS: <span id='appointment_status'>Pending</span></h1>  <!-- ayusin mo rin colors dito ah -->
 
         <h2 class="text-base sm:text-xl font-bold mt-5 text-black dark:text-white">Edit Status of this Appointment</h2>
-        <form id='update_appointment' action="#" method="GET">
+        <form id='update_appointment' >
           <input type='hidden' value='<?php echo $staff_id; ?>' name='appointDoctor'>
           <ul class="items-center w-full text-lg font-medium text-gray-900 bg-white border border-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white rounded-lg sm:flex mb-2">
             <li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
+              <div class="flex items-center ps-3">
+                <input id="completed"  type="radio" required name="list-status" class="radio radio-info" value="completed">
+                <label for="completed" class="w-full py-3 ms-2">Completed</label>
+              </div>
+            </li><li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
               <div class="flex items-center ps-3">
                 <input id="approve"  type="radio" required name="list-status" class="radio radio-info" value="approved">
                 <label for="approve" class="w-full py-3 ms-2">Approve</label>
@@ -473,8 +490,8 @@ ORDER BY
             <textarea name="reason" placeholder="Type here" disabled required class="textarea-bordered textarea w-full p-2 h-20 bg-gray-300 dark:bg-gray-600 text-black dark:text-white text-base disabled:bg-white disabled:text-black dark:disabled:text-white border-none"></textarea>
           </div> -->
 
-          <h3 class="text-xl font-bold mt-5 mb-2 text-black dark:text-white">Service</h3>
-          <p class="font-medium text-lg mt-1 w-full mb-2 text-black dark:text-white"><strong>Pediatrics:</strong> Flu Vaccine, Measles, Mumps, and Rubella Vaccine, Monthly Immunization for babies, Pneumococcal Vaccine, Polio Vaccine</p>
+          <h3 class="text-xl font-bold mt-5 mb-2 text-black dark:text-white">Selected Service</h3>
+          <p class="font-medium text-lg mt-1 w-full mb-2 text-black dark:text-white" id='selectedService'></p>
 
           <fieldset class="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
             <!--<legend class="text-xl font-bold mb-2 col-span-full">Service:</legend>
@@ -528,7 +545,7 @@ ORDER BY
                 Appointment Time:
               </label>
               <input
-                type="time"
+                type="text"
                 id="appointment-timeHistory"
                 name="appointment-timeHistory"
                 required
@@ -656,12 +673,25 @@ ORDER BY
           if (data) {
             let appointmentSchedule = data.Appointment_schedule;
             let date = '';
-            let time = '';
+            let formattedTime
 
             if (appointmentSchedule) {
               let parts = appointmentSchedule.split(' ');
               date = parts[0];
-              time = parts[1];
+              formattedTime = appointmentSchedule ?
+                (() => {
+                  const startTime = new Date(`2000-01-01T${parts[1]}`);
+                  const endTime = new Date(startTime.getTime() + 30 * 60000);
+
+                  const formattedStartTime = startTime.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+                  const formattedEndTime = endTime.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+
+                  return `${formattedStartTime} - ${formattedEndTime}`;
+                })()
+                : 'N/A';
+
+
+
             }
             let status = data.Status.charAt(0).toUpperCase() + data.Status.slice(1).toLowerCase();
             document.querySelector('#appointment_status').textContent = status;
@@ -718,9 +748,9 @@ ORDER BY
             }
 
             //document.querySelector('#update_appointment select[name="service-type"]').value = service_type;
-            document.querySelector('#appointmentform textarea[name="reason"]').value = reason;
+            $('#selectedService').html(reason);
             document.querySelector('#appointmentform input[name="appointment-dateHistory"]').value = date;
-            document.querySelector('#appointmentform input[name="appointment-timeHistory"]').value = time;
+            document.querySelector('#appointmentform input[name="appointment-timeHistory"]').value = formattedTime;
             document.querySelector('#appointmentform input[name="first-nameHistory"]').value = data.First_Name;
             document.querySelector('#appointmentform input[name="middle-nameHistory"]').value = data.Middle_Name;
             document.querySelector('#appointmentform input[name="last-nameHistory"]').value = data.Last_Name;
@@ -745,7 +775,7 @@ ORDER BY
         type: 'GET',
         success: function(response) {
           if (parseInt(response) === 1) {
-            window.location.href='admin-appointments.php';
+            window.location.href='staff-patientsRecord.php';
           } else {
             document.getElementById('error').innerHTML = response;
             toggleDialog('errorAlert');

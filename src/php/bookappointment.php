@@ -83,7 +83,7 @@ if (isset($_SESSION['user_type']) and $_SESSION['user_type'] == 'staff') {
           <h3 class="text-xl font-bold mt-5">Select person for appointment</h3>
           <div class="w-full sm:w-2/4">
             <select
-              id="doctor"
+              id="AppointPerson"
               name="AppointPerson"
               required
               class="select select-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 text-lg sm:text-xl text-black dark:text-white"
@@ -91,7 +91,7 @@ if (isset($_SESSION['user_type']) and $_SESSION['user_type'] == 'staff') {
               <option value="" disabled selected>...</option>
                 <?php
                 $sql =
-                    "SELECT * FROM tbl_accountpatientmember  where user_info_ID = ? ";
+                    "SELECT * FROM tbl_accountpatientmember  where user_info_ID = ? and status = 'Active'";
                 $stmt = $conn->prepare($sql);
                 $stmt->bind_param('i', $_SESSION['online_Account_owner_id']);
                 $stmt->execute();
@@ -146,26 +146,14 @@ if (isset($_SESSION['user_type']) and $_SESSION['user_type'] == 'staff') {
               id="doctor"
               name="doctor"
               required
-              class="select select-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 text-lg sm:text-xl text-black dark:text-white"
-            >
-              <option value="" disabled selected>Select doctor</option>
-                <?php
-                $sql =
-                    "SELECT * FROM tbl_staff where role = 'doctor' ";
-                $stmt = $conn->prepare($sql);
-                $stmt->execute();
-                $result = $stmt->get_result();
-                while ($row = $result->fetch_assoc()) {
-                    $middleInitial = strlen($row['Middle_Name']) >= 1 ? substr($row['Middle_Name'], 0, 1) : '';
-                    echo '<option  value="' . $row['Staff_ID'] . '">' . $row['First_Name'] . ' ' . $middleInitial . '. ' . $row['Last_Name'] . ' (' . $row['speciality'] . ')</option>';
-                }
-                ?>
+              class="select select-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 text-lg sm:text-xl text-black dark:text-white">
+
             </select>
           </div>
 
           <a class="mt-2 btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none cursor-pointer w-full" onclick="serviceModal.showModal()">Choose a Service</a>
           <!-- dito mo lagay kung ano piniling service, hide mo kapag wala pa. yung naka strong yung specialty -->
-          <p class="font-medium text-lg mt-1"><strong>Pediatrics:</strong> Flu Vaccine, Measles, Mumps, and Rubella Vaccine, Monthly Immunization for babies, Pneumococcal Vaccine, Polio Vaccine</p>
+          <p class="font-medium text-lg mt-1"><strong id='ServiceTitle'>Selected service: </strong> <span id='availedServices'> </span></p>
 
         <div class="w-full md:w-auto md:col-span-1">
           <label for="appointment-date" class="block text-base sm:text-lg font-medium">
@@ -290,56 +278,11 @@ if (isset($_SESSION['user_type']) and $_SESSION['user_type'] == 'staff') {
 -->
               <div class="text-xl font-medium p-10" id='services'>
 
-                  <?php
-                  $sql = "SELECT specialty, Title, Service_Type, serviceStatus FROM tbl_services WHERE serviceStatus = 'Available' ORDER BY specialty, Service_Type";
-                  $result = $conn->query($sql);
 
-                  $services = [];
-
-                  if ($result->num_rows > 0) {
-                      while($row = $result->fetch_assoc()) {
-                          $specialty = $row['specialty'];
-                          $title = $row['Title'];
-
-                          if (!isset($services[$specialty])) {
-                              $services[$specialty] = [];
-                          }
-
-
-                          $services[$specialty][$title][] = $row;
-                      }
-                  } else {
-                      echo "0 results";
-                  }
-
-                  ?>
-
-                  <?php foreach ($services as $specialty => $titles): ?>
-                      <?php foreach ($titles as $title => $serviceItems): ?>
-                      <div class="mb-4">
-                        <p class="font-bold mb-2 text-2xl">
-                            <?= htmlspecialchars($title) ?><?= $title !== $specialty ? " (" . htmlspecialchars($specialty) . ")" : "" ?>
-                        </p>
-                        <div class="pl-6" id='<?= htmlspecialchars($specialty) ?>'>
-                            <?php foreach ($serviceItems as $service): ?>
-                              <label class="flex items-center space-x-2 mb-2 hover:bg-slate-300 dark:hover:bg-gray-600 p-2 rounded-md transition duration-150">
-                                <input type="checkbox" name="service" value="<?= htmlspecialchars($service['Service_Type']) ?>" class="checkbox checkbox-info" data-specialty="<?= htmlspecialchars($specialty) ?>">
-                                <span><?= htmlspecialchars($service['Service_Type']) ?></span>
-                              </label>
-                            <?php endforeach; ?>
-                        </div>
-                      </div>
-                      <?php endforeach; ?>
-                  <?php endforeach; ?>
 
               </div>
 
-              <div class="mb-4 p-10">
-                    <p class="font-bold mb-2 text-2xl">Others</p>
-                    <label class="block flex items-center space-x-2 mb-2 hover:bg-slate-300 dark:hover:bg-gray-600 p-2 rounded-md transition duration-150">
-                    <textarea id="otherService" rows="4" name="otherService"  class="input input-bordered h-20 text-lg w-full bg-white dark:bg-gray-600 text-black dark:text-white border-none" placeholder="If none in the following, type your reason/purpose here"></textarea>
-                  </label>
-                </div>
+
             </div>
             </div>
           </dialog>
@@ -349,6 +292,89 @@ if (isset($_SESSION['user_type']) and $_SESSION['user_type'] == 'staff') {
 
   </body>
   <script>
+    let selectedVisitType = '';
+    document.querySelectorAll('input[name="VisitType"]').forEach(function(radio) {
+      radio.addEventListener('change', function() {
+        selectedVisitType = this.value;
+        getAppointDoctor(selectedVisitType);
+        loadServices();
+      });
+    });
+
+    document.getElementById('doctor').addEventListener('change', function() {
+      loadServices();
+    });
+
+    function loadServices() {
+      const doctorId = document.getElementById('doctor').value;
+      document.getElementById('ServiceType').value = '';
+      $('#availedServices').html('');
+      if (selectedVisitType && doctorId) {
+        getServices(doctorId, selectedVisitType);
+      }
+
+    }
+    function getAppointDoctor(selectedVisitType){
+      $.ajax({
+        url: 'ajax.php?action=bookAppointmentDoctor&VisitType=' + encodeURIComponent(selectedVisitType),
+        method: 'GET',
+        dataType: 'html',
+        success: function(data) {
+          $('#doctor').html(data);
+        },
+        error: function(xhr, status, error) {
+          console.error('Error fetching data:', error);
+        }
+      });
+    }
+
+    function getServices(staff_Id, visitType){
+      $.ajax({
+        url: 'ajax.php?action=getDoctorServices&VisitType=' + encodeURIComponent(visitType) + '&staff_id=' + encodeURIComponent(staff_Id),
+        method: 'GET',
+        dataType: 'html',
+        success: function(data) {
+          $('#services').html(data);
+          attachCheckboxListeners();
+        },
+        error: function(xhr, status, error) {
+          console.error('Error fetching data:', error);
+        }
+      });
+    }
+
+    function attachCheckboxListeners() {
+      let services = document.getElementById('services');
+      const checkboxes = services.querySelectorAll('input[type="checkbox"]');
+      const serviceTypeInput = document.getElementById('ServiceType');
+
+      checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+          const selectedSpecialty = this.getAttribute('data-specialty');
+
+          if (this.checked) {
+            checkboxes.forEach(cb => {
+              if (cb !== this && cb.getAttribute('data-specialty') !== selectedSpecialty) {
+                cb.checked = false;
+              }
+            });
+          }
+
+          updateServiceTypeInput();
+        });
+      });
+
+      function updateServiceTypeInput() {
+        let serviceval = Array.from(checkboxes)
+          .filter(cb => cb.checked)
+          .map(cb => cb.value)
+          .join(';');
+        serviceTypeInput.value = serviceval;
+        $('#availedServices').html(': ' + serviceval);
+      }
+    }
+
+
 
 
     function toggleDialog(id) {
@@ -395,41 +421,7 @@ if (isset($_SESSION['user_type']) and $_SESSION['user_type'] == 'staff') {
   <script>
 
     document.addEventListener('DOMContentLoaded', function() {
-      let services = document.getElementById('services');
-      const checkboxes = services.querySelectorAll('input[type="checkbox"]');
-      const otherServiceTextarea = document.getElementById('otherService');
-      const serviceTypeInput = document.getElementById('ServiceType');
 
-      otherServiceTextarea.addEventListener('input', function() {
-        checkboxes.forEach(checkbox => {
-          checkbox.checked = false;
-        });
-        serviceTypeInput.value = this.value;
-      });
-
-      checkboxes.forEach(checkbox => {
-        checkbox.addEventListener('change', function() {
-          const selectedSpecialty = this.getAttribute('data-specialty');
-
-          if (this.checked) {
-            checkboxes.forEach(cb => {
-              if (cb !== this && cb.getAttribute('data-specialty') !== selectedSpecialty) {
-                cb.checked = false;
-              }
-            });
-            otherServiceTextarea.value = '';
-          }
-
-          updateServiceTypeInput();
-        });
-      });
-
-      function updateServiceTypeInput() {
-        serviceTypeInput.value = Array.from(checkboxes)
-          .filter(cb => cb.checked)
-          .map(cb => cb.value)
-          .join(';');
-      }
     });
 
 

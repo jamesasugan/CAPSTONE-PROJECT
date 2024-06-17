@@ -49,6 +49,8 @@ if ($result && $result->num_rows > 0) {
     $patientDOB =  $row['DateofBirth'];
     $patientVacStat = '';
     $patient_Sex = $row['Sex'];
+    $patient_weight = $row['Weight'];
+    $patient_MdCondition = $row['Medical_condition'];
 
     $patient_status = $row['patient_Status'];
     $statusClass = '';
@@ -153,15 +155,17 @@ if ($result && $result->num_rows > 0) {
                   <p><strong>Contact Number: </strong> <?php echo $Patient_ContactNumber ?></p>
                   <p><strong>Age: </strong> <?php echo (new DateTime($patientDOB))->diff(new DateTime)->y; ?></p>
                   <p><strong>Sex: </strong> <?php echo $patient_Sex; ?></p>
+                  <p><strong>Weight: </strong> <?php echo $patient_weight; ?></p>
+                  <p><strong>Medical Condition: </strong> <?php echo $patient_MdCondition; ?></p>
                   <p><strong>Email: </strong><?php echo $Patient_Email; ?></p>
                   <p><strong>Address:</strong> <?php echo $Patient_address; ?></p>
                   <p><strong>Date of Birth: </strong><?php echo   date("F j, Y", strtotime($patientDOB));?></p>
 
                 </div>
               </div>
-              <div class="flex justify-end">
+             <!-- <div class="flex justify-end">
                 <a class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none mb-5" onclick='toggleDialog("editpatient_info")'>Edit Patient Info</a>
-              </div>
+              </div>-->
               
               <div class="flex justify-end mb-5">
                 <button class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none printformButton flex flex-col items-center px-5 py-1" onclick="window.print()">
@@ -286,16 +290,7 @@ if ($result && $result->num_rows > 0) {
                                   </select>
                                 </label>
                             </div>
-                            <div>
-                                <label class="block">
-                                    Weight:
-                                    <input type="number" 
-                                    name="weight"
-                                    required
-                                    placeholder="Weight"
-                                    class="input input-bordered w-full bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400" />
-                                </label>
-                            </div>
+
                             <div>
                                 <label class="block">
                                     Heart Rate:
@@ -634,9 +629,7 @@ if ($result && $result->num_rows > 0) {
                   $('#availedService').html('<strong>Service Type: </strong><span >'+data.availedService+'</span>');
                   document.querySelector('#patientRecordForm input[name="serviceSelected"]').value = data.availedService;
                   document.querySelector('#patientRecordForm input[name="consultation-date"]').value = data.consultationDate;
-
                   document.querySelector('#patientRecordForm input[name="record_id"]').value = data.Record_ID;
-                  document.querySelector('#patientRecordForm input[name="weight"]').value = data.Weight;
                   document.querySelector('#patientRecordForm input[name="blood-pressure"]').value = data.Blood_Pressure;
                   document.querySelector('#patientRecordForm input[name="heart-rate"]').value = data.HeartRate;
                   document.querySelector('#patientRecordForm input[name="saturation"]').value = data.Saturation;
@@ -662,7 +655,7 @@ if ($result && $result->num_rows > 0) {
               document.getElementById('error').innerHTML = 'Please select a service type';
               toggleDialog('errorAlert');
               return;
-            }if (!isNumeric(form_data.get('weight')) || !isNumeric(form_data.get('heart-rate')) || !isNumeric(form_data.get('temperature')) ){
+            }if ( !isNumeric(form_data.get('heart-rate')) || !isNumeric(form_data.get('temperature')) ){
               document.getElementById('error').innerHTML = 'Please input correct data type';
               toggleDialog('errorAlert');
               return;

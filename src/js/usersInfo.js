@@ -13,6 +13,12 @@ function getUserInfo() {
         document.querySelector('#personal-info input[name="address"]').value = data.Address;
         document.querySelector('#personal-info input[name="email"]').value = data.Email;
         document.querySelector('#personal-info select[name="sex"]').value = data.Sex;
+        if (document.querySelector('#personal-info input[name="medicalCondition"]')){
+          document.querySelector('#personal-info input[name="medicalCondition"]').value = data.Medical_condition;
+        }
+        if (document.querySelector('#personal-info input[name="weight"]')){
+          document.querySelector('#personal-info input[name="weight"]').value = data.weight;
+        }
         if (document.querySelector('#personal-info select[name="specialty"]')){
           document.querySelector('#personal-info select[name="specialty"]').value = data.speciality;
 
@@ -34,53 +40,67 @@ function toggleDialog(id) {
     }
   }
 }
-document.addEventListener('submit',function(e){
+document.addEventListener('submit', function(e) {
   e.preventDefault();
   let form_data = new FormData(e.target);
-  let endpoint
+  let endpoint;
   let infoText;
   let tab;
-  if (e.target.id === 'personal-info'){
+
+  if (e.target.id === 'personal-info') {
     infoText = 'Information Updated';
     endpoint = 'editUserInfo';
-  }else if (e.target.id === 'security-form'){
+  } else if (e.target.id === 'security-form') {
     infoText = 'Password Updated';
-
     endpoint = 'editUserInfo';
-  }
-  else if (e.target.id === 'cancel_appoinment'){
+  } else if (e.target.id === 'cancel_appoinment') {
     endpoint = 'cancelAppointment';
     infoText = 'Appointment has been cancelled';
     tab = 'appointmentHistory';
-  }
-  else if (e.target.id === 'RelativeForm'){
+  } else if (e.target.id === 'RelativeForm') {
     infoText = 'Account members has been updated';
-    endpoint = 'AccountMemberPostReq'
-    tab = 'AccountMembers'
+    endpoint = 'AccountMemberPostReq';
+    tab = 'AccountMembers';
+    if (form_data.get('otherRelation').toLowerCase() === 'self' ){
 
+      document.getElementById('memberErrorUpdatetext').innerHTML = "Self type relationship is invalid";
+      toggleDialog('memberErrorUpdate');
+      return;
+    }
+
+
+  } else {
+    console.log('Form ID not recognized:', e.target.id);
+    return; // Exit if form ID does not match
   }
+
   document.getElementById('textInfo').innerHTML = infoText;
+
   $.ajax({
-    url: 'ajax.php?action=' +endpoint,
+    url: 'ajax.php?action=' + endpoint,
     type: 'POST',
     data: form_data,
     processData: false,
     contentType: false,
     success: function(response) {
+      console.log('Server response:', response);
       if (parseInt(response) === 1) {
-
         toggleDialog('profileAlert');
-        getUserInfo()
-      }if (parseInt(response) === 2) {
+        getUserInfo();
+      } else if (parseInt(response) === 2) {
         toggleDialog('profileAlert');
         window.location.href = 'patient-profile.php?route=' + tab;
-      }else {
+      } else {
         document.getElementById('errorAlert').innerHTML = response;
-
         toggleDialog('errorAlert');
       }
-      console.log(response)
+    },
+    error: function(xhr, status, error) {
+      console.log('AJAX error:', error);
+      document.getElementById('errorAlert').innerHTML = 'An error occurred: ' + error;
+      toggleDialog('errorAlert');
     }
   });
-})
+});
+
 getUserInfo();

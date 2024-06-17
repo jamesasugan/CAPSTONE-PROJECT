@@ -13,7 +13,7 @@ function getDoctorAvailability(id) {
       dateNote.classList.add('hidden');
 
       if (response.message === 'No schedule') {
-        dateNote.innerHTML = '(This doctor has no schedule)';
+        dateNote.innerHTML = '(Doctor selected has no schedule available)';
         dateNote.classList.remove('hidden');
       } else if (Array.isArray(response)) {
         dateInput.disabled = false;

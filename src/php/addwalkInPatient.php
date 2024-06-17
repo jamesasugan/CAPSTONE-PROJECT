@@ -68,7 +68,8 @@ if ($result->num_rows > 0) {
       >
         <h2 class="text-3xl sm:text-4xl font-bold mb-10 text-center">Add Walk In Patient</h2>
 
-        <form id='walkInPatientForm' action="#" method="GET">
+        <form id='walkInPatientForm' >
+          <input id='ServiceType' type='hidden' value='' name='ServiceType'>
 
        
 
@@ -107,33 +108,13 @@ if ($result->num_rows > 0) {
               Choose a Doctor:</label
             >
             <select
-              id="appointDoctor"
-              name="appointDoctor"
+              onchange='getDoctorAvailability(this.value)'
+              id="doctor"
+              name="doctor"
               class="select select-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 text-lg"
               required
             >
-              <option value="" disabled selected>Select...</option>
-                <?php
-                $sql = "SELECT * FROM tbl_staff where role = 'doctor' ";
-                $stmt = $conn->prepare($sql);
-                $stmt->execute();
-                $result = $stmt->get_result();
-                while ($row = $result->fetch_assoc()) {
-                    $middleInitial =
-                        strlen($row['Middle_Name']) >= 1
-                            ? substr($row['Middle_Name'], 0, 1)
-                            : '';
-                    echo '<option value="' .
-                        $row['Staff_ID'] .
-                        '">' .
-                        $row['First_Name'] .
-                        ' ' .
-                        $middleInitial .
-                        '. ' .
-                        $row['Last_Name'] .
-                        '</option>';
-                }
-                ?>
+
             </select>
 
           </div>
@@ -146,7 +127,7 @@ if ($result->num_rows > 0) {
                   <input id="horizontal-list-radio-license" 
                   type="radio" 
                   value="Consultation" 
-                  name="service" 
+                  name="VisitType"
                   class="radio radio-info [color-scheme:light] dark:[color-scheme:dark]" 
                   required>
                   <span class="py-3 ml-2 text-lg font-medium ">Consultation</span>
@@ -157,7 +138,7 @@ if ($result->num_rows > 0) {
                   <input id="horizontal-list-radio-id" 
                   type="radio" 
                   value="Test/Procedure" 
-                  name="service" 
+                  name="VisitType"
                   class="radio radio-info [color-scheme:light] dark:[color-scheme:dark]" 
                   required>
                   <span class="py-3 ml-2 text-lg font-medium ">Test/Procedure</span>
@@ -171,9 +152,23 @@ if ($result->num_rows > 0) {
 
           <a class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none cursor-pointer w-full" onclick="serviceModal.showModal()">Choose a Service</a>
           <!-- dito mo lagay kung ano piniling service, hide mo kapag wala pa. yung naka strong yung specialty -->
-          <p class="font-medium text-lg mt-1 text-black dark:text-white"><strong>Pediatrics:</strong> Flu Vaccine, Measles, Mumps, and Rubella Vaccine, Monthly Immunization for babies, Pneumococcal Vaccine, Polio Vaccine</p>
+          <p class="font-medium text-lg mt-1 text-black dark:text-white"><strong>Selected service:</strong> <span id='availedServices'> </span></p>
+          <div class="w-full md:w-auto md:col-span-1">
+            <label for="appointment-date" class="block text-base sm:text-lg font-medium">
+              Appointment Date<span id='appointmentDateNote' class='text-sm text-info hidden'> (Please check doctor schedule)</span>
+            </label>
+            <input disabled type="date" id="appointment-date" name="appointment-date" required class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark] text-lg text-black dark:text-white disabled:bg-gray-200 disabled:text-gray-400 dark:disabled:text-gray-400 disabled:border-gray-300" />
+          </div>
+          <div class="w-full md:w-auto md:col-span-1">
+            <label for="appointment-time" class="block text-base sm:text-lg font-medium">
+              Available  Time
+            </label>
+            <select id="appointment-time" name="appointment-time" required class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark] text-lg text-black dark:text-white">
 
+            </select>
+          </div>
           </fieldset>
+
 
 
 
@@ -225,7 +220,7 @@ if ($result->num_rows > 0) {
                 <label for="address" class="block text-base sm:text-lg font-medium">Address</label>
                 <input type="text" id="address" name="address" autocomplete="off" placeholder="Address" required class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600" />
             </div>
-           
+
 
           </div>
 
@@ -289,56 +284,9 @@ if ($result->num_rows > 0) {
 -->
               <div class="text-xl font-medium p-10" id='services'>
 
-                  <?php
-                  $sql = "SELECT specialty, Title, Service_Type, serviceStatus FROM tbl_services WHERE serviceStatus = 'Available' ORDER BY specialty, Service_Type";
-                  $result = $conn->query($sql);
 
-                  $services = [];
-
-                  if ($result->num_rows > 0) {
-                      while($row = $result->fetch_assoc()) {
-                          $specialty = $row['specialty'];
-                          $title = $row['Title'];
-
-                          if (!isset($services[$specialty])) {
-                              $services[$specialty] = [];
-                          }
-
-
-                          $services[$specialty][$title][] = $row;
-                      }
-                  } else {
-                      echo "0 results";
-                  }
-
-                  ?>
-
-                  <?php foreach ($services as $specialty => $titles): ?>
-                      <?php foreach ($titles as $title => $serviceItems): ?>
-                      <div class="mb-4">
-                        <p class="font-bold mb-2 text-2xl">
-                            <?= htmlspecialchars($title) ?><?= $title !== $specialty ? " (" . htmlspecialchars($specialty) . ")" : "" ?>
-                        </p>
-                        <div class="pl-6" id='<?= htmlspecialchars($specialty) ?>'>
-                            <?php foreach ($serviceItems as $service): ?>
-                              <label class="flex items-center space-x-2 mb-2 hover:bg-slate-300 dark:hover:bg-gray-600 p-2 rounded-md transition duration-150">
-                                <input type="checkbox" name="service" value="<?= htmlspecialchars($service['Service_Type']) ?>" class="checkbox checkbox-info" data-specialty="<?= htmlspecialchars($specialty) ?>">
-                                <span><?= htmlspecialchars($service['Service_Type']) ?></span>
-                              </label>
-                            <?php endforeach; ?>
-                        </div>
-                      </div>
-                      <?php endforeach; ?>
-                  <?php endforeach; ?>
 
               </div>
-
-              <div class="mb-4 p-10">
-                    <p class="font-bold mb-2 text-2xl">Others</p>
-                    <label class="block flex items-center space-x-2 mb-2 hover:bg-slate-300 dark:hover:bg-gray-600 p-2 rounded-md transition duration-150">
-                    <textarea id="otherService" rows="4" name="otherService"  class="input input-bordered h-20 text-lg w-full bg-white dark:bg-gray-600 text-black dark:text-white border-none" placeholder="If none in the following, type your reason/purpose here"></textarea>
-                  </label>
-                </div>
             </div>
             </div>
           </dialog>
@@ -379,5 +327,6 @@ if ($result->num_rows > 0) {
         }
       }
     </script>
+<script src='../js/doctorAppoimtmentAvailability.js'></script>
 </body>
 </html>

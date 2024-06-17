@@ -242,9 +242,7 @@ $accountOwner_ID = $_SESSION['online_Account_owner_id'];
                   <div class="form-group col-span-1 sm:col-span-1">
                     <label
                       for="email"
-                      class="block font-medium text-black dark:text-white text-base sm:text-lg overflow-hidden whitespace-nowrap text-overflow-ellipsis"
-                      >Email Address</label
-                    >
+                      class="block font-medium text-black dark:text-white text-base sm:text-lg overflow-hidden whitespace-nowrap text-overflow-ellipsis">Email Address</label>
                     <input
                       id="email"
                       name="email"
@@ -256,6 +254,14 @@ $accountOwner_ID = $_SESSION['online_Account_owner_id'];
                       class="input input-bordered appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none text-base sm:text-lg bg-white dark:bg-gray-600 text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400 disabled:border-gray-300"
                       
                     />
+                  </div>
+                  <div class="form-group col-span-1 sm:col-span-1">
+                    <label for="weight" class="block font-medium text-black dark:text-white text-base sm:text-lg whitespace-nowrap overflow-hidden text-ellipsis">Weight (optional)</label>
+                    <input id="weight" name="weight" type="text" value="" autocomplete="off" placeholder="Weight" class="input input-bordered appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none text-base sm:text-lg bg-white dark:bg-gray-600 text-black dark:text-white " />
+                  </div>
+                  <div class="form-group col-span-1 sm:col-span-1">
+                    <label for="medicalCondition" class="block font-medium text-black dark:text-white text-base sm:text-lg whitespace-nowrap overflow-hidden text-ellipsis">Medical Conditions, if any:</label>
+                    <input id="medicalCondition" name="medicalCondition" type="text" value="" autocomplete="off" placeholder="Medical Conditions" class="input input-bordered appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none text-base sm:text-lg bg-white dark:bg-gray-600 text-black dark:text-white " />
                   </div>
                 </div>
                 <div class="flex justify-end space-x-2">
@@ -373,7 +379,7 @@ $accountOwner_ID = $_SESSION['online_Account_owner_id'];
                   <tbody>
                   <?php
                   $sql = "
-    SELECT * FROM tbl_accountpatientmember WHERE user_info_ID = ? and status = 'Active'";
+    SELECT * FROM tbl_accountpatientmember WHERE user_info_ID = ? and status = 'Active' and RelationshipType != 'Self'";
                   $stmt = $conn->prepare($sql);
                   $stmt->bind_param('i', $accountOwner_ID);
                   $stmt->execute();
@@ -409,99 +415,86 @@ $accountOwner_ID = $_SESSION['online_Account_owner_id'];
 
               <div class="container mx-auto">
                 <div class="flex flex-col gap-4 h-[calc(100vh-18rem)] overflow-y-auto">
-                  <!-- card 1 -->
-                  <div class="card bg-white dark:bg-gray-800 shadow-md rounded-lg p-4">
-                  <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center">
-                    <h3 class="text-base sm:text-2xl font-semibold text-gray-900 dark:text-white">John Doe Emmanuel L. Asugan</h3>
-                    <p class="text-base sm:text-lg text-black dark:text-white font-bold">Status: <span class="text-blue-500">Approved</span></p>
-                  </div>
-                    <div class="mt-2  text-sm sm:text-lg text-black dark:text-white">
-                      <p><strong>Schedule:</strong> June 14, 2024, 10:00 AM</p>
-                      <p><strong>Service:</strong> General Check-up</p>
-                      <p><strong>Remarks:</strong> Due to a scheduling conflict, your appointment has been rescheduled. Please confirm in your profile settings if the new time and date works for you.</p>
-                    </div>
-                    <div class="mt-4 flex justify-end">
-                      <!-- <button class="btn btn-error">Cancel Appointment</button> -->
-                      <button class="btn btn-success mr-3">Accept</button>
-                      <button class="btn btn-error ">Decline</button>
-                    </div>
-                  </div>
-                  <!-- card 1 end -->    
-                </div>
-              </div>
-
-              <!-- remove mo to pag nakita mo na code -->
-              <div class="overflow-x-auto">
-                <table class="table">
-                  <!-- head -->
-                  <thead>
-                  <tr class="font-bold text-black dark:text-white text-base sm:text-lg">
-                    <th>Name</th>
-                    <th>Schedule </th>
-                    <th>Status</th>
-                    <th>Remarks</th>
-                    <th>Action</th>
-                  </tr>
-                  </thead>
-                  <tbody>
-                  <?php
-                  $sql = "
+                    <?php
+                    $sql = "
                      SELECT `tbl_accountpatientmember`.*, `tbl_appointment`.*
 FROM `tbl_accountpatientmember` 
 JOIN `tbl_appointment` ON `tbl_appointment`.`Account_Patient_ID_Member` = `tbl_accountpatientmember`.`Account_Patient_ID_Member`
-WHERE `tbl_accountpatientmember`.`user_info_ID` = ?
-ORDER BY CASE WHEN `tbl_appointment`.`Status` = 'pending' THEN 0 ELSE 1 END, `tbl_appointment`.`AppointmentCreated`;
-";
-                  $stmt = $conn->prepare($sql);
-                  $stmt->bind_param('i', $accountOwner_ID);
-                  $stmt->execute();
-                  $result = $stmt->get_result();
-                  if ($result->num_rows > 0) {
-                      while ($row = $result->fetch_assoc()) {
-                          $middleInitial =
-                              strlen($row['Middle_Name']) >= 1
-                                  ? substr($row['Middle_Name'], 0, 1)
-                                  : '';
-                          $status_color = '';
+WHERE `tbl_accountpatientmember`.`user_info_ID` = ? 
+ORDER BY 
+    CASE 
+        WHEN `tbl_appointment`.`Status` = 'pending' THEN 0
+        WHEN `tbl_appointment`.`Status` = 'rescheduled' THEN 1
+        WHEN `tbl_appointment`.`Status` = 'approved' THEN 2
+        WHEN `tbl_appointment`.`Status` = 'completed' THEN 3
+        ELSE 4
+    END, 
+    `tbl_appointment`.`Appointment_schedule` ASC;";
+                    $stmt = $conn->prepare($sql);
+                    $stmt->bind_param('i', $accountOwner_ID);
+                    $stmt->execute();
+                    $result = $stmt->get_result();
+                    if ($result->num_rows > 0) {
+                        while ($row = $result->fetch_assoc()) {
+                            $middleInitial = strlen($row['Middle_Name']) >= 1 ? substr($row['Middle_Name'], 0, 1).'.' : '';
+                            $status_color = '';
 
-                          if ($row['Status'] == 'pending') {
-                              $status_color = 'text-yellow-600';
-                          } elseif ($row['Status'] == 'completed') {
-                              $status_color = 'text-green-500';
-                          } elseif ($row['Status'] == 'approved') {
-                              $status_color = 'text-blue-500';
-                          } elseif ($row['Status'] == 'rescheduled') {
-                              $status_color = 'text-yellow-600';
-                          } elseif ($row['Status'] == 'cancelled') {
-                              $status_color = 'text-red-500';
-                          }
-                          $appointment_schedule = $row['Appointment_schedule'];
-                          $date = isset($appointment_schedule) ? date('F j, Y', strtotime($appointment_schedule)) : 'N/A';$time = isset($appointment_schedule) ? date('g:ia', strtotime($appointment_schedule)) : 'N/A';
-                          echo '
-                         <tr class="text-base hover:bg-gray-300  dark:hover:bg-gray-600 font-medium text-black dark:text-white">               
-                        <td class="w-1/4">' . $row['First_Name'] . ' ' . $middleInitial . '. ' . $row['Last_Name'] . '</td>
-          
-                       <td class="w-1/4">' . $date . ' ' . $time . '</td>
-                   
-                     <td class="font-bold  ' . $status_color . ' ">' . ucfirst($row['Status']) .
-                              '</td> 
-                      <td>' . $row['Remarks'] . '</td>';
-                          if ($row['Status'] == 'pending' || $row['Status'] == 'rescheduled') {
-                              echo '<td class="w-1/12 pl-5"> 
-                          <button onclick="getPatientAppointmentInfo('.$row['Account_Patient_ID_Member'].') ;toggleDialog(\'viewAppointmentForm\')"><i class="fa-regular fa-eye"></i></button>
-                         <button onclick="toggleDialog(\'viewandCancel\');getAppointmentId(' . $row['Appointment_ID'] . ')" class="text-error ml-3"><i class="fa-solid fa-trash"></i></button>
-                         
-                        
-                    
-                     </td>';}
-                          echo '</tr>';
-                      }
-                  }
-                  ?>
-                  </tbody>
-                </table>
+                            if ($row['Status'] == 'pending') {
+                                $status_color = 'text-yellow-600';
+                            } elseif ($row['Status'] == 'completed') {
+                                $status_color = 'text-green-500';
+                            } elseif ($row['Status'] == 'approved') {
+                                $status_color = 'text-blue-500';
+                            } elseif ($row['Status'] == 'rescheduled') {
+                                $status_color = 'text-yellow-600';
+                            } elseif ($row['Status'] == 'cancelled') {
+                                $status_color = 'text-red-500';
+                            }
+                            $appointment_schedule = $row['Appointment_schedule'];
+                            $date = isset($appointment_schedule) ? date('F j, Y', strtotime($appointment_schedule)) : 'N/A';$time = isset($appointment_schedule) ? date('g:ia', strtotime($appointment_schedule)) : 'N/A';
+                            $time = isset($appointment_schedule)
+                                ? date('g:ia', strtotime($appointment_schedule)) . ' - ' . date('g:ia', strtotime($appointment_schedule . ' +30 minutes'))
+                                : 'N/A';
+
+                            echo '
+                         <div class="card bg-white dark:bg-gray-800 shadow-md rounded-lg p-4">
+                    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center">
+                      <h3 class="text-base sm:text-2xl font-semibold text-gray-900 dark:text-white">'.$row['First_Name'].' '.$middleInitial.' '.$row['Last_Name'].'</h3>
+                      <p class="text-base sm:text-lg text-black dark:text-white font-bold">Status: <span class="'.$status_color.'">' . ucfirst($row['Status']) . '</span></p>
+                    </div>
+                      <div class="mt-2  text-sm sm:text-lg text-black dark:text-white">
+                        <p><strong>Date:</strong> '.$date.'</p>
+                        <p><strong>Time:</strong> '.$time.' </p>
+                        <p><strong>Service:</strong> '.$row['ServiceType'].'</p>
+                        <p><strong>Remarks:</strong>  '.$row['Remarks'].' </p>
+                      </div>
+                      <div class="mt-4 flex justify-end">';
+
+                            if ($row['Status'] !== 'completed' and $row['Status'] !== 'cancelled'){
+                                if ($row['Status'] == 'rescheduled'){
+                                    echo '
+                        <!-- <button class="btn btn-error">Cancel Appointment</button> -->
+                        <button class="btn btn-success mr-3" onclick="toggleDialog(\'confirmAppointment\');
+                         document.getElementById(\'confSchedIdLink\').setAttribute(\'data_id\','.$row['Appointment_ID'].')">Accept</button>
+                        <button class="btn btn-error " onclick="toggleDialog(\'viewandCancel\') ;getAppointmentId('.$row['Appointment_ID'].')">Cancel Appointment</button>
+                     ';
+                                }else{
+                                    echo '
+                         <button class="btn btn-error" onclick="toggleDialog(\'viewandCancel\') ;getAppointmentId('.$row['Appointment_ID'].')">Cancel Appointment</button> 
+                       ';
+                                }
+                            }
+                            echo ' </div>
+                  </div>';
+
+
+                        }
+
+                    }
+                    ?>
+                </div>
               </div>
-              <!-- remove mo to pag nakita mo na code end -->
+
 
 
              
@@ -519,7 +512,7 @@ ORDER BY CASE WHEN `tbl_appointment`.`Status` = 'pending' THEN 0 ELSE 1 END, `tb
                   <thead>
                   <tr class="font-bold text-black dark:text-white text-base sm:text-lg">
                     <th>Name</th>
-                    <th>Last visit</th>
+                    <th>Consultant</th>
                     <th>Schedule </th>
                     <th>Status</th>
                     <th>Action</th>
@@ -565,7 +558,7 @@ ORDER BY CASE WHEN `tbl_appointment`.`Status` = 'pending' THEN 0 ELSE 1 END, `tb
                       echo '
     <tr class="text-base hover:bg-gray-300 dark:hover:bg-gray-600 font-medium text-black dark:text-white">
         <td>' . $row['First_Name'] . ' ' . $middleInitial . '. ' . $row['Last_Name'] . '</td>
-        <td>' . getLastPatientVisit($row['Chart_id']) . '</td>
+        <td>' . getPatientChartDoctor($row['Chart_id']) . '</td>
         <td>' . $followUpschedule . '</td>
         <td class="font-bold ' . $statusClass . '">' . $row['patient_Status'] . '</td>
         <!-- Status List
@@ -593,33 +586,14 @@ ORDER BY CASE WHEN `tbl_appointment`.`Status` = 'pending' THEN 0 ELSE 1 END, `tb
         </div>
         </div>
       </div>
-    <dialog id="viewAppointmentForm"  class="modal bg-opacity-50 bg-black">
-      <div class="modal-box w-11/12 max-w-7xl bg-gray-200 dark:bg-gray-700">
-
-        <div class="flex flex-col sm:flex-row justify-between items-center">
-          <div class="order-2 sm:order-1">
-            <h3 class="font-bold text-black dark:text-white text-2xl sm:text-4xl mb-2 sm:mb-0">Appointment Information</h3>
-          </div>
-          <div class="order-1 sm:order-2 mb-2 sm:mb-0">
-            <img src="../images/HCMC-blue.png" class="block h-10 lg:h-16 w-auto dark:hidden" alt="logo-light" />
-            <img src="../images/HCMC-white.png" class="h-10 lg:h-16 w-auto hidden dark:block" alt="logo-dark" />
-          </div>
+    <dialog id="confirmAppointment"   class="modal bg-black  bg-opacity-40 ">
+      <div class="card bg-slate-50 w-[80vw] absolute top-10 sm:w-[30rem] max-h-[35rem]  flex flex-col text-black">
+        <div  class=" card-title sticky  w-full grid place-items-center">
+          <h3 class="font-bold text-center text-lg  p-5 ">Confirm appointment?</h3>
         </div>
-
-        <div class="patientInfo mb-10 mt-5 text-black dark:text-white">
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-1 text-lg sm:text-xl">
-            <p><strong>Name: </strong> <span id='Patient_name'></span></p>
-            <p><strong>Contact Number: </strong><span id='Patient_contact_number'> </span></p>
-            <p><strong>Email: </strong> <span id='Patient_email'></span></p>
-            <p><strong>Sex: </strong> <span id='Patient_sex'></span></p>
-            <p><strong>Address: </strong><span id='Patient_address'> </span></p>
-            <p><strong>Date of Birth: </strong><span id='Patient_dateOfBirth'> </span></p>
-            <p><strong>Vaccinated: </strong><span id='Patient_vacStat'></span></p>
-            <p><strong>Reason/Purpose: </strong><span id='Patient_reasonn'> </span></p>
-          </div>
-        </div>
-        <div class="modal-action">
-            <button class="btn bg-gray-400 dark:bg-white hover:bg-gray-500 dark:hover:bg-gray-400  text-black  border-none" onclick='toggleDialog("viewAppointmentForm")'>Close</button>
+        <div class="p-4 w-full flex justify-evenly">
+          <a  id="confSchedIdLink"  class="btn btn-info w-1/4"  onclick="console.log('asdasd');accept_Appointment(this.getAttribute('data_id'))">Yes</a>
+          <button class="btn  btn-neutral  w-1/4 " onclick='toggleDialog("confirmAppointment")'>Close</button>
         </div>
       </div>
     </dialog>
@@ -672,6 +646,7 @@ ORDER BY CASE WHEN `tbl_appointment`.`Status` = 'pending' THEN 0 ELSE 1 END, `tb
             <img src="../images/HCMC-white.png" class="h-10 lg:h-16 w-auto hidden dark:block" alt="logo-dark" />
           </div>
         </div>
+
 
         <form id="RelativeForm" action="#" method="GET" class="space-y-6">
 
@@ -774,6 +749,16 @@ ORDER BY CASE WHEN `tbl_appointment`.`Status` = 'pending' THEN 0 ELSE 1 END, `tb
             <button class="btn bg-gray-400 dark:bg-white hover:bg-gray-500 dark:hover:bg-gray-400  text-black  border-none" onclick='toggleDialog("addRelative") '>Close</button>
         </div>
       </div>
+      <dialog id='memberErrorUpdate'  class='modal ' onclick='toggleDialog("memberErrorUpdate");' >
+        <div class="flex justify-center bg-red-600" >
+          <div role="alert" class="inline-flex items-center border  px-4 py-3 rounded relative">
+            <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span id='memberErrorUpdatetext'>Something went wrong</span>
+          </div>
+        </div>
+      </dialog>
     </dialog>
     <dialog id='profileAlert' class='modal' onclick='toggleDialog("profileAlert");toggleSecurityEdit(false);toggleEdit(false)' >
       <div class="flex justify-center" >
@@ -785,6 +770,7 @@ ORDER BY CASE WHEN `tbl_appointment`.`Status` = 'pending' THEN 0 ELSE 1 END, `tb
         </div>
       </div>
     </dialog>
+
     <dialog id="RemoveAppointmentAccountMember"   class="modal bg-black  bg-opacity-40 ">
       <div class="card bg-gray-200 dark:bg-gray-700 text-[#0e1011] dark:text-[#eef0f1] w-[80vw] absolute top-10 sm:w-[30rem] max-h-[35rem]  flex flex-col">
         <div  class=" card-title sticky  w-full grid place-items-center">
@@ -797,7 +783,8 @@ ORDER BY CASE WHEN `tbl_appointment`.`Status` = 'pending' THEN 0 ELSE 1 END, `tb
       </div>
     </dialog>
 
-      <script src='../js/usersInfo.js' defer></script>
+
+      <script src='../js/usersInfo.js' ></script>
     <script>
       function getPatientAppointmentInfo(id) {
         $.ajax({
@@ -921,6 +908,23 @@ ORDER BY CASE WHEN `tbl_appointment`.`Status` = 'pending' THEN 0 ELSE 1 END, `tb
       function getAppointmentId(id) {
         let appoit_id = document.getElementById('appoint_id');
         appoit_id.value = id;
+      }
+      function accept_Appointment(appointmentID){
+        $.ajax({
+          url: 'ajax.php?action=AcceptResched&appointment_id=' + encodeURIComponent(appointmentID),
+          method: 'GET',
+          dataType: 'html',
+          success: function(response) {
+            if (parseInt(response) === 1) {
+
+              $('#textInfo').html('Appointment Confirmed')
+              toggleDialog('profileAlert');
+              window.location.href='patient-profile.php?route=appointmentHistory';
+            }
+            console.log(response);
+          }
+        });
+
       }
 
 

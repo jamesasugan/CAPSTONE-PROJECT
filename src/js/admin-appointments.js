@@ -119,11 +119,17 @@ document.addEventListener('DOMContentLoaded', function () {
       remarksInput.value = this.value; // Update hidden input value
       if (this.id.includes('others')) {
         showOtherReasonContainer();
+        remarksInput.value = otherReasonInput.value
       } else {
         hideOtherReasonContainer();
       }
     });
   });
+  if(otherReasonInput){
+    otherReasonInput.addEventListener('keyup', function(){
+      remarksInput.value = this.value
+    })
+  }
 
   hideAllReasonOptionsInitially();
 
