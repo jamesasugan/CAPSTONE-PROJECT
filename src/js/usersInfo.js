@@ -1,3 +1,5 @@
+
+let accountOwnerAddress;
 function getUserInfo() {
   $.ajax({
     url: 'ajax.php?action=getUserInfo',
@@ -11,6 +13,7 @@ function getUserInfo() {
         document.querySelector('#personal-info input[name="contact-number"]').value = data.Contact_Number;
         document.querySelector('#personal-info input[name="dob"]').value = data.DateofBirth;
         document.querySelector('#personal-info input[name="address"]').value = data.Address;
+        accountOwnerAddress = data.Address;
         document.querySelector('#personal-info input[name="email"]').value = data.Email;
         document.querySelector('#personal-info select[name="sex"]').value = data.Sex;
         if (document.querySelector('#personal-info input[name="medicalCondition"]')){

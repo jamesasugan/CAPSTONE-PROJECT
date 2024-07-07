@@ -1491,35 +1491,35 @@ if ($action === 'AccountMemberPostReq'){
     }
 
     $relation = isset($_POST['relation']) && $_POST['relation'] != 'Others' ? $_POST['relation'] : (isset($_POST['otherRelation']) ? $_POST['otherRelation'] : '');
-    $relativeFname = isset($_POST['relativeFname']) ? $_POST['relativeFname'] : '';
-    $relativeMiddlename = isset($_POST['relativeMiddlename']) ? $_POST['relativeMiddlename'] : '';
-    $relativeLastname = isset($_POST['relativeLastname']) ? $_POST['relativeLastname'] : '';
-    $relativeWeight = isset($_POST['relativeWeight']) ? $_POST['relativeWeight'] : '';
-    $relativeDob = isset($_POST['relativeDob']) ? $_POST['relativeDob'] : '';
-    $relativeSex = isset($_POST['sex']) ? $_POST['sex'] : '';
-    $relativeMedcondition = isset($_POST['relativeMedcondition']) ? $_POST['relativeMedcondition'] : 'N/A';
+    $relativeFname = $_POST['relativeFname'] ?? '';
+    $relativeMiddlename = $_POST['relativeMiddlename'] ?? '';
+    $relativeLastname = $_POST['relativeLastname'] ?? '';
+    $relativeWeight = $_POST['relativeWeight'] ?? '';
+    $relativeDob = $_POST['relativeDob'] ?? '';
+    $relativeSex = $_POST['sex'] ?? '';
+    $relativeMedcondition = $_POST['relativeMedcondition'] ?? 'N/A';
     $addressInfo = (isset($_POST['addressInfo']) && $_POST['addressInfo'] === 'Yes') ? $ownerAddress : (isset($_POST['relativeAddress']) ? $_POST['relativeAddress'] : '');
-    $accountmemeberID = isset($_POST['accountmemeberID']) ? $_POST['accountmemeberID'] : '';
-    $actionType = isset($_POST['actionType']) ? $_POST['actionType'] : '';
+    $accountmemeberID = $_POST['accountmemeberID'] ?? '';
+    $actionType = $_POST['actionType'] ?? '';
 
     if ($relation === 'Self') {
         echo "Invalid Relationship Type";
         exit();
     }
 
-    if ($relation !== '' && $relativeFname !== '' && $relativeMiddlename !== '' && $relativeLastname !== '' && $relativeWeight !== '' &&
+    if ($relation !== '' && $relativeFname !== ''  && $relativeLastname !== '' &&
         $relativeDob !== '' && $relativeSex !== '' && $addressInfo !== '' && $accownerId) {
 
         if ($actionType == 'Edit' && $accountmemeberID != 0) {
             $updateAccAppointmentMember = "UPDATE tbl_accountpatientmember 
                                    SET First_Name=?, Middle_Name=?, Last_Name=?, DateofBirth=?, 
                                        Sex=?, Contact_Number=?, MemberPatientEmail=?, 
-                                       Address=?, Medical_condition=?, RelationshipType=?
+                                       Address=?, weight=?, Medical_condition=?, RelationshipType=?
                                    WHERE Account_Patient_ID_Member  = ?";
             $updateAccAppointmentMemberSTMT = $conn->prepare($updateAccAppointmentMember);
-            $updateAccAppointmentMemberSTMT->bind_param('ssssssssssi', $relativeFname, $relativeMiddlename,
+            $updateAccAppointmentMemberSTMT->bind_param('ssssssssdssi', $relativeFname, $relativeMiddlename,
                 $relativeLastname, $relativeDob, $relativeSex,
-                $ownerContact, $ownerEmail, $addressInfo,
+                $ownerContact, $ownerEmail, $addressInfo, $relativeWeight,
                 $relativeMedcondition, $relation, $accountmemeberID);
 
             if ($updateAccAppointmentMemberSTMT->execute()) {
@@ -1529,10 +1529,13 @@ if ($action === 'AccountMemberPostReq'){
                 echo $updateAccAppointmentMemberSTMT->error;
             }
         } elseif ($actionType == 'Add') {
-            $newAccAppointmentMember = "INSERT INTO tbl_accountpatientmember (user_info_ID,  First_Name, Middle_Name, Last_Name, DateofBirth, Sex, Contact_Number, MemberPatientEmail, Address, Medical_condition, RelationshipType)
-                                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            $newAccAppointmentMember = "INSERT INTO tbl_accountpatientmember (user_info_ID,  First_Name,
+                                      Middle_Name, Last_Name, DateofBirth, Sex, 
+                                      Contact_Number, MemberPatientEmail, Address,weight,
+                                      Medical_condition, RelationshipType)
+                                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?,?, ?, ?)";
             $newAccAppointmentMemberSTMT = $conn->prepare($newAccAppointmentMember);
-            $newAccAppointmentMemberSTMT->bind_param('issssssssss', $accownerId, $relativeFname, $relativeMiddlename, $relativeLastname, $relativeDob, $relativeSex, $ownerContact, $ownerEmail, $addressInfo, $relativeMedcondition, $relation);
+            $newAccAppointmentMemberSTMT->bind_param('issssssssdss', $accownerId, $relativeFname, $relativeMiddlename, $relativeLastname, $relativeDob, $relativeSex, $ownerContact, $ownerEmail, $addressInfo,$relativeWeight, $relativeMedcondition, $relation);
 
             if ($newAccAppointmentMemberSTMT->execute()) {
                 echo 2;

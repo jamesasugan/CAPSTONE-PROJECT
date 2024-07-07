@@ -359,11 +359,11 @@ $accountOwner_ID = $_SESSION['online_Account_owner_id'];
           <div id="Memberstab" class="flex-1 p-0 sm:p-10 hidden">
             <div class="bg-gray-200 dark:bg-gray-700 p-5 rounded-lg h-full">
                 <div class="flex flex-col sm:flex-row sm:justify-between mb-3">
-                  <h3 class="text-2xl sm:text-3xl font-bold text-black dark:text-white mb-4 sm:mb-0">
+                  <h3 class="text-2xl sm:text-3xl font-bold text-black dark:text-white mb-4 sm:mb-0" >
                     Account Members
                   </h3>
                     <button class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none" onclick='toggleDialog("addRelative") ;
-                  changeInputvalue("actionType","Add");changeInputvalue("accountmemeberID","0") '>Add a Member</button>
+                  changeInputvalue("actionType","Add");changeInputvalue("accountmemeberID","0");resetAddMemberForm(); $("#RelativeFormTitle").html("Add a Member")'>Add a Member</button>
                 </div>
                 
               <div class="overflow-x-auto">
@@ -639,7 +639,8 @@ ORDER BY
 
         <div class="flex flex-col sm:flex-row justify-between items-center">
           <div class="order-2 sm:order-1">
-            <h3 class="font-bold text-black dark:text-white text-2xl sm:text-4xl mb-2 sm:mb-0">Add a Member</h3>
+            <h3 class="font-bold text-black dark:text-white text-2xl sm:text-4xl mb-2 sm:mb-0"
+            id='RelativeFormTitle'>Add a Member</h3>
           </div>
           <div class="order-1 sm:order-2 mb-2 sm:mb-0">
             <img src="../images/HCMC-blue.png" class="block h-10 lg:h-16 w-auto dark:hidden" alt="logo-light" />
@@ -820,6 +821,7 @@ ORDER BY
           dataType: 'json',
           success: function(data) {
             if (data) {
+              $('#RelativeFormTitle').html('Edit Member Info')
               document.querySelector('#RelativeForm input[name="relativeFname"]').value = data.First_Name;
               document.querySelector('#RelativeForm  input[name="relativeMiddlename"]').value = data.Middle_Name;
               document.querySelector('#RelativeForm  input[name="relativeLastname"]').value = data.Last_Name;
@@ -842,9 +844,27 @@ ORDER BY
 
               if (dataExists) {
                 selectElement.value = data.RelationshipType;
+                document.querySelector('#RelativeForm input[name="otherRelation"]').value = '';
+                document.getElementById('otherRelationContainer').style.display = 'none';
+
               } else {
                 selectElement.value = 'Others'
+                document.querySelector('#RelativeForm input[name="otherRelation"]').value = data.RelationshipType;
+                document.getElementById('otherRelationContainer').style.display = 'block';
+
+
               }
+              if (accountOwnerAddress !== data.Address) {
+                document.querySelector('#RelativeForm input[name="relativeAddress"]').value = data.Address;
+                document.querySelector('#RelativeForm input[name="addressInfo"][value="No"]').checked = true;
+                document.getElementById('addressContainer').style.display = 'block';
+              }else {
+                document.querySelector('#RelativeForm input[name="addressInfo"][value="Yes"]').checked = true;
+                document.getElementById('addressContainer').style.display = 'none';
+                document.querySelector('#RelativeForm input[name="relativeAddress"]').value = '';
+
+              }
+
 
             } else {
               console.error('No data found for the given patient ID');
@@ -956,6 +976,17 @@ ORDER BY
     function changeInputvalue(inputID, value){
         document.getElementById(inputID).value = value
     }
+      function resetAddMemberForm() {
+        const form = document.getElementById('RelativeForm');
+        const onlineOwnerId = document.getElementsByName('onlineOwnerId')[0].value;
+
+        form.reset();
+
+        document.getElementsByName('onlineOwnerId')[0].value = onlineOwnerId;
+        document.getElementsByName('actionType').value = 'Add';
+
+      }
+
     </script>
 
     </body>
