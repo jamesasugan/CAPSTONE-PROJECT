@@ -116,7 +116,7 @@ if ($result && $result->num_rows == 1){
             bg-[#f6fafc] dark:bg-[#17222a]"
     >
       <div
-        class="w-full max-w-7xl mx-auto p-4 rounded-lg shadow-lg bg-gray-200 dark:bg-gray-700 text-[#0e1011] dark:text-[#eef0f1] printableArea"
+        class="w-full max-w-7xl mx-auto p-4 rounded-lg shadow-lg bg-gray-200 dark:bg-gray-700 text-[#0e1011] dark:text-[#eef0f1]"
       >
       <div
         class="flex flex-col sm:flex-row justify-between items-center"

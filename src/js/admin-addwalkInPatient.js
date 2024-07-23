@@ -1,18 +1,68 @@
 // for radio button
 document.addEventListener('DOMContentLoaded', function() {
-    const radioButtons = document.querySelectorAll('input[name="recordExist"]');
-    const searchPatientRecord = document.getElementById('searchPatientRecord');
-  
-    radioButtons.forEach(radio => {
-      radio.addEventListener('change', function() {
-        if (this.value === 'Yes') {
-          searchPatientRecord.classList.remove('hidden');
-        } else {
-          searchPatientRecord.classList.add('hidden');
-        }
-      });
+  const radioButtons = document.querySelectorAll('input[name="recordExist"]');
+  const searchPatientRecord = document.getElementById('searchPatientRecord');
+  const serviceSection = document.getElementById('serviceSection');
+  const personalInfoSection = document.getElementById('personalInfoSection');
+  const emailInput = document.getElementById('email');
+  const weightInput = document.getElementById('weight');
+  const medicalConditionInput = document.getElementById('medicalCondition');
+
+  // Function to manage required attributes based on visibility
+  function manageRequiredAttributes() {
+    const form = document.getElementById('walkInPatientForm');
+    const visibleInputs = form.querySelectorAll('input:not([type="hidden"]), select:not(.select-hidden)');
+
+    visibleInputs.forEach(input => {
+      if (input.offsetParent === null) {
+        input.removeAttribute('required');
+      } else {
+        input.setAttribute('required', '');
+      }
     });
+
+    // Remove 'required' attribute specifically from optional inputs
+    emailInput.removeAttribute('required');
+    weightInput.removeAttribute('required');
+    medicalConditionInput.removeAttribute('required');
+  }
+
+  radioButtons.forEach(radio => {
+    radio.addEventListener('change', function() {
+      if (this.value === 'Yes') {
+        searchPatientRecord.classList.remove('hidden');
+        serviceSection.classList.remove('hidden');
+        personalInfoSection.classList.add('hidden');
+      } else if (this.value === 'No') {
+        searchPatientRecord.classList.add('hidden');
+        serviceSection.classList.remove('hidden');
+        personalInfoSection.classList.remove('hidden');
+      }
+
+      manageRequiredAttributes();
+    });
+  });
+
+  const form = document.getElementById('walkInPatientForm');
+  form.addEventListener('submit', function(event) {
+    const visibleInputs = form.querySelectorAll('input:not([type="hidden"]), select:not(.select-hidden)');
+    let isValid = true;
+
+    visibleInputs.forEach(input => {
+      if (input.hasAttribute('required') && !input.checkValidity()) {
+        isValid = false;
+      }
+    });
+
+    if (!isValid) {
+      event.preventDefault(); 
+    }
+  });
+
+  manageRequiredAttributes(); // Initial call to manage required attributes based on default visibility
 });
+
+
 
 // for dropdown na may search
 document.addEventListener('DOMContentLoaded', function() {

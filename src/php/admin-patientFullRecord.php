@@ -119,7 +119,7 @@ if ($result && $result->num_rows > 0){
             bg-[#f6fafc] dark:bg-[#17222a]"
             >
             <div
-                class="w-full max-w-7xl mx-auto p-4 rounded-lg shadow-lg bg-gray-200 dark:bg-gray-700 text-[#0e1011] dark:text-[#eef0f1] printableArea"
+                class="w-full max-w-7xl mx-auto p-4 rounded-lg shadow-lg bg-gray-200 dark:bg-gray-700 text-[#0e1011] dark:text-[#eef0f1]"
             >
             <div
                 class="flex flex-col sm:flex-row justify-between items-center"
@@ -146,20 +146,54 @@ if ($result && $result->num_rows > 0){
                 </div>
               </div>
                 
-                <div class="patientInfo mb-10 mt-5">
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-1 text-lg sm:text-xl">
-                                <h2 class="text-lg sm:text-xl font-bold">Status: <span class="<?php echo $statusClass;?>"><?php echo $patient_status?></span></h2>
-                              <p><strong>Name: </strong> <?php echo $Patient_firstname . ' ' . $middleInitial . '. ' . $Patient_lastname; ?></p>
-                              <p><strong>Contact Number: </strong> <?php echo $Patient_ContactNumber ?></p>
-                              <p><strong>Age: </strong> <?php echo (new DateTime($patientDOB))->diff(new DateTime)->y; ?></p>
-                              <p><strong>Sex: </strong> <?php echo $patient_Sex ?></p>
-                              <p><strong>Weight: </strong> <?php echo $patient_weight; ?></p>
-                              <p><strong>Medical Condition: </strong> <?php echo $patient_MdCondition; ?></p>
-                              <p><strong>Email: </strong><?php echo $Patient_Email; ?></p>
-                              <p><strong>Address:</strong> <?php echo $Patient_address; ?></p>
-                              <p><strong>Date of Birth: </strong><?php echo   date("F j, Y", strtotime($patientDOB));?></p>
-                            </div>
-                        </div>
+              <div class="patientInfo mb-10 mt-5">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-1 text-lg sm:text-xl">   
+                  <div>
+                      <strong class="block">Name</strong>
+                      <span class="block"><?php echo $Patient_firstname . ' ' . $middleInitial . '. ' . $Patient_lastname; ?></span>
+                  </div>
+                  <div>
+                      <strong class="block">Status</strong>
+                      <p class="block font-semibold"><span class="<?php echo $statusClass;?>"><?php echo $patient_status?></span></p>
+                  </div>   
+                  <div>
+                      <strong class="block">Username</strong>
+                      <span class="block">franky123</span>
+                  </div>
+                  <div>
+                      <strong class="block">Age</strong>
+                      <span class="block"><?php echo (new DateTime($patientDOB))->diff(new DateTime)->y; ?></span>
+                  </div>
+                  <div>
+                      <strong class="block">Sex</strong>
+                      <span class="block"><?php echo $patient_Sex; ?></span>
+                  </div>
+                  <div>
+                      <strong class="block">Contact Number</strong>
+                      <span class="block"><?php echo $Patient_ContactNumber ?></span>
+                  </div>
+                  <div>
+                      <strong class="block">Email</strong>
+                      <span class="block"><?php echo $Patient_Email; ?></span>
+                  </div>
+                  <div>
+                      <strong class="block">Weight</strong>
+                      <span class="block"><?php echo $patient_weight; ?></span>
+                  </div>
+                  <div>
+                      <strong class="block">Date of Birth</strong>
+                      <span class="block"><?php echo   date("F j, Y", strtotime($patientDOB));?></span>
+                  </div>
+                  <div>
+                      <strong class="block">Medical Condition</strong>
+                      <span class="block"><?php echo $patient_MdCondition; ?></span>
+                  </div>
+                  <div>
+                      <strong class="block">Address</strong>
+                      <span class="block"><?php echo $Patient_address; ?></span>
+                  </div>
+                </div>
+              </div>
 
                         <div class="flex justify-end mb-5">
                           <button class="mt-6 btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none printformButton flex flex-col items-center px-5 py-1" onclick="window.print()">
@@ -201,7 +235,9 @@ if ($result && $result->num_rows > 0){
               <!-- lalabas lang to sa follow up stage end -->
 
               <form id="patientRecordForm" action="#" method="POST" enctype='multipart/form-data'>
-                <p id='availedService' class='mt-5'></p>
+
+                <p id='availedService' class="text-center mt-5"></p>
+
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 mt-5">
                   <div>
                     <label class="block">
@@ -331,7 +367,7 @@ if ($result && $result->num_rows > 0){
       dataType: 'json',
       success: function(data) {
         if (data) {
-          $('#availedService').html(' <strong>Service Type: </strong><span >'+ data.availedService +'</span>');
+          $('#availedService').html(' <strong class="text-xl">Service: </strong><br><span class="text-lg font-medium">'+ data.availedService +'</span>');
           document.querySelector('#patientRecordForm input[name="consultation-date"]').value = data.consultationDate;
           document.querySelector('#patientRecordForm input[name="record_id"]').value = data.Record_ID;
           document.querySelector('#patientRecordForm input[name="blood-pressure"]').value = data.Blood_Pressure;

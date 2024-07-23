@@ -82,6 +82,7 @@ if ($result && $result->num_rows > 0) {
     <title>Patient Information</title>
     <link rel="stylesheet" href="../css/output.css" />
     <link rel="stylesheet" href="../css/staff.css" />
+    <link rel="stylesheet" href="../css/print.css">
     <script
       src="https://kit.fontawesome.com/70df29d299.js"
       crossorigin="anonymous"
@@ -106,30 +107,21 @@ if ($result && $result->num_rows > 0) {
       href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
     />
     <link rel="stylesheet" href="../css/services-swiper.css" />
+    <script src="../../node_modules/html2canvas-pro/dist/html2canvas-pro.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script src="../js/main.js" defer></script>
     <script src="../js/staff-patientsRecord.js" defer></script>
-  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 </head>
 <body>
+      <div class="mainContainer">
         <?php include 'staff-navbar.php'; ?>
-
-        <section
-            id="fullpatientInformation"
-            class="w-full min-h-screen flex justify-center items-center pt-28 pb-10 p-5
-            bg-[#f6fafc] dark:bg-[#17222a]"
-            >
-            <div
-                class="w-full max-w-7xl mx-auto p-4 rounded-lg shadow-lg bg-gray-200 dark:bg-gray-700 text-[#0e1011] dark:text-[#eef0f1] printableArea"
-            >
-            <div
-                class="flex flex-col sm:flex-row justify-between items-center"
-              >
+    
+        <section id="fullpatientInformation" class="w-full min-h-screen flex justify-center items-center pt-28 pb-10 p-5 bg-[#f6fafc] dark:bg-[#17222a]">
+            <div class="w-full max-w-7xl mx-auto p-4 rounded-lg shadow-lg bg-gray-200 dark:bg-gray-700 text-[#0e1011] dark:text-[#eef0f1] recordHid">
+            <div class="flex flex-col sm:flex-row justify-between items-center">
                 <div class="order-2 sm:order-1">
-                  <h3
-                    class="font-bold text-black dark:text-white text-3xl mb-2 sm:mb-0"
-                  >
+                  <h3 class="font-bold text-black dark:text-white text-3xl mb-2 sm:mb-0">
                     Patient's Chart
                   </h3>
                 </div>
@@ -149,34 +141,101 @@ if ($result && $result->num_rows > 0) {
               </div>
 
               <div class="patientInfo mb-10 mt-5">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-1 text-lg sm:text-xl">
-                  <h2 class="text-lg sm:text-xl font-bold">Status: <span class="<?php echo $statusClass;?>"><?php echo $patient_status?></span></h2>
-                  <p><strong>Name: </strong> <?php echo $Patient_firstname . ' ' . $middleInitial . '. ' . $Patient_lastname; ?></p>
-                  <p><strong>Contact Number: </strong> <?php echo $Patient_ContactNumber ?></p>
-                  <p><strong>Age: </strong> <?php echo (new DateTime($patientDOB))->diff(new DateTime)->y; ?></p>
-                  <p><strong>Sex: </strong> <?php echo $patient_Sex; ?></p>
-                  <p><strong>Weight: </strong> <?php echo $patient_weight; ?></p>
-                  <p><strong>Medical Condition: </strong> <?php echo $patient_MdCondition; ?></p>
-                  <p><strong>Email: </strong><?php echo $Patient_Email; ?></p>
-                  <p><strong>Address:</strong> <?php echo $Patient_address; ?></p>
-                  <p><strong>Date of Birth: </strong><?php echo   date("F j, Y", strtotime($patientDOB));?></p>
-
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-1 text-lg sm:text-xl">   
+                  <div>
+                      <strong class="block">Name</strong>
+                      <span class="block"><?php echo $Patient_firstname . ' ' . $middleInitial . '. ' . $Patient_lastname; ?></span>
+                  </div>
+                  <div>
+                      <strong class="block">Status</strong>
+                      <p class="block font-semibold"><span class="<?php echo $statusClass;?>"><?php echo $patient_status?></span></p>
+                  </div>   
+                  <div>
+                      <strong class="block">Username</strong>
+                      <span class="block">franky123</span>
+                  </div>
+                  <div>
+                      <strong class="block">Age</strong>
+                      <span class="block"><?php echo (new DateTime($patientDOB))->diff(new DateTime)->y; ?></span>
+                  </div>
+                  <div>
+                      <strong class="block">Sex</strong>
+                      <span class="block"><?php echo $patient_Sex; ?></span>
+                  </div>
+                  <div>
+                      <strong class="block">Contact Number</strong>
+                      <span class="block"><?php echo $Patient_ContactNumber ?></span>
+                  </div>
+                  <div>
+                      <strong class="block">Email</strong>
+                      <span class="block"><?php echo $Patient_Email; ?></span>
+                  </div>
+                  <div>
+                      <strong class="block">Weight</strong>
+                      <span class="block"><?php echo $patient_weight; ?></span>
+                  </div>
+                  <div>
+                      <strong class="block">Date of Birth</strong>
+                      <span class="block"><?php echo   date("F j, Y", strtotime($patientDOB));?></span>
+                  </div>
+                  <div>
+                      <strong class="block">Medical Condition</strong>
+                      <span class="block"><?php echo $patient_MdCondition; ?></span>
+                  </div>
+                  <div>
+                      <strong class="block">Address</strong>
+                      <span class="block"><?php echo $Patient_address; ?></span>
+                  </div>
                 </div>
               </div>
              <!-- <div class="flex justify-end">
                 <a class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none mb-5" onclick='toggleDialog("editpatient_info")'>Edit Patient Info</a>
               </div>-->
               
-              <div class="flex justify-end mb-5">
-                <button class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none printformButton flex flex-col items-center px-5 py-1" onclick="window.print()">
-                    <i class="fa-solid fa-print"></i>
-                    <span>Print</span>
-                </button>
-              </div>
+              
               <!-- lalabas lang to sa follow up stage.
                   nilipat ko muna ng pwesto, nilabas ko sa form kase pag nasa form nagkakaerror, gawan mo na lang sariling form siguro to
 
           -->
+            <!-- <div class="flex justify-center">
+              <button class="btn btn-info">View Record History</button>
+            </div>
+
+            <div class="flex justify-center mt-10">
+              <button class="btn btn-info">Add New Record</button>
+            </div> -->
+
+
+            <!-- <div id="printContainer" class="container mx-auto">
+                <div class="flex flex-col gap-4 h-[calc(100vh-18rem)] overflow-y-auto">
+                    <div class="card bg-white dark:bg-gray-800 shadow-md rounded-lg p-4">
+                        <div class="flex justify-center">
+                            <h3 class="text-base sm:text-2xl font-semibold text-gray-900 dark:text-white">Patient Record History</h3>
+                        </div>
+                        <div class="text-lg">
+                            <p><span class="font-medium">Name: </span>Franklin C. Saint</p>
+                            <p><span class="font-medium">Consultation Date:</span> July 20, 2024</p>
+                            <p><span class="font-medium">Service:</span></p>
+                            <p><span class="font-medium">Remarks:</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+
+            <div class="flex justify-end mb-5">
+                <button id="print" class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none printformButton flex flex-col items-center px-5 py-1">
+                    <i class="fa-solid fa-print"></i>
+                    <span>Print</span>
+                </button>
+            </div>
+
+            <div class="flex justify-end">
+              <button id="save" class="btn btn-info">Save</button>
+            </div>
+
+
+
+
               <div class="flex flex-col sm:flex-row justify-between sm:items-center">
                 <select id="visitDropdown" onchange="if(this.value !== 'newRecord')
                 { getRecords(this.value); getResImg(this.value); $('#serviceTypeBTN').html('Edit Service Type')} else { document.getElementById('patientRecordForm').reset(); $('#availedService').html('N/A');
@@ -203,8 +262,12 @@ if ($result && $result->num_rows > 0) {
               </div>
 
               <form id="patientRecordForm" enctype='multipart/form-data'>
-                <a class='btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none mt-6' onclick='toggleDialog("services")' id='serviceTypeBTN'>Select Service Type</a>
-                <p id='availedService'></p>
+                <div class="flex justify-center">
+                  <a class='btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none mt-6' onclick='toggleDialog("services")' id='serviceTypeBTN'>Select Service</a>
+                </div>
+
+                  <p id='availedService' class="text-center mt-5"></p>
+               
 
                 <dialog class='modal bg-black bg-opacity-20' id='services'>
                   <div id='ServiceList'  class="modal-box w-11/12 max-w-5xl bg-gray-200 dark:bg-gray-700 overflow-auto">
@@ -550,6 +613,125 @@ if ($result && $result->num_rows > 0) {
             <!-- modal content for edit patient information end -->
 
             </section>
+          </div>
+
+    <!-- print content -->
+        <div class="recordContent hidden">
+              <a id="save_to_image">
+                <div class="invoice-container">
+                  <table cellpadding="0" cellspacing="0">
+                    <tr class="top">
+                      <td colspan="2">
+                        <table>
+                          <tr>
+                            <td class="title">
+                              <img
+                                src="../images/HCMC-blue.png"
+                                style="width: 100%; max-width: 100px"
+                              />
+                            </td>
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+                    <tr class="information">
+                      <td colspan="2">
+                      <table class="table-fixed w-full">
+                        <tr>
+                          <td class="w-1/2 p-2 align-top">
+                            <p><strong>Name:</strong> Franklin C. Saint</p>
+                            <p><strong>Sex:</strong> Male</p>
+                            <p><strong>Medical Conditions:</strong> N/A</p>
+                            <p><strong>Email:</strong> franklinsaint@gmail.com</p>
+                            <p><strong>Address:</strong> blk 10 lot 4 via roma street Romanville Tagapo Sta. Rosa Laguna Philippines</p>
+                          </td>
+                          <td class="w-1/2 p-2 align-top">
+                            <p><strong>Age:</strong> 22</p>
+                            <p><strong>Weight:</strong> 60kg</p>
+                            <p><strong>Contact Number:</strong> 09763218546</p>           
+                            <p><strong>Date of Birth:</strong> February 21, 2002</p>
+                          </td>
+                        </tr>
+                      </table>
+                      </td>
+                    </tr>
+                    <tr class="heading ">
+                      <td class="font-bold py-2">Consultation Date</td>
+                      <td class="font-medium py-2">July 21, 2024</td>
+                    </tr>
+                    <tr class="heading ">
+                      <td class="font-bold py-2">Consultant</td>
+                      <td class="font-medium py-2">Dr. John Edward Dionisio</td>
+                    </tr>
+                    <tr class="heading ">
+                      <td class="font-bold py-2">Heart Rate</td>
+                      <td class="font-medium py-2">90</td>
+                    </tr>
+                    <tr class="heading ">
+                      <td class="font-bold py-2">Temperature</td>
+                      <td class="font-medium py-2">36</td>
+                    </tr>
+                    <tr class="heading ">
+                      <td class="font-bold py-2">Blood Pressure</td>
+                      <td class="font-medium py-2">110/70</td>
+                    </tr>
+                    <tr class="heading ">
+                      <td class="font-bold py-2">Saturation</td>
+                      <td class="font-medium py-2">96%</td>
+                    </tr>
+                    <tr class="heading ">
+                      <td class="font-bold py-2">Chief Complaint</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td colspan="2" class="font-medium py-2">Experiencing high fever, severe headache, and joint pain for the past few days.</td>
+                    </tr>
+                    <tr class="heading ">
+                      <td class="font-bold py-2">Physical Examination</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td colspan="2" class="font-medium py-2">
+                      Patient appears febrile and fatigued.
+                      Normal heart sounds, no murmurs, regular rhythm.
+                      Clear breath sounds bilaterally, no wheezing or crackles.
+                      Soft, mild tenderness in the right upper quadrant, no organomegaly.
+                      No rash or petechiae observed.
+                      Stable except for elevated temperature.
+                      </td>
+                    </tr>
+                    <tr class="heading ">
+                      <td class="font-bold py-2">Assessment</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td colspan="2" class="font-medium py-2">
+                      Febrile illness with severe headache and myalgia, suspected dengue fever.
+                      </td>
+                    </tr>
+                    <tr class="heading ">
+                      <td class="font-bold py-2">Treatment Plan</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td colspan="2" class="font-medium py-2">
+                      Order dengue NS1 antigen test and dengue IgM and IgG antibody tests to confirm the diagnosis.
+                      Recommend complete blood count (CBC) to check for leukopenia and thrombocytopenia, which are common in dengue fever.
+                      Advise the patient to maintain adequate hydration by drinking plenty of fluids.
+                      Prescribe acetaminophen 500 mg, one tablet every 6 hours as needed for fever and pain.
+                      Instruct the patient to avoid NSAIDs such as ibuprofen and aspirin due to the risk of bleeding.
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+              </a>
+            </div>
+<!-- print content end -->
+
+            
+
+
+
         <dialog id='SuccessAlert'  class='modal' onclick='toggleDialog("SuccessAlert")' >
           <div class="flex justify-center" >
             <div role="alert" class="inline-flex items-center bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative">
@@ -715,7 +897,7 @@ if ($result && $result->num_rows > 0) {
                   .join(', ');
 
                 hiddenInput.value = selectedServices;
-                $('#availedService').html('<strong>Service Type: </strong><span >'+ selectedServices +'</span>');
+                $('#availedService').html('<strong class="text-xl">Service: </strong><br><span class="text-lg font-medium">'+ selectedServices +'</span>');
               });
             });
           });
@@ -741,19 +923,8 @@ if ($result && $result->num_rows > 0) {
         </script>
 
 
-    <script>
-/*
-  document.addEventListener('DOMContentLoaded', function(){
-    const printBtn = document.querySelector('.printform');
-
-    printBtn.addEventListener('click', function() {
-      window.print();
-    });
-  })
-
- */
-
-      </script>
+        <script src="../js/index.js"></script>
+        <script src="../js/html2canvaspro.js"></script>
         <script src='../js/doctorAppoimtmentAvailability.js' ></script>
 </body>
 </html>

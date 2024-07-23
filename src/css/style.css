@@ -162,7 +162,7 @@ iframe {
 
 
 /* for print */
-@media print {
+/* @media print {
   body *, select {
     visibility: hidden;
   }
@@ -188,7 +188,7 @@ iframe {
   .printformButton {
   display: none !important;
   }
-}
+} */
 
 
 

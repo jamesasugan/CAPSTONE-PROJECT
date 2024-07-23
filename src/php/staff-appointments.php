@@ -63,7 +63,37 @@ $staff_id = $row['Staff_ID'];
 
   <?php include 'staff-navbar.php'; ?>
 
-  <div id="appointmentRecordsTab" class="p-10 pt-32 mx-auto w-full min-h-screen bg-[#ebf0f4] dark:bg-[#17222a]">
+  <div id="appointmentRecordsTab" class="p-10 pt-24 mx-auto w-full min-h-screen bg-[#ebf0f4] dark:bg-[#17222a]">
+  
+    <!-- <div class="flex justify-center">
+      <div class="w-full sm:w-1/2 bg-gray-200 dark:bg-gray-800 rounded-lg mb-5 p-4 text-black dark:text-white">
+        <h1 class="text-center text-xl font-bold mb-3">Filter Options</h1>
+        <div class="flex justify-center">
+          <div class="flex flex-wrap gap-2 mt-2" id="filterStatus">
+            <p class="font-medium content-center">Status:</p>
+            <label class="flex items-center space-x-2 bg-white dark:bg-gray-700 text-black dark:text-white px-3 py-2 rounded cursor-pointer">
+              <input type="checkbox" class="hidden" value="Pending">
+              <span class="text-sm">Pending</span>
+            </label>
+            <label class="flex items-center space-x-2 bg-white dark:bg-gray-700 text-black dark:text-white px-3 py-2 rounded cursor-pointer">
+              <input type="checkbox" class="hidden" value="Approved">
+              <span class="text-sm">Approved</span>
+            </label>
+            <label class="flex items-center space-x-2 bg-white dark:bg-gray-700 text-black dark:text-white px-3 py-2 rounded cursor-pointer">
+              <input type="checkbox" class="hidden" value="Rescheduled">
+              <span class="text-sm">Rescheduled</span>
+            </label>
+            <label class="flex items-center space-x-2 bg-white dark:bg-gray-700 text-black dark:text-white px-3 py-2 rounded cursor-pointer">
+              <input type="checkbox" class="hidden" value="Cancelled">
+              <span class="text-sm">Cancelled</span>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div> -->
+
+
+
     <div class="flex flex-col sm:flex-row justify-between items-center bg-gray-200 dark:bg-gray-700 p-5 border-b border-b-black">
       <h3 class="text-2xl sm:text-xl md:text-3xl font-bold text-black dark:text-white mb-4 sm:mb-0 uppercase mr-0 sm:mr-10">
         Appointments
@@ -100,29 +130,20 @@ $staff_id = $row['Staff_ID'];
     </div>
 
     <!-- Table Container with scrolling -->
-    <div
-      class="bg-gray-200 dark:bg-gray-700 p-5 overflow-y-auto"
-      style="max-height: calc(80vh - 100px)"
-    >
-      <table class="table w-full" id='TableList'>
-        <thead>
-
-
-        <tr
-          class="font-bold text-black dark:text-white text-base sm:text-lg"
-        >
-          <th class='cursor-pointer'>Name</th>
-          <th class='cursor-pointer' >Date</th>
-          <th class='cursor-pointer'>Time</th>
-          <th class='cursor-pointer' >Visit Type</th>
-
-
-
-          <th class='cursor-pointer'>Status</th>
-          <th  >Action</th>
-        </tr>
-        </thead>
-        <tbody class="text-black dark:text-white text-base sm:text-lg">
+    <div class="bg-gray-200 dark:bg-gray-700 overflow-hidden" style="max-height: calc(80vh - 100px)">
+      <div class="p-5">
+        <div style="overflow-y: auto; max-height: calc(75vh - 100px);">
+          <table class="table w-full" id='TableList'>
+            <thead class="sticky top-0 bg-neutral-300 dark:bg-gray-500 z-10" style="top: -1px;">
+              <tr class="font-bold text-black dark:text-white text-base sm:text-lg">
+                <th>Name</th>
+                <th >Date</th>
+                <th>Time</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody class="text-black dark:text-white text-base sm:text-lg">
         <!-- sample row -->
         <?php
         $sql = "SELECT `tbl_accountpatientmember`.*, `tbl_appointment`.*
@@ -181,7 +202,6 @@ ORDER BY
                 <td>' . $row['First_Name'] . ' ' . $middleInitial . '. ' . $row['Last_Name'] . '</td>
                 <td>' . $date . ' </td>
                 <td class=" ">' . $time . '</td> 
-                    <td class=" ">' . $row['VisitType'] . '</td> 
               
             
                
@@ -198,22 +218,24 @@ ORDER BY
                   </button>';
                 // Include the tooltip for Approved status here
                 if ($status === 'Completed') {
-                    echo '<div class="ml-2 tooltip tooltip-bottom" data-tip="Create patient chart">
-                                <a class="ml-5 hover:cursor-pointer" onclick="toggleDialog(\'addPatient\');setAppointmentId(this.getAttribute(\'data-appointment-id\'))" data-appointment-id="' .
+                    echo '
+                                <a class="ml-2 sm:ml-5 hover:cursor-pointer" onclick="toggleDialog(\'addPatient\');setAppointmentId(this.getAttribute(\'data-appointment-id\'))" data-appointment-id="' .
                         $row['Appointment_ID'] .
                         '">
                                   <i class="fa-solid fa-user-plus"></i>
                                 </a>
-                            </div>';
+                            ';
                 }
                 echo '</td>
             </tr>';
             }
         }
-        ?>
+        ?> 
 
-        </tbody>
-      </table>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   </div>
   <dialog id="viewAppointment" class="modal">
@@ -490,9 +512,10 @@ ORDER BY
             <textarea name="reason" placeholder="Type here" disabled required class="textarea-bordered textarea w-full p-2 h-20 bg-gray-300 dark:bg-gray-600 text-black dark:text-white text-base disabled:bg-white disabled:text-black dark:disabled:text-white border-none"></textarea>
           </div> -->
 
-          <h3 class="text-xl font-bold mt-5 mb-2 text-black dark:text-white">Selected Service</h3>
-          <p class="font-medium text-lg mt-1 w-full mb-2 text-black dark:text-white" id='selectedService'></p>
-
+          <div class="text-center mb-10">
+            <h3 class="text-2xl font-bold mt-5 mb-2 text-black dark:text-white">Service:</h3>
+            <p class="font-medium text-lg mt-1 w-full text-black dark:text-white" id='selectedService'></p>
+          </div>
           <fieldset class="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
             <!--<legend class="text-xl font-bold mb-2 col-span-full">Service:</legend>
             <div class="flex flex-col w-full">
@@ -643,6 +666,37 @@ ORDER BY
       </div>
     </div>
   </dialog>
+
+
+  <!-- js for filter options -->
+  <!-- <script>
+    function setupToggle(containerId) {
+      document.querySelectorAll(`#${containerId} label`).forEach(label => {
+        label.addEventListener('click', function() {
+          const checkbox = this.querySelector('input[type="checkbox"]');
+          const isChecked = checkbox.checked;
+
+          document.querySelectorAll(`#${containerId} label`).forEach(lbl => {
+            lbl.classList.remove('bg-[#0b6c95]', 'text-white');
+            lbl.classList.add('bg-white', 'dark:bg-gray-700', 'text-black');
+            lbl.querySelector('input[type="checkbox"]').checked = false;
+          });
+
+          if (!isChecked) {
+            this.classList.add('bg-[#0b6c95]', 'text-white');
+            this.classList.remove('bg-white', 'dark:bg-gray-700', 'text-black');
+            checkbox.checked = true;
+          }
+        });
+      });
+    }
+
+    setupToggle('filterStatus');
+</script> -->
+
+
+
+
   <script>
 
     <?php if (isset($_GET['filter']) and $_GET['filter'] == 'Pending'): ?>

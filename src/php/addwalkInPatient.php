@@ -63,22 +63,19 @@ if ($result->num_rows > 0) {
       class="w-full min-h-screen flex justify-center items-center pt-28 pb-10 p-5
       bg-[#f6fafc] dark:bg-[#17222a]"
     >
-      <div
-        class="w-full max-w-7xl mx-auto p-4 rounded-lg shadow-lg bg-gray-200 dark:bg-gray-700 text-[#0e1011] dark:text-[#eef0f1]"
-      >
+      <div class="w-full max-w-7xl mx-auto p-10 rounded-lg shadow-lg bg-gray-200 dark:bg-gray-700 text-[#0e1011] dark:text-[#eef0f1] min-h-[600px]">
         <h2 class="text-3xl sm:text-4xl font-bold mb-10 text-center">Add Walk In Patient</h2>
 
-        <form id='walkInPatientForm' >
+        <form id='walkInPatientForm'>
           <input id='ServiceType' type='hidden' value='' name='ServiceType'>
 
        
 
-        <fieldset class="grid grid-cols-1 md:grid-cols-2 gap-4">   
-
-
-          <div>
-            <div class="block text-base sm:text-lg font-medium mb-1">Does this Patient already have an Online Account?</div>
-            <div class="flex items-center space-x-4 p-2 bg-gray-300 dark:bg-gray-600 rounded">
+          <div class="mx-auto w-1/2 px-4 py-8 bg-gray-100 dark:bg-gray-800 rounded-lg shadow-md">
+            <div class="text-lg font-medium mb-4">
+              Does this Patient already have an Online Account?
+            </div>
+            <div class="flex items-center space-x-4 bg-gray-300 dark:bg-gray-600 rounded p-2">
               <label class="flex items-center">
                 <input type="radio" name="recordExist" value="Yes" class="radio radio-primary" required>
                 <span class="ml-2">Yes</span>
@@ -88,140 +85,161 @@ if ($result->num_rows > 0) {
                 <span class="ml-2">No</span>
               </label>
             </div>
-          </div>
 
-          <div id="searchPatientRecord" class="hidden">
-            <label for="searchInput1" class="block font-medium text-gray-800 dark:text-white text-lg">Search Patient Record</label>
-            <div class="relative">
-              <input type="text" id="searchInput1" placeholder="Search..." class="input input-bordered w-full px-3 py-2 mb-1 bg-white dark:bg-gray-800 text-gray-800 dark:text-white">
-              <ul id="optionsList1" class="absolute z-10 hidden w-full py-1 bg-white border border-gray-300 rounded-md shadow-md dark:bg-gray-800 dark:border-gray-700"></ul>
+            <div id="searchPatientRecord" class="hidden mt-4">
+              <label for="searchInput1" class="block text-lg font-medium text-gray-800 dark:text-white">Search Patient Record</label>
+              <div class="relative">
+                <input type="text" id="searchInput1" placeholder="Search..." class="input input-bordered w-full px-3 py-2 bg-white dark:bg-gray-800 text-gray-800 dark:text-white">
+                <ul id="optionsList1" class="absolute z-10 hidden w-full py-1 bg-white border border-gray-300 rounded-md shadow-md dark:bg-gray-800 dark:border-gray-700"></ul>
+              </div>
             </div>
           </div>
 
 
-          <h3 class="text-xl font-bold col-span-full">Service:</h3>
-          <div class="w-full">
-            <label
-              for="appointDoctor"
-              class="block font-medium text-black dark:text-white text-base sm:text-lg"
-            >
-              Choose a Doctor:</label
-            >
-            <select
-              onchange='getDoctorAvailability(this.value)'
-              id="doctor"
-              name="doctor"
-              class="select select-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 text-lg"
-              required
-            >
+            <div id="patientInfo" class="grid grid-cols-1 md:grid-cols-2 gap-1 text-lg sm:text-xl mt-5">
+                <p><strong>Username: </strong>DiddyGiddyap</p>
+                <p><strong>Name: </strong>Diddy</p>
+                <p><strong>Contact Number: </strong>09231512312</p>
+                <p><strong>Age: </strong>21</p>
+                <p><strong>Sex: </strong> Male</p>
+                <p><strong>Weight: </strong> 60</p>
+                <p><strong>Medical Condition: </strong> N/A</p>
+                <p><strong>Email: </strong>diddy@gmail.com</p>
+                <p><strong>Address:</strong> Ohio, USA</p>
+                <p><strong>Date of Birth: </strong> December 25, 2000</p>
+                <p><strong>Last Visit: </strong> June 25, 2024</p>
+                <p><strong>Services Taken: </strong>X-Ray: Skull X-Ray, 
+                Upper Extremities. General Medicine. Internal Medicine.</p>
+                <!-- kapag maraming type of service gayahin mo yung layout sa X-ray. Kapag ibang specialty na iseparate mo gamit dot (.) -->
+            </div>
 
-            </select>
+          <div id="serviceSection" class="hidden grid grid-cols-1 md:grid-cols-2 gap-4"> 
+            <h3 class="text-xl font-bold col-span-full mt-5">Service:</h3>
+            <div id='doctorList' class="form-group">
+              <div class="flex flex-col w-full">           
+                <ul class="w-full text-lg font-medium text-gray-900 bg-gray-100 dark:bg-gray-600 border border-gray-200 rounded-lg dark:border-gray-600 dark:text-white">
+                  <li class="border-b border-gray-400 dark:border-slate-300">
+                    <label class="flex items-center pl-3 w-full cursor-pointer">
+                      <input id="horizontal-list-radio-license" 
+                      type="radio" 
+                      value="Consultation" 
+                      name="VisitType"
+                      class="radio radio-info [color-scheme:light] dark:[color-scheme:dark]" 
+                      required>
+                      <span class="py-3 ml-2 text-lg font-medium ">Consultation</span>
+                    </label>
+                  </li>
+                  <li>
+                    <label class="flex items-center pl-3 w-full cursor-pointer">
+                      <input id="horizontal-list-radio-id" 
+                      type="radio" 
+                      value="Test/Procedure" 
+                      name="VisitType"
+                      class="radio radio-info [color-scheme:light] dark:[color-scheme:dark]" 
+                      required>
+                      <span class="py-3 ml-2 text-lg font-medium ">Test/Procedure</span>
+                    </label>
+                  </li>
+                </ul>
+              </div>
+            </div>
 
+
+            <div class="w-full">
+              <label for="appointDoctor" class="block font-medium text-black dark:text-white text-base sm:text-lg">
+                Choose a Doctor:</label>
+              <select onchange='getDoctorAvailability(this.value)' id="doctor" name="doctor" class="select select-bordered w-full p-2 bg-gray-100 dark:bg-gray-600 text-lg" required>
+              </select>
+            </div>
+            
+            
+
+            <a class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none cursor-pointer w-full" onclick="serviceModal.showModal()">Choose a Service</a>
+            <!-- dito mo lagay kung ano piniling service, hide mo kapag wala pa. yung naka strong yung specialty -->
+            <p class="font-medium text-lg mt-1 text-black dark:text-white"><strong>Selected service:</strong> <span id='availedServices'> </span></p>
+
+            <div class="w-full md:w-auto md:col-span-1">
+              <label for="appointment-date" class="block text-base sm:text-lg font-medium">
+                Appointment Date<span id='appointmentDateNote' class='text-sm text-info hidden'> (Please check doctor schedule)</span>
+              </label>
+              <input disabled type="date" id="appointment-date" name="appointment-date" required class="input input-bordered w-full p-2 bg-gray-100 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark] text-lg text-black dark:text-white disabled:bg-gray-200 disabled:text-gray-400 dark:disabled:text-gray-400 disabled:border-gray-300" />
+            </div>
+            <div class="w-full md:w-auto md:col-span-1">
+              <label for="appointment-time" class="block text-base sm:text-lg font-medium">
+                Available  Time
+              </label>
+              <select id="appointment-time" name="appointment-time" required class="input input-bordered w-full p-2 bg-gray-100 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark] text-lg text-black dark:text-white">
+
+              </select>
+            </div>
           </div>
-          <div id='doctorList' class="form-group mt-5">
-
-          <div class="flex flex-col w-full">           
-            <ul class="w-full text-lg font-medium text-gray-900 bg-gray-300 dark:bg-gray-600 border border-gray-200 rounded-lg dark:border-gray-600 dark:text-white">
-              <li class="border-b border-gray-400 dark:border-slate-300">
-                <label class="flex items-center pl-3 w-full cursor-pointer">
-                  <input id="horizontal-list-radio-license" 
-                  type="radio" 
-                  value="Consultation" 
-                  name="VisitType"
-                  class="radio radio-info [color-scheme:light] dark:[color-scheme:dark]" 
-                  required>
-                  <span class="py-3 ml-2 text-lg font-medium ">Consultation</span>
-                </label>
-              </li>
-              <li>
-                <label class="flex items-center pl-3 w-full cursor-pointer">
-                  <input id="horizontal-list-radio-id" 
-                  type="radio" 
-                  value="Test/Procedure" 
-                  name="VisitType"
-                  class="radio radio-info [color-scheme:light] dark:[color-scheme:dark]" 
-                  required>
-                  <span class="py-3 ml-2 text-lg font-medium ">Test/Procedure</span>
-                </label>
-              </li>
-            </ul>
-          </div>
-
-          </div>
-          
-
-          <a class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none cursor-pointer w-full" onclick="serviceModal.showModal()">Choose a Service</a>
-          <!-- dito mo lagay kung ano piniling service, hide mo kapag wala pa. yung naka strong yung specialty -->
-          <p class="font-medium text-lg mt-1 text-black dark:text-white"><strong>Selected service:</strong> <span id='availedServices'> </span></p>
-          <div class="w-full md:w-auto md:col-span-1">
-            <label for="appointment-date" class="block text-base sm:text-lg font-medium">
-              Appointment Date<span id='appointmentDateNote' class='text-sm text-info hidden'> (Please check doctor schedule)</span>
-            </label>
-            <input disabled type="date" id="appointment-date" name="appointment-date" required class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark] text-lg text-black dark:text-white disabled:bg-gray-200 disabled:text-gray-400 dark:disabled:text-gray-400 disabled:border-gray-300" />
-          </div>
-          <div class="w-full md:w-auto md:col-span-1">
-            <label for="appointment-time" class="block text-base sm:text-lg font-medium">
-              Available  Time
-            </label>
-            <select id="appointment-time" name="appointment-time" required class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark] text-lg text-black dark:text-white">
-
-            </select>
-          </div>
-          </fieldset>
+  
 
 
 
 
-          <h3 class="text-xl font-bold mt-5 mb-2">Personal Information</h3>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-                <label for="first-name" class="block text-base sm:text-lg font-medium">First Name</label>
-                <input type="text" id="first-name" name="first-name" autocomplete="off" placeholder="First Name" required class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600" />
+          <div id="personalInfoSection" class="hidden">
+            <h3 class="text-xl font-bold mt-5 mb-2">Personal Information</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                  <label for="userName" class="block text-base sm:text-lg font-medium">Username</label>
+                  <input type="text" id="userName" name="userName" autocomplete="off" placeholder="Username" required class="input input-bordered w-full p-2 bg-gray-100 dark:bg-gray-600" />
+              </div>
+              <div>
+                  <label for="first-name" class="block text-base sm:text-lg font-medium">First Name</label>
+                  <input type="text" id="first-name" name="first-name" autocomplete="off" placeholder="First Name" required class="input input-bordered w-full p-2 bg-gray-100 dark:bg-gray-600" />
+              </div>
+              <div>
+                  <label for="middle-name" class="block text-base sm:text-lg font-medium">Middle Name</label>
+                  <input type="text" id="middle-name" name="middle-name" placeholder="Middle Name" required class="input input-bordered w-full p-2 bg-gray-100 dark:bg-gray-600" />
+              </div>
+
+              <div>
+                  <label for="last-name" class="block text-base sm:text-lg font-medium">Last Name</label>
+                  <input type="text" id="last-name" name="last-name" placeholder="Last Name" required class="input input-bordered w-full p-2 bg-gray-100 dark:bg-gray-600" />
+              </div>
+              <div>
+                  <label
+                      for="email"
+                      class="block font-medium text-black dark:text-white text-base sm:text-lg overflow-hidden whitespace-nowrap text-overflow-ellipsis"
+                        >Email (optional)</label
+                    >
+                  <input id="email" name="email" type="email" autocomplete="email" placeholder="Email"
+                        class="input input-bordered w-full p-2 bg-gray-100 dark:bg-gray-600"/>
+              </div>
+              <div>
+                  <label for="weight" class="block font-medium text-black dark:text-white text-base sm:text-lg whitespace-nowrap overflow-hidden text-ellipsis">Weight (optional)</label>
+                  <input id="weight" name="weight" type="number" value="" autocomplete="off" placeholder="Weight" class="input input-bordered w-full p-2 bg-gray-100 dark:bg-gray-600" />
+              </div>
+              <div>
+                  <label for="medicalCondition" class="block font-medium text-black dark:text-white text-base sm:text-lg whitespace-nowrap overflow-hidden text-ellipsis">Medical Conditions, if any:</label>
+                  <input id="medicalCondition" name="medicalCondition" type="text" value="" autocomplete="off" placeholder="Medical Conditions" class="input input-bordered w-full p-2 bg-gray-100 dark:bg-gray-600" />
+              </div>
+              <div>
+                  <label for="contact-number" class="block text-base sm:text-lg font-medium">Contact Number</label>
+                  <input id="contact-number" name="contact-number" type="tel" required autocomplete="off" placeholder="Contact Number" pattern="^\d{11}$" minlength="11" maxlength="11" title="Please enter up to 11 numeric characters." class="input input-bordered w-full p-2 bg-gray-100 dark:bg-gray-600" 
+                  oninput="validateNumericInput(this); setCustomValidity('');"
+                  oninvalid="setCustomValidity(this.value.length !== 11 ? 'Please enter exactly 11 digits.' : '');" />
+              </div>
+
+              <div>
+                  <label for="sex" class="block text-base sm:text-lg font-medium">Sex</label>
+                  <select id="sex" required class="select select-bordered w-full p-2 bg-gray-100 dark:bg-gray-600 text-lg" name="sex">
+                      <option value="" disabled selected>Select...</option>
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
+                  </select>
+              </div>
+              <div>
+                  <label for="dob" class="block text-base sm:text-lg font-medium">Date of Birth</label>
+                  <input type="date" id="dob" name="dob" required class="dob-input input input-bordered w-full p-2 bg-gray-100 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark]" />
+              </div>
+
+              <div>
+                  <label for="address" class="block text-base sm:text-lg font-medium">Address</label>
+                  <input type="text" id="address" name="address" autocomplete="off" placeholder="Address" required class="input input-bordered w-full p-2 bg-gray-100 dark:bg-gray-600" />
+              </div>
             </div>
-            <div>
-                <label for="middle-name" class="block text-base sm:text-lg font-medium">Middle Name</label>
-                <input type="text" id="middle-name" name="middle-name" placeholder="Middle Name" required class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600" />
-            </div>
-
-            <div>
-                <label for="last-name" class="block text-base sm:text-lg font-medium">Last Name</label>
-                <input type="text" id="last-name" name="last-name" placeholder="Last Name" required class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600" />
-            </div>
-            <div>
-                <label
-                    for="email"
-                    class="block font-medium text-black dark:text-white text-base sm:text-lg overflow-hidden whitespace-nowrap text-overflow-ellipsis"
-                      >Email (optional)</label
-                  >
-                <input id="email" name="email" type="email" autocomplete="email" placeholder="Email"
-                      class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600"/>
-            </div>
-            <div>
-                <label for="contact-number" class="block text-base sm:text-lg font-medium">Contact Number</label>
-                <input id="contact-number" name="contact-number" type="tel" required autocomplete="off" placeholder="Contact Number" pattern="^\d{11}$" minlength="11" maxlength="11" title="Please enter up to 11 numeric characters." class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600" 
-                oninput="validateNumericInput(this); setCustomValidity('');"
-                oninvalid="setCustomValidity(this.value.length !== 11 ? 'Please enter exactly 11 digits.' : '');" />
-            </div>
-
-            <div>
-                <label for="sex" class="block text-base sm:text-lg font-medium">Sex</label>
-                <select id="sex" required class="select select-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 text-lg" name="sex">
-                    <option value="" disabled selected>Select...</option>
-                    <option value="Male">Male</option>
-                    <option value="Female">Female</option>
-                </select>
-            </div>
-            <div>
-                <label for="dob" class="block text-base sm:text-lg font-medium">Date of Birth</label>
-                <input type="date" id="dob" name="dob" required class="dob-input input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark]" />
-            </div>
-
-            <div>
-                <label for="address" class="block text-base sm:text-lg font-medium">Address</label>
-                <input type="text" id="address" name="address" autocomplete="off" placeholder="Address" required class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600" />
-            </div>
-
-
           </div>
 
 

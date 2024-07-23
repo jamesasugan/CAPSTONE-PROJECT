@@ -87,16 +87,63 @@ function getAssignDoctor($staff_id)
   </head>
   <body>
   <?php include 'admin-navbar.php'; ?>
-    <div
-      id="appointmentRecordsTab" class="p-10 pt-32 mx-auto w-full min-h-screen bg-[#ebf0f4] dark:bg-[#17222a]">
-      <div class="flex justify-end mb-5">
-        <a href="addwalkInPatient.php" class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold py-2 px-4 rounded cursor-pointer border-none">Add Walk In patient</a>
+    <div id="appointmentRecordsTab" class="p-10 pt-24 mx-auto w-full min-h-screen bg-[#ebf0f4] dark:bg-[#17222a]">
+      <div class="flex justify-end">
+        <a href="addwalkInPatient.php" class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold py-2 px-4 rounded cursor-pointer border-none mb-4">Add Walk In patient</a>
       </div>
-    <div class="flex flex-col sm:flex-row justify-between items-center bg-gray-200 dark:bg-gray-700 p-5 border-b border-b-black">
+
+      <!-- filter option -->
+      <!-- <div class="flex justify-center">
+          <div class="w-full sm:w-1/2 bg-gray-200 dark:bg-gray-800 rounded-lg mb-5 p-4 text-black dark:text-white">  
+            <h1 class="text-center text-xl font-bold mb-3">Filter Options</h1>
+            <div class="flex justify-center">
+                <div class="w-full grid gap-2" id="filterVisit">
+                    <p class="font-medium text-center sm:text-left">Visit Type:</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        <label class="flex items-center justify-center bg-white dark:bg-gray-700 text-black dark:text-white px-3 py-2 rounded cursor-pointer">
+                            <input type="checkbox" class="hidden" value="Consultation">
+                            <span class="text-sm">Consultation</span>
+                        </label>
+                        <label class="flex items-center justify-center bg-white dark:bg-gray-700 text-black dark:text-white px-3 py-2 rounded cursor-pointer">
+                            <input type="checkbox" class="hidden" value="Test/Procedure">
+                            <span class="text-sm">Test/Procedure</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="flex justify-center mt-2">
+                <div class="w-full grid gap-2" id="filterStatus">
+                    <p class="font-medium text-center sm:text-left">Status:</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
+                        <label class="flex items-center justify-center bg-white dark:bg-gray-700 text-black dark:text-white px-3 py-2 rounded cursor-pointer">
+                            <input type="checkbox" class="hidden" value="Pending">
+                            <span class="text-sm">Pending</span>
+                        </label>
+                        <label class="flex items-center justify-center bg-white dark:bg-gray-700 text-black dark:text-white px-3 py-2 rounded cursor-pointer">
+                            <input type="checkbox" class="hidden" value="Approved">
+                            <span class="text-sm">Approved</span>
+                        </label>
+                        <label class="flex items-center justify-center bg-white dark:bg-gray-700 text-black dark:text-white px-3 py-2 rounded cursor-pointer">
+                            <input type="checkbox" class="hidden" value="Rescheduled">
+                            <span class="text-sm">Rescheduled</span>
+                        </label>
+                        <label class="flex items-center justify-center bg-white dark:bg-gray-700 text-black dark:text-white px-3 py-2 rounded cursor-pointer">
+                            <input type="checkbox" class="hidden" value="Cancelled">
+                            <span class="text-sm">Cancelled</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="flex justify-end mt-2">
+              <small id="removeAllButton" class="bg-red-500 text-white px-1 rounded hover:bg-red-600 cursor-pointer">Remove All</small>
+            </div>
+          </div>
+      </div> -->
+
+      <div class="flex flex-col sm:flex-row justify-between items-center bg-gray-200 dark:bg-gray-700 p-5 border-b border-b-black">
                 <h3 class="text-2xl sm:text-xl md:text-3xl font-bold text-black dark:text-white mb-4 sm:mb-0 uppercase mr-0 sm:mr-10">
                   Appointments
                 </h3>
-
       <div class="w-full sm:flex sm:items-center justify-end">
 
         <select onchange='if (this.value === "none") { resetSearch("TableList"); } else { handleSearch("dropDownSort", "TableList", this.value); }' id='dropDownSort' name="sort" class="select select-bordered w-full sm:w-48 bg-[#0b6c95] font-medium text-white text-base sm:text-lg lg:text-xl mb-4 sm:mb-0 sm:mr-4">
@@ -129,28 +176,21 @@ function getAssignDoctor($staff_id)
       </div>
           </div>
       <!-- Table Container with scrolling -->
-      <div
-        class="bg-gray-200 dark:bg-gray-700 p-5 overflow-y-auto"
-        style="max-height: calc(80vh - 100px)"
-      >
-        <table class="table w-full" id='TableList'>
-          <thead>
-
-
-            <tr
-              class="font-bold text-black dark:text-white text-base sm:text-lg"
-            >
-              <th class='cursor-pointer'>Name</th>
-              <th class='cursor-pointer'>Date</th>
-              <th class='cursor-pointer'>Time</th>
-              <th class='cursor-pointer'>Visit Type</th>
-
-              <th class='cursor-pointer' >Doctor</th>
-              <th class='cursor-pointer'>Status</th>
-              <th class='cursor-pointer'>Action</th>
-            </tr>
-          </thead>
-          <tbody class="text-black dark:text-white text-base sm:text-lg">
+      <div class="bg-gray-200 dark:bg-gray-700 overflow-hidden" style="max-height: calc(80vh - 100px)">
+        <div class="p-5">
+          <div style="overflow-y: auto; max-height: calc(70vh - 100px);">
+            <table class="table w-full" id='TableList'>
+              <thead class="sticky top-0 bg-neutral-300 dark:bg-gray-500 z-10" style="top: -1px;">
+                <tr class="font-bold text-black dark:text-white text-base sm:text-lg">
+                  <th class='cursor-pointer'>Name</th>
+                  <th class='cursor-pointer'>Date</th>
+                  <th class='cursor-pointer'>Time</th>
+                  <th class='cursor-pointer' >Doctor</th>
+                  <th class='cursor-pointer'>Status</th>
+                  <th class='cursor-pointer'>Action</th>
+                </tr>
+              </thead>
+              <tbody class="text-black dark:text-white text-base sm:text-lg">
             <!-- sample row -->
             <?php
             $sql = "SELECT `tbl_accountpatientmember`.*, `tbl_appointment`.*
@@ -215,8 +255,6 @@ ORDER BY
                         '</td>
                 <td>' . $date . '</td><!-- alisin mo yung pl-10 pag nagoverlap yung ilalagay mo -->
                 <td class=" ">' . $time .'</td> 
-              <td class=" ">' . $row['VisitType'] . '</td> 
-              
                 <td>' . getAssignDoctor($row['Staff_ID']) . '</td>
                 <td class="font-bold ' .
                         $class .
@@ -235,22 +273,23 @@ ORDER BY
                   </button>';
                     // Include the tooltip for Approved status here
                     if ($status === 'Completed') {
-                        echo '<div class="ml-2 tooltip tooltip-bottom" data-tip="Create patient chart">
-                                <a class="ml-5 hover:cursor-pointer" onclick="toggleDialog(\'addPatient\');setAppointmentId(this.getAttribute(\'data-appointment-id\'))" data-appointment-id="' .
+                        echo '
+                                <a class="ml-2 sm:ml-5 hover:cursor-pointer" onclick="toggleDialog(\'addPatient\');setAppointmentId(this.getAttribute(\'data-appointment-id\'))" data-appointment-id="' .
                             $row['Appointment_ID'] .
                             '">
                                   <i class="fa-solid fa-user-plus"></i>
-                                </a>
-                            </div>';
+                                </a>';
                     }
                     echo '</td>
             </tr>';
                 }
             }
             ?>
-
-          </tbody>
-        </table>
+            
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </div>
   <dialog id="viewAppointment" class="modal">
@@ -547,8 +586,10 @@ ORDER BY
             <textarea name="reason" placeholder="Type here" disabled required class="textarea-bordered textarea w-full p-2 h-20 bg-gray-300 dark:bg-gray-600 text-black dark:text-white text-base disabled:bg-white disabled:text-black dark:disabled:text-white border-none "></textarea>
           </div> -->
 
-          <h3 class="text-xl font-bold mt-5 mb-2 text-black dark:text-white">Selected Service</h3>
-          <p class="font-medium text-lg mt-1 w-full mb-2 text-black dark:text-white" id='selectedService'></p>
+          <div class="text-center mb-10">
+            <h3 class="text-2xl font-bold mt-5 mb-2 text-black dark:text-white">Service:</h3>
+            <p class="font-medium text-lg w-full text-black dark:text-white" id='selectedService'></p>
+          </div>
 
 
           <fieldset class="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -694,6 +735,69 @@ ORDER BY
       </div>
     </div>
   </dialog>
+
+ <!-- js for filter options -->
+    <!-- <script>
+      function setupToggle(containerId) {
+        document.querySelectorAll(`#${containerId} label`).forEach(label => {
+          label.addEventListener('click', function() {
+            const checkbox = this.querySelector('input[type="checkbox"]');
+            const isChecked = checkbox.checked;
+
+            document.querySelectorAll(`#${containerId} label`).forEach(lbl => {
+              lbl.classList.remove('bg-[#0b6c95]', 'text-white');
+              lbl.classList.add('bg-white', 'dark:bg-gray-700', 'text-black');
+              lbl.querySelector('input[type="checkbox"]').checked = false;
+            });
+
+            if (!isChecked) {
+              this.classList.add('bg-[#0b6c95]', 'text-white');
+              this.classList.remove('bg-white', 'dark:bg-gray-700', 'text-black');
+              checkbox.checked = true;
+            }
+          });
+        });
+      }
+
+      function setupStatusToggle(containerId) {
+        document.querySelectorAll(`#${containerId} label`).forEach(label => {
+          label.addEventListener('click', function() {
+            const checkbox = this.querySelector('input[type="checkbox"]');
+            const isChecked = checkbox.checked;
+
+            if (isChecked) {
+              this.classList.remove('bg-[#0b6c95]', 'text-white');
+              this.classList.add('bg-white', 'dark:bg-gray-700', 'text-black');
+              checkbox.checked = false;
+            } else {
+              this.classList.add('bg-[#0b6c95]', 'text-white');
+              this.classList.remove('bg-white', 'dark:bg-gray-700', 'text-black');
+              checkbox.checked = true;
+            }
+          });
+        });
+      }
+
+      function setupRemoveAllButton() {
+        document.getElementById('removeAllButton').addEventListener('click', function() {
+          document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+            checkbox.checked = false;
+            const label = checkbox.closest('label');
+            if (label) {
+              label.classList.remove('bg-[#0b6c95]', 'text-white');
+              label.classList.add('bg-white', 'dark:bg-gray-700', 'text-black');
+            }
+          });
+        });
+      }
+
+      setupToggle('filterVisit');
+      setupStatusToggle('filterStatus');
+      setupRemoveAllButton();
+    </script> -->
+
+
+
   <script>
     function setAppointmentId(appointmentId) {
       document.getElementById('newChart').setAttribute('data-appointment-id', appointmentId);

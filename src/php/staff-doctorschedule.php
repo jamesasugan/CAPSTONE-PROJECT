@@ -360,7 +360,7 @@ $doctor_id = $row['Staff_ID'];
                         <!-- table for Adding Schedules -->
                         <div id='addSched' class="overflow-x-auto ">
                             <table class="table">
-                                <thead>
+                                <thead class="bg-neutral-300 dark:bg-gray-500">
                                 <tr class="font-bold text-black dark:text-white text-base sm:text-lg ">
                                     <th>Days in a Week</th>
                                     <th>Start to End Time</th>
@@ -386,7 +386,7 @@ $doctor_id = $row['Staff_ID'];
                         <!-- table for Deleting Schedules -->
                         <div id='deleteSchedTBL' class="overflow-x-auto hidden">
                             <table class="table">
-                                <thead>
+                                <thead class="bg-neutral-300 dark:bg-gray-500">
                                 <tr class="font-bold text-black dark:text-white text-base sm:text-lg ">
                                     <th>Deletion Type</th>
                                     <th>Date</th>

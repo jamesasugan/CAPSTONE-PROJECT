@@ -103,23 +103,20 @@ if ($result->num_rows > 0) {
       </div>
 
       <!-- Table ng Doctor Accounts -->
-      <div
-        class="bg-gray-200 dark:bg-gray-700 p-5 overflow-y-auto"
-        style="max-height: calc(80vh - 100px)"
-       id='doctorsList'>
-        <table id='accounts_table_doctor' class="table w-full">
-          <thead>
-            <tr
-              class="font-bold text-black dark:text-white text-base sm:text-lg"
-            >
-              <th>Name</th>
-              <th>Specialty</th>
-              <th>Account Status</th>
-              <th>Account Created</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody id='' class="text-black dark:text-white text-base sm:text-lg">
+      <div class="bg-gray-200 dark:bg-gray-700 overflow-hidden" style="max-height: calc(80vh - 100px)" id='doctorsList'>
+        <div class="p-5">
+          <div style="overflow-y: auto; max-height: calc(70vh - 100px);">
+            <table id='accounts_table_doctor' class="table w-full">
+              <thead class="sticky top-0 bg-neutral-300 dark:bg-gray-500 z-10" style="top: -1px;">
+                <tr class="font-bold text-black dark:text-white text-base sm:text-lg">
+                  <th>Name</th>
+                  <th>Specialty</th>
+                  <th>Account Status</th>
+                  <th>Account Created</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id='' class="text-black dark:text-white text-base sm:text-lg">
           <?php
           $sql = "SELECT `tbl_accounts`.*, `tbl_staff`.*
 FROM `tbl_accounts` 
@@ -146,32 +143,30 @@ JOIN `tbl_staff` ON `tbl_staff`.`User_ID` = `tbl_accounts`.`User_ID` where role 
               </td>
             </tr>';
           }
-          ?>
+          ?> 
 
-
-          </tbody>
-        </table>
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
       <!-- Table ng Doctor Accounts end -->
 
 
       <!-- Table ng Patient Accounts -->
-      <div
-        class="bg-gray-200 dark:bg-gray-700 p-5 overflow-y-auto hidden"
-        style="max-height: calc(80vh - 100px)"
-        id='patientList' >
-        <table id='accounts_table_patient'  class="table w-full ">
-          <thead>
-            <tr
-              class="font-bold text-black dark:text-white text-base sm:text-lg"
-            >
-              <th>Name</th>
-              <th>Account Status</th>
-              <th>Account Created</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody id='' class="text-black dark:text-white text-base sm:text-lg">
+      <div class="bg-gray-200 dark:bg-gray-700 overflow-hidden hidden" style="max-height: calc(80vh - 100px)" id='patientList'>
+        <div class="p-5">
+          <div style="overflow-y: auto; max-height: calc(70vh - 100px);">
+            <table id='accounts_table_patient'  class="table w-full ">
+              <thead class="sticky top-0 bg-neutral-300 dark:bg-gray-500 z-10" style="top: -1px;">
+                <tr class="font-bold text-black dark:text-white text-base sm:text-lg">
+                  <th>Name</th>
+                  <th>Account Status</th>
+                  <th>Account Created</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id='' class="text-black dark:text-white text-base sm:text-lg">
           <?php
           $patientQuery = "SELECT account_user_info.*, tbl_accounts.*
                           FROM account_user_info JOIN tbl_accounts ON account_user_info.User_ID = tbl_accounts.User_ID;";
@@ -194,19 +189,18 @@ JOIN `tbl_staff` ON `tbl_staff`.`User_ID` = `tbl_accounts`.`User_ID` where role 
 
               <td>' . $row['status'] . '</td>
               <td>' . $row['account_created'] . '</td>
-              <td class="pl-9">
+              <td>
                  <button onclick="view_patient.showModal();getPatientInfo(' . $row['user_info_ID'] . ')"><i class="fa-regular fa-eye"></i></button>
-                 <a class="text-error"><i class="fa-solid fa-trash"></i></i></a>
+                 <a class="text-error ml-5"><i class="fa-solid fa-trash"></i></i></a>
               </td>
             </tr>';
           }
-          ?>
-            <!-- sample row -->
+          ?> 
 
-            <!-- sample row end -->
-
-          </tbody>
-        </table>
+                </tbody>
+              </table>
+            </div>
+          </div>
       </div>
     </div>
     <!-- Table ng Patient Accounts -->

@@ -95,19 +95,21 @@ include "ReuseFunction.php";
                 </div>
           </div>
       <!-- Table Container with scrolling -->
-      <div class="bg-gray-200 dark:bg-gray-700 p-5 overflow-y-auto" style="max-height: calc(80vh - 100px);">
-        <table class="table w-full" id='TableList'>
-          <thead>
-            <tr class="font-bold text-black dark:text-white text-base sm:text-lg">
-              <th class='cursor-pointer'  >Name</th>
-              <th class='cursor-pointer' >Last visit</th>
-              <th class='cursor-pointer'  >Schedule</th>
-              <th class='cursor-pointer'  >Status</th>
-              <th>Action</th>
-              <th>Archive</th>
-            </tr>
-          </thead>
-          <tbody class="text-black dark:text-white text-base sm:text-lg">
+      <div class="bg-gray-200 dark:bg-gray-700 overflow-hidden" style="max-height: calc(80vh - 100px);">
+        <div class="p-5">
+          <div style="overflow-y: auto; max-height: calc(75vh - 100px);">
+            <table class="table w-full" id='TableList'>
+              <thead class="sticky top-0 bg-neutral-300 dark:bg-gray-500 z-10" style="top: -1px;">
+                <tr class="font-bold text-black dark:text-white text-base sm:text-lg">
+                  <th class='cursor-pointer'  >Name</th>
+                  <th class='cursor-pointer' >Last visit</th>
+                  <th class='cursor-pointer'  >Schedule</th>
+                  <th class='cursor-pointer'  >Status</th>
+                  <th>Action</th>
+                  <th>Archive</th>
+                </tr>
+              </thead>
+              <tbody class="text-black dark:text-white text-base sm:text-lg">
             <?php
             $sql = "SELECT *
 FROM tbl_patient_chart
@@ -165,10 +167,11 @@ ORDER BY
             }
 
             ?>
-            <!-- sample row -->
-
-          </tbody>
-        </table>
+          
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </div>
 
