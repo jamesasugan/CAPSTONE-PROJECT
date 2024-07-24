@@ -79,7 +79,7 @@ if ($result && $result->num_rows > 0) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Patient Information</title>
+    <title>Patient Form</title>
     <link rel="stylesheet" href="../css/output.css" />
     <link rel="stylesheet" href="../css/staff.css" />
     <link rel="stylesheet" href="../css/print.css">
@@ -458,9 +458,7 @@ if ($result && $result->num_rows > 0) {
 
                         <h2 class="text-2xl sm:text-3xl font-bold mb-4 text-center">Results</h2>
                             <!-- Images dito. pag nag upload sa upload file button dito lalabas dapat. kapag kunwari lima inupload na picture dapat lima din tong buong DIV -->
-                                <div class="flex flex-wrap gap-2 justify-center items-center w-full mb-3" id='ImageResults'>
-
-
+                                <div class="flex flex-wrap gap-2 justify-center items-center w-full mb-3" id='ImageResults'>                         
 
                                 </div>
 
@@ -808,7 +806,7 @@ if ($result && $result->num_rows > 0) {
 
                 if (data) {
 
-                  $('#availedService').html('<strong>Service Type: </strong><span >'+data.availedService+'</span>');
+                  $('#availedService').html('<strong class="text-xl">Service: </strong><br><span class="text-lg font-medium">'+data.availedService+'</span>');
                   document.querySelector('#patientRecordForm input[name="serviceSelected"]').value = data.availedService;
                   document.querySelector('#patientRecordForm input[name="consultation-date"]').value = data.consultationDate;
                   document.querySelector('#patientRecordForm input[name="record_id"]').value = data.Record_ID;

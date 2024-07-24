@@ -157,7 +157,7 @@ ORDER BY
               <td>'.$followUpschedule.'</td>
               <td class="font-bold '.$statusClass.'">'.$row['patient_Status'].'</td>
           
-              <!-- view information -->
+              <!-- sa admin-consultationResults.php dapat to dederetso -->
               <td class="pl-9">
                 <a href="admin-patientFullRecord.php?chart_id='.$row['Chart_id'].'"><i class="fa-regular fa-eye"></i></a>
               </td>

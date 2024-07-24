@@ -169,7 +169,7 @@ ORDER BY
                    No Show =  text-red-500
             -->
 
-              <!-- view information -->
+              <!-- sa staff-consultationResults.php dapat to dederetso -->
               <td>
                 <a href="staff-patientFullRecord.php?chart_id='. $row['Chart_id'].'"><i class="fa-regular fa-eye"></i></a>';
 
