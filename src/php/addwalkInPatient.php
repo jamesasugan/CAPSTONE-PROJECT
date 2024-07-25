@@ -182,10 +182,6 @@ if ($result->num_rows > 0) {
             <h3 class="text-xl font-bold mt-5 mb-2">Personal Information</h3>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                  <label for="userName" class="block text-base sm:text-lg font-medium">Username</label>
-                  <input type="text" id="userName" name="userName" autocomplete="off" placeholder="Username" required class="input input-bordered w-full p-2 bg-gray-100 dark:bg-gray-600" />
-              </div>
-              <div>
                   <label for="first-name" class="block text-base sm:text-lg font-medium">First Name</label>
                   <input type="text" id="first-name" name="first-name" autocomplete="off" placeholder="First Name" required class="input input-bordered w-full p-2 bg-gray-100 dark:bg-gray-600" />
               </div>

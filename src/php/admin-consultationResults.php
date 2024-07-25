@@ -64,7 +64,6 @@
                             <tr class="font-bold text-black dark:text-white text-base sm:text-lg">
                                 <th>#</th>
                                 <th>Service</th>
-                                <th>Consultant</th>
                                 <th>Consultation Date</th>
                                 <th class="pl-6 sm:pl-9">Action</th>
                             </tr>
@@ -78,7 +77,6 @@
                                     <li>Monthly Immunization for babies</li>
                                     <li>Polio Vaccine</li>
                                 </td>
-                                <td>Dr. John Edward E. Dionisio</td>
                                 <td>July 21, 2024</td>
                                 <td> 
                                     <a href="admin-patientOverallRecord.php" class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none" target="_blank">View More</a>

@@ -73,21 +73,21 @@
                             <span class="block">franklinsaint@gmail.com</span>
                         </div>
                         <div>
-                            <strong class="block">Weight</strong>
-                            <span class="block">60</span>
-                        </div>
-                        <div>
-                            <strong class="block">Date of Birth</strong>
-                            <span class="block">February 21, 2002</span>
-                        </div>
-                        <div>
                             <strong class="block">Medical Condition</strong>
                             <span class="block">N/A</span>
+                        </div>
+                        <div>
+                            <strong class="block">Weight</strong>
+                            <span class="block">60</span>
                         </div>
                         <div>
                             <strong class="block">Address</strong>
                             <span class="block">Platero Binan Laguna</span>
                         </div>
+                        <div>
+                            <strong class="block">Date of Birth</strong>
+                            <span class="block">February 21, 2002</span>
+                        </div>  
                     </div>
                 </div>
 
@@ -237,15 +237,16 @@
                         <tr>
                           <td class="w-1/2 p-2 align-top">
                             <p><strong>Name:</strong> Franklin C. Saint</p>
-                            <p><strong>Sex:</strong> Male</p>
+                            <p><strong>Age:</strong> 22</p>
+                            <p><strong>Contact Number:</strong> 09763218546</p> 
                             <p><strong>Medical Conditions:</strong> N/A</p>
-                            <p><strong>Email:</strong> franklinsaint@gmail.com</p>
                             <p><strong>Address:</strong> California, USA</p>
                           </td>
                           <td class="w-1/2 p-2 align-top">
-                            <p><strong>Age:</strong> 22</p>
-                            <p><strong>Weight:</strong> 60kg</p>
-                            <p><strong>Contact Number:</strong> 09763218546</p>           
+                            <p><strong>Username:</strong> franky123</p>
+                            <p><strong>Sex:</strong> Male</p>
+                            <p><strong>Email:</strong> franklinsaint@gmail.com</p>
+                            <p><strong>Weight:</strong> 60kg</p> 
                             <p><strong>Date of Birth:</strong> February 21, 2002</p>
                           </td>
                         </tr>

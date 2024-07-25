@@ -104,6 +104,7 @@ include "ReuseFunction.php";
                   <th class='cursor-pointer'  >Name</th>
                   <th class='cursor-pointer' >Last visit</th>
                   <th class='cursor-pointer'  >Schedule</th>
+                  <th class='cursor-pointer'>Consultant</th>
                   <th class='cursor-pointer'  >Status</th>
                   <th>Action</th>
                   <th>Archive</th>
@@ -155,7 +156,11 @@ ORDER BY
           
               <td>'.getLastPatientVisit($row['Chart_id']).'</td>
               <td>'.$followUpschedule.'</td>
+
+              <td> Dr. John Edward Dionisio </td>
+
               <td class="font-bold '.$statusClass.'">'.$row['patient_Status'].'</td>
+              
           
               <!-- sa admin-consultationResults.php dapat to dederetso -->
               <td class="pl-9">
