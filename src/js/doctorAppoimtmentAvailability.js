@@ -33,7 +33,7 @@ function checkDoctorAvailability(dateInput, datesArray, doctor_id) {
     const dateNote = document.getElementById('appointmentDateNote');
     if (!datesArray.includes(newDateInput.value)) {
       dateNote.classList.remove('hidden');
-      dateNote.innerHTML = '(Please check doctor schedule)';
+      dateNote.innerHTML = '(NOT Available, please select another day)';
       newDateInput.value = '';
     } else {
       getAvailableAppointmentTime(newDateInput.value, doctor_id);

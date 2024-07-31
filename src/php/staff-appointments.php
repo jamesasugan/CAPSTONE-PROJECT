@@ -374,7 +374,7 @@ ORDER BY
           <div class="flex flex-col sm:flex-row justify-between gap-4" id="reschedule-section" style="display: none;">
             <div class="w-full">
               <label for="rescheduled-date" class="block text-base sm:text-lg font-medium text-black dark:text-white">
-                Rescheduled Date <span id='appointmentDateNote' class='text-sm text-info hidden'> (Please check doctor schedule)</span>
+                Rescheduled Date <span id='appointmentDateNote' class='text-base text-error hidden'> (NOT Available, please select another day)</span>
               </label>
               <input
                 type="date"

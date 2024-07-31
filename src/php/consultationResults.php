@@ -38,6 +38,8 @@
 <body>
     <?php include 'admin-navbar.php'; ?>
 
+    <!-- CONSULTATION RESULTS NG ADMIN AT PATIENT -->
+
     <div class="p-10 pt-24 mx-auto w-full min-h-screen bg-[#ebf0f4] dark:bg-[#17222a]">
         <div class="text-center text-black dark:text-white mt-3 mb-3">
             <h1 class="text-2xl sm:text-4xl font-bold text-black dark:text-white uppercase">Consultation Records</h1>
@@ -79,7 +81,7 @@
                                 </td>
                                 <td>July 21, 2024</td>
                                 <td> 
-                                    <a href="admin-patientOverallRecord.php" class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none" target="_blank">View More</a>
+                                    <a href="patientOverallRecord.php" class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none" target="_blank">View More</a>
                                 </td>
                             </tr>
                         </tbody>

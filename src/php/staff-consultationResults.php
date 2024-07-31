@@ -6,6 +6,7 @@
     <title>Consultation Records</title>
     <link rel="stylesheet" href="../css/output.css" />
     <link rel="stylesheet" href="../css/staff.css" />
+    <link rel="stylesheet" href="../css/toast.css">
     <script
       src="https://kit.fontawesome.com/70df29d299.js"
       crossorigin="anonymous"
@@ -43,9 +44,13 @@
             <h1 class="text-2xl sm:text-4xl font-bold text-black dark:text-white uppercase">Consultation Records</h1>
         </div>
 
-        <div class="flex justify-end mb-3">
+        <div class="flex justify-between mb-3"> 
+            <button class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none" onclick="addFollowUp.showModal()">View/Add Follow Up Schedule</button>   
             <a href="#" class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none">Add New Record</a>
         </div>
+
+       
+
 
         <div class="flex flex-col sm:flex-row justify-between items-center bg-gray-200 dark:bg-gray-700 p-5 border-b border-b-black">
             <h3 class="text-2xl sm:text-3xl font-bold text-black dark:text-white mb-4 sm:mb-0 mr-0 sm:mr-10">
@@ -96,14 +101,73 @@
             </div>
         </div>
 
+         <!-- alert templates -->
+         <!-- <div class="toastButtons">
+            <button onclick="showToast()">Success</button>
+            <button onclick="showToast()">Error</button>
+            <button onclick="showToast()">Invalid</button>
+         </div>
+         <div id="toastBox"></div> -->
+        <!-- alert templates -->
         
     </div>
 
+    
 
 
 
 
 
     
+    <dialog id="addFollowUp" class="modal">
+        <div class="modal-box w-11/12 max-w-5xl bg-gray-200 dark:bg-gray-700 text-[#0e1011] dark:text-[#eef0f1]">
+            <form method="dialog">
+                <button class="btn btn-sm btn-circle btn-ghost absolute right-4 top-4 font-bold text-2xl">✕</button>
+            </form>
+
+            <div id="followUpDetails" class="mt-8">
+                <h2 class="text-2xl text-center font-semibold">Schedule the Patient for another Check-Up:</h2>
+
+                <div class="flex justify-center mt-5">
+                    <div class="w-1/2">
+                    <form method="GET">
+                        <label for="appointment-date" class="block text-md font-medium"> 
+                            Follow Up Date: <span id='appointmentDateNote' class='text-base text-error hidden'> (NOT Available, please select another day)</span>
+                        </label>
+                        <input type="date" id="appointment-date" name="followUpDate" required class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark]"/>
+                        
+                        <label for="appointment-time" class="block text-md font-medium">
+                            Follow Up Time:
+                        </label>
+                        <select id="appointment-time"  required name="followUpTime" class="input input-bordered w-full p-2 bg-gray-300 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark]">
+                        </select>
+
+                        <div class="flex justify-center mt-2">
+                            <input type="submit" value="Submit" class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none">
+                        </div>
+                    </form>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </dialog>
+
+    <!-- script for toastAlerts only -->
+    <!-- <script>
+
+        let toastBox = document.getElementById('toastBox');
+        
+        function showToast(){
+           let toast = document.createElement('div');
+           toast.classList.add('toast');
+           toast.innerHTML = 'Success';
+           toastBox.appendChild(toast);
+        }
+
+    </script> -->
+    
+
+    <script src='../js/doctorAppoimtmentAvailability.js'></script>
 </body>
 </html>

@@ -195,12 +195,14 @@ if ($result && $result->num_rows > 0){
                 </div>
               </div>
 
-                        <div class="flex justify-end mb-5">
+                        <!-- <div class="flex justify-end mb-5">
                           <button class="mt-6 btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none printformButton flex flex-col items-center px-5 py-1" onclick="window.print()">
                               <i class="fa-solid fa-print"></i>
                               <span>Print</span>
                           </button>
-                        </div>
+                        </div> -->
+
+
                                 <!-- lalabas lang to sa follow up stage.
                                     nilipat ko muna ng pwesto, nilabas ko sa form kase pag nasa form nagkakaerror, gawan mo na lang sariling form siguro to
                             -->
@@ -389,7 +391,7 @@ if ($result && $result->num_rows > 0){
 
 </script>
 
-<script>
+<!-- <script>
     document.addEventListener('DOMContentLoaded', function() {
       const printBtn = document.querySelector('.printform');
 
@@ -397,5 +399,6 @@ if ($result && $result->num_rows > 0){
         window.print();
       });
     });
-  </script>
+  </script> -->
+
 </html>

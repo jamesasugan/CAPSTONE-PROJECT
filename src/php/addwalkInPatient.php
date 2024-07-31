@@ -71,7 +71,7 @@ if ($result->num_rows > 0) {
 
        
 
-          <div class="mx-auto w-1/2 px-4 py-8 bg-gray-100 dark:bg-gray-800 rounded-lg shadow-md">
+          <!-- <div class="mx-auto w-1/2 px-4 py-8 bg-gray-100 dark:bg-gray-800 rounded-lg shadow-md">
             <div class="text-lg font-medium mb-4">
               Does this Patient already have an Online Account?
             </div>
@@ -93,11 +93,10 @@ if ($result->num_rows > 0) {
                 <ul id="optionsList1" class="absolute z-10 hidden w-full py-1 bg-white border border-gray-300 rounded-md shadow-md dark:bg-gray-800 dark:border-gray-700"></ul>
               </div>
             </div>
-          </div>
+          </div> -->
 
-
+<!-- 
             <div id="patientInfo" class="grid grid-cols-1 md:grid-cols-2 gap-1 text-lg sm:text-xl mt-5">
-                <p><strong>Username: </strong>DiddyGiddyap</p>
                 <p><strong>Name: </strong>Diddy</p>
                 <p><strong>Contact Number: </strong>09231512312</p>
                 <p><strong>Age: </strong>21</p>
@@ -110,10 +109,9 @@ if ($result->num_rows > 0) {
                 <p><strong>Last Visit: </strong> June 25, 2024</p>
                 <p><strong>Services Taken: </strong>X-Ray: Skull X-Ray, 
                 Upper Extremities. General Medicine. Internal Medicine.</p>
-                <!-- kapag maraming type of service gayahin mo yung layout sa X-ray. Kapag ibang specialty na iseparate mo gamit dot (.) -->
-            </div>
+            </div> -->
 
-          <div id="serviceSection" class="hidden grid grid-cols-1 md:grid-cols-2 gap-4"> 
+          <div id="serviceSection" class="grid grid-cols-1 md:grid-cols-2 gap-4"> 
             <h3 class="text-xl font-bold col-span-full mt-5">Service:</h3>
             <div id='doctorList' class="form-group">
               <div class="flex flex-col w-full">           
@@ -154,13 +152,24 @@ if ($result->num_rows > 0) {
             
             
 
-            <a class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none cursor-pointer w-full" onclick="serviceModal.showModal()">Choose a Service</a>
+            <a class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none cursor-pointer w-1/2" onclick="serviceModal.showModal()">Choose a Service</a>
             <!-- dito mo lagay kung ano piniling service, hide mo kapag wala pa. yung naka strong yung specialty -->
-            <p class="font-medium text-lg mt-1 text-black dark:text-white"><strong>Selected service:</strong> <span id='availedServices'> </span></p>
+            <div></div>
+
+            <!-- gawin mong ul, ganito layout
+              Selected Service:
+              <ul>Internal Medicine</ul>
+
+              sa baba ng text yung service
+            -->
+            <p class="font-medium text-lg mt-1 text-black dark:text-white"><strong>Selected Service:</strong> <span id='availedServices'> </span></p>
+            
+            <div></div>
+            
 
             <div class="w-full md:w-auto md:col-span-1">
               <label for="appointment-date" class="block text-base sm:text-lg font-medium">
-                Appointment Date<span id='appointmentDateNote' class='text-sm text-info hidden'> (Please check doctor schedule)</span>
+                Appointment Date<span id='appointmentDateNote' class='text-base text-error hidden'> (NOT Available, please select another day)</span>
               </label>
               <input disabled type="date" id="appointment-date" name="appointment-date" required class="input input-bordered w-full p-2 bg-gray-100 dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark] text-lg text-black dark:text-white disabled:bg-gray-200 disabled:text-gray-400 dark:disabled:text-gray-400 disabled:border-gray-300" />
             </div>
@@ -178,7 +187,7 @@ if ($result->num_rows > 0) {
 
 
 
-          <div id="personalInfoSection" class="hidden">
+          <div id="personalInfoSection">
             <h3 class="text-xl font-bold mt-5 mb-2">Personal Information</h3>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
@@ -240,11 +249,7 @@ if ($result->num_rows > 0) {
 
 
           <div class="flex justify-center mt-10 mb-2 w-full ">
-            <input
-              type="submit"
-              value="Submit"
-              class="bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold py-2 px-4 rounded w-1/2 cursor-pointer"
-            />
+            <input type="submit" value="Submit" class="bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold py-2 px-4 rounded w-1/2 cursor-pointer transition duration-150"/>
           </div>
 
         </form>

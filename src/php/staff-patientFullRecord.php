@@ -222,7 +222,7 @@ if ($result && $result->num_rows > 0) {
                 </div>
             </div> -->
 
-            <div class="flex justify-end mb-5">
+            <!-- <div class="flex justify-end mb-5">
                 <button id="print" class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none printformButton flex flex-col items-center px-5 py-1">
                     <i class="fa-solid fa-print"></i>
                     <span>Print</span>
@@ -231,7 +231,7 @@ if ($result && $result->num_rows > 0) {
 
             <div class="flex justify-end">
               <button id="save" class="btn btn-info">Save</button>
-            </div>
+            </div> -->
 
 
 
@@ -921,8 +921,12 @@ if ($result && $result->num_rows > 0) {
         </script>
 
 
+        <!-- for print and save only
         <script src="../js/index.js"></script>
-        <script src="../js/html2canvaspro.js"></script>
+        <script src="../js/html2canvaspro.js"></script> 
+        -->
+
+
         <script src='../js/doctorAppoimtmentAvailability.js' ></script>
 </body>
 </html>
