@@ -1,16 +1,15 @@
 <!-- patient -->
 
 <?php
-include '../Database/database_conn.php';
 session_start();
-
-if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'patient') {
-    header('Location: index.php');
+require_once 'Utils.php';
+if (!user_has_roles(get_account_type(), [AccountType::PATIENT]))
+{
+  return;
 }
 
-
+include '../Database/database_conn.php';
 $user_id = $_SESSION['user_id'];
-
 $getAccOwner_Info = "
         SELECT *  FROM account_user_info
         WHERE User_ID = ?;

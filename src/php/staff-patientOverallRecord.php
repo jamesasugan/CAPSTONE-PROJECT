@@ -1,3 +1,12 @@
+<?php
+session_start();
+require_once 'Utils.php';
+if (!user_has_roles(get_account_type(), [AccountType::STAFF]))
+{
+  return;
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

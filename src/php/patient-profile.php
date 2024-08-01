@@ -2,13 +2,14 @@
 
 <?php
 session_start();
-include '../Database/database_conn.php';
-if (!isset($_SESSION['user_type']) or $_SESSION['user_type'] !== 'patient') {
-    header('Location: index.php');
+require_once 'Utils.php';
+if (!user_has_roles(get_account_type(), [AccountType::PATIENT]))
+{
+  return;
 }
+
+include '../Database/database_conn.php';
 include 'ReuseFunction.php';
-
-
 $accountOwner_ID = $_SESSION['online_Account_owner_id'];
 ?>
 

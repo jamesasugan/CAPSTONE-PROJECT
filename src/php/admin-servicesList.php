@@ -1,3 +1,15 @@
+<?php
+if (session_status() === PHP_SESSION_NONE) {
+  session_start();
+}
+
+require_once 'Utils.php';
+if (!user_has_roles(get_account_type(), [AccountType::ADMIN]))
+{
+  return;
+}
+?>
+
 <section id="services" class="services w-full min-h-screen">
   <div class="flex flex-col items-center px-4">
     <h2 class="text-4xl sm:text-6xl font-bold text-center mt-32 mb-11">

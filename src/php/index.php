@@ -2,41 +2,28 @@
 
 <?php
 session_start();
+require_once 'Utils.php';
+$currAccType = get_account_type();
+if (!user_has_roles($currAccType, [AccountType::PATIENT, AccountType::VISITOR]))
+{
+  return;
+}
+
 include_once '../Database/database_conn.php';
-
-if (isset($_SESSION['user_type']) and $_SESSION['user_type'] == 'staff'){
-
-    $user_id = $_SESSION['user_id'];
-    $sql = "SELECT role from tbl_staff where User_ID = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param('i', $user_id);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    if ($result->num_rows > 0) {
-        $row = $result->fetch_assoc();
-        if ($row['role'] == 'doctor'){
-          header("Location: staff-index.php");
-        }elseif ($row['role'] == 'admin'){
-          header("Location: admin-index.php");
-        }
-    }
+if ($currAccType == AccountType::PATIENT)
+{
+  $user_id = $_SESSION['user_id'];
+  $getAccOwner_Info = "
+  SELECT * FROM account_user_info
+  WHERE User_ID = ?;
+  ";
+  $getAccOwner_InfoSTMT = $conn->prepare($getAccOwner_Info);
+  $getAccOwner_InfoSTMT->bind_param('i', $user_id);
+  $getAccOwner_InfoSTMT->execute();
+  $res = $getAccOwner_InfoSTMT->get_result();
+  $row = $res->fetch_assoc();
+  $_SESSION['online_Account_owner_id'] = $row['user_info_ID'];
 }
-if (isset($_SESSION['user_type']) and $_SESSION['user_type'] == 'patient'){
-    $user_id = $_SESSION['user_id'];
-    $getAccOwner_Info = "
-    SELECT * FROM account_user_info
-    WHERE User_ID = ?;
-";
-    $getAccOwner_InfoSTMT = $conn->prepare($getAccOwner_Info);
-    $getAccOwner_InfoSTMT->bind_param('i', $user_id);
-    $getAccOwner_InfoSTMT->execute();
-    $res = $getAccOwner_InfoSTMT->get_result();
-    $row = $res->fetch_assoc();
-    $_SESSION['online_Account_owner_id'] = $row['user_info_ID'];
-    //echo  $_SESSION['user_id'];
-}
-
-
 ?>
 
 <!DOCTYPE html>

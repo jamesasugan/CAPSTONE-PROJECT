@@ -1,30 +1,15 @@
 <?php
 session_start();
+require_once 'Utils.php';
+if (!user_has_roles(get_account_type(), [AccountType::STAFF]))
+{
+  return;
+}
 
+$user_query = query_user_info(true);
+$staff_id = $user_query['Staff_ID'];
 include "../Database/database_conn.php";
-
-
-
-if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] == 'patient'){
-    header("Location: index.php");
-
-}
-
 include 'ReuseFunction.php';
-$user_id = $_SESSION['user_id'];
-$sql = "SELECT * from tbl_staff where User_ID = ?";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param('i', $user_id);
-$stmt->execute();
-$result = $stmt->get_result();
-if ($result->num_rows > 0) {
-    $row = $result->fetch_assoc();
-    if ($row['Role'] == 'admin'){
-        header("Location: admin-index.php");
-    }
-}
-
-$staff_id = $row['Staff_ID'];
 ?>
 
 <!doctype html>

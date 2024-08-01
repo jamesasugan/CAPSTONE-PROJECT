@@ -1,22 +1,23 @@
-
 <?php
+if (session_status() === PHP_SESSION_NONE) {
+  session_start();
+}
+
+require_once 'Utils.php';
+if (!user_has_roles(get_account_type(), [AccountType::ADMIN, AccountType::STAFF]))
+{
+  return;
+}
+
 $first_name = '';
 $last_name = '';
-if (isset($_SESSION['user_type']) && $_SESSION['user_type'] == 'staff'){
-    $sql = "SELECT * FROM tbl_staff WHERE User_id = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $_SESSION['user_id']);
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    if ($result->num_rows === 1) {
-        $row = $result->fetch_assoc();
-        $first_name = $row['First_Name'];
-        $last_name = $row['Last_Name'];
-    }
-}else{
-    header("Location: index.php");
+$user_query = query_user_info(true);
+if ($user_query)
+{
+  $first_name = $user_query['First_Name'];
+  $last_name = $user_query['Last_Name'];
 }
+
 include "ReuseFunction.php";
 ?>
 

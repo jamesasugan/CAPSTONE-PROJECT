@@ -2,25 +2,13 @@
 
 <?php
 session_start();
-include_once '../Database/database_conn.php';
-
-if (isset($_SESSION['user_type']) and $_SESSION['user_type'] == 'staff'){
-
-    $user_id = $_SESSION['user_id'];
-    $sql = "SELECT role from tbl_staff where User_ID = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param('i', $user_id);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    if ($result->num_rows > 0) {
-        $row = $result->fetch_assoc();
-        if ($row['role'] == 'doctor'){
-            header("Location: staff-index.php");
-        }elseif ($row['role'] == 'admin'){
-            header("Location: admin-index.php");
-        }
-    }
+require_once 'Utils.php';
+if (!user_has_roles(get_account_type(), [AccountType::PATIENT]))
+{
+  return;
 }
+
+include_once '../Database/database_conn.php';
 ?>
 
 <!DOCTYPE html>

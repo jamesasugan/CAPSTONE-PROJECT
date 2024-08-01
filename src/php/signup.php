@@ -1,7 +1,9 @@
 <?php
 session_start();
-if (isset($_SESSION['user_type'])) {
-    header('Location: index.php');
+require_once 'Utils.php';
+if (!user_has_roles(get_account_type(), [AccountType::VISITOR]))
+{
+  return;
 }
 ?>
 

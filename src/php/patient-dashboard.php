@@ -1,6 +1,25 @@
 <!-- patient -->
 
 <?php
+if (session_status() === PHP_SESSION_NONE) {
+  session_start();
+}
+
+require_once 'Utils.php';
+if (!user_has_roles(get_account_type(), [AccountType::PATIENT]))
+{
+  return;
+}
+
+$first_name = '';
+$last_name = '';
+$user_query = query_user_info(false);
+if ($user_query)
+{
+  $first_name = $user_query['First_Name'];
+  $last_name = $user_query['Last_Name'];
+}
+
 
 $first_name = '';
 $last_name = '';

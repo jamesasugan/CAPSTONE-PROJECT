@@ -1,28 +1,18 @@
 
 <?php
-include '../Database/database_conn.php';
 session_start();
-
-if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] == 'patient') {
-    header('Location: index.php');
+require_once 'Utils.php';
+if (!user_has_roles(get_account_type(), [AccountType::STAFF]))
+{
+  return;
 }
+
+$user_query = query_user_info(true);
+$specialty = $user_query['speciality'];
+$staff_id = $user_query['Staff_ID'];
+
+include '../Database/database_conn.php';
 include "ReuseFunction.php";
-$user_id = $_SESSION['user_id'];
-
-$sql = 'SELECT * from tbl_staff where User_ID = ?';
-$stmt = $conn->prepare($sql);
-$stmt->bind_param('i', $user_id);
-$stmt->execute();
-$result = $stmt->get_result();
-if ($result->num_rows > 0) {
-    $row = $result->fetch_assoc();
-    if ($row['Role'] == 'admin') {
-        header('Location: staff-index.php');
-    }
-}
-$specialty = $row['speciality'];
-$staff_id = $row['Staff_ID'];
-
 
 $chart_id = isset($_GET['chart_id']) ? $_GET['chart_id'] : null;
 
