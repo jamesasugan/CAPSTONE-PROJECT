@@ -53,10 +53,6 @@
                             <span class="block">Franklin C. Saint</span>
                         </div>
                         <div>
-                            <strong class="block">Username</strong>
-                            <span class="block">franky123</span>
-                        </div>
-                        <div>
                             <strong class="block">Age</strong>
                             <span class="block">22</span>
                         </div>
@@ -243,7 +239,6 @@
                             <p><strong>Address:</strong> California, USA</p>
                           </td>
                           <td class="w-1/2 p-2 align-top">
-                            <p><strong>Username:</strong> franky123</p>
                             <p><strong>Sex:</strong> Male</p>
                             <p><strong>Email:</strong> franklinsaint@gmail.com</p>
                             <p><strong>Weight:</strong> 60kg</p> 
