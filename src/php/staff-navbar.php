@@ -68,7 +68,7 @@ if ($user_query)
             </div>
 
             <div class="logo-main flex justify-center lg:justify-start w-full sm:w-auto">
-              <a href="staff-index.php">
+              <a href="index.php">
                 <!-- Light mode logo (Shown in light mode, hidden in dark mode) -->
                 <img
                   class="block mx-auto h-10 lg:h-16 w-auto dark:hidden"

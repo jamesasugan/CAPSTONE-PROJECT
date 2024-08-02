@@ -46,22 +46,8 @@ function user_has_roles($currAccountType, $permission_arr)
     if (in_array($currAccountType, $permission_arr))
         return true;
 
-    // redirect depending on user account type
-    if ($currAccountType == AccountType::ADMIN)
-    {
-        header('Location: admin-index.php');
-        return false;
-    }
-    else if ($currAccountType == AccountType::STAFF)
-    {
-        header('Location: staff-index.php');
-        return false;
-    }
-    else // visitor and patient
-    {
-        header('Location: index.php');
-        return false;
-    }
+    header('Location: index.php');
+    return false;
 }
 
 function query_user_info($is_staff)

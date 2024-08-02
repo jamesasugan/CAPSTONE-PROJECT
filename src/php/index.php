@@ -4,12 +4,8 @@
 session_start();
 require_once 'Utils.php';
 $currAccType = get_account_type();
-if (!user_has_roles($currAccType, [AccountType::PATIENT, AccountType::VISITOR]))
-{
-  return;
-}
 
-include_once '../Database/database_conn.php';
+include '../Database/database_conn.php';
 if ($currAccType == AccountType::PATIENT)
 {
   $user_id = $_SESSION['user_id'];
@@ -24,6 +20,28 @@ if ($currAccType == AccountType::PATIENT)
   $row = $res->fetch_assoc();
   $_SESSION['online_Account_owner_id'] = $row['user_info_ID'];
 }
+
+// code below are for page styles depending on user role
+
+// page style
+$pageStyle = "../css/style.css";
+if (in_array($currAccType, [AccountType::STAFF, AccountType::ADMIN]))
+{
+    $pageStyle = "../css/staff.css";
+}
+
+// page title
+$pageTitle = "HCMC";
+if ($currAccType == AccountType::STAFF)
+{
+    // title for doctor
+    $pageTitle = $pageTitle . " Doctor";
+}
+else if ($currAccType == AccountType::ADMIN)
+{
+    $pageTitle = "Admin";
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -31,9 +49,11 @@ if ($currAccType == AccountType::PATIENT)
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>HCMC</title>
+    <title>
+        <?= $pageTitle?>
+    </title>
     <link rel="stylesheet" href="../css/output.css" />
-    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="<?= $pageStyle ?>" />
     <script
       src="https://kit.fontawesome.com/70df29d299.js"
       crossorigin="anonymous"
@@ -57,31 +77,34 @@ if ($currAccType == AccountType::PATIENT)
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
   </head>
-  <body class=" bg-[#ebf0f4] dark:bg-[#17222a] text-[#0e1011] dark:text-[#eef0f1]">
+  <body class="bg-[#ebf0f4] dark:bg-[#17222a] text-[#0e1011] dark:text-[#eef0f1]">
        
   <!-- max-w-screen-xl pinakaimportant -->
 
-
-    <!-- navigation bar -->
-    <?php include 'navbar-main.php'; ?>
     <?php
-    if (isset($_SESSION['user_type']) and $_SESSION['user_type'] == 'patient'):
+      if ($currAccType == AccountType::STAFF)
+      {
+        include 'staff-navbar.php';
+        include 'staff-dashboard.php';
+      }
+      else if($currAccType == AccountType::ADMIN)
+      {
+        include 'admin-navbar.php';
+        include 'admin-dashboard.php';
+        include 'admin-servicesList.php';
+      }
+      else
+      {
+        include 'navbar-main.php';
+        if (isset($_SESSION['user_type']) and $_SESSION['user_type'] == 'patient')
+        {
+          include 'patient-dashboard.php'; 
+        }
+  
+        include '../html/landpage-swiper.html';
+        include '../html/features.html';
+        include '../html/footer.html';
+      }
     ?>
-    <!-- patient welcome page pag may account lang -->
-    <?php include 'patient-dashboard.php'; ?>
-
-    <?php endif;?>
-    <!-- welcome page pag walang account -->
-    <?php include '../html/landpage-swiper.html'; ?>
-
-
-    <?php include '../html/features.html'; ?>
-
-    <?php include '../html/footer.html'; ?>
-    
-
-    
-
- 
   </body>
 </html>
