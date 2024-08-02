@@ -48,7 +48,7 @@ include "ReuseFunction.php";
   </head>
   <body>
 
-    <?php include 'admin-navbar.php'; ?>
+  <?php include 'navbar.php'; ?>
 
     <div id="patients-recordTab" class="p-10 pt-24 mx-auto w-full min-h-screen bg-[#ebf0f4] dark:bg-[#17222a]">
 

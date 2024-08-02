@@ -98,7 +98,7 @@ if ($result && $result->num_rows > 0){
   <script src="../js/main.js" defer></script>
 </head>
 <body>
-    <?php include 'admin-navbar.php'; ?>
+<?php include 'navbar.php'; ?>
 
     <section
             id="fullpatientInformation"

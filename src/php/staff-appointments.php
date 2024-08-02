@@ -51,7 +51,9 @@ $staff_id = $row['Staff_ID'];
   </head>
   <body>
 
-  <?php include 'staff-navbar.php'; ?>
+  <?php  
+    include 'navbar.php';
+    ?>
 
   <div id="appointmentRecordsTab" class="p-10 pt-24 mx-auto w-full min-h-screen bg-[#ebf0f4] dark:bg-[#17222a]">
   

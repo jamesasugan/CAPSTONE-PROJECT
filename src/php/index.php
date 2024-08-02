@@ -82,20 +82,18 @@ else if ($currAccType == AccountType::ADMIN)
   <!-- max-w-screen-xl pinakaimportant -->
 
     <?php
+      include 'navbar.php';
       if ($currAccType == AccountType::STAFF)
       {
-        include 'staff-navbar.php';
         include 'staff-dashboard.php';
       }
       else if($currAccType == AccountType::ADMIN)
       {
-        include 'admin-navbar.php';
         include 'admin-dashboard.php';
         include 'admin-servicesList.php';
       }
       else
       {
-        include 'navbar-main.php';
         if (isset($_SESSION['user_type']) and $_SESSION['user_type'] == 'patient')
         {
           include 'patient-dashboard.php'; 

@@ -50,7 +50,7 @@ include_once '../Database/database_conn.php';
   <body>
 
 
-    <?php include 'navbar-main.php'; ?>
+    <?php include 'navbar.php'; ?>
     <section
       id="booking"
       class="book-appointment w-full flex justify-center items-center pt-24 pb-10 p-5

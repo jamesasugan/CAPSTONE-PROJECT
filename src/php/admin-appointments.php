@@ -76,7 +76,7 @@ function getAssignDoctor($staff_id)
     <script src="../js/SearchTables.js" defer></script>
   </head>
   <body>
-  <?php include 'admin-navbar.php'; ?>
+  <?php include 'navbar.php'; ?>
     <div id="appointmentRecordsTab" class="p-10 pt-24 mx-auto w-full min-h-screen bg-[#ebf0f4] dark:bg-[#17222a]">
       <div class="flex justify-end">
         <a href="addwalkInPatient.php" class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold py-2 px-4 rounded cursor-pointer border-none mb-4">Add Walk In patient</a>

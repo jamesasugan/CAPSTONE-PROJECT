@@ -44,7 +44,7 @@ include '../Database/database_conn.php';
 </head>
 <body>
 
-    <?php include 'admin-navbar.php'; ?>
+<?php include 'navbar.php'; ?>
     
     <section class="w-full min-h-screen bg-[#ebf0f4] dark:bg-[#17222a] text-[#0e1011] dark:text-[#eef0f1]">
             <div class="mx-auto bg-[#f6fafc] dark:bg-[#222f3a] shadow-lg p-5 pt-28 w-full max-w-full">

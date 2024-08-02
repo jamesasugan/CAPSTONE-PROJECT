@@ -109,7 +109,7 @@ if ($result && $result->num_rows == 1){
 </head>
 <body>
 
-    <?php include 'navbar-main.php'; ?>
+    <?php include 'navbar.php'; ?>
 
     <section
       id="fullpatientInformation"

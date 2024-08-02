@@ -54,7 +54,7 @@ $accountOwner_ID = $_SESSION['online_Account_owner_id'];
   </head>
   <body>
 
-    <?php include 'navbar-main.php'; ?>
+    <?php include 'navbar.php'; ?>
 
     <div class="flex flex-col sm:flex-row justify-center items-center">
     <div class="bg-[#ebf0f4] dark:bg-[#17222a] p-5 w-full min-h-screen pt-10 sm:pt-20">

@@ -49,7 +49,9 @@ include "../Database/database_conn.php";
   </head>
   <body>
 
-  <?php include 'staff-navbar.php'; ?>
+  <?php  
+    include 'navbar.php';
+    ?>
 
 
     <div class="flex flex-col sm:flex-row justify-center items-center">

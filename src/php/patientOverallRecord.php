@@ -48,7 +48,7 @@ if (!user_has_roles(get_account_type(), [AccountType::PATIENT, AccountType::ADMI
 </head>
 <body>
     <div class="mainContainer">
-        <?php include 'admin-navbar.php'; ?>
+    <?php include 'navbar.php'; ?>
 
         <!-- OVERALL RECORDS PARA SA ADMIN AT PATIENT -->
 

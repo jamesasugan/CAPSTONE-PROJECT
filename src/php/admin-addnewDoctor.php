@@ -44,7 +44,7 @@ include '../Database/database_conn.php';
 </head>
 <body>
 
-    <?php include 'admin-navbar.php'; ?>
+<?php include 'navbar.php'; ?>
     
     <section
       id="addDoctor"

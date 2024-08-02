@@ -49,7 +49,7 @@ include "ReuseFunction.php";
     <script src="../js/SearchTables.js" defer></script>
   </head>
   <body>
-    <?php include 'admin-navbar.php'; ?>
+  <?php include 'navbar.php'; ?>
     <div id="patients-recordTab" class="p-10 pt-24 mx-auto w-full min-h-screen bg-[#ebf0f4] dark:bg-[#17222a]">
             <div class="flex flex-col sm:flex-row justify-between items-center bg-gray-200 dark:bg-gray-700 p-5 border-b border-b-black">
                 <h3 class="text-2xl sm:text-4xl font-bold text-black dark:text-white mb-4 sm:mb-0 uppercase mr-0 sm:mr-10">

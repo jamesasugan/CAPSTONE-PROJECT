@@ -46,7 +46,9 @@ if (!user_has_roles(get_account_type(), [AccountType::STAFF]))
 </head>
 <body>
 
-    <?php include 'staff-navbar.php'; ?>
+<?php  
+    include 'navbar.php';
+    ?>
 
     <div class="p-10 pt-24 mx-auto w-full min-h-screen bg-[#ebf0f4] dark:bg-[#17222a]">
         <div class="text-center text-black dark:text-white mt-3 mb-3">

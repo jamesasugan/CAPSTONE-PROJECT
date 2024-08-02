@@ -47,7 +47,7 @@ if (!user_has_roles(get_account_type(), [AccountType::ADMIN, AccountType::PATIEN
     <script src="../js/main.js" defer></script>
 </head>
 <body>
-    <?php include 'admin-navbar.php'; ?>
+<?php include 'navbar.php'; ?>
 
     <!-- CONSULTATION RESULTS NG ADMIN AT PATIENT -->
 

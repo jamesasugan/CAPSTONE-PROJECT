@@ -4,19 +4,57 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 require_once 'Utils.php';
-if (!user_has_roles(get_account_type(), [AccountType::ADMIN]))
-{
-  return;
-}
+$currAccType = get_account_type();
 
 $first_name = '';
 $last_name = '';
-$user_query = query_user_info(true);
+$is_staff = in_array($currAccType, [AccountType::ADMIN, AccountType::STAFF]);
+$user_query = query_user_info($is_staff);
 if ($user_query)
 {
   $first_name = $user_query['First_Name'];
   $last_name = $user_query['Last_Name'];
 }
+
+function render_navs($navList, $navStyle)
+{
+    foreach($navList as $navTitle => $navHREF)
+    {
+        ?>
+            <a href="<?= $navHREF ?>" class="<?= $navStyle ?>">
+                <?= $navTitle ?>
+            </a>
+        <?php
+    }
+}
+
+$navDesktopStyle = "hover:bg-gray-300 dark:hover:bg-gray-700 dark:hover:text-white px-3 py-2 rounded-md transition duration-300 ease-in-out";
+$navMobileStyle = "block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-700 hover:text-white border-b border-slate-800 dark:border-slate-300";
+$navsDict = [
+    AccountType::ADMIN->value => [
+        "Records" => "admin-patientRecords.php",
+        "Schedules" => "admin-doctorSchedule.php",
+        "Appointments" => "admin-appointments.php",
+        "Accounts" => "admin-accounts.php"
+    ],
+    AccountType::STAFF->value => [
+        "Patient Records" => "staff-patientsRecord.php",
+        "Schedule" => "staff-doctorschedule.php",
+        "Appointment" => "staff-appointments.php"
+    ],
+    AccountType::PATIENT->value => [
+        "Book Appointment" => "bookappointment.php",
+        "Doctor's Schedule" => "doctorschedule.php",
+        "Our Services" => "index.php?page=#services",
+        "About Us" => "index.php?page=#about-us"
+    ],
+    AccountType::VISITOR->value => [
+        "Doctor's Schedule" => "doctorschedule.php",
+        "Our Services" => "index.php?page=#services",
+        "About Us" => "index.php?page=#about-us"
+    ]
+];
+
 ?>
 
 <section
@@ -97,30 +135,10 @@ if ($user_query)
                   <div
                     class="flex space-x-4 uppercase font-bold text-lg"
                   >
-                    <a
-                      href="admin-patientRecords.php"
-                      class="hover:bg-gray-300 dark:hover:bg-gray-700 dark:hover:text-white px-3 py-2 rounded-md transition duration-300 ease-in-out"
-                    >
-                     Records
-                    </a>
-                    <a
-                      href="admin-doctorSchedule.php"
-                      class="hover:bg-gray-300 dark:hover:bg-gray-700 dark:hover:text-white px-3 py-2 rounded-md transition duration-300 ease-in-out"
-                    >
-                      Schedules
-                    </a>
-                    <a
-                      href="admin-appointments.php"
-                      class="hover:bg-gray-300 dark:hover:bg-gray-700 dark:hover:text-white px-3 py-2 rounded-md transition duration-300 ease-in-out"
-                    >
-                      Appointments
-                    </a>
-                    <a
-                      href="admin-accounts.php"
-                      class="hover:bg-gray-300 dark:hover:bg-gray-700 dark:hover:text-white px-3 py-2 rounded-md transition duration-300 ease-in-out"
-                    >
-                      Accounts
-                    </a>
+                    <?php
+                        // render nav items
+                        render_navs($navsDict[$currAccType->value], $navDesktopStyle);
+                    ?>
                   </div>
                 </div>
               </div>
@@ -208,38 +226,55 @@ if ($user_query)
                             </svg>
                           </label>
                         </li>
-                        <?php if (!isset($_SESSION['user_type'])): ?>
                         <!-- labas mo to pag di naka log in -->
-                        <li class="flex items-center justify-center hover:bg-gray-300 dark:hover:bg-gray-600 hover:font-bold transition duration-300 ease-in-out text-lg">
-                          <a href="login.php"
-                            class="w-full h-full flex justify-center items-center"
-                            >Log In</a
-                          >
-                        </li>    
-                        <!-- labas mo to pag di naka log in end -->
-                        <!-- ito nakalabas pag naka log in -->
-                        <?php else: ?>
-                        <li class="flex items-center justify-center hover:bg-gray-300 dark:hover:bg-gray-600 font-bold transition duration-300 ease-in-out text-lg">
-                          <a href="admin-profile.php"
-                            class="w-full h-full flex justify-center items-center"
-                            ><?php echo $first_name .' '. $last_name?></a
-                          >
-                        </li>
-                        <li class="flex items-center justify-center hover:bg-gray-300 dark:hover:bg-gray-600 hover:font-bold transition duration-300 ease-in-out text-lg">
-                          <a href="admin-archiveAccounts.php"
-                            class="w-full h-full flex justify-center items-center"
-                            >Archived Records</a
-                          >
-                        </li>
-                        <li class="flex items-center justify-center hover:bg-gray-300 dark:hover:bg-gray-600 hover:font-bold transition duration-300 ease-in-out text-lg">
-                          <a href='logout.php'
-                            class="w-full h-full flex justify-center items-center"
-                            >Log Out</a
-                          >
-                        </li>  
-                        <!-- ito nakalabas pag naka log in end -->
-                        <?php endif; ?>
+                        <?php 
+                            if ($currAccType == AccountType::VISITOR)
+                            {
+                                ?>
+                                    <li class="flex items-center justify-center hover:bg-gray-300 dark:hover:bg-gray-600 hover:font-bold transition duration-300 ease-in-out text-lg">
+                                    <a href="login.php"
+                                        class="w-full h-full flex justify-center items-center"
+                                        >Log In</a
+                                    >
+                                    </li> 
+                                <?php
+                            }
+                            else
+                            {
+                                ?>
+                                    <!-- ito nakalabas pag naka log in -->
+                                    <li class="flex items-center justify-center hover:bg-gray-300 dark:hover:bg-gray-600 font-bold transition duration-300 ease-in-out text-lg">
+                                        <a href="admin-profile.php"
+                                            class="w-full h-full flex justify-center items-center"
+                                            ><?= $first_name .' '. $last_name?></a
+                                        >
+                                        </li>
+                                        
+                                        <?php 
+                                        // render archive
+                                        if ($currAccType == AccountType::ADMIN)
+                                        {
+                                            ?>
+                                                <li class="flex items-center justify-center hover:bg-gray-300 dark:hover:bg-gray-600 hover:font-bold transition duration-300 ease-in-out text-lg">
+                                                    <a href="admin-archiveAccounts.php"
+                                                        class="w-full h-full flex justify-center items-center"
+                                                        >Archived Records</a
+                                                    >
+                                                </li>
+                                            <?php
+                                        }
+                                        ?>
 
+
+                                        <li class="flex items-center justify-center hover:bg-gray-300 dark:hover:bg-gray-600 hover:font-bold transition duration-300 ease-in-out text-lg">
+                                        <a href='logout.php'
+                                            class="w-full h-full flex justify-center items-center"
+                                            >Log Out</a
+                                        >
+                                    </li>  
+                                <?php
+                            }
+                        ?>
                       </ul>
                     </details>
                   </li>
@@ -261,26 +296,10 @@ if ($user_query)
           <div
             class="px-2 pt-2 pb-3 space-y-1 text-neutral dark:text-gray-200 uppercase"
           >
-            <a
-              href="admin-patientRecords.php"
-              class="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-700 hover:text-white border-b border-slate-800 dark:border-slate-300"
-              >Records</a
-            >
-            <a
-              href="admin-doctorSchedule.php"
-              class="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-700 hover:text-white border-b border-slate-800 dark:border-slate-300"
-              >Schedules</a
-            >
-            <a
-              href="admin-appointments.php"
-              class="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-700 hover:text-white border-b border-slate-800 dark:border-slate-300"
-              >Appointments</a
-            >
-            <a
-              href="admin-accounts.php"
-              class="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-700 hover:text-white border-b border-slate-800 dark:border-slate-300"
-              >Accounts</a
-            >
+          <?php
+            // render mobile nav
+            render_navs($navsDict[$currAccType->value], $navMobileStyle);
+          ?>
           </div>
         </div>
       </nav>

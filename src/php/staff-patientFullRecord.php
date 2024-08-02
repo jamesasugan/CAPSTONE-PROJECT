@@ -105,7 +105,9 @@ if ($result && $result->num_rows > 0) {
 </head>
 <body>
       <div class="mainContainer">
-        <?php include 'staff-navbar.php'; ?>
+      <?php  
+    include 'navbar.php';
+    ?>
     
         <section id="fullpatientInformation" class="w-full min-h-screen flex justify-center items-center pt-28 pb-10 p-5 bg-[#f6fafc] dark:bg-[#17222a]">
             <div class="w-full max-w-7xl mx-auto p-4 rounded-lg shadow-lg bg-gray-200 dark:bg-gray-700 text-[#0e1011] dark:text-[#eef0f1] recordHid">
