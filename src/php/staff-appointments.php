@@ -7,7 +7,8 @@ if (!user_has_roles(get_account_type(), [AccountType::STAFF]))
 }
 
 include '../Database/database_conn.php';
-$staff_id = $row['Staff_ID'];
+$user_query = query_user_info(true);
+$staff_id = $user_query['Staff_ID'];
 ?>
 
 <!doctype html>
