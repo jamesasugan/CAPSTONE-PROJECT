@@ -8,7 +8,7 @@ if (!user_has_roles(get_account_type(), [AccountType::PATIENT]))
   return;
 }
 
-include_once '../Database/database_conn.php';
+include '../Database/database_conn.php';
 ?>
 
 <!doctype html>
