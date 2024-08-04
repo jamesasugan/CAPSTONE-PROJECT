@@ -81,7 +81,9 @@ if (!user_has_roles(get_account_type(), [AccountType::ADMIN, AccountType::PATIEN
                                 <th class="pl-6 sm:pl-9">Action</th>
                             </tr>
                         </thead>
-                        <tbody class="text-black dark:text-white text-base sm:text-lg">
+                        <tbody id="tritems" class="text-black dark:text-white text-base sm:text-lg">
+
+                            <!-- Single item in list -->
                             <tr class="hover:bg-gray-300 dark:hover:bg-gray-600">
                                 <td>1</td>
                                 <td class="w-1/2">
@@ -95,11 +97,12 @@ if (!user_has_roles(get_account_type(), [AccountType::ADMIN, AccountType::PATIEN
                                     <a href="patientOverallRecord.php" class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none" target="_blank">View More</a>
                                 </td>
                             </tr>
+
                         </tbody>
                     </table>
 
                     <!-- labas mo to pag blangko -->
-                    <h1 class="text-center font-medium text-2xl text-black dark:text-white mt-5">No Records</h1>
+                    <h1 id="norecordelement" class="text-center font-medium text-2xl text-black dark:text-white mt-5">No Records</h1>
 
                 </div>
             </div>
@@ -107,6 +110,65 @@ if (!user_has_roles(get_account_type(), [AccountType::ADMIN, AccountType::PATIEN
 
         
     </div>
-    
+    <script>
+        <?php
+            if (isset($_GET["chart_id"]))
+            {
+                ?>
+                    let currentElement = document.getElementById("tritems");
+
+                    // clear items in table
+                    currentElement.innerHTML = '';
+
+                    // fetch patient records
+                    $.ajax({
+                    'url': 'ajax.php?action=getPatientRecords2&chart_id=' + encodeURIComponent('<?=$_GET["chart_id"] ?>') + '&page=' + encodeURIComponent("0") + '&user_id=' + encodeURIComponent(<?= $_SESSION['user_id'] ?>),
+                    'method': 'GET',
+                    'success': function(resp)
+                    {
+                        let noRecordElement = document.getElementById("norecordelement");
+                        if (resp && 'total_page' in resp)
+                        {
+                            // hide no record message if we have entries
+                            noRecordElement.style.visibility = "hidden";
+                            let trData = "";
+                            let items = resp.data;
+                            for(let i = 0; i < items.length; i++)
+                            {
+                                let services = items[i].availedService.split(",");
+                                let mappedServices = services.map(x => "<li>" + x.trim() + "</li>");
+                                trData += `                            <tr class="hover:bg-gray-300 dark:hover:bg-gray-600">
+                                            <td>${i + 1}</td>
+                                            <td class="w-1/2">
+                                            ${mappedServices.join("\n")}
+                                            </td>
+                                            <td>${items[i].c_date}</td>
+                                            <td> 
+                                                <a href="patientOverallRecord.php" class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none" target="_blank">View More</a>
+                                            </td>
+                                        </tr>\n`;
+                            }
+
+                            // set innerHTML to table items
+                            currentElement.innerHTML =trData;
+
+                            
+                        }
+                        else
+                        {
+                            // show no record message
+                            noRecordElement.style.visibility = "visible";
+                        }
+                    },
+                    'error': function(request,e){
+                        // show no record message
+                        let noRecordElement = document.getElementById("norecordelement");
+                        noRecordElement.style.visibility = "visible";
+                        console.log(e);
+                    }});
+                <?php
+            }
+        ?>
+    </script>
 </body>
 </html>

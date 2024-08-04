@@ -1116,6 +1116,53 @@ if ($action == 'getPatientRecord'){
     exit();
 }
 
+if ($action == "getPatientRecords2")
+{
+    function FetchPatientRecordsCount($conn, $id)
+    {
+        $sql = "SELECT Chart_id FROM tbl_patient_chart WHERE user_info_ID = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param('i', $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->num_rows;
+    }
+
+    $page_limit = 10;
+    $page = $_GET['page'];
+    $user_id = $_GET["user_id"];
+    $chart_id = $_GET["chart_id"];
+    $total_page_count = intdiv(FetchPatientRecordsCount($conn, $user_id), $page_limit) + 1;
+    $sql= "SELECT `Record_ID`, `Chart_ID`, DATE_FORMAT(`consultationDate`, '%M %e, %Y') as `c_date`, `availedService`, `Temperature`, `HeartRate`, `Blood_Pressure`, `Saturation`, `Chief_complaint`, `Physical_Examination`, `Assessment`, `Treatment_Plan` 
+    FROM 
+    (SELECT @rn := @rn + 1 as `row_num`, t.* 
+    FROM 
+    (SELECT * 
+    FROM `tbl_records` tr1 
+    WHERE tr1.Chart_ID = ? AND tr1.Chart_ID IN(SELECT Chart_id FROM tbl_patient_chart WHERE user_info_ID = (SELECT user_info_ID FROM `account_user_info` WHERE User_ID = ?))) t, (SELECT @rn := 0) r
+    ORDER BY `t`.`consultationDate` DESC) nt
+    WHERE `row_num` > (?-1) * ?
+    LIMIT ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param('iiiii', $chart_id, $user_id, $page, $page_limit, $page_limit);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    if ($result && $result->num_rows > 0){
+        $record_list = [];
+        while($row = $result->fetch_assoc())
+        {
+            $record_list[] = $row;
+        }
+
+        header('Content-Type: application/json');
+        echo json_encode([
+            "total_page" => $total_page_count,
+            "data" => $record_list
+        ]);
+    }
+    exit();
+}
+
 if ($action == 'createPatientRecord') {
     try {
         $record_id = 0;

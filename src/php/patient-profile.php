@@ -573,7 +573,7 @@ ORDER BY
         -->
         <!-- view information -->
         <td class="pl-9">
-            <a href="patient-fullRecord.php?chart_id=' . $row['Chart_id'] . '"><i class="fa-regular fa-eye"></i></a>
+            <a href="consultationResults.php?chart_id=' . $row['Chart_id'] . '"><i class="fa-regular fa-eye"></i></a>
         </td>
     </tr>
     ';

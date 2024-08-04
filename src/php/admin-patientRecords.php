@@ -151,7 +151,7 @@ ORDER BY
           
               <!-- sa admin-consultationResults.php dapat to dederetso -->
               <td class="pl-9">
-                <a href="admin-patientFullRecord.php?chart_id='.$row['Chart_id'].'"><i class="fa-regular fa-eye"></i></a>
+                <a href="consultationResults.php?chart_id='.$row['Chart_id'].'"><i class="fa-regular fa-eye"></i></a>
               </td>
               <td class="pl-10"><button onclick="archive_record.showModal();get_chartID('.$row['Chart_id'].')"><i class="fa-solid fa-box-archive"></i></button></td>
             </tr>
