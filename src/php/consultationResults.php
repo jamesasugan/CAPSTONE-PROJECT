@@ -43,7 +43,6 @@ if (!user_has_roles(get_account_type(), [AccountType::ADMIN, AccountType::PATIEN
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
     />
-    <link rel="stylesheet" href="../css/services-swiper.css" />
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script src="../js/main.js" defer></script>
 </head>

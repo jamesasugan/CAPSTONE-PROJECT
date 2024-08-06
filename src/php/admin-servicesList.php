@@ -10,7 +10,7 @@ if (!user_has_roles(get_account_type(), [AccountType::ADMIN]))
 }
 ?>
 
-<section id="services" class="services w-full min-h-screen">
+<section id="services" class="w-full min-h-[100vh]">
   <div class="flex flex-col items-center px-4">
     <h2 class="text-4xl sm:text-6xl font-bold text-center mt-32 mb-11">
       Our Services
@@ -33,323 +33,151 @@ if (!user_has_roles(get_account_type(), [AccountType::ADMIN]))
         </div>
     </div>
 
-  <div class="swiper-wrapper-custom">
-    <div class="swiper custom-swiper mySwiperist">
-      <div class="swiper-wrapper">
+   
 
-        <div
-        class="swiper-slide custom-slide shadow-lg rounded-lg overflow-hidden"
-      >
-          <img src="../images/internal medicine.png" alt="internal Services" />
-          <p
-            class="custom-slide-title text-3xl font-bold bg-slate-400 bg-opacity-80"
-          >
-            Internal Medicine
-          </p>
+    <div class="flex flex-wrap justify-center gap-6 p-10">
+      
+      <!-- service card div
+       gawin mong dynamic yung onclick -->
+      <div class="relative w-full max-w-md h-80 md:h-96 shadow-lg rounded-lg overflow-hidden serviceList flex flex-col items-center">
+          <img src="../images/internal medicine.png" alt="Internal Medicine" class="w-full h-full object-cover">
 
-          <!-- yung name ng modal at id ng dialog same yun ah, katulad ng ginawa mo dati dapat di parehas sa mga madadagdag -->
-          <button class="btn-edit btn bg-[#0b6c95] hover:bg-[#11485f] text-white px-5 rounded cursor-pointer border-none" onclick="editService1.showModal()"><i class="fa-solid fa-pen-to-square fa-xl text-white"></i></button>
+          <div class="absolute inset-0 flex flex-col items-center justify-center">
+              <p class="w-full text-center text-3xl mb-10 font-bold text-white bg-slate-400 bg-opacity-80 p-4 rounded" style="text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);">
+                  Internal Medicine
+              </p>  
 
-          <!-- yung name ng modal at id ng dialog same yun ah, katulad ng ginawa mo dati dapat di parehas sa mga madadagdag -->
-          <button
-            class="btn-card btn bg-[#0b6c95] hover:bg-[#11485f] text-white px-5 rounded cursor-pointer border-none"
-            onclick="service1.showModal()"
-          >
-            See More
-          </button>
-          <dialog id="service1" class="modal modal-middle">
-            <div
-              class="modal-box bg-gray-200 dark:bg-neutral text-[#0e1011] dark:text-[#eef0f1]"
-            >
-              <img
-                src="../images/internal medicine.png"
-                alt="internal Services"
-                class="w-full h-auto mb-4"
-              />
-              
-              <h3 class="font-bold text-2xl">Internal Medicine</h3>
-              <div class="text-base font-medium">
-                <p>Dr. Ryan Joseph Gahol, MD</p>
-                
+              <!-- gawin mong dynamic yung mga button names na to -->
+              <div class="flex gap-1 sm:gap-5 justify-between">
+              <!-- mark as unavailable at mark as available buttons, pinag isang modal ko na lang, imodify mo na lang depende sa clinick na button -->
+                <button class="btn-edit btn bg-yellow-500 hover:bg-yellow-700 text-white px-5 rounded cursor-pointer border-none" onclick="modService.showModal()"><i class="fa-solid fa-ban fa-xl"></i></button>
+                <button class="btn-edit btn bg-green-500 hover:bg-green-700 text-white px-5 rounded cursor-pointer border-none" onclick="modService.showModal()"><i class="fa-solid fa-circle-check fa-xl"></i></button>
+
+                <button class="btn-edit btn bg-[#0b6c95] hover:bg-[#11485f] text-white px-5 rounded cursor-pointer border-none" onclick="editService1.showModal()"><i class="fa-solid fa-pen-to-square fa-xl text-white"></i></button>
+                <button class="btn-edit btn bg-red-500 hover:bg-red-700 text-white px-5 rounded cursor-pointer border-none" onclick="delService.showModal()"><i class="fa-solid fa-trash-can fa-xl"></i></button>
               </div>
 
-              <div class="border border-gray-400 my-2"></div>
+              <button class="btn-card bg-[#0b6c95] hover:bg-[#11485f] text-white px-5 py-3 mt-10 font-semibold rounded cursor-pointer border-none transition duration-150" onclick="service1.showModal()">
+                  See More
+              </button>
+          </div>
+      </div>
+     
+    </div>
+    
+</section>
+  <!-- modal for delete service -->
+  <dialog id="delService" class="modal">
+    <div class="modal-box bg-gray-200 dark:bg-neutral text-[#0e1011] dark:text-[#eef0f1]">
+      <form method="dialog">
+        <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 font-bold text-xl">✕</button>
+      </form>
 
-              <p class="py-4 text-base font-medium">
-                Internal medicine is a medical specialty that deals with the diagnosis and medical, as opposed to surgical, treatment of diseases of adults.
-              </p>
 
-              <div class="border border-gray-400 my-2"></div>
+      <h3 class="text-2xl font-bold text-center mt-5">Are you sure you want to <span class="text-red-500">Delete</span> (Service Name)?</h3>
+      <form method="POST">
+        <div class="flex justify-center mb-5 mt-5">
+            <input type="submit" class="btn bg-red-500 hover:bg-red-700 border-none text-white w-1/2" value="Delete">
+        </div>
+      </form>
+    </div>
+  </dialog>
 
-                 <!-- kung maraming type of service add mo dito -->
-                 <p class="font-bold">List of Services Offered</p>
-                 <div class="font-medium text-base">
-                    <ul class="list-disc list-inside ml-5">
-                        <li>Internal Medicine</li>
-                    </ul>
-                 </div>
+  <!-- modal for mark as available/unavailable service. pinag isa ko na lang, ikaw na bahala mag modify depende sa clinick na button sa dalawa -->
+  <dialog id="modService" class="modal">
+    <div class="modal-box bg-gray-200 dark:bg-neutral text-[#0e1011] dark:text-[#eef0f1]">
+      <form method="dialog">
+        <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 font-bold text-xl">✕</button>
+      </form>
 
-                <p class="font-bold mt-3">Price Range</p>
-                <p class="text-base font-medium">&#8369;500-1000</p>
-                <p class="italic text-sm ">Prices may vary depending on the Doctor</p>
+      <h3 class="text-2xl font-bold text-center mt-5">Please choose a Service that you want to <span class="text-yellow-500">Mark as Unavailable</span></h3>
+      <h3 class="text-2xl font-bold text-center mt-5">Please choose a Service that you want to <span class="text-green-500">Mark as Available</span></h3>
 
-              <div class="modal-action flex justify-center">
-                <a
-                  href="bookappointment.php?service=Internal Medicine"
-                  class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold cursor-pointer border-none"
-                >
-                  Book Appointment
-                </a>
-                <form method="dialog">
-                  <button
-                    class="btn bg-gray-400 hover:bg-gray-500 border-none text-[#0e1011] dark:text-[#eef0f1]"
-                  >
-                    Close
-                  </button>
-                </form>
-              </div>
-            </div>
-          </dialog>
+      <form method="GET">
+        <ul class="w-full mt-3 text-lg font-medium text-black dark:text-white bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600">
+            <li class="w-full border-b border-gray-200 rounded-t-lg dark:border-gray-600">
+                <div class="flex items-center ps-3">
+                    <input id="InternalMedicine" name="Internal Medicine" type="checkbox" value="Internal Medicine" class="checkbox checkbox-info">
+                    <label for="InternalMedicine" class="w-full py-3 ms-2 font-medium">Internal Medicine</label>
+                </div>
+            </li>
+        </ul>
+        
+        <div class="flex justify-center mb-5 mt-5 ">
+          <input type="submit" class="btn bg-yellow-500 hover:bg-yellow-700 border-none text-white sm:w-1/2 w-full" value="Mark as Unavailable">
+          <input type="submit" class="btn bg-green-500 hover:bg-green-700 border-none text-white sm:w-1/2 w-full" value="Mark as Unavailable">
+        </div>
+      </form>
+
+    </div>
+  </dialog>
+
+  <!-- modal for "See More" Content per service -->
+  <dialog id="service1" class="modal modal-middle">
+    <div class="modal-box bg-gray-200 dark:bg-neutral text-[#0e1011] dark:text-[#eef0f1] text-center">
+      <img src="../images/internal medicine.png" alt="internal Services" class="w-full h-auto mb-4"/>
+      <h3 class="font-bold text-2xl">Internal Medicine</h3>
+      <div class="text-base font-medium">
+        <p>Dr. Ryan Joseph Gahol, MD</p>
       </div>
 
-      <div
-          class="swiper-slide custom-slide shadow-lg rounded-lg overflow-hidden"
-        >
-          <img src="../images/general medicine.jpg" alt="generalmedicine" />
-          <p
-            class="custom-slide-title text-3xl font-bold bg-slate-400 bg-opacity-80"
-          >
-            General Medicine
-          </p>
+      <div class="border border-gray-400 my-2"></div>
 
-          <!-- yung name ng modal at id ng dialog same yun ah, katulad ng ginawa mo dati dapat di parehas sa mga madadagdag -->
-          <button class="btn-edit btn bg-[#0b6c95] hover:bg-[#11485f] text-white px-5 rounded cursor-pointer border-none" onclick="editService2.showModal()"><i class="fa-solid fa-pen-to-square fa-xl text-white"></i></button>
+      <p class="py-4 text-base font-medium">
+        Internal medicine is a medical specialty that deals with the diagnosis and medical, as opposed to surgical, treatment of diseases of adults.
+      </p>
 
-          <!-- yung name ng modal at id ng dialog same yun ah, katulad ng ginawa mo dati dapat di parehas sa mga madadagdag -->
-          <button
-            class="btn-card btn bg-[#0b6c95] hover:bg-[#11485f] text-white px-5 rounded cursor-pointer border-none"
-            onclick="service2.showModal()"
-          >
-            See More
-          </button>
-          <dialog id="service2" class="modal modal-middle">
-            <div
-              class="modal-box bg-gray-200 dark:bg-neutral text-[#0e1011] dark:text-[#eef0f1]"
-            >
-              <img
-                src="../images/general medicine.jpg"
-                alt="generalmedicine"
-                class="w-full h-auto mb-4"
-              />
-              
-              <h3 class="font-bold text-2xl">General Medicine</h3>
-              <div class="text-base font-medium">
-                <p>Dr. Armie S. Versoza, MD</p>                
-              </div>
-  
-              <div class="border border-gray-400 my-2"></div>
-  
-              <p class="py-4 text-base font-medium">
-                General Medicine is a speciality of medicine which is involved in the prevention, diagnosis, and treatment of a wide range of both acute and chronic diseases affecting different parts of the body. General medicine deals with different diseases from head to toe. 
-              </p>
-  
-              <div class="border border-gray-400 my-2"></div>
-  
-                 <!-- kung maraming type of service add mo dito -->
-                 <p class="font-bold">List of Services Offered</p>
-                 <div class="font-medium text-base">
-                    <ul class="list-disc list-inside ml-5">
-                        <li>General Medicine</li>
-                    </ul>
-                 </div>
+      <div class="border border-gray-400 my-2"></div>
 
-                <p class="font-bold mt-3">Price Range</p>
-                <p class="text-base font-medium">&#8369;500-1500</p>
-                <p class="italic text-sm ">Prices may vary depending on the Doctor</p>
-  
-              <div class="modal-action flex justify-center">
-                <a
-                  href="bookappointment.php?service=Internal Medicine"
-                  class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold cursor-pointer border-none"
-                >
-                  Book Appointment
-                </a>
-                <form method="dialog">
-                  <button
-                    class="btn bg-gray-400 hover:bg-gray-500 border-none text-[#0e1011] dark:text-[#eef0f1]"
-                  >
-                    Close
-                  </button>
-                </form>
-              </div>
-            </div>
-          </dialog>
+      <!-- kung maraming type of service add mo dito -->
+      <p class="font-bold">List of Services Offered</p>
+        <div class="font-medium text-base">
+            <ul class="list-disc list-inside ml-5">
+                <li>Internal Medicine</li>
+            </ul>
         </div>
 
-        <div
-        class="swiper-slide custom-slide shadow-lg rounded-lg overflow-hidden"
-      >
-          <img src="../images/pediatrics.jpg" alt="pediatrics" />
-          <p
-            class="custom-slide-title text-3xl font-bold bg-slate-400 bg-opacity-80"
-          >
-            Pediatrics
-          </p>
-        
-          <!-- yung name ng modal at id ng dialog same yun ah, katulad ng ginawa mo dati dapat di parehas sa mga madadagdag -->
-          <button class="btn-edit btn bg-[#0b6c95] hover:bg-[#11485f] text-white px-5 rounded cursor-pointer border-none" onclick="editService3.showModal()"><i class="fa-solid fa-pen-to-square fa-xl text-white"></i></button>
+        <p class="font-bold mt-3">Price Range</p>
+        <p class="text-base font-medium">&#8369;500-1000</p>
+        <p class="italic text-sm ">Prices may vary depending on the Doctor</p>
 
-          <!-- yung name ng modal at id ng dialog same yun ah, katulad ng ginawa mo dati dapat di parehas sa mga madadagdag -->
-          <button
-            class="btn-card btn bg-[#0b6c95] hover:bg-[#11485f] text-white px-5 rounded cursor-pointer border-none"
-            onclick="service3.showModal()"
-          >
-            See More
+      <div class="modal-action flex justify-center">
+        <a href="bookappointment.php?service=Internal Medicine" class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold cursor-pointer border-none">
+          Book Appointment
+        </a>
+        <form method="dialog">
+          <button class="btn bg-gray-400 hover:bg-gray-500 border-none text-[#0e1011] dark:text-[#eef0f1]">
+            Close
           </button>
-          <dialog id="service3" class="modal modal-middle">
-            <div
-              class="modal-box bg-gray-200 dark:bg-neutral text-[#0e1011] dark:text-[#eef0f1]"
-            >
-              <img
-                src="../images/pediatrics.jpg"
-                alt="pediatrics"
-                class="w-full h-auto mb-4"
-              />
-              
-              <h3 class="font-bold text-2xl">Pediatrics</h3>
-              <div class="text-base font-medium">
-                <p>Dr. Maria Theresa Licos-Aragones </p>
-                
-              </div>
-
-              <div class="border border-gray-400 my-2"></div>
-
-              <p class="py-4 text-base font-medium">
-                Pediatrics, medical specialty dealing with the development and care of children and with the diagnosis and treatment of childhood diseases. 
-              </p>
-
-              <div class="border border-gray-400 my-2"></div>
-
-              <!-- kung maraming type of service add mo dito -->
-                <p class="font-bold">List of Services Offered</p>
-                <div class="font-medium text-base">
-                    <ul class="list-disc list-inside ml-5">
-                        <li>Flu Vaccine</li>
-                        <li>Monthly Immunization for babies</li>
-                        <li>Polio Vaccine</li>
-                        <li>Measles, Mumps, and Rubella Vaccine</li>
-                        <li>Pneumococcal Vaccine</li>
-                    </ul>
-                </div>
-
-                <p class="font-bold mt-2">Price Range</p>
-                <p class="text-base font-medium">&#8369;800-1000</p>
-                <p class="italic text-sm ">Prices may vary depending on the Doctor</p>
-
-              <div class="modal-action flex justify-center">
-                <a
-                  href="bookappointment.php?service=Internal Medicine"
-                  class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold cursor-pointer border-none"
-                >
-                  Book Appointment
-                </a>
-                <form method="dialog">
-                  <button
-                    class="btn bg-gray-400 hover:bg-gray-500 border-none text-[#0e1011] dark:text-[#eef0f1]"
-                  >
-                    Close
-                  </button>
-                </form>
-              </div>
-            </div>
-          </dialog>
-      </div>
-
-      <div
-        class="swiper-slide custom-slide shadow-lg rounded-lg overflow-hidden"
-      >
-          <img src="../images/xray.jpg" alt="x-ray" />
-          <p
-            class="custom-slide-title text-3xl font-bold bg-slate-400 bg-opacity-80"
-          >
-            X-Ray
-          </p>
-
-          <!-- yung name ng modal at id ng dialog same yun ah, katulad ng ginawa mo dati dapat di parehas sa mga madadagdag -->
-          <button class="btn-edit btn bg-[#0b6c95] hover:bg-[#11485f] text-white px-5 rounded cursor-pointer border-none" onclick="editService4.showModal()"><i class="fa-solid fa-pen-to-square fa-xl text-white"></i></button>
-
-          <!-- yung name ng modal at id ng dialog same yun ah, katulad ng ginawa mo dati dapat di parehas sa mga madadagdag -->
-          <button
-            class="btn-card btn bg-[#0b6c95] hover:bg-[#11485f] text-white px-5 rounded cursor-pointer border-none"
-            onclick="service4.showModal()"
-          >
-            See More
-          </button>
-          <dialog id="service4" class="modal modal-middle">
-            <div
-              class="modal-box bg-gray-200 dark:bg-neutral text-[#0e1011] dark:text-[#eef0f1]"
-            >
-              <img
-                src="../images/xray.jpg"
-                alt="x-ray"
-                class="w-full h-auto mb-4"
-              />
-              
-              <h3 class="font-bold text-2xl">X-Ray</h3>
-              <div class="text-base font-medium">
-                <p>Dr. John D. Edwards</p>
-                
-              </div>
-
-              <div class="border border-gray-400 my-2"></div>
-
-              <p class="py-4 text-base font-medium">
-                X-rays are a type of radiation called electromagnetic waves. X-ray imaging creates pictures of the inside of your body. The images show the parts of your body in different shades of black and white. 
-              </p>
-
-              <div class="border border-gray-400 my-2"></div>
-
-               <!-- kung maraming type of service add mo dito -->
-               <p class="font-bold">List of Services Offered</p>
-                <div class="font-medium text-base">
-                    <ul class="list-disc list-inside ml-5">
-                        <li>Skull X-Ray</li>
-                        <li>Upper Extremities</li>
-                        <li>Lower Extremities</li>
-                        <li>Lungs</li>
-                        <li>Lumbosacral</li>
-                    </ul>
-                </div>
-
-
-
-                <p class="font-bold mt-2">Price Range</p>
-                <p class="text-base font-medium">&#8369;300-1000</p>
-                <p class="italic text-sm ">Prices may vary depending on the Doctor</p>
-
-              <div class="modal-action flex justify-center">
-                <a
-                  href="bookappointment.php?service=Internal Medicine"
-                  class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold cursor-pointer border-none"
-                >
-                  Book Appointment
-                </a>
-                <form method="dialog">
-                  <button
-                    class="btn bg-gray-400 hover:bg-gray-500 border-none text-[#0e1011] dark:text-[#eef0f1]"
-                  >
-                    Close
-                  </button>
-                </form>
-              </div>
-            </div>
-          </dialog>
-      </div>
-        
+        </form>
       </div>
     </div>
+  </dialog>
 
-    <!-- modal for adding service -->
+  <!-- modal for edit service
+    isang modal lang ginawan ko ah yung internal medicine lang, gawan mo sa lahat ng madadagdag -->
+    <dialog id="editService1" class="modal">
+        <div class="modal-box w-11/12 max-w-5xl bg-gray-200 dark:bg-gray-700 text-black dark:text-white p-0">
+            <div class="modal-header sticky top-0 bg-gray-200 dark:bg-gray-700 z-10 px-10 pt-10">
+                    <div class="flex justify-between">
+                      <h3 class="font-bold text-3xl mb-0 text-center">Edit Service</h3>
+                      <div class="modal-action">
+                        <form method="dialog">
+                            <!-- if there is a button, it will close the modal -->
+                            <button class="btn bg-gray-400 dark:bg-white hover:bg-gray-500 dark:hover:bg-gray-400  text-black border-none mb-2">Close</button>
+                        </form>
+                    </div>
+                    </div>            
+                  <div class="border border-gray-600 dark:border-slate-300"></div>
+              </div>     
+
+              <!-- dito mo sa baba nitong comment ilagay yung form ng edit service (katulad lang nung add service)
+            di ko na cinopy paste para di magulo kaya ikaw na -->
+
+        </div>
+    </dialog>
+
+  <!-- modal for adding service -->
     <dialog id="addnewService" class="modal">
         <div class="modal-box w-11/12 max-w-5xl bg-gray-200 dark:bg-gray-700 text-black dark:text-white p-0">
             <div class="modal-header sticky top-0 bg-gray-200 dark:bg-gray-700 z-10 px-10 pt-10">
@@ -367,13 +195,13 @@ if (!user_has_roles(get_account_type(), [AccountType::ADMIN]))
                   <div class="border border-gray-600 dark:border-slate-300"></div>
               </div>
 
-        <form id='addNewService' action="#" method="GET" class="p-10">
-            <div class="flex justify-center flex-col items-center mt-5">
+        <form id='addNewService' action="#" method="GET" class="my-10">
+            <div class="flex justify-center flex-col items-center mt-5 w-full">
                 <!-- Image -->
                 <img
                     src="../images/pediatrics.jpg"
                     alt="pediatrics"
-                    class="w-1/3 mb-4" 
+                    class="w-1/2 mb-4" 
                 />
                 <!-- File input -->
                 <input 
@@ -533,38 +361,6 @@ if (!user_has_roles(get_account_type(), [AccountType::ADMIN]))
         </div>
     </dialog>
 
-    <!-- modal for edit service
-    isang modal lang ginawan ko ah yung internal medicine lang, gawan mo sa lahat ng madadagdag -->
-    <dialog id="editService1" class="modal">
-        <div class="modal-box w-11/12 max-w-5xl bg-gray-200 dark:bg-gray-700 text-black dark:text-white p-0">
-            <div class="modal-header sticky top-0 bg-gray-200 dark:bg-gray-700 z-10 px-10 pt-10">
-                    <div class="flex justify-between">
-                      <h3 class="font-bold text-3xl mb-0 text-center">Edit Service</h3>
-                      <div class="modal-action">
-                        <form method="dialog">
-                            <!-- if there is a button, it will close the modal -->
-                            <button class="btn bg-gray-400 dark:bg-white hover:bg-gray-500 dark:hover:bg-gray-400  text-black border-none mb-2">Close</button>
-                        </form>
-                    </div>
-                    </div>            
-                  <div class="border border-gray-600 dark:border-slate-300"></div>
-              </div>     
-
-              <!-- dito mo sa baba nitong comment ilagay yung form ng edit service (katulad lang nung add service)
-            di ko na cinopy paste para di magulo kaya ikaw na -->
-
-        </div>
-    </dialog>
-
-
-
-
-    <div class="swiper-navigation">
-      <div class="swiper-button-prev ml-0 lg:ml-10 mr-10 lg:mr-0"></div>
-      <div class="swiper-button-next mr-0 lg:mr-10"></div>
-    </div>
-  </div>
-
 
   <!-- script for dropdown na may search, pwede mo to gamitin sa patient chart -->
   <script>
@@ -697,4 +493,4 @@ if (!user_has_roles(get_account_type(), [AccountType::ADMIN]))
     }
     </script>
     
-</section>
+

@@ -13,26 +13,6 @@ const swiper = new Swiper('.mySwiper', {
   speed: 2000,
 });
 
-// for features.html
-const swiperserve = new Swiper('.mySwiperist', {
-  slidesPerView: 1,
-  spaceBetween: 30,
-  navigation: {
-    nextEl: '.swiper-button-next',
-    prevEl: '.swiper-button-prev',
-  },
-  breakpoints: {
-    640: {
-      slidesPerView: 2,
-    },
-    768: {
-      slidesPerView: 2,
-    },
-    1024: {
-      slidesPerView: 3,
-    },
-  },
-});
 
 // Hamburger menu functionality
 const toggleButton = document.querySelector('[aria-controls="mobile-menu"]');

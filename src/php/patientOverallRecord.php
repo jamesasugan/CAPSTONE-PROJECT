@@ -51,7 +51,6 @@ if (!user_has_roles(get_account_type(), [AccountType::PATIENT, AccountType::ADMI
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
     />
-    <link rel="stylesheet" href="../css/services-swiper.css" />
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script src="../js/main.js" defer></script>
 </head>
@@ -123,10 +122,10 @@ if (!user_has_roles(get_account_type(), [AccountType::PATIENT, AccountType::ADMI
                     <div class="mx-auto w-11/12 px-4 py-8 bg-gray-100 dark:bg-gray-800 rounded-lg shadow-md mb-10">   
 
                             <div class="recordList">
-                                <table cellpadding="0" cellspacing="0">
+                                <table cellpadding="0" cellspacing="0" class="w-full">
                                     <tr class="headList border-b border-gray-300 dark:border-gray-700">
-                                        <td class="font-bold py-2 text-lg">Service</td>
-                                        <td></td>
+                                        <td class="font-bold py-2 text-xl w-1/4">Service</td>
+                                        <td class="w-3/4"></td>
                                     </tr>
                                     <tr>
                                         <td colspan="2" class="font-medium py-2" id='vrecAvailedService'>
@@ -137,40 +136,40 @@ if (!user_has_roles(get_account_type(), [AccountType::PATIENT, AccountType::ADMI
                                         </td>
                                     </tr>
                                     <tr class="headList border-b border-gray-300 dark:border-gray-700">
-                                        <td class="font-bold">Consultation Date</td>
-                                        <td class="font-medium" id='vrecConsultationDate'>July 21, 2024</td>
+                                        <td class="font-bold w-1/2">Consultation Date</td>
+                                        <td class="font-medium w-1/2" id='vrecConsultationDate'>July 21, 2024</td>
                                     </tr>
                                     <tr class="headList border-b border-gray-300 dark:border-gray-700">
-                                        <td class="font-bold">Consultant</td>
-                                        <td class="font-medium" id='vrecConsultant'>Dr. John Edward Dionisio</td>
+                                        <td class="font-bold w-1/2">Consultant</td>
+                                        <td class="font-medium w-1/2" id='vrecConsultant'>Dr. John Edward Dionisio</td>
                                     </tr>
                                     <tr class="headList border-b border-gray-300 dark:border-gray-700">
-                                        <td class="font-bold">Heart Rate</td>
-                                        <td class="font-medium" id='vrecHearRate'>90</td>
+                                        <td class="font-bold w-1/2">Heart Rate</td>
+                                        <td class="font-medium w-1/2" id='vrecHearRate'>90</td>
                                     </tr>
                                     <tr class="headList border-b border-gray-300 dark:border-gray-700">
-                                        <td class="font-bold">Temperature</td>
-                                        <td class="font-medium" id='vrecTemp'>36</td>
+                                        <td class="font-bold w-1/2">Temperature</td>
+                                        <td class="font-medium w-1/2" id='vrecTemp'>36</td>
                                     </tr>
                                     <tr class="headList border-b border-gray-300 dark:border-gray-700">
-                                        <td class="font-bold">Blood Pressure</td>
-                                        <td class="font-medium" id='vrecBP'>110/70</td>
+                                        <td class="font-bold w-1/2">Blood Pressure</td>
+                                        <td class="font-medium w-1/2" id='vrecBP'>110/70</td>
                                     </tr>
                                     <tr class="headList border-b border-gray-300 dark:border-gray-700">
-                                        <td class="font-bold">Saturation</td>
-                                        <td class="font-medium" id='vrecSaturation'>96%</td>
+                                        <td class="font-bold w-1/2">Saturation</td>
+                                        <td class="font-medium w-1/2" id='vrecSaturation'>96%</td>
                                     </tr>
                                     <tr class="headList border-b border-gray-300 dark:border-gray-700">
-                                        <td class="font-bold" >Chief Complaint</td>
-                                        <td></td>
+                                        <td class="font-bold w-1/4">Chief Complaint</td>
+                                        <td class="w-3/4"></td>
                                     </tr>
                                     <tr>
                                         <!-- Chief Complaint -->
                                         <td colspan="2" class="font-medium" id='vrecChiefComp'>Experiencing high fever, severe headache, and joint pain for the past few days.</td>
                                     </tr>
                                     <tr class="headList border-b border-gray-300 dark:border-gray-700">
-                                        <td class="font-bold">Physical Examination</td>
-                                        <td></td>
+                                        <td class="font-bold w-1/4">Physical Examination</td>
+                                        <td class="w-3/4"></td>
                                     </tr>
                                     <tr>
                                         <!-- Physical Examination -->
@@ -179,8 +178,8 @@ if (!user_has_roles(get_account_type(), [AccountType::PATIENT, AccountType::ADMI
                                         </td>
                                     </tr>
                                     <tr class="headList border-b border-gray-300 dark:border-gray-700">
-                                        <td class="font-bold">Assessment</td>
-                                        <td></td>
+                                        <td class="font-bold w-1/4">Assessment</td>
+                                        <td class="w-3/4"></td>
                                     </tr>
                                     <tr>
                                         <!-- Assessment -->
@@ -189,8 +188,8 @@ if (!user_has_roles(get_account_type(), [AccountType::PATIENT, AccountType::ADMI
                                         </td>
                                     </tr>
                                     <tr class="headList border-b border-gray-300 dark:border-gray-700">
-                                        <td class="font-bold">Treatment Plan</td>
-                                        <td></td>
+                                        <td class="font-bold w-1/4">Treatment Plan</td>
+                                        <td class="w-3/4"></td>
                                     </tr>
                                     <tr>
                                         <!-- Treatment Plan -->
@@ -221,7 +220,7 @@ if (!user_has_roles(get_account_type(), [AccountType::PATIENT, AccountType::ADMI
     <div class="recordContent hidden">
               <a id="save_to_image">
                 <div class="invoice-container"> 
-                  <table cellpadding="0" cellspacing="0">
+                  <table cellpadding="0" cellspacing="0" class="w-full">
                     <tr class="top">
                         <td colspan="2">
                             <div class="flex justify-between items-center">
@@ -265,39 +264,39 @@ if (!user_has_roles(get_account_type(), [AccountType::PATIENT, AccountType::ADMI
                       </td>
                     </tr>
                     <tr class="heading ">
-                      <td class="font-bold py-2">Consultation Date</td>
-                      <td class="font-medium py-2" id='precConsultationDate'>July 21, 2024</td>
+                      <td class="font-bold py-2 w-1/2">Consultation Date</td>
+                      <td class="font-medium py-2 w-1/2" id='precConsultationDate'>July 21, 2024</td>
                     </tr>
                     <tr class="heading ">
-                      <td class="font-bold py-2">Consultant</td>
-                      <td class="font-medium py-2" id='precConsultant'>Dr. John Edward Dionisio</td>
+                      <td class="font-bold py-2 w-1/2">Consultant</td>
+                      <td class="font-medium py-2 w-1/2" id='precConsultant'>Dr. John Edward Dionisio</td>
                     </tr>
                     <tr class="heading ">
-                      <td class="font-bold py-2">Heart Rate</td>
-                      <td class="font-medium py-2 id='precHearRate'">90</td>
+                      <td class="font-bold py-2 w-1/2">Heart Rate</td>
+                      <td class="font-medium py-2 w-1/2 id='precHearRate'">90</td>
                     </tr>
                     <tr class="heading ">
-                      <td class="font-bold py-2">Temperature</td>
-                      <td class="font-medium py-2" id='precTemp'>36</td>
+                      <td class="font-bold py-2 w-1/2">Temperature</td>
+                      <td class="font-medium py-2 w-1/2" id='precTemp'>36</td>
                     </tr>
                     <tr class="heading ">
-                      <td class="font-bold py-2">Blood Pressure</td>
-                      <td class="font-medium py-2" id='precBP'>110/70</td>
+                      <td class="font-bold py-2 w-1/2">Blood Pressure</td>
+                      <td class="font-medium py-2 w-1/2" id='precBP'>110/70</td>
                     </tr>
                     <tr class="heading ">
-                      <td class="font-bold py-2">Saturation</td>
-                      <td class="font-medium py-2" id='precSaturation'>96%</td>
+                      <td class="font-bold py-2 w-1/2">Saturation</td>
+                      <td class="font-medium py-2 w-1/2" id='precSaturation'>96%</td>
                     </tr>
                     <tr class="heading ">
-                      <td class="font-bold py-2" >Chief Complaint</td>
-                      <td></td>
+                      <td class="font-bold py-2 w-1/4">Chief Complaint</td>
+                      <td class="w-3/4"></td>
                     </tr>
                     <tr>
                       <td colspan="2" class="font-medium py-2" id='precChiefComp'>Experiencing high fever, severe headache, and joint pain for the past few days.</td>
                     </tr>
                     <tr class="heading ">
-                      <td class="font-bold py-2">Physical Examination</td>
-                      <td></td>
+                      <td class="font-bold py-2 w-1/4">Physical Examination</td>
+                      <td class="w-3/4"></td>
                     </tr>
                     <tr>
                       <td colspan="2" class="font-medium py-2" id='precPhyExam'>
@@ -310,8 +309,8 @@ if (!user_has_roles(get_account_type(), [AccountType::PATIENT, AccountType::ADMI
                       </td>
                     </tr>
                     <tr class="heading ">
-                      <td class="font-bold py-2">Assessment</td>
-                      <td></td>
+                      <td class="font-bold py-2 w-1/4">Assessment</td>
+                      <td class="w-3/4"></td>
                     </tr>
                     <tr>
                       <td colspan="2" class="font-medium py-2" id='precAssesment'>
@@ -319,8 +318,8 @@ if (!user_has_roles(get_account_type(), [AccountType::PATIENT, AccountType::ADMI
                       </td>
                     </tr>
                     <tr class="heading ">
-                      <td class="font-bold py-2">Treatment Plan</td>
-                      <td></td>
+                      <td class="font-bold py-2 w-1/4">Treatment Plan</td>
+                      <td class="w-3/4"></td>
                     </tr>
                     <tr>
                       <td colspan="2" class="font-medium py-2" id='precTreatmentPlan'>

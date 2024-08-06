@@ -71,7 +71,6 @@ else if ($currAccType == AccountType::ADMIN)
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
     />
-    <link rel="stylesheet" href="../css/services-swiper.css">
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script src="../js/main.js" defer></script>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>

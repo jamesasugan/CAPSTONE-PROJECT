@@ -61,7 +61,7 @@ wag muna
 /* arrow para sa slideshow images */
 .scroll-down-arrow {
   position: relative;
-  bottom: 150px;
+  bottom: -100px;
   left: 50%;
   transform: translateX(-50%);
   animation-name: floating;
@@ -278,7 +278,7 @@ iframe {
     font-size: 1.3vw;
   }
   .dashboard-page {
-    height: 105vh;
+    height: 100vh;
   }
   .overlay-content {
     width: 93%;
@@ -288,7 +288,7 @@ iframe {
 /* galaxy fold */
 @media (max-width: 281px) {
   .land-page {
-    height: 110vh;
+    height: 100vh;
     width: 110%;
   }
   .dashboard-page {
@@ -336,12 +336,3 @@ iframe {
   }
 }
 
-/* iphone SE */
-@media (max-width: 378px) {
-  .land-page {
-    height: calc(115vh - 100px);
-  }
-  .dashboard-page {
-    height: 145vh;
-  }
-}

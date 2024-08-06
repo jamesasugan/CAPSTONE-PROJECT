@@ -39,7 +39,6 @@ if (!user_has_roles(get_account_type(), [AccountType::STAFF]))
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
     />
-    <link rel="stylesheet" href="../css/services-swiper.css" />
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script src="../js/main.js" defer></script>
     <script src="../js/staff-patientsRecord.js" defer></script>
@@ -116,10 +115,10 @@ if (!user_has_roles(get_account_type(), [AccountType::STAFF]))
                         </div>
                         
                             <div class="recordList">
-                                <table cellpadding="0" cellspacing="0">
+                                <table cellpadding="0" cellspacing="0" class="w-full">
                                     <tr class="headList border-b border-gray-300 dark:border-gray-700">
-                                        <td class="font-bold py-2 text-xl">Service</td>
-                                        <td></td>
+                                        <td class="font-bold py-2 text-xl w-1/4">Service</td>
+                                        <td class="w-3/4"></td>
                                     </tr>
                                     <tr>
                                         <td colspan="2" class="font-medium py-2">
@@ -134,36 +133,36 @@ if (!user_has_roles(get_account_type(), [AccountType::STAFF]))
                                         <td class="font-medium ">July 21, 2024</td>
                                     </tr>
                                     <tr class="headList border-b border-gray-300 dark:border-gray-700">
-                                        <td class="font-bold">Consultant</td>
-                                        <td class="font-medium">Dr. John Edward Dionisio</td>
+                                        <td class="font-bold w-1/2">Consultant</td>
+                                        <td class="font-medium w-1/2">Dr. John Edward Dionisio</td>
                                     </tr>
                                     <tr class="headList border-b border-gray-300 dark:border-gray-700">
-                                        <td class="font-bold">Heart Rate</td>
-                                        <td class="font-medium">90</td>
+                                        <td class="font-bold w-1/2">Heart Rate</td>
+                                        <td class="font-medium w-1/2">90</td>
                                     </tr>
                                     <tr class="headList border-b border-gray-300 dark:border-gray-700">
-                                        <td class="font-bold">Temperature</td>
-                                        <td class="font-medium">36</td>
+                                        <td class="font-bold w-1/2">Temperature</td>
+                                        <td class="font-medium w-1/2">36</td>
                                     </tr>
                                     <tr class="headList border-b border-gray-300 dark:border-gray-700">
-                                        <td class="font-bold">Blood Pressure</td>
-                                        <td class="font-medium">110/70</td>
+                                        <td class="font-bold w-1/2">Blood Pressure</td>
+                                        <td class="font-medium w-1/2">110/70</td>
                                     </tr>
                                     <tr class="headList border-b border-gray-300 dark:border-gray-700">
-                                        <td class="font-bold">Saturation</td>
-                                        <td class="font-medium">96%</td>
+                                        <td class="font-bold w-1/2">Saturation</td>
+                                        <td class="font-medium w-1/2">96%</td>
                                     </tr>
                                     <tr class="headList border-b border-gray-300 dark:border-gray-700">
-                                        <td class="font-bold">Chief Complaint</td>
-                                        <td></td>
+                                        <td class="font-bold w-1/4">Chief Complaint</td>
+                                        <td class="w-3/4"></td>
                                     </tr>
                                     <tr>
                                         <!-- Chief Complaint -->
                                         <td colspan="2" class="font-medium">Experiencing high fever, severe headache, and joint pain for the past few days.</td>
                                     </tr>
                                     <tr class="headList border-b border-gray-300 dark:border-gray-700">
-                                        <td class="font-bold">Physical Examination</td>
-                                        <td></td>
+                                        <td class="font-bold w-1/4">Physical Examination</td>
+                                        <td class="w-3/4"></td>
                                     </tr>
                                     <tr>
                                         <!-- Physical Examination -->
@@ -172,8 +171,8 @@ if (!user_has_roles(get_account_type(), [AccountType::STAFF]))
                                         </td>
                                     </tr>
                                     <tr class="headList border-b border-gray-300 dark:border-gray-700">
-                                        <td class="font-bold">Assessment</td>
-                                        <td></td>
+                                        <td class="font-bold w-1/4">Assessment</td>
+                                        <td class="w-3/4"></td>
                                     </tr>
                                     <tr>
                                         <!-- Assessment -->
@@ -182,8 +181,8 @@ if (!user_has_roles(get_account_type(), [AccountType::STAFF]))
                                         </td>
                                     </tr>
                                     <tr class="headList border-b border-gray-300 dark:border-gray-700">
-                                        <td class="font-bold">Treatment Plan</td>
-                                        <td></td>
+                                        <td class="font-bold w-1/4">Treatment Plan</td>
+                                        <td class="w-3/4"></td>
                                     </tr>
                                     <tr>
                                         <!-- Treatment Plan -->
@@ -225,7 +224,7 @@ if (!user_has_roles(get_account_type(), [AccountType::STAFF]))
     <div class="recordContent hidden">
               <a id="save_to_image">
                 <div class="invoice-container"> 
-                  <table cellpadding="0" cellspacing="0">
+                  <table cellpadding="0" cellspacing="0" class="w-full">
                     <tr class="top">
                         <td colspan="2">
                             <div class="flex justify-between items-center">
@@ -260,7 +259,7 @@ if (!user_has_roles(get_account_type(), [AccountType::STAFF]))
                       </td>
                     </tr>
                     <tr class="heading ">
-                      <td class="font-bold py-2">Service</td>
+                      <td class="font-bold py-2 w-1/4">Service</td>
                       <td></td>
                     </tr>
                     <tr>
@@ -272,39 +271,39 @@ if (!user_has_roles(get_account_type(), [AccountType::STAFF]))
                       </td>
                     </tr>
                     <tr class="heading">
-                      <td class="font-bold py-2">Consultation Date</td>
-                      <td class="font-medium py-2">July 21, 2024</td>
+                      <td class="font-bold py-2 w-1/2">Consultation Date</td>
+                      <td class="font-medium py-2 w-1/2">July 21, 2024</td>
                     </tr>
                     <tr class="heading">
-                      <td class="font-bold py-2">Consultant</td>
-                      <td class="font-medium py-2">Dr. John Edward Dionisio</td>
+                      <td class="font-bold py-2 w-1/2">Consultant</td>
+                      <td class="font-medium py-2 w-1/2">Dr. John Edward Dionisio</td>
                     </tr>
                     <tr class="heading ">
-                      <td class="font-bold py-2">Heart Rate</td>
-                      <td class="font-medium py-2">90</td>
+                      <td class="font-bold py-2 w-1/2">Heart Rate</td>
+                      <td class="font-medium py-2 w-1/2">90</td>
                     </tr>
                     <tr class="heading">
-                      <td class="font-bold py-2">Temperature</td>
-                      <td class="font-medium py-2">36</td>
+                      <td class="font-bold py-2 w-1/2">Temperature</td>
+                      <td class="font-medium py-2 w-1/2">36</td>
                     </tr>
                     <tr class="heading">
-                      <td class="font-bold py-2">Blood Pressure</td>
-                      <td class="font-medium py-2">110/70</td>
+                      <td class="font-bold py-2 w-1/2">Blood Pressure</td>
+                      <td class="font-medium py-2 w-1/2">110/70</td>
                     </tr>
                     <tr class="heading ">
-                      <td class="font-bold py-2">Saturation</td>
-                      <td class="font-medium py-2">96%</td>
+                      <td class="font-bold py-2 w-1/2">Saturation</td>
+                      <td class="font-medium py-2 w-1/2">96%</td>
                     </tr>
                     <tr class="heading ">
-                      <td class="font-bold py-2">Chief Complaint</td>
-                      <td></td>
+                      <td class="font-bold py-2 w-1/4">Chief Complaint</td>
+                      <td class="w-3/4"></td>
                     </tr>
                     <tr>
                       <td colspan="2" class="font-medium py-2">Experiencing high fever, severe headache, and joint pain for the past few days.</td>
                     </tr>
                     <tr class="heading ">
-                      <td class="font-bold py-2">Physical Examination</td>
-                      <td></td>
+                      <td class="font-bold py-2 w-1/4">Physical Examination</td>
+                      <td class="w-3/4"></td>
                     </tr>
                     <tr>
                       <td colspan="2" class="font-medium py-2">
@@ -317,8 +316,8 @@ if (!user_has_roles(get_account_type(), [AccountType::STAFF]))
                       </td>
                     </tr>
                     <tr class="heading ">
-                      <td class="font-bold py-2">Assessment</td>
-                      <td></td>
+                      <td class="font-bold py-2 w-1/4">Assessment</td>
+                      <td class="w-3/4"></td>
                     </tr>
                     <tr>
                       <td colspan="2" class="font-medium py-2">
@@ -326,8 +325,8 @@ if (!user_has_roles(get_account_type(), [AccountType::STAFF]))
                       </td>
                     </tr>
                     <tr class="heading ">
-                      <td class="font-bold py-2">Treatment Plan</td>
-                      <td></td>
+                      <td class="font-bold py-2 w-1/4">Treatment Plan</td>
+                      <td class="w-3/4"></td>
                     </tr>
                     <tr>
                       <td colspan="2" class="font-medium py-2">

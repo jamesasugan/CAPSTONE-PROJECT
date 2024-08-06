@@ -96,7 +96,6 @@ if ($result && $result->num_rows > 0) {
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
     />
-    <link rel="stylesheet" href="../css/services-swiper.css" />
     <script src="../../node_modules/html2canvas-pro/dist/html2canvas-pro.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script src="../js/main.js" defer></script>

@@ -22,7 +22,7 @@ include 'ReuseFunction.php'
 ?>
 
 
-<div class="dashboard-page pt-32 sm:pt-60 ">
+<div class="dashboard-page pt-32 sm:pt-60 min-h-screen">
   <div class="title mb-0 sm:mb-10 w-full px-4">
     <h1 class="text-3xl sm:text-6xl font-bold text-center break-words mb-5">
       Welcome,
@@ -93,10 +93,5 @@ include 'ReuseFunction.php'
   </div>
 </div>
 
-  <a href="#services" class="scroll-down-container">
-    <img
-      src="../images/memaarrow.png"
-      class="scroll-down-arrow w-16"
-      alt="Scroll down"
-    />
-  </a>
+
+ 
