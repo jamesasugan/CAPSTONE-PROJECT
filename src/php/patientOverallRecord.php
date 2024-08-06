@@ -351,6 +351,17 @@ if (!user_has_roles(get_account_type(), [AccountType::PATIENT, AccountType::ADMI
 
 
     <script>
+      function formatDate(dateString) {
+        // Create a Date object from the input date string
+        const date = new Date(dateString);
+
+        // Format the date to "Month Day, Year"
+        return date.toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+        });
+      }
       document.addEventListener('DOMContentLoaded', function(){
         $.ajax({
           url: 'ajax.php?action=getOverallRecord&chart_id=' + encodeURIComponent('<?=$_GET["chart_id"]?>') + '&record_id=' +  encodeURIComponent('<?=$_GET["record_id"]?>'),
@@ -360,14 +371,14 @@ if (!user_has_roles(get_account_type(), [AccountType::PATIENT, AccountType::ADMI
               let data = response.data;
 
 
-              $('#vrecName').html(data.First_Name + data.Middle_Name + data.Last_Name);
+              $('#vrecName').html(data.First_Name+ ' ' + data.Middle_Name+ ' ' + data.Last_Name);
               let age = Math.floor((new Date() - new Date(data.DateofBirth)) / (365.25 * 24 * 60 * 60 * 1000));
               $('#vrecAge').html(age)
               $('#vrecSex').html(data.Sex);
               $('#vrecContactNum ').html(data.Contact_Number);
               $('#vrecEmail').html(data.patientEmail);
               $('#vrecWeight').html(data.Weight);
-              $('#vrecDob').html(data.DateofBirth);
+              $('#vrecDob').html(formatDate(data.DateofBirth));
               $('#vrecMDcondition').html(data.Medical_condition);
               $('#vrecAddress').html(data.Address);
 
@@ -375,7 +386,8 @@ if (!user_has_roles(get_account_type(), [AccountType::PATIENT, AccountType::ADMI
               let services = data.availedService.split(",");
               let mappedServices = services.map(x => "<li>" + x.trim() + "</li>");
               $('#vrecAvailedService').html(mappedServices);
-              $('#vrecConsultationDate').html(data.consultationDate);
+              $('#vrecConsultationDate').html(formatDate(data.consultationDate));
+
              $('#vrecConsultant').html(response.consultant);
               $('#vrecHearRate').html(data.HeartRate);
               $('#vrecTemp').html(data.Temperature);
@@ -398,9 +410,9 @@ if (!user_has_roles(get_account_type(), [AccountType::PATIENT, AccountType::ADMI
               $('#precAge').html(age)
               $('#precWeight').html(data.Weight);
               $('#precContactNum').html(data.Contact_Number)
-              $('#precDOB').html(data.DateofBirth);
+              $('#precDOB').html(formatDate(data.DateofBirth));
 
-              $('#precConsultationDate').html(data.consultationDate);
+              $('#precConsultationDate').html(formatDate(data.consultationDate));
               $('#precConsultant').html(response.consultant);
               $('#precHearRate').html(data.HeartRate);
               $('#precTemp').html(data.Temperature);
