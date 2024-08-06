@@ -40,7 +40,7 @@
     <div id="appointmentRecordsTab" class="p-10 pt-24 mx-auto w-full min-h-screen bg-[#ebf0f4] dark:bg-[#17222a]">
       <div class="flex flex-col sm:flex-row justify-between items-center bg-gray-200 dark:bg-gray-700 p-5 border-b border-b-black">
             <h3 class="text-lg text-center sm:text-start sm:text-3xl w-full font-bold text-black dark:text-white uppercase">
-                Appointment Records
+                Appointment Patient List
             </h3>
         <div class="w-full sm:flex sm:items-center justify-end">
             <!-- Search Input and Button -->
@@ -67,7 +67,6 @@
               <thead class="sticky top-0 bg-neutral-300 dark:bg-gray-500 z-10" style="top: -1px;">
                 <tr class="font-bold text-black dark:text-white text-base sm:text-lg">
                   <th class='cursor-pointer'>Name</th>
-                  <th class='cursor-pointer'>Appointment Type</th>
                   <th class='cursor-pointer'>Contact Number</th>
                   <th class='cursor-pointer' >Email</th>
                   <th class='cursor-pointer'>Action</th>
@@ -77,7 +76,6 @@
                 <!-- sample row -->
                 <tr class="text-base hover:bg-gray-300 dark:hover:bg-gray-600 font-medium text-black dark:text-white">
                     <td class="w-1/4">Rio Carl Dela Cruz</td>
-                    <td>Online</td>
                     <td>09512832512</td>
                     <td>riocarldelacruz@gmail.com</td>
                     <td><span class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold py-2 px-4 rounded cursor-pointer border-none">Book this Patient</span></td>
