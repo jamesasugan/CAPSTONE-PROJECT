@@ -6,6 +6,7 @@ if (!user_has_roles(get_account_type(), [AccountType::ADMIN, AccountType::PATIEN
 {
   return;
 }
+
 ?>
 
 
@@ -135,6 +136,8 @@ if (!user_has_roles(get_account_type(), [AccountType::ADMIN, AccountType::PATIEN
                             let items = resp.data;
                             for(let i = 0; i < items.length; i++)
                             {
+                              let date = new Date(items[i].consultationDate);
+                              let formattedDate = date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
                                 let services = items[i].availedService.split(",");
                                 let mappedServices = services.map(x => "<li>" + x.trim() + "</li>");
                                 trData += `                            <tr class="hover:bg-gray-300 dark:hover:bg-gray-600">
@@ -142,9 +145,9 @@ if (!user_has_roles(get_account_type(), [AccountType::ADMIN, AccountType::PATIEN
                                             <td class="w-1/2">
                                             ${mappedServices.join("\n")}
                                             </td>
-                                            <td>${items[i].c_date}</td>
+                                            <td>${formattedDate}</td>
                                             <td> 
-                                                <a href="patientOverallRecord.php" class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none" target="_blank">View More</a>
+                                                <a href="patientOverallRecord.php?chart_id=${items[i].Chart_ID}&record_id=${items[i].Record_ID}" class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none" target="_blank">View More</a>
                                             </td>
                                         </tr>\n`;
                             }

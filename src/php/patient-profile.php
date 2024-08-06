@@ -539,10 +539,13 @@ ORDER BY
                   $result = $stmt->get_result();
                   while ($row = $result->fetch_assoc()) {
                       $middleInitial = strlen($row['Middle_Name']) >= 1 ? substr($row['Middle_Name'], 0, 1) : '';
-                      $date = date('F j, Y', strtotime($row['followUp_schedule']));
-                      $time = date('g:ia', strtotime($row['followUp_schedule']));
-                      $followUpschedule = ($date . ' ' . $time) == 'January 1, 1970 1:00am' ? 'No schedule' : $date . ' ' . $time;
-
+                      if ($row['followUp_schedule']!==null){
+                          $date = date("F j, Y", strtotime($row['followUp_schedule']));
+                          $time = date("g:ia", strtotime($row['followUp_schedule']));
+                          $followUpschedule =  $date . ' ' . $time;
+                      }else{
+                          $followUpschedule = "No schedule";
+                      }
                       $statusClass = '';
                       switch ($row['patient_Status']) {
                           case 'To be Seen':

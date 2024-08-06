@@ -1,15 +1,16 @@
 <?php
 
-if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] !== 'XMLHttpRequest') {
+/*if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] !== 'XMLHttpRequest') {
     header("Location: 404.php");
     exit();
-}
+}*/
 
 
 
 
 
 include '../Database/database_conn.php';
+include 'Utils.php';
 session_start();
 
 
@@ -20,18 +21,17 @@ $action = $_GET['action'];
 extract($_POST);
 if ($action == 'signup'){
 
-    $first_name = filter_input(INPUT_POST, 'first_name', FILTER_SANITIZE_STRING);
-    $middle_name = filter_input(INPUT_POST, 'middle_name', FILTER_SANITIZE_STRING);
-    $last_name = filter_input(INPUT_POST, 'last_name', FILTER_SANITIZE_STRING);
-    $contact_number = filter_input(INPUT_POST, 'contact_number', FILTER_SANITIZE_NUMBER_INT);
-    $date_of_birth = filter_input(INPUT_POST, 'dob', FILTER_SANITIZE_STRING);
-    $sex = filter_input(INPUT_POST, 'sex', FILTER_SANITIZE_STRING);
-    $address = filter_input(INPUT_POST, 'address', FILTER_SANITIZE_STRING);
-    $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
-
-    $user_type =  filter_input(INPUT_POST, 'type', FILTER_SANITIZE_EMAIL);
-    $password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_STRING);
-    $conf_password = filter_input(INPUT_POST, 'conf_password', FILTER_SANITIZE_STRING);
+    $first_name = $_POST['first_name'] ?? '';
+    $middle_name = $_POST['middle_name'] ?? '';;
+    $last_name = $_POST['last_name'] ?? '';
+    $contact_number = $_POST['contact_number'] ?? '';
+    $date_of_birth = $_POST['dob'] ?? '';
+    $sex = $_POST['sex'] ?? '';
+    $address = $_POST['address'] ?? '';
+    $email = $_POST['email'] ?? '';
+    $user_type =  $_POST['type'] ?? '';
+    $password = $_POST['password'] ?? '';
+    $conf_password = $_POST['conf_password'] ?? '';
 
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
@@ -117,8 +117,8 @@ if ($action == 'signup'){
 
 if ($action == "login"){
 
-    $login_email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_STRING);
-    $login_password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_STRING);
+    $login_email = isset($_POST['email']) ? $_POST['email'] : ''; //filter_input(INPUT_POST, 'email', FILTER_SANITIZE_STRING);
+    $login_password = isset($_POST['password']) ? $_POST['password'] : '' ;//filter_input(INPUT_POST, 'password', FILTER_SANITIZE_STRING);
     $sql = "SELECT * FROM tbl_accounts WHERE Email = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $login_email);
@@ -1098,25 +1098,81 @@ if ($action == 'createPatientChart') {
     }
 }
 
-if ($action == 'getPatientRecord'){
+if ($action == 'getOverallRecord') {
+    $chart_id = $_GET['chart_id'];
     $record_id = $_GET['record_id'];
-    $sql= "SELECT 
-                *
-            FROM 
-                tbl_records  WHERE Record_ID = ?;";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param('i', $record_id);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    if ($result && $result->num_rows > 0){
-        $row = $result->fetch_assoc();
-        header('Content-Type: application/json');
-        echo json_encode($row);
+
+    function getStaff($conn, $staff_id) {
+        $getStaff = "SELECT * FROM tbl_staff WHERE Staff_ID = ?";
+        if ($stmt = $conn->prepare($getStaff)) {
+            $stmt->bind_param('i', $staff_id);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            if ($result && $result->num_rows > 0) {
+                return $result->fetch_assoc();
+            }
+            $stmt->close();
+        }
+        return false;
     }
-    exit();
+
+    if (user_has_roles(get_account_type(), [AccountType::ADMIN])) {
+        $sql = "SELECT tbl_patient_chart.*, tbl_records.* 
+                FROM tbl_records 
+                JOIN tbl_patient_chart ON tbl_records.Chart_ID = tbl_patient_chart.Chart_ID 
+                WHERE tbl_patient_chart.Chart_ID = ? AND tbl_records.Record_ID = ?";
+        $param_types = 'ii'; // for admin
+        $params = [$chart_id, $record_id];
+    } elseif (user_has_roles(get_account_type(), [AccountType::PATIENT])) {
+        $sql = "SELECT tbl_patient_chart.*, tbl_records.* 
+                FROM tbl_records 
+                JOIN tbl_patient_chart ON tbl_records.Chart_ID = tbl_patient_chart.Chart_ID 
+                WHERE tbl_patient_chart.Chart_ID = ? 
+                AND tbl_records.Record_ID = ? 
+                AND tbl_patient_chart.user_info_ID = ?";
+        $param_types = 'iii'; // for patient
+        $params = [$chart_id, $record_id, $_SESSION['online_Account_owner_id']];
+    } elseif (user_has_roles(get_account_type(), [AccountType::STAFF])) {
+        $sql = "SELECT tbl_patient_chart.*, tbl_records.* 
+                FROM tbl_records 
+                JOIN tbl_patient_chart ON tbl_records.Chart_ID = tbl_patient_chart.Chart_ID 
+                WHERE tbl_patient_chart.Chart_ID = ? 
+                AND tbl_records.Record_ID = ? 
+                AND tbl_patient_chart.Consultant_id = ?";
+        $param_types = 'iii'; // for staff
+        $staffInfo = query_user_info(true);
+        $params = [$chart_id, $record_id, $staffInfo['Staff_ID']];
+    } else {
+        echo json_encode(['error' => 'Unauthorized access']);
+        exit();
+    }
+
+    if ($stmt = $conn->prepare($sql)) {
+        $stmt->bind_param($param_types, ...$params);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result && $result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            $doctor = getStaff($conn, $row['Consultant_id']);
+
+            header('Content-Type: application/json');
+            echo json_encode([
+                "successResponse" => 1,
+                "consultant" => $doctor ? "Dr. ".formatFullName($doctor['First_Name'],$doctor['Middle_Name'],$doctor['Last_Name']) : "Unknown",
+                "data" => $row
+            ]);
+        } else {
+            echo json_encode(['error' => 'No record found']);
+        }
+        $stmt->close();
+    } else {
+        echo json_encode(['error' => 'Failed to prepare SQL statement']);
+    }
 }
 
 if ($action == "getPatientRecords2")
+
 {
     function FetchPatientRecordsCount($conn, $id)
     {
@@ -1133,18 +1189,22 @@ if ($action == "getPatientRecords2")
     $user_id = $_GET["user_id"];
     $chart_id = $_GET["chart_id"];
     $total_page_count = intdiv(FetchPatientRecordsCount($conn, $user_id), $page_limit) + 1;
-    $sql= "SELECT `Record_ID`, `Chart_ID`, DATE_FORMAT(`consultationDate`, '%M %e, %Y') as `c_date`, `availedService`, `Temperature`, `HeartRate`, `Blood_Pressure`, `Saturation`, `Chief_complaint`, `Physical_Examination`, `Assessment`, `Treatment_Plan` 
-    FROM 
-    (SELECT @rn := @rn + 1 as `row_num`, t.* 
-    FROM 
-    (SELECT * 
-    FROM `tbl_records` tr1 
-    WHERE tr1.Chart_ID = ? AND tr1.Chart_ID IN(SELECT Chart_id FROM tbl_patient_chart WHERE user_info_ID = (SELECT user_info_ID FROM `account_user_info` WHERE User_ID = ?))) t, (SELECT @rn := 0) r
-    ORDER BY `t`.`consultationDate` DESC) nt
-    WHERE `row_num` > (?-1) * ?
-    LIMIT ?";
+    $sql = '';
+    if ($_SESSION['user_type'] == 'staff'){
+       $getUserInfo = query_user_info(true);
+        if ($getUserInfo['Role'] == 'admin'){
+            $sql= "SELECT * FROM tbl_records where Chart_ID = ?";
+        }
+
+    }else {
+        $sql = "SELECT * FROM tbl_records 
+JOIN tbl_patient_chart ON tbl_patient_chart.Chart_id = tbl_records.Chart_ID 
+         where tbl_patient_chart.Chart_ID = ? and tbl_patient_chart.user_info_ID = ".$_SESSION['online_Account_owner_id'];
+
+    }
+
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param('iiiii', $chart_id, $user_id, $page, $page_limit, $page_limit);
+    $stmt->bind_param('i', $chart_id);
     $stmt->execute();
     $result = $stmt->get_result();
     if ($result && $result->num_rows > 0){
@@ -1279,22 +1339,34 @@ if ($action == 'createPatientRecord') {
     }
 }
 
-if ($action == 'getResImg'){
+if ($action == 'getResImg') {
     $record_id = $_GET['record_id'];
-    $sql = "SELECT * FROM patientimageresult where record_id = ?";
+    $sql = "SELECT * FROM patientimageresult WHERE record_id = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param('i', $record_id);
     $stmt->execute();
+
     $res = $stmt->get_result();
-    if ($res->num_rows > 0){
-        while ($row = $res->fetch_assoc()){
-            echo '<img class="h-auto max-w-full"
-                                       src="../PatientChartRecordResults/'.$row['image_file_name'].'"
-                                       alt="image description">';
+    header('Content-Type: application/json');
+
+    if ($res->num_rows > 0) {
+        $result_List = [];
+        while ($row = $res->fetch_assoc()) {
+            $result_List[] = $row;
         }
+        echo json_encode([
+            "response" => 1,
+            "data" => $result_List
+        ]);
+    } else {
+        echo json_encode([
+            "response" => 0, // Changed to 0 to indicate no results
+            "message" => "No image results"
+        ]);
     }
     exit();
 }
+
 
 if ($action == 'archivePatientChar'){
     $chart_id = $_GET['chart_id'];

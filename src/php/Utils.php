@@ -76,4 +76,12 @@ function query_user_info($is_staff)
     return null;
 }
 
+function formatFullName($firstName, $middleName, $lastName) {
+    if ($middleName !== 'N/A' && !empty($middleName)) {
+        return $firstName . ' ' . substr($middleName, 0, 1) . '. ' . $lastName;
+    } else {
+        return $firstName . ' ' . $lastName;
+    }
+}
+
 ?>

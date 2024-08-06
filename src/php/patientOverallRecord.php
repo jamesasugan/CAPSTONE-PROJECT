@@ -2,10 +2,19 @@
 <?php
 session_start();
 require_once 'Utils.php';
+include_once '../Database/database_conn.php';
 if (!user_has_roles(get_account_type(), [AccountType::PATIENT, AccountType::ADMIN]))
 {
   return;
 }
+
+
+/* else {
+  return;
+  //header('Location: staff-patientsRecord.php');
+ // exit();
+}*/
+
 
 ?>
 <!DOCTYPE html>
@@ -62,47 +71,48 @@ if (!user_has_roles(get_account_type(), [AccountType::PATIENT, AccountType::ADMI
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-2 max-w-4xl w-full text-lg">
                         <div>
                             <strong class="block">Name</strong>
-                            <span class="block">Franklin C. Saint</span>
+                            <span class="block" id='vrecName'></span>
                         </div>
                         <div>
-                            <strong class="block">Age</strong>
-                            <span class="block">22</span>
+                            <strong class="block" >Age</strong>
+                            <span class="block" id='vrecAge'></span>
                         </div>
                         <div>
-                            <strong class="block">Sex</strong>
-                            <span class="block">Male</span>
+                            <strong class="block" >Sex</strong>
+                            <span class="block" id='vrecSex'></span>
                         </div>
                         <div>
-                            <strong class="block">Contact Number</strong>
-                            <span class="block">09231512512</span>
+                            <strong class="block" >Contact Number</strong>
+                            <span class="block" id='vrecContactNum'></span>
                         </div>
                         <div>
-                            <strong class="block">Email</strong>
-                            <span class="block">franklinsaint@gmail.com</span>
+                            <strong class="block" >Email</strong>
+                          <span class="block" id='vrecEmail'></span>
                         </div>
                         <div>
                             <strong class="block">Weight</strong>
-                            <span class="block">60</span>
+                          <span class="block" id='vrecWeight'></span>
                         </div>
                         <div>
                             <strong class="block">Date of Birth</strong>
-                            <span class="block">February 21, 2002</span>
+                          <span class="block" id='vrecDob'></span>
                         </div>
                         <div>
                             <strong class="block">Medical Condition</strong>
-                            <span class="block">N/A</span>
+                          <span class="block" id='vrecMDcondition'></span>
                         </div>
                         <div>
                             <strong class="block">Address</strong>
-                            <span class="block">Platero Binan Laguna</span>
+                          <span class="block" id='vrecAddress'></span>
                         </div>
                     </div>
                 </div>
 
             
-                <!-- eto kapag wala pang record -->
+                <!-- eto kapag wala pang record
                 <p class="text-2xl font-semibold text-center">No Records Yet</p>
-                
+                -->
+
                 <div class="flex justify-center mb-5 mt-5">
                     <button id="print" class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none printformButton flex flex-col items-center px-5 py-1">
                         <i class="fa-solid fa-print"></i>
@@ -119,7 +129,7 @@ if (!user_has_roles(get_account_type(), [AccountType::PATIENT, AccountType::ADMI
                                         <td></td>
                                     </tr>
                                     <tr>
-                                        <td colspan="2" class="font-medium py-2">
+                                        <td colspan="2" class="font-medium py-2" id='vrecAvailedService'>
                                             <li>Flu Vaccine</li>
                                             <li>Pneumococcal Vaccine Measles, Mumps, and Rubella Vaccine</li>
                                             <li>Monthly Immunization for babies</li>
@@ -128,35 +138,35 @@ if (!user_has_roles(get_account_type(), [AccountType::PATIENT, AccountType::ADMI
                                     </tr>
                                     <tr class="headList border-b border-gray-300 dark:border-gray-700">
                                         <td class="font-bold">Consultation Date</td>
-                                        <td class="font-medium">July 21, 2024</td>
+                                        <td class="font-medium" id='vrecConsultationDate'>July 21, 2024</td>
                                     </tr>
                                     <tr class="headList border-b border-gray-300 dark:border-gray-700">
                                         <td class="font-bold">Consultant</td>
-                                        <td class="font-medium">Dr. John Edward Dionisio</td>
+                                        <td class="font-medium" id='vrecConsultant'>Dr. John Edward Dionisio</td>
                                     </tr>
                                     <tr class="headList border-b border-gray-300 dark:border-gray-700">
                                         <td class="font-bold">Heart Rate</td>
-                                        <td class="font-medium">90</td>
+                                        <td class="font-medium" id='vrecHearRate'>90</td>
                                     </tr>
                                     <tr class="headList border-b border-gray-300 dark:border-gray-700">
                                         <td class="font-bold">Temperature</td>
-                                        <td class="font-medium">36</td>
+                                        <td class="font-medium" id='vrecTemp'>36</td>
                                     </tr>
                                     <tr class="headList border-b border-gray-300 dark:border-gray-700">
                                         <td class="font-bold">Blood Pressure</td>
-                                        <td class="font-medium">110/70</td>
+                                        <td class="font-medium" id='vrecBP'>110/70</td>
                                     </tr>
                                     <tr class="headList border-b border-gray-300 dark:border-gray-700">
                                         <td class="font-bold">Saturation</td>
-                                        <td class="font-medium">96%</td>
+                                        <td class="font-medium" id='vrecSaturation'>96%</td>
                                     </tr>
                                     <tr class="headList border-b border-gray-300 dark:border-gray-700">
-                                        <td class="font-bold">Chief Complaint</td>
+                                        <td class="font-bold" >Chief Complaint</td>
                                         <td></td>
                                     </tr>
                                     <tr>
                                         <!-- Chief Complaint -->
-                                        <td colspan="2" class="font-medium">Experiencing high fever, severe headache, and joint pain for the past few days.</td>
+                                        <td colspan="2" class="font-medium" id='vrecChiefComp'>Experiencing high fever, severe headache, and joint pain for the past few days.</td>
                                     </tr>
                                     <tr class="headList border-b border-gray-300 dark:border-gray-700">
                                         <td class="font-bold">Physical Examination</td>
@@ -164,7 +174,7 @@ if (!user_has_roles(get_account_type(), [AccountType::PATIENT, AccountType::ADMI
                                     </tr>
                                     <tr>
                                         <!-- Physical Examination -->
-                                        <td colspan="2" class="font-medium">
+                                        <td colspan="2" class="font-medium" id='vrecPhyExam'>
                                             Patient appears febrile and fatigued. Normal heart sounds, no murmurs, regular rhythm. Clear breath sounds bilaterally, no wheezing or crackles. Soft, mild tenderness in the right upper quadrant, no organomegaly. No rash or petechiae observed. Stable except for elevated temperature.
                                         </td>
                                     </tr>
@@ -174,7 +184,7 @@ if (!user_has_roles(get_account_type(), [AccountType::PATIENT, AccountType::ADMI
                                     </tr>
                                     <tr>
                                         <!-- Assessment -->
-                                        <td colspan="2" class="font-medium">
+                                        <td colspan="2" class="font-medium" id='vrecAssesment'>
                                             Febrile illness with severe headache and myalgia, suspected dengue fever.
                                         </td>
                                     </tr>
@@ -184,20 +194,20 @@ if (!user_has_roles(get_account_type(), [AccountType::PATIENT, AccountType::ADMI
                                     </tr>
                                     <tr>
                                         <!-- Treatment Plan -->
-                                        <td colspan="2" class="font-medium">
+                                        <td colspan="2" class="font-medium" id='vrecTreatmentPlan'>
                                             Order dengue NS1 antigen test and dengue IgM and IgG antibody tests to confirm the diagnosis. Recommend complete blood count (CBC) to check for leukopenia and thrombocytopenia, which are common in dengue fever. Advise the patient to maintain adequate hydration by drinking plenty of fluids. Prescribe acetaminophen 500 mg, one tablet every 6 hours as needed for fever and pain. Instruct the patient to avoid NSAIDs such as ibuprofen and aspirin due to the risk of bleeding.
                                         </td>
                                     </tr>
                                 </table>
 
                                 <!-- hide mo tong "Results" tsaka border pag walang image -->
-                                <div class="border border-gray-400 mt-10 mb-10"></div>
-                                <h2 class="text-2xl sm:text-3xl font-bold mb-4 text-center">Results</h2>   
-                                <div class="flex flex-wrap gap-2 justify-center items-center w-full mb-3" id="ImageResults">
+                                <div class="border border-gray-400 mt-10 mb-10" id='presborder'></div>
+                                <h2 class="text-2xl sm:text-3xl font-bold mb-4 text-center" id='vresttext'>Results</h2>
+                                <div class="flex flex-wrap gap-2 justify-center items-center w-full mb-3" id="VImageResults">
                                     <div class="flex flex-col items-center">                
                                         <!-- image dito, example lang tong img tag, alisin mo na lang -->
-                                        <img class="h-auto max-w-full object-cover" src="../images/xray.jpg" alt="Image Result">
-                                    </div>          
+<!--                                        <img class="h-auto max-w-full object-cover" src="../images/xray.jpg" alt="Image Result">
+-->                                    </div>
                                 </div>
 
                             </div>
@@ -229,17 +239,17 @@ if (!user_has_roles(get_account_type(), [AccountType::PATIENT, AccountType::ADMI
                       <table class="table-fixed w-full">
                         <tr>
                           <td class="w-1/2 p-2 align-top">
-                            <p><strong>Name:</strong> Franklin C. Saint</p>
-                            <p><strong>Sex:</strong> Male</p>
-                            <p><strong>Medical Conditions:</strong> N/A</p>
-                            <p><strong>Email:</strong> franklinsaint@gmail.com</p>
-                            <p><strong>Address:</strong> California, USA</p>
+                            <p><strong>Name:</strong> <span id='precName'></span></p>
+                            <p><strong>Sex:</strong> <span id='precSex'></span></p>
+                            <p><strong>Medical Conditions:</strong> <span id='precMD'></span></p>
+                            <p><strong>Email:</strong> <span id='precEmail'></span></p>
+                            <p><strong>Address:</strong> <span  id='precAddress'></span></p>
                           </td>
                           <td class="w-1/2 p-2 align-top">
-                            <p><strong>Age:</strong> 22</p>
-                            <p><strong>Weight:</strong> 60kg</p>
-                            <p><strong>Contact Number:</strong> 09763218546</p>           
-                            <p><strong>Date of Birth:</strong> February 21, 2002</p>
+                            <p><strong>Age:</strong> <span  id='precAge'></span></p>
+                            <p><strong>Weight:</strong> <span  id='precWeight'></span></p>
+                            <p><strong>Contact Number:</strong> <span id='precContactNum'></span></p>
+                            <p><strong>Date of Birth:</strong> <span id='precDOB'></span></p>
                           </td>
                         </tr>
                       </table>
@@ -250,50 +260,47 @@ if (!user_has_roles(get_account_type(), [AccountType::PATIENT, AccountType::ADMI
                       <td></td>
                     </tr>
                     <tr>
-                      <td colspan="2" class="font-medium py-2">
-                        <li>Flu Vaccine</li>
-                        <li>Pneumococcal Vaccine Measles, Mumps, and Rubella Vaccine</li>
-                        <li>Monthly Immunization for babies</li>
-                        <li>Polio Vaccine</li>
+                      <td colspan="2" class="font-medium py-2" id='precAvailedService'>
+
                       </td>
                     </tr>
                     <tr class="heading ">
                       <td class="font-bold py-2">Consultation Date</td>
-                      <td class="font-medium py-2">July 21, 2024</td>
+                      <td class="font-medium py-2" id='precConsultationDate'>July 21, 2024</td>
                     </tr>
                     <tr class="heading ">
                       <td class="font-bold py-2">Consultant</td>
-                      <td class="font-medium py-2">Dr. John Edward Dionisio</td>
+                      <td class="font-medium py-2" id='precConsultant'>Dr. John Edward Dionisio</td>
                     </tr>
                     <tr class="heading ">
                       <td class="font-bold py-2">Heart Rate</td>
-                      <td class="font-medium py-2">90</td>
+                      <td class="font-medium py-2 id='precHearRate'">90</td>
                     </tr>
                     <tr class="heading ">
                       <td class="font-bold py-2">Temperature</td>
-                      <td class="font-medium py-2">36</td>
+                      <td class="font-medium py-2" id='precTemp'>36</td>
                     </tr>
                     <tr class="heading ">
                       <td class="font-bold py-2">Blood Pressure</td>
-                      <td class="font-medium py-2">110/70</td>
+                      <td class="font-medium py-2" id='precBP'>110/70</td>
                     </tr>
                     <tr class="heading ">
                       <td class="font-bold py-2">Saturation</td>
-                      <td class="font-medium py-2">96%</td>
+                      <td class="font-medium py-2" id='precSaturation'>96%</td>
                     </tr>
                     <tr class="heading ">
-                      <td class="font-bold py-2">Chief Complaint</td>
+                      <td class="font-bold py-2" >Chief Complaint</td>
                       <td></td>
                     </tr>
                     <tr>
-                      <td colspan="2" class="font-medium py-2">Experiencing high fever, severe headache, and joint pain for the past few days.</td>
+                      <td colspan="2" class="font-medium py-2" id='precChiefComp'>Experiencing high fever, severe headache, and joint pain for the past few days.</td>
                     </tr>
                     <tr class="heading ">
                       <td class="font-bold py-2">Physical Examination</td>
                       <td></td>
                     </tr>
                     <tr>
-                      <td colspan="2" class="font-medium py-2">
+                      <td colspan="2" class="font-medium py-2" id='precPhyExam'>
                       Patient appears febrile and fatigued.
                       Normal heart sounds, no murmurs, regular rhythm.
                       Clear breath sounds bilaterally, no wheezing or crackles.
@@ -307,7 +314,7 @@ if (!user_has_roles(get_account_type(), [AccountType::PATIENT, AccountType::ADMI
                       <td></td>
                     </tr>
                     <tr>
-                      <td colspan="2" class="font-medium py-2">
+                      <td colspan="2" class="font-medium py-2" id='precAssesment'>
                       Febrile illness with severe headache and myalgia, suspected dengue fever.
                       </td>
                     </tr>
@@ -316,7 +323,7 @@ if (!user_has_roles(get_account_type(), [AccountType::PATIENT, AccountType::ADMI
                       <td></td>
                     </tr>
                     <tr>
-                      <td colspan="2" class="font-medium py-2">
+                      <td colspan="2" class="font-medium py-2" id='precTreatmentPlan'>
                       Order dengue NS1 antigen test and dengue IgM and IgG antibody tests to confirm the diagnosis.
                       Recommend complete blood count (CBC) to check for leukopenia and thrombocytopenia, which are common in dengue fever.
                       Advise the patient to maintain adequate hydration by drinking plenty of fluids.
@@ -327,14 +334,11 @@ if (!user_has_roles(get_account_type(), [AccountType::PATIENT, AccountType::ADMI
                   </table>
 
                   <!-- image results dito, hide mo "Results" na text pag walang image -->
-                  <h2 class="text-2xl sm:text-3xl font-bold mb-4 text-center mt-10">Results</h2>
+                  <h2 class="text-2xl sm:text-3xl font-bold mb-4 text-center mt-10" id='presttext'>Results</h2>
 
                   <!-- isang buong div na to per image -->
-                  <div class="flex flex-wrap gap-2 justify-center items-center w-full mb-3" id="ImageResults">
-                    <div class="flex flex-col items-center">
-                        <!-- image dito, example lang tong img tag, alisin mo na lang -->
-                        <img class="h-auto max-w-full object-cover" src="../images/xray.jpg" alt="Image Result">
-                    </div>          
+                  <div class="flex flex-wrap gap-2 justify-center items-center w-full mb-3" id="PImageResults">
+
                   </div>
 
                   <!-- image results end -->
@@ -345,7 +349,114 @@ if (!user_has_roles(get_account_type(), [AccountType::PATIENT, AccountType::ADMI
     <!-- print content end -->
 
     <script src="../js/index.js"></script>
-    <script src="../js/html2canvaspro.js"></script>
+
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function(){
+        $.ajax({
+          url: 'ajax.php?action=getOverallRecord&chart_id=' + encodeURIComponent('<?=$_GET["chart_id"]?>') + '&record_id=' +  encodeURIComponent('<?=$_GET["record_id"]?>'),
+          type: 'GET',
+          success: function(response) {
+            if (response.successResponse === 1) {
+              let data = response.data;
+
+
+              $('#vrecName').html(data.First_Name + data.Middle_Name + data.Last_Name);
+              let age = Math.floor((new Date() - new Date(data.DateofBirth)) / (365.25 * 24 * 60 * 60 * 1000));
+              $('#vrecAge').html(age)
+              $('#vrecSex').html(data.Sex);
+              $('#vrecContactNum ').html(data.Contact_Number);
+              $('#vrecEmail').html(data.patientEmail);
+              $('#vrecWeight').html(data.Weight);
+              $('#vrecDob').html(data.DateofBirth);
+              $('#vrecMDcondition').html(data.Medical_condition);
+              $('#vrecAddress').html(data.Address);
+
+
+              let services = data.availedService.split(",");
+              let mappedServices = services.map(x => "<li>" + x.trim() + "</li>");
+              $('#vrecAvailedService').html(mappedServices);
+              $('#vrecConsultationDate').html(data.consultationDate);
+             $('#vrecConsultant').html(response.consultant);
+              $('#vrecHearRate').html(data.HeartRate);
+              $('#vrecTemp').html(data.Temperature);
+              $('#vrecBP').html(data.Blood_Pressure);
+              $('#vrecSaturation').html(data.Saturation);
+              $('#vrecChiefComp').html(data.Chief_complaint);
+              $('#vrecPhyExam').html(data.Physical_Examination);
+              $('#vrecAssesment').html(data.Assessment);
+              $('#vrecTreatmentPlan').html(data.Treatment_Plan);
+
+              $('#precAvailedService').html(mappedServices);
+
+
+
+              $('#precName').html(data.First_Name + data.Middle_Name + data.Last_Name);
+              $('#precSex').html(data.Sex);
+              $('#precMD').html(data.Medical_condition);
+              $('#precEmail').html(data.patientEmail);
+              $('#precAddress').html(data.Address);
+              $('#precAge').html(age)
+              $('#precWeight').html(data.Weight);
+              $('#precContactNum').html(data.Contact_Number)
+              $('#precDOB').html(data.DateofBirth);
+
+              $('#precConsultationDate').html(data.consultationDate);
+              $('#precConsultant').html(response.consultant);
+              $('#precHearRate').html(data.HeartRate);
+              $('#precTemp').html(data.Temperature);
+              $('#precBP').html(data.Blood_Pressure);
+              $('#precSaturation').html(data.Saturation);
+              $('#precChiefComp').html(data.Chief_complaint);
+              $('#precPhyExam').html(data.Physical_Examination);
+              $('#precAssesment').html(data.Assessment);
+              $('#precTreatmentPlan').html(data.Treatment_Plan);
+
+            } else {
+              console.error('Error: ' + response.error);
+            }
+          }
+
+        });
+      })
+      document.addEventListener('DOMContentLoaded', function() {
+        $.ajax({
+          url: 'ajax.php?action=getResImg&record_id=' + encodeURIComponent('<?=$_GET["record_id"]?>'),
+          type: 'GET',
+          success: function(response) {
+            if (response.response === 1) {
+              let imgResult = "";
+              let imgResultList = response.data;
+
+              if (Array.isArray(imgResultList) && imgResultList.length > 0) {
+                for (let i = 0; i < imgResultList.length; i++) {
+                  let imageFileName = imgResultList[i].image_file_name;
+                  imgResult += `
+                            <div class="flex flex-col items-center">
+                                <img class="h-auto max-w-full object-cover" src="../PatientChartRecordResults/${imageFileName}" alt="Image Result">
+                            </div>
+                        `;
+                  console.log(imageFileName); // Logging for debugging
+                }
+              } else {
+                console.log("No images found in response.");
+              }
+
+              // Update HTML elements
+              $('#PImageResults').html(imgResult);
+              $('#VImageResults').html(imgResult);
+            } else {
+              $('#presborder, #presttext, #vresttext').addClass('hidden');
+
+            }
+          },
+          error: function(xhr, status, error) {
+            console.error("AJAX request failed:", status, error);
+          }
+        });
+      });
+
+    </script>
     
 </body>
 </html>
