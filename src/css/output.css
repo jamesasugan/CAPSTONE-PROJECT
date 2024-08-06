@@ -1712,6 +1712,19 @@ html {
   scrollbar-gutter: stable;
 }
 
+.navbar {
+  display: flex;
+  align-items: center;
+  padding: var(--navbar-padding, 0.5rem);
+  min-height: 4rem;
+  width: 100%;
+}
+
+:where(.navbar > *:not(script, style)) {
+  display: inline-flex;
+  align-items: center;
+}
+
 .progress {
   position: relative;
   width: 100%;
@@ -4380,10 +4393,6 @@ details.collapse summary::-webkit-details-marker {
   flex: 1 1 0%;
 }
 
-.flex-shrink-0 {
-  flex-shrink: 0;
-}
-
 .shrink-0 {
   flex-shrink: 0;
 }
@@ -5855,10 +5864,6 @@ details.collapse summary::-webkit-details-marker {
     margin-bottom: 2.5rem;
   }
 
-  .sm\:ml-12 {
-    margin-left: 3rem;
-  }
-
   .sm\:ml-5 {
     margin-left: 1.25rem;
   }
@@ -6013,6 +6018,14 @@ details.collapse summary::-webkit-details-marker {
     text-align: left;
   }
 
+  .sm\:text-center {
+    text-align: center;
+  }
+
+  .sm\:text-start {
+    text-align: start;
+  }
+
   .sm\:text-2xl {
     font-size: 1.5rem;
     line-height: 2rem;
@@ -6133,11 +6146,6 @@ details.collapse summary::-webkit-details-marker {
     line-height: 1.75rem;
   }
 
-  .md\:text-xs {
-    font-size: 0.75rem;
-    line-height: 1rem;
-  }
-
   .md\:last\:border-r:last-child {
     border-right-width: 1px;
   }
@@ -6215,11 +6223,6 @@ details.collapse summary::-webkit-details-marker {
 
   .lg\:pr-4 {
     padding-right: 1rem;
-  }
-
-  .lg\:text-lg {
-    font-size: 1.125rem;
-    line-height: 1.75rem;
   }
 
   .lg\:text-xl {
