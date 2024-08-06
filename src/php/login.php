@@ -212,7 +212,7 @@ if (!user_has_roles(get_account_type(), [AccountType::VISITOR]))
           } else {
             alert(response);
           }
-          e.target.reset();
+          //e.target.reset();
         },
       });
     });
