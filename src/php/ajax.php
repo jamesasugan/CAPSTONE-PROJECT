@@ -1,9 +1,9 @@
 <?php
 
-/*if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] !== 'XMLHttpRequest') {
-    header("Location: 404.php");
+if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] !== 'XMLHttpRequest') {
+    header("Location: index.php");
     exit();
-}*/
+}
 
 
 
@@ -1116,14 +1116,27 @@ if ($action == 'getOverallRecord') {
         return false;
     }
 
-    if (user_has_roles(get_account_type(), [AccountType::ADMIN])) {
-        $sql = "SELECT tbl_patient_chart.*, tbl_records.* 
+    if ($_SESSION['user_type'] == 'staff'){
+        $sessionStaff = query_user_info(true);
+        if ($sessionStaff['Role'] == 'doctor'){
+            $sql = "SELECT tbl_patient_chart.*, tbl_records.* 
+                FROM tbl_records 
+                JOIN tbl_patient_chart ON tbl_records.Chart_ID = tbl_patient_chart.Chart_ID 
+                WHERE tbl_patient_chart.Chart_ID = ? 
+                AND tbl_records.Record_ID = ? 
+                AND tbl_patient_chart.Consultant_id = ?";
+            $param_types = 'iii'; // for staff
+            $staffInfo = query_user_info(true);
+            $params = [$chart_id, $record_id, $staffInfo['Staff_ID']];
+        }else if ($sessionStaff['Role'] == 'admin') {
+            $sql = "SELECT tbl_patient_chart.*, tbl_records.* 
                 FROM tbl_records 
                 JOIN tbl_patient_chart ON tbl_records.Chart_ID = tbl_patient_chart.Chart_ID 
                 WHERE tbl_patient_chart.Chart_ID = ? AND tbl_records.Record_ID = ?";
-        $param_types = 'ii'; // for admin
-        $params = [$chart_id, $record_id];
-    } elseif (user_has_roles(get_account_type(), [AccountType::PATIENT])) {
+            $param_types = 'ii'; // for admin
+            $params = [$chart_id, $record_id];
+        }
+    }else if ($_SESSION['user_type'] == 'patient'){
         $sql = "SELECT tbl_patient_chart.*, tbl_records.* 
                 FROM tbl_records 
                 JOIN tbl_patient_chart ON tbl_records.Chart_ID = tbl_patient_chart.Chart_ID 
@@ -1132,20 +1145,13 @@ if ($action == 'getOverallRecord') {
                 AND tbl_patient_chart.user_info_ID = ?";
         $param_types = 'iii'; // for patient
         $params = [$chart_id, $record_id, $_SESSION['online_Account_owner_id']];
-    } elseif (user_has_roles(get_account_type(), [AccountType::STAFF])) {
-        $sql = "SELECT tbl_patient_chart.*, tbl_records.* 
-                FROM tbl_records 
-                JOIN tbl_patient_chart ON tbl_records.Chart_ID = tbl_patient_chart.Chart_ID 
-                WHERE tbl_patient_chart.Chart_ID = ? 
-                AND tbl_records.Record_ID = ? 
-                AND tbl_patient_chart.Consultant_id = ?";
-        $param_types = 'iii'; // for staff
-        $staffInfo = query_user_info(true);
-        $params = [$chart_id, $record_id, $staffInfo['Staff_ID']];
-    } else {
+    }
+    else {
         echo json_encode(['error' => 'Unauthorized access']);
         exit();
     }
+
+
 
     if ($stmt = $conn->prepare($sql)) {
         $stmt->bind_param($param_types, ...$params);
@@ -1194,8 +1200,10 @@ if ($action == "getPatientRecords2")
        $getUserInfo = query_user_info(true);
         if ($getUserInfo['Role'] == 'admin'){
             $sql= "SELECT * FROM tbl_records where Chart_ID = ?";
+        }if ($getUserInfo['Role'] == 'doctor'){
+            $sql= "SELECT * FROM tbl_records JOIN tbl_patient_chart ON tbl_patient_chart.Chart_id = tbl_records.Chart_ID 
+         where tbl_patient_chart.Chart_ID = ? and tbl_patient_chart.Consultant_id = ".$getUserInfo['Staff_ID'];
         }
-
     }else {
         $sql = "SELECT * FROM tbl_records 
 JOIN tbl_patient_chart ON tbl_patient_chart.Chart_id = tbl_records.Chart_ID 
@@ -1213,7 +1221,6 @@ JOIN tbl_patient_chart ON tbl_patient_chart.Chart_id = tbl_records.Chart_ID
         {
             $record_list[] = $row;
         }
-
         header('Content-Type: application/json');
         echo json_encode([
             "total_page" => $total_page_count,

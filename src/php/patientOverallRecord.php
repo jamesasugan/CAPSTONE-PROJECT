@@ -1,9 +1,9 @@
-<!-- admin and patient -->
+<!-- admin, patient, staff -->
 <?php
 session_start();
 require_once 'Utils.php';
 include_once '../Database/database_conn.php';
-if (!user_has_roles(get_account_type(), [AccountType::PATIENT, AccountType::ADMIN]))
+if (!user_has_roles(get_account_type(), [AccountType::PATIENT, AccountType::ADMIN, AccountType::STAFF]))
 {
   return;
 }
@@ -58,7 +58,7 @@ if (!user_has_roles(get_account_type(), [AccountType::PATIENT, AccountType::ADMI
     <div class="mainContainer">
     <?php include 'navbar.php'; ?>
 
-        <!-- OVERALL RECORDS PARA SA ADMIN AT PATIENT -->
+        <!-- OVERALL RECORDS PARA SA ADMIN, PATIENT, STAFF -->
 
         <section id="overallPatientRecord" class="w-full min-h-screen flex justify-center items-center pt-28 p-5 bg-[#f6fafc] dark:bg-[#17222a]">
             <div class="w-full max-w-8xl min-h-[600px] mx-auto p-4 rounded-lg shadow-lg bg-gray-200 dark:bg-gray-700 text-[#0e1011] dark:text-[#eef0f1]">

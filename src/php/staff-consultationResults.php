@@ -105,7 +105,7 @@ if (!user_has_roles(get_account_type(), [AccountType::STAFF]))
                     </table>
 
                     <!-- labas mo to pag blangko -->
-                    <h1 class="text-center font-medium text-2xl text-black dark:text-white mt-5">No Records</h1>
+                    <h1 id='norecordelement' class="text-center font-medium text-2xl text-black dark:text-white mt-5">No Records</h1>
 
                 </div>
             </div>

@@ -162,7 +162,7 @@ ORDER BY
 
               <!-- sa staff-consultationResults.php dapat to dederetso -->
               <td>
-                <a href="staff-consultationResults.php?chart_id='. $row['Chart_id'].'"><i class="fa-regular fa-eye"></i></a>';
+                <a href="consultationResults.php?chart_id='. $row['Chart_id'].'"><i class="fa-regular fa-eye"></i></a>';
 
               if ($row['patient_Status'] == 'Follow Up' and $followUpschedule != 'No schedule'){
                   echo '<div class="tooltip tooltip-bottom ml-5" data-tip="Remove Schedule">
