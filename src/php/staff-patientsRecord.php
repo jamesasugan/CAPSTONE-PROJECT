@@ -96,7 +96,6 @@ include 'ReuseFunction.php';
                   <th class='cursor-pointer'  >Name</th>
                   <th class='cursor-pointer' >Last visit</th>
                   <th class='cursor-pointer'  >Schedule</th>
-                  <th class='cursor-pointer'  >Status</th>
                   <th>Action</th>
                 </tr>
               </thead>
@@ -151,7 +150,7 @@ ORDER BY
               <td>'.getLastPatientVisit($row['Chart_id']).'</td>
        
               <td>'.$followUpschedule.'</td>
-              <td class="font-bold '.$statusClass.'">'.$row['patient_Status'].'</td>
+         
               <!-- Status List
                    To be seen = text-yellow-600 dark:text-yellow-300
                    Follow Up = text-info

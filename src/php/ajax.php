@@ -1151,7 +1151,7 @@ if ($action == 'getOverallRecord') {
         exit();
     }
 
-
+    header('Content-Type: application/json');
 
     if ($stmt = $conn->prepare($sql)) {
         $stmt->bind_param($param_types, ...$params);
@@ -1162,18 +1162,21 @@ if ($action == 'getOverallRecord') {
             $row = $result->fetch_assoc();
             $doctor = getStaff($conn, $row['Consultant_id']);
 
-            header('Content-Type: application/json');
             echo json_encode([
                 "successResponse" => 1,
                 "consultant" => $doctor ? "Dr. ".formatFullName($doctor['First_Name'],$doctor['Middle_Name'],$doctor['Last_Name']) : "Unknown",
                 "data" => $row
             ]);
         } else {
-            echo json_encode(['error' => 'No record found']);
+            echo json_encode([
+                "successResponse" => 2,
+                'message' => "No record found"
+            ]);
         }
         $stmt->close();
     } else {
-        echo json_encode(['error' => 'Failed to prepare SQL statement']);
+        echo json_encode(["successResponse" => 3,
+            'message' => 'Failed to prepare SQL statement']);
     }
 }
 
@@ -1199,13 +1202,14 @@ if ($action == "getPatientRecords2")
     if ($_SESSION['user_type'] == 'staff'){
        $getUserInfo = query_user_info(true);
         if ($getUserInfo['Role'] == 'admin'){
-            $sql= "SELECT * FROM tbl_records where Chart_ID = ?";
+            $sql= "SELECT tbl_records.*, tbl_patient_chart.*  FROM tbl_records 
+    JOIN tbl_patient_chart ON tbl_patient_chart.Chart_id = tbl_records.Chart_ID  where Chart_ID = ?";
         }if ($getUserInfo['Role'] == 'doctor'){
-            $sql= "SELECT * FROM tbl_records JOIN tbl_patient_chart ON tbl_patient_chart.Chart_id = tbl_records.Chart_ID 
+            $sql= "SELECT tbl_records.*, tbl_patient_chart.* FROM tbl_records JOIN tbl_patient_chart ON tbl_patient_chart.Chart_id = tbl_records.Chart_ID 
          where tbl_patient_chart.Chart_ID = ? and tbl_patient_chart.Consultant_id = ".$getUserInfo['Staff_ID'];
         }
     }else {
-        $sql = "SELECT * FROM tbl_records 
+        $sql = "SELECT tbl_records.*, tbl_patient_chart.* FROM tbl_records 
 JOIN tbl_patient_chart ON tbl_patient_chart.Chart_id = tbl_records.Chart_ID 
          where tbl_patient_chart.Chart_ID = ? and tbl_patient_chart.user_info_ID = ".$_SESSION['online_Account_owner_id'];
 
@@ -1230,8 +1234,41 @@ JOIN tbl_patient_chart ON tbl_patient_chart.Chart_id = tbl_records.Chart_ID
     exit();
 }
 
+if ($action == 'getPatientChart_info'){
+    $chart_id = $_GET['chart_id'] ?? null;
+    $consultant_id = $_GET['consultant_id'] ?? null;
+
+    $sql = "SELECT * FROM `tbl_patient_chart` 
+        WHERE Chart_id = ? AND Consultant_id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param('ii', $chart_id, $consultant_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    header('Content-Type: application/json');
+
+    if ($result && $result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        echo json_encode([
+            "successResponse" => 1,
+            "data" => $row
+        ]);
+    } else {
+        echo json_encode([
+            "successResponse" => 0,
+            "message" => "emptyResult"
+        ]);
+    }
+}
+
+
 if ($action == 'createPatientRecord') {
-    try {
+    $staff_info = query_user_info(true);
+    if (!$staff_info){
+        exit();
+    }
+    if ($staff_info['Role'] == 'admin'){
+        exit();
+    }
         $record_id = 0;
         $consultation_date = $_POST['consultation-date'];
         $heart_rate = $_POST['heart-rate'];
@@ -1242,24 +1279,23 @@ if ($action == 'createPatientRecord') {
         $physical_exam = $_POST['Physical_Examination'];
         $assesment = $_POST['Assessment'];
         $treatment_plan = $_POST['Treatment_Plan'];
-        $followUp = $_POST['followUp-radio'];
+
         $Chart_ID = $_GET['chart_id'];
         $availed_Service =$_POST['serviceSelected'];
-        if (!empty($_POST['record_id'])){
+        if (!empty($_POST['record_id'])){ //if not empty means edit
             $record_id = $_POST['record_id'];
-            $getRec = "SELECT * FROM tbl_records where Record_ID = ?";
+            $getRec = "SELECT tbl_records.* ,tbl_patient_chart.Consultant_id FROM tbl_records 
+    JOIN tbl_patient_chart on tbl_records.Chart_id = tbl_patient_chart.Chart_id 
+    where tbl_records.Record_ID = ? and tbl_patient_chart.Consultant_id = ?;";
             $stmt = $conn->prepare($getRec);
-            $stmt->bind_param('i', $record_id);
+            $stmt->bind_param('ii', $record_id, $staffInfo['Staff_ID']);
             $stmt->execute();
             $result = $stmt->get_result();
             if ($result->num_rows === 1) {
                 $sql = "UPDATE tbl_records SET 
-                    
                        consultationDate = ?,
-                       
                        Temperature = ?, 
                        HeartRate = ?,
-             
                        Blood_Pressure = ?, 
                        Saturation = ?, 
                        Chief_complaint = ?, 
@@ -1269,81 +1305,58 @@ if ($action == 'createPatientRecord') {
                        Treatment_Plan= ?
                        WHERE Record_ID = ?
                        ";
-                $stmt = $conn->prepare($sql);
-                $stmt->bind_param('sddsssssssi', $consultation_date, $temperature,
-                    $heart_rate,  $blood_pressure,
-                    $saturation, $chief_comp, $physical_exam,
-                    $assesment, $availed_Service, $treatment_plan, $record_id);
-                if (!$stmt->execute()){
-                    if ($stmt->errno == 1265){
-                        echo "Data insert mismatch error";
-                        exit();
-                    }
-                }
-
-                if (!empty($_FILES['resultImage']['name'][0])) {
-                    $delsql = "DELETE FROM patientimageresult where record_id = ?";
-                    $delstmt = $conn->prepare($delsql);
-                    $delstmt->bind_param('i', $record_id);
-                    $delstmt->execute();
+                try {
+                    $stmt = $conn->prepare($sql);
+                    $stmt->bind_param('sddsssssssi', $consultation_date, $temperature,
+                        $heart_rate,  $blood_pressure,
+                        $saturation, $chief_comp, $physical_exam,
+                        $assesment, $availed_Service, $treatment_plan, $record_id);
+                    $stmt->execute();
+                }catch (mysqli_sql_exception $e){
+                    echo $e->getMessage();
+                    exit();
                 }
             }else{
                 echo 'Something wrong please reload the website1' ;
                 exit();
             }
-        }else {
+        }else { //otherwise insert new record
             $sql = "INSERT INTO tbl_records (Chart_ID,consultationDate, availedService,Temperature, HeartRate, Blood_Pressure, Saturation, Chief_complaint, Physical_Examination, Assessment, Treatment_Plan) 
                 VALUES (?, ?, ?, ?, ?, ?, ?,?, ?, ?, ?)";
-            $stmt = $conn->prepare($sql);
-            $stmt->bind_param("issddssssss", $Chart_ID,  $consultation_date, $availed_Service,$temperature, $heart_rate, $blood_pressure, $saturation, $chief_comp, $physical_exam, $assesment, $treatment_plan);
-            if (!$stmt->execute()){
-                if ($stmt->errno == 1265){
-                    echo "Data insert mismatch error";
-                    exit();
-                }
+            try {
+
+                $stmt = $conn->prepare($sql);
+                $stmt->bind_param("issddssssss", $Chart_ID,  $consultation_date, $availed_Service,$temperature, $heart_rate, $blood_pressure, $saturation, $chief_comp, $physical_exam, $assesment, $treatment_plan);
+                $stmt->execute();
+            }catch (mysqli_sql_exception $e){
+                echo $e->getMessage();
+                exit();
             }
-            $record_id = $stmt->insert_id;
+           $record_id = $stmt->insert_id;
         }
-
-        if ($followUp === 'no') {
-            $update_patient_chart = "UPDATE tbl_patient_chart SET followUp_schedule = null, patient_Status ='Completed' WHERE Chart_id = ?";
-            $stmt2 = $conn->prepare($update_patient_chart);
-            $stmt2->bind_param('i', $Chart_ID);
-            $stmt2->execute();
-        } elseif ($followUp === 'yes') {
-            $followUpDate = $_POST['followUpDate'];
-            $followUpTime = $_POST['followUpTime'];
-            $followupSched = $followUpDate . ' ' . $followUpTime;
-            $update_patient_chart = "UPDATE tbl_patient_chart SET followUp_schedule = ?, patient_Status ='Follow Up' WHERE Chart_id = ?";
-            $stmt = $conn->prepare($update_patient_chart);
-            $stmt->bind_param('si', $followupSched, $Chart_ID);
-            $stmt->execute();
-        }
-
-        if (!empty($_FILES['resultImage']['name'][0])) {
-            foreach ($_FILES['resultImage']['tmp_name'] as $key => $tmp_name) {
-                $temp_file = $_FILES['resultImage']['tmp_name'][$key];
-                $file_type = $_FILES['resultImage']['type'][$key];
-                $file_name = uniqid() . '.' . pathinfo($_FILES['resultImage']['name'][$key], PATHINFO_EXTENSION);
-                $destination_directory = '../PatientChartRecordResults/';
-                $destination_file = $destination_directory . $file_name;
-                if (move_uploaded_file($temp_file, $destination_file)){
-                    $sql = "INSERT INTO patientimageresult (record_id,	image_file_name)
+    if (!empty($_FILES['resultImage']['name'][0])) {
+        foreach ($_FILES['resultImage']['tmp_name'] as $key => $tmp_name) {
+            $temp_file = $_FILES['resultImage']['tmp_name'][$key];
+            $file_type = $_FILES['resultImage']['type'][$key];
+            $file_name = uniqid() . '.' . pathinfo($_FILES['resultImage']['name'][$key], PATHINFO_EXTENSION);
+            $destination_directory = '../PatientChartRecordResults/';
+            $destination_file = $destination_directory . $file_name;
+            if (move_uploaded_file($temp_file, $destination_file)){
+                $sql = "INSERT INTO patientimageresult (record_id,	image_file_name)
                                 values (?,?)";
+                try {
                     $stmt = $conn->prepare($sql);
                     $stmt->bind_param('is',$record_id, $file_name);
                     $stmt->execute();
+                }catch (mysqli_sql_exception $e){
+                    echo $e->getMessage();
+                    exit();
                 }
             }
-            echo 1;
-            exit();
-        }else{
-            echo 1;
-            exit();
         }
-    } catch (Exception $e) {
-        echo "Error: " . $e->getMessage();
     }
+    echo 1;
+    exit();
 }
 
 if ($action == 'getResImg') {
@@ -1397,7 +1410,7 @@ if ($action == 'DeletePatientChart'){
 }
 if ($action == 'UnarchivePatientChart'){
     $chart_id = $_GET['chart_id'];
-    $sql = "UPDATE tbl_patient_chart SET followUp_schedule = 'No schedule', 
+    $sql = "UPDATE tbl_patient_chart SET followUp_schedule = NUll, 
                              patient_Status = '	Unarchived ' where Chart_id = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param('i', $chart_id);

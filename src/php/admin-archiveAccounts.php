@@ -161,9 +161,13 @@ ORDER BY
             while ($row= $result->fetch_assoc()){
                 $middleInitial = (strlen($row['Middle_Name']) >= 1) ? substr($row['Middle_Name'], 0, 1) : '';
                 $age = date_diff(date_create($row['DateofBirth']), date_create('today'))->y;
-                $date = date("F j, Y", strtotime($row['followUp_schedule']));
-                $time = date("g:ia", strtotime($row['followUp_schedule']));
-                $followUpschedule = $date . ' ' . $time == 'January 1, 1970 1:00am'  ? 'N/A' : $date . ' ' . $time;
+                if ($row['followUp_schedule']!==null){
+                    $date = date("F j, Y", strtotime($row['followUp_schedule']));
+                    $time = date("g:ia", strtotime($row['followUp_schedule']));
+                    $followUpschedule =  $date . ' ' . $time;
+                }else{
+                    $followUpschedule = "No schedule";
+                }
                 echo '<tr class="text-base hover:bg-gray-300 dark:hover:bg-gray-600 font-medium text-black dark:text-white">
               <td>'.$row['First_Name'].' '.$middleInitial.'. '.$row['Last_Name'].'</td>
               <td>'.getLastPatientVisit($row['Chart_id']).'</td>
@@ -179,7 +183,7 @@ ORDER BY
 
               <!-- view information -->
               <td class="pl-9">
-                <a href="admin-patientFullRecord.php?chart_id='.$row['Chart_id'].'"><i class="fa-regular fa-eye"></i></a>
+                <a href="consultationResults.php?chart_id='.$row['Chart_id'].'"><i class="fa-regular fa-eye"></i></a>
               </td>
               <td class="pl-10"><button onclick="unArchive('.$row['Chart_id'].')"><i class="fa-solid fa-address-book"></i></button></td>
               <td class="pl-9"><button onclick="delete_record.showModal();get_chartID('.$row['Chart_id'].')"><i class="fa-solid fa-trash text-red-500"></i></button></td>

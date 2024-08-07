@@ -14,7 +14,7 @@ if (!user_has_roles(get_account_type(), [AccountType::PATIENT, AccountType::ADMI
   //header('Location: staff-patientsRecord.php');
  // exit();
 }*/
-
+$noReslocRedirect = ''; //redirect path
 
 ?>
 <!DOCTYPE html>
@@ -119,7 +119,22 @@ if (!user_has_roles(get_account_type(), [AccountType::PATIENT, AccountType::ADMI
                     </button>
                 </div>
 
-                    <div class="mx-auto w-11/12 px-4 py-8 bg-gray-100 dark:bg-gray-800 rounded-lg shadow-md mb-10">   
+                    <div class="mx-auto w-11/12 px-4 py-8 bg-gray-100 dark:bg-gray-800 rounded-lg shadow-md mb-10">
+                  <?php
+                  if ($is_staff){ //userq_query from navbar
+                      if ($user_query['Role'] == 'doctor'){
+                          $noReslocRedirect = 'staff-patientsRecord.php';
+                          ?>
+                        <div class="flex justify-end mb-3">
+                          <a href="staff-patientFullRecordForm.php?chart_id=<?=$_GET['chart_id']?>&record_id=<?=$_GET['record_id']?>" class="px-10 btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none"><i class="fa-solid fa-pen-to-square"></i></a>
+                        </div>
+                        <?php
+                      }else{
+                          $noReslocRedirect = 'admin-patientRecords.php';
+                      }
+                  }else{
+                    $noReslocRedirect = 'patient-profile.php';
+                  }?>
 
                             <div class="recordList">
                                 <table cellpadding="0" cellspacing="0" class="w-full">
@@ -349,19 +364,9 @@ if (!user_has_roles(get_account_type(), [AccountType::PATIENT, AccountType::ADMI
 
     <script src="../js/index.js"></script>
 
-
+    <script src='../js/tools.js'></script>
     <script>
-      function formatDate(dateString) {
-        // Create a Date object from the input date string
-        const date = new Date(dateString);
 
-        // Format the date to "Month Day, Year"
-        return date.toLocaleDateString('en-US', {
-          year: 'numeric',
-          month: 'long',
-          day: 'numeric'
-        });
-      }
       document.addEventListener('DOMContentLoaded', function(){
         $.ajax({
           url: 'ajax.php?action=getOverallRecord&chart_id=' + encodeURIComponent('<?=$_GET["chart_id"]?>') + '&record_id=' +  encodeURIComponent('<?=$_GET["record_id"]?>'),
@@ -423,9 +428,10 @@ if (!user_has_roles(get_account_type(), [AccountType::PATIENT, AccountType::ADMI
               $('#precAssesment').html(data.Assessment);
               $('#precTreatmentPlan').html(data.Treatment_Plan);
 
-            } else {
-              console.error('Error: ' + response.error);
+            } else if (response.successResponse === 2) {
+              window.location.href = '<?php echo $noReslocRedirect?>';
             }
+            console.log(response.successResponse);
           }
 
         });

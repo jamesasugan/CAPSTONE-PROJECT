@@ -62,7 +62,7 @@ if (!user_has_roles(get_account_type(), [AccountType::ADMIN, AccountType::PATIEN
         if ($user_query['Role'] == 'doctor'){
               echo '<div class="flex justify-between mb-3">
           <button class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none" onclick="addFollowUp.showModal()">View/Add Follow Up Schedule</button>
-          <a href="#" class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none">Add New Record</a>
+          <a href="staff-patientFullRecordForm.php?chart_id='.$_GET['chart_id'].'" class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none">Add New Record</a>
         </div>';
           }
       } ?>
@@ -70,7 +70,7 @@ if (!user_has_roles(get_account_type(), [AccountType::ADMIN, AccountType::PATIEN
 
 
         <div class="flex flex-col sm:flex-row justify-between items-center bg-gray-200 dark:bg-gray-700 p-5 border-b border-b-black">
-            <h3 class="text-2xl sm:text-3xl font-bold text-black dark:text-white mb-4 sm:mb-0 mr-0 sm:mr-10">
+            <h3 class="text-2xl sm:text-3xl font-bold text-black dark:text-white mb-4 sm:mb-0 mr-0 sm:mr-10" id='patientName'>
                 Franklin C. Saint
             </h3>
 
@@ -172,12 +172,16 @@ if ($is_staff){ //userq_query from navbar
             if (isset($_GET["chart_id"])):
 
                 ?>
+
+
+
                     let currentElement = document.getElementById("tritems");
 
                     // clear items in table
                     currentElement.innerHTML = '';
 
                     // fetch patient records
+
                     $.ajax({
                     'url': 'ajax.php?action=getPatientRecords2&chart_id=' + encodeURIComponent('<?=$_GET["chart_id"] ?>') + '&page=' + encodeURIComponent("0") + '&user_id=' + encodeURIComponent(<?= $_SESSION['user_id'] ?>),
                     'method': 'GET',
@@ -188,10 +192,13 @@ if ($is_staff){ //userq_query from navbar
                         {
                             // hide no record message if we have entries
                             noRecordElement.style.visibility = "hidden";
-                            let trData = "";
+
+                          let patientName
+                          let trData = "";
                             let items = resp.data;
                             for(let i = 0; i < items.length; i++)
                             {
+                              patientName = items[i].First_Name + ' ' + items[i].Middle_Name + ' ' + items[i].Last_Name;
                               let date = new Date(items[i].consultationDate);
                               let formattedDate = date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
                                 let services = items[i].availedService.split(",");
@@ -209,7 +216,8 @@ if ($is_staff){ //userq_query from navbar
                             }
 
                             // set innerHTML to table items
-                            currentElement.innerHTML =trData;
+                            currentElement.innerHTML = trData;
+                          $('#patientName').html(patientName);
 
 
                         }
