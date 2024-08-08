@@ -1203,7 +1203,7 @@ if ($action == "getPatientRecords2")
        $getUserInfo = query_user_info(true);
         if ($getUserInfo['Role'] == 'admin'){
             $sql= "SELECT tbl_records.*, tbl_patient_chart.*  FROM tbl_records 
-    JOIN tbl_patient_chart ON tbl_patient_chart.Chart_id = tbl_records.Chart_ID  where Chart_ID = ?";
+    JOIN tbl_patient_chart ON tbl_patient_chart.Chart_id = tbl_records.Chart_ID  where tbl_records.Chart_ID = ?";
         }if ($getUserInfo['Role'] == 'doctor'){
             $sql= "SELECT tbl_records.*, tbl_patient_chart.* FROM tbl_records JOIN tbl_patient_chart ON tbl_patient_chart.Chart_id = tbl_records.Chart_ID 
          where tbl_patient_chart.Chart_ID = ? and tbl_patient_chart.Consultant_id = ".$getUserInfo['Staff_ID'];
@@ -1284,11 +1284,11 @@ if ($action == 'createPatientRecord') {
         $availed_Service =$_POST['serviceSelected'];
         if (!empty($_POST['record_id'])){ //if not empty means edit
             $record_id = $_POST['record_id'];
-            $getRec = "SELECT tbl_records.* ,tbl_patient_chart.Consultant_id FROM tbl_records 
-    JOIN tbl_patient_chart on tbl_records.Chart_id = tbl_patient_chart.Chart_id 
+            $getRec = "SELECT * FROM tbl_records 
+    JOIN tbl_patient_chart on tbl_records.Chart_ID = tbl_patient_chart.Chart_id 
     where tbl_records.Record_ID = ? and tbl_patient_chart.Consultant_id = ?;";
             $stmt = $conn->prepare($getRec);
-            $stmt->bind_param('ii', $record_id, $staffInfo['Staff_ID']);
+            $stmt->bind_param('ii', $record_id, $staff_info['Staff_ID']);
             $stmt->execute();
             $result = $stmt->get_result();
             if ($result->num_rows === 1) {
@@ -1317,7 +1317,7 @@ if ($action == 'createPatientRecord') {
                     exit();
                 }
             }else{
-                echo 'Something wrong please reload the website1' ;
+                echo $record_id. ' '. $staff_info['Staff_ID'] ;
                 exit();
             }
         }else { //otherwise insert new record
@@ -1355,7 +1355,9 @@ if ($action == 'createPatientRecord') {
             }
         }
     }
-    echo 1;
+    header('Content-Type: application/json');
+    echo json_encode(['response' => 1,
+        'record_id' => $record_id]);
     exit();
 }
 
@@ -1365,7 +1367,6 @@ if ($action == 'getResImg') {
     $stmt = $conn->prepare($sql);
     $stmt->bind_param('i', $record_id);
     $stmt->execute();
-
     $res = $stmt->get_result();
     header('Content-Type: application/json');
 
@@ -1385,6 +1386,22 @@ if ($action == 'getResImg') {
         ]);
     }
     exit();
+}
+if ($action == 'addPatientChartSched'){
+
+}
+
+if ($action == 'delResImg'){
+    $imgId = $_GET['img_id'];
+    $sql = "DELETE FROM patientimageresult WHERE img_id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param('i', $imgId);
+    if ($stmt->execute()){
+        header('Content-Type: application/json');
+        echo json_encode(["response" => 1]);
+        $conn->close();
+        exit();
+    }
 }
 
 

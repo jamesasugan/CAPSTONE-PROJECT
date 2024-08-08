@@ -41,10 +41,6 @@ function checkDoctorAvailability(dateInput, datesArray, doctor_id) {
     }
   });
 }
-
-
-
-
 function getAvailableAppointmentTime(date, doctor_id){
   $.ajax({
     url: 'ajax.php?action=getDoctorAvailabilityTime&schedDate=' + encodeURIComponent(date) + '&doctor_id=' + encodeURIComponent(doctor_id),

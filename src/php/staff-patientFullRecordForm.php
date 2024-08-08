@@ -184,6 +184,7 @@ include "ReuseFunction.php";
                                         class="input input-bordered w-full p-2 bg-white dark:bg-gray-600 [color-scheme:light] dark:[color-scheme:dark] text-black dark:text-white disabled:bg-white disabled:text-gray-400 dark:disabled:text-gray-400" />
                                 </label>
                             </div>
+
                           <input id='record_id' type='hidden' name='record_id' value=''>
                             <div>
                                 <label class="block">
@@ -284,18 +285,7 @@ include "ReuseFunction.php";
                         <h2 class="text-2xl sm:text-3xl font-bold mb-4 text-center">Results</h2>
                             <!-- Images dito. pag nag upload sa upload file button dito lalabas dapat. kapag kunwari lima inupload na picture dapat lima din tong buong DIV -->
                                 <div class="flex flex-wrap gap-2 justify-center items-center w-full mb-3" id='ImageResults'>
-                                  <div class="flex flex-col items-center">
 
-                                    <!-- yung button na to sa staff-patientFullRecord.php lang
-                                    hindi sa file na to -->
-                                    <div class="w-full flex justify-end mb-1">
-                                      <button class="bg-red-500 text-white px-2 py-1 rounded">Delete</button>
-                                    </div>
-
-                                    <!-- image dito, example lang tong img tag, alisin mo na lang -->
-                                    <img class="h-auto max-w-full object-cover" src="../images/xray.jpg" alt="Image Result">
-
-                                  </div>
 
                                 </div>
 
@@ -345,6 +335,7 @@ include "ReuseFunction.php";
         </dialog>
       <script src='../js/tools.js'></script>
 
+
         <script>
           document.addEventListener('DOMContentLoaded', function(){
             $.ajax({
@@ -372,56 +363,12 @@ include "ReuseFunction.php";
             });
           })
 
+
           function isNumeric(value) {
             return !isNaN(value) && (typeof value === 'number' || !isNaN(parseFloat(value)));
           }
-          function getResImg(id){
-            $.ajax({
-              url: 'ajax.php?action=getResImg&record_id=' + encodeURIComponent(id),
-              method: 'GET',
-              dataType: 'html',
-              success: function(data) {
-                if (data) {
-                  $('#ImageResults').html(data);
-                }
-              },
-              error: function(xhr, status, error) {
-                console.error('Error fetching data:', error);
-              }
-            });
-          }
 
 
-
-          function getRecords(id){
-            $.ajax({
-              url: 'ajax.php?action=getPatientRecord&record_id='+ encodeURIComponent(id) + '&chart_id='+encodeURIComponent(<?php echo $_GET['chart_id'];?>),
-              method: 'GET',
-              dataType: 'json',
-              success: function(data) {
-
-                if (data) {
-
-                  $('#availedService').html('<strong class="text-xl">Service: </strong><br><span class="text-lg font-medium">'+data.availedService+'</span>');
-                  document.querySelector('#patientRecordForm input[name="serviceSelected"]').value = data.availedService;
-                  document.querySelector('#patientRecordForm input[name="consultation-date"]').value = data.consultationDate;
-                  document.querySelector('#patientRecordForm input[name="record_id"]').value = data.Record_ID;
-                  document.querySelector('#patientRecordForm input[name="blood-pressure"]').value = data.Blood_Pressure;
-                  document.querySelector('#patientRecordForm input[name="heart-rate"]').value = data.HeartRate;
-                  document.querySelector('#patientRecordForm input[name="saturation"]').value = data.Saturation;
-                  document.querySelector('#patientRecordForm input[name="temperature"]').value = data.Temperature;
-                  document.querySelector('#patientRecordForm textarea[name="Chief Complaint"]').value = data.Chief_complaint;
-                  document.querySelector('#patientRecordForm textarea[name="Physical Examination"]').value = data.Physical_Examination;
-                  document.querySelector('#patientRecordForm textarea[name="Assessment"]').value = data.Assessment;
-                  document.querySelector('#patientRecordForm textarea[name="Treatment Plan"]').value = data.Treatment_Plan;
-
-                }
-              },
-              error: function(xhr, status, error) {
-                console.error('Error fetching data:', error);
-              }
-            });
-          }
           document.getElementById('patientRecordForm').addEventListener('submit', function(e) {
             e.preventDefault();
             let endpoint = 'createPatientRecord';
@@ -445,9 +392,9 @@ include "ReuseFunction.php";
               processData: false,
               contentType: false,
               success: function(response) {
-                if (parseInt(response) === 1) {
+                if (response.response === 1) {
                   toggleDialog('SuccessAlert');
-                  window.location.href = 'consultationResults.php?chart_id=<?php echo $_GET['chart_id']; ?>';
+                  window.location.href = 'patientOverallRecord.php?chart_id=<?=$_GET["chart_id"]?>&record_id='+response.record_id;
                 } else {
                   document.getElementById('error').innerHTML = response;
                   toggleDialog('errorAlert');
@@ -474,6 +421,15 @@ include "ReuseFunction.php";
             });
           });
         </script>
+      <?php if (isset($_GET['record_id'])){?>
+        <script src='../js/patientRecordFormStaff.js'></script>
+        <script>
+          getRecords(<?=$_GET['record_id']?>, <?=$_GET['chart_id']?>)
+        </script>
+      <?php }?>
+
+
+
 
 
 </body>

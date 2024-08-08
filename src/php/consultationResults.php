@@ -59,19 +59,24 @@ if (!user_has_roles(get_account_type(), [AccountType::ADMIN, AccountType::PATIEN
 
       <?php
       if ($is_staff){ //userq_query from navbar
-        if ($user_query['Role'] == 'doctor'){
-              echo '<div class="flex justify-between mb-3">
+        if ($user_query['Role'] == 'doctor'){?>
+             <div class="flex justify-between mb-3">
           <button class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none" onclick="addFollowUp.showModal()">View/Add Follow Up Schedule</button>
           <a href="staff-patientFullRecordForm.php?chart_id='.$_GET['chart_id'].'" class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none">Add New Record</a>
-        </div>';
-          }
-      } ?>
+        </div>
+          <script src='../js/doctorAppoimtmentAvailability.js' ></script>
+          <script> getDoctorAvailability(<?= $user_query['Staff_ID']?>)</script>
+        <?php
+        }//pang doctor lang to
+      }
+      ?>
+
 
 
 
         <div class="flex flex-col sm:flex-row justify-between items-center bg-gray-200 dark:bg-gray-700 p-5 border-b border-b-black">
             <h3 class="text-2xl sm:text-3xl font-bold text-black dark:text-white mb-4 sm:mb-0 mr-0 sm:mr-10" id='patientName'>
-                Franklin C. Saint
+
             </h3>
 
             <div class="flex w-full sm:w-auto">
@@ -125,7 +130,7 @@ if (!user_has_roles(get_account_type(), [AccountType::ADMIN, AccountType::PATIEN
     </div>
 <?php
 if ($is_staff){ //userq_query from navbar
-    if ($user_query['Role'] == 'doctor'){
+    if ($user_query['Role'] == 'doctor'){//pang doctor din
 
 
  ?>
@@ -162,16 +167,22 @@ if ($is_staff){ //userq_query from navbar
 
         </div>
       </dialog>
+      <script>
+
+      </script>
 <?php
   }
 }
 ?>
 
-    <script>
-        <?php
-            if (isset($_GET["chart_id"])):
 
-                ?>
+<?php
+
+if (isset($_GET["chart_id"])):
+
+?>
+    <script>
+
 
 
 
@@ -233,7 +244,7 @@ if ($is_staff){ //userq_query from navbar
                         noRecordElement.style.visibility = "visible";
                         console.log(e);
                     }});
-                <?php endif;?>
     </script>
+<?php endif;?>
 </body>
 </html>
