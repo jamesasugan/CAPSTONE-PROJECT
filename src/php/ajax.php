@@ -510,14 +510,8 @@ if ($action == 'getDoctorAvailabilityTime'){
 if ($action == 'deleteSched'){
     $login_user = $_SESSION['user_id'];
 
-    // Get staff information
-    $getstaffID = "SELECT * FROM tbl_staff WHERE User_ID = ?";
-    $getstaffIDSTMT = $conn->prepare($getstaffID);
-    $getstaffIDSTMT->bind_param("i", $login_user);
-    $getstaffIDSTMT->execute();
-    $result = $getstaffIDSTMT->get_result();
-    if ($result->num_rows === 1) {
-        $staff = $result->fetch_assoc();
+    $staff = query_user_info(true);
+    if ($staff) {
         $staff_id = $staff['Staff_ID'];
         $staffRole = $staff['Role'];
     } else {
@@ -535,6 +529,8 @@ if ($action == 'deleteSched'){
     if ($result->num_rows === 1) {
         $row = $result->fetch_assoc();
         if (password_verify($passWord_conf, $row['Password'])) {
+            $response = '';
+            $responseMessage = '';
             $delDoc_id = $_POST['dltDoctorSched'];
             if (isset($_POST['list-radio']) && $_POST['list-radio'] == 'deleteAll') {
                 if ($staffRole == 'admin'){
@@ -544,12 +540,14 @@ if ($action == 'deleteSched'){
                     $doctorDelSchedSTMT = $conn->prepare($doctorDelSched);
                     $doctorDelSchedSTMT->bind_param('i', $delDoc_id);
                     if (!$doctorDelSchedSTMT->execute()) {
-                        echo $doctorDelSchedSTMT->error;
-                        exit();
+                        $responseMessage = $doctorDelSchedSTMT->error;
+                        $response = 2;
+                    }else{
+                        $response = 1;
+                        $responseMessage = 'Delete All schedule request has been submitted';
                     }
                 }
-                echo 1;
-                exit();
+
             } elseif (isset($_POST['list-radio']) && $_POST['list-radio'] == 'deleteDay') {
                 $selectd_date = $_POST['delete-dayDate'];
                 if ($staffRole == 'admin'){
@@ -560,12 +558,15 @@ if ($action == 'deleteSched'){
                     $doctorDelSchedSTMT = $conn->prepare($doctorDelSched);
                     $doctorDelSchedSTMT->bind_param('iss', $delDoc_id, $selectd_date, $selectd_date);
                     if (!$doctorDelSchedSTMT->execute()) {
-                        echo $doctorDelSchedSTMT->error;
-                        exit();
+                        $responseMessage = $doctorDelSchedSTMT->error;
+                        $response = 2;
+
+                    }else{
+                        $responseMessage = 'Delete day request has been submitted';
+                        $response = 1;
+
                     }
                 }
-                echo 1;
-                exit();
             } elseif (isset($_POST['list-radio']) && $_POST['list-radio'] == 'customDelete') {
                 $range_start_date = $_POST['start-date'];
                 $range_end_date = $_POST['end-date'];
@@ -576,22 +577,30 @@ if ($action == 'deleteSched'){
                     $doctorDelSchedSTMT = $conn->prepare($doctorDelSched);
                     $doctorDelSchedSTMT->bind_param('iss', $delDoc_id, $range_start_date, $range_end_date);
                     if (!$doctorDelSchedSTMT->execute()) {
-                        echo $doctorDelSchedSTMT->error;
-                        exit();
+                        $responseMessage = $doctorDelSchedSTMT->error;
+                        $response = 2;
+
+                    }else{
+                        $response = 1;
+                        $responseMessage = 'Custom delete range request has been submitted';
                     }
                 }
-                echo 1;
-                exit();
             } else {
-                echo 2;
-                exit();
+                $response = 2;
+                $responseMessage = 'Invalid delete request form';
             }
         } else {
-            echo 2;
+            $response = 2;
+            $responseMessage = 'Password Incorrect';
         }
     } else {
-        echo 2;
+        $response = 2;
+        $responseMessage = 'Account cannot find';
     }
+    header('Content-Type: application/json');
+    echo  json_encode(['response' => $response,
+        'message' => $responseMessage]);
+    exit();
 }
 
 

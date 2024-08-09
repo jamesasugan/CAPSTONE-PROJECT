@@ -411,32 +411,15 @@ $doctor_id = $user_query['Staff_ID'];
                     </div>
                 </dialog>
         </section>
-    <dialog id="scheSet"  class='modal bg-black bg-opacity-50' onclick='toggleDialog(this.id)'>
-      <div class='absolute top-20'>
-        <div  class="flex justify-center  mt-2">
-          <div role="alert" class="alert alert-success w-auto font-medium">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-            </svg>
-            <span>Schedule successfully set Please wait for admin approval</span>
-          </div>
-        </div>
-      </div>
-    </dialog>
-    <dialog id="DelSchedReqNotif"  class='modal bg-black bg-opacity-50' onclick='toggleDialog("DelSchedReqNotif"); console.log("asdasdasd")'>
-      <div class='absolute top-20'>
-        <div  class="flex justify-center  mt-2">
-          <div role="alert" class="alert alert-error w-auto font-medium">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-            </svg>
-            <span>Delete Request has been submitted Please wait for admin approval</span>
-          </div>
-        </div>
-      </div>
-    </dialog>
+    <div id="scheSet"  onclick='resetNotif(this.id)'>
+
+    </div>
+    <div id="DelSchedReqNotif"   onclick='resetNotif(this.id);'>
+
+    </div>
 
 </body>
+<script src="../js/tools.js"></script>
 <script>
 
   function switchTable() {
@@ -467,16 +450,6 @@ $doctor_id = $user_query['Staff_ID'];
     else {
       checkboxAlert.classList.remove('hidden')
       return  false;
-    }
-  }
-  function toggleDialog(id) {
-    let dialog = document.getElementById(id);
-    if (dialog) {
-      if (dialog.hasAttribute('open')) {
-        dialog.removeAttribute('open');
-      } else {
-        dialog.setAttribute('open', '');
-      }
     }
   }
   function getReqRec(){
@@ -520,7 +493,7 @@ $doctor_id = $user_query['Staff_ID'];
         contentType: false,
         success: function(response) {
           if (parseInt(response) === 1) {
-            toggleDialog('scheSet');
+            successNotifcation('scheSet','Schedule successfully set Please wait for admin approval');
           }
         },
       });
@@ -537,11 +510,15 @@ $doctor_id = $user_query['Staff_ID'];
       processData: false,
       contentType: false,
       success: function(response) {
-        if (parseInt(response) === 1) {
+        if (response.response === 1) {
           toggleDialog('deleteSched');
-          toggleDialog('DelSchedReqNotif')
+          warningNotifcation('DelSchedReqNotif', 'Delete Request has been submitted Please wait for admin approval')
+        }else {
+          toggleDialog('deleteSched');
+          errorNotifcation('DelSchedReqNotif', response.message);
         }
         console.log(response);
+
       },
     });
   });
