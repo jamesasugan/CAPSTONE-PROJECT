@@ -62,7 +62,7 @@ if (!user_has_roles(get_account_type(), [AccountType::ADMIN, AccountType::PATIEN
         if ($user_query['Role'] == 'doctor'){?>
              <div class="flex justify-between mb-3">
           <button class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none" onclick="addFollowUp.showModal()">View/Add Follow Up Schedule</button>
-          <a href="staff-patientFullRecordForm.php?chart_id='.$_GET['chart_id'].'" class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none">Add New Record</a>
+          <a href="staff-patientFullRecordForm.php?chart_id=<?=$_GET['chart_id']?>" class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none">Add New Record</a>
         </div>
           <script src='../js/doctorAppoimtmentAvailability.js' ></script>
           <script> getDoctorAvailability(<?= $user_query['Staff_ID']?>)</script>

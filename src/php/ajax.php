@@ -1381,24 +1381,38 @@ if ($action == 'getResImg') {
         ]);
     } else {
         echo json_encode([
-            "response" => 0, // Changed to 0 to indicate no results
+            "response" => 0, //  0  no results
             "message" => "No image results"
         ]);
     }
     exit();
 }
-if ($action == 'addPatientChartSched'){
+/*if ($action == 'addPatientChartSched'){
 
-}
+}*/
 
 if ($action == 'delResImg'){
     $imgId = $_GET['img_id'];
-    $sql = "DELETE FROM patientimageresult WHERE img_id = ?";
-    $stmt = $conn->prepare($sql);
+    $imgDir = "../PatientChartRecordResults/";
+    $getImg = "SELECT image_file_name from patientimageresult where img_id = ?";
+    $getImgSTMT = $conn->prepare($getImg);
+    $getImgSTMT->bind_param('i',$imgId);
+    $getImgSTMT->execute();
+    $res = $getImgSTMT->get_result();
+    $row = $res->fetch_assoc();
+
+
+    $delsql = "DELETE FROM patientimageresult WHERE img_id = ?";
+    $stmt = $conn->prepare($delsql);
     $stmt->bind_param('i', $imgId);
     if ($stmt->execute()){
         header('Content-Type: application/json');
-        echo json_encode(["response" => 1]);
+        if (unlink($imgDir.$row['image_file_name'])){
+            echo json_encode(["response" => 1]);
+        }else{
+            echo json_encode(["response" => 2,
+                "message" => "File not exist in directory"]);
+        }
         $conn->close();
         exit();
     }

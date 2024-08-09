@@ -18,10 +18,11 @@ function getRecords(record_id, chart_id){
           checkbox.checked = true; // Check the checkbox
         }
       });
+      let services = resData.availedService.split(",");
+      let mappedServices = services.map(x => "<li>" + x.trim() + "</li>");
 
 
-
-      $('#availedService').html('<strong class="text-xl">Service: </strong><br><span class="text-lg font-medium">'+resData.availedService+'</span>');
+      $('#availedService').html('<strong class="text-xl">Service: </strong><br><span class="text-lg font-medium">'+mappedServices+'</span>');
       document.querySelector('#patientRecordForm input[name="serviceSelected"]').value = resData.availedService;
       document.querySelector('#patientRecordForm input[name="consultation-date"]').value = resData.consultationDate;
       document.querySelector('#patientRecordForm input[name="record_id"]').value = resData.Record_ID;
@@ -55,17 +56,19 @@ function getResImg(id) {
       if (data.response === 1) {
         let resData = data.data;
         let imgResult = '';
-        let  record_id = id;
+
         for (let i = 0; i < resData.length; i++) {
           imgResult += `
             <div class="flex flex-col items-center">
               <div class="w-full flex justify-end mb-1">
-                <a class="bg-red-500 text-white px-2 py-1 rounded cursor-pointer" onclick='deleteImg(${resData[i].img_id}, ${record_id});'>Delete</a>
+                <a class="bg-red-500 text-white px-2 py-1 rounded cursor-pointer" onclick='deleteImg(${resData[i].img_id}, ${id});'>Delete</a>
               </div>
               <img class="h-auto max-w-full object-cover" src="../PatientChartRecordResults/${resData[i].image_file_name}" alt="Image Result">
             </div>`;
         }
         $('#ImageResults').html(imgResult);
+      }else if (data.response === 0){
+        $('#ImageResults').empty();
       }
     },
     error: function(xhr, status, error) {

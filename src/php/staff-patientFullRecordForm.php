@@ -416,7 +416,9 @@ include "ReuseFunction.php";
                   .join(', ');
 
                 hiddenInput.value = selectedServices;
-                $('#availedService').html('<strong class="text-xl">Service: </strong><br><span class="text-lg font-medium">'+ selectedServices +'</span>');
+                let services = selectedServices.split(",");
+                let mappedServices = services.map(x => "<li>" + x.trim() + "</li>");
+                $('#availedService').html('<strong class="text-xl">Service: </strong><br><span class="text-lg font-medium">'+ mappedServices +'</span>');
               });
             });
           });
