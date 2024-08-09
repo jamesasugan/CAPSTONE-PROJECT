@@ -60,9 +60,9 @@ if (!user_has_roles(get_account_type(), [AccountType::ADMIN, AccountType::PATIEN
       <?php
       if ($is_staff){ //userq_query from navbar
         if ($user_query['Role'] == 'doctor'){?>
-             <div class="flex justify-between mb-3">
-          <button class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none" onclick="addFollowUp.showModal()">View/Add Follow Up Schedule</button>
-          <a href="staff-patientFullRecordForm.php?chart_id=<?=$_GET['chart_id']?>" class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none">Add New Record</a>
+             <div class="flex flex-col sm:flex-row sm:justify-between mb-0 sm:mb-3">
+          <button class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none mb-3 sm:mb-0" onclick="addFollowUp.showModal()">View/Add Follow Up Schedule</button>
+          <a href="staff-patientFullRecordForm.php?chart_id=<?=$_GET['chart_id']?>" class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none mb-3 sm:mb-0">Add New Record</a>
         </div>
           <script src='../js/doctorAppoimtmentAvailability.js' ></script>
           <script> getDoctorAvailability(<?= $user_query['Staff_ID']?>)</script>
@@ -72,7 +72,38 @@ if (!user_has_roles(get_account_type(), [AccountType::ADMIN, AccountType::PATIEN
       ?>
 
 
+        <!-- eto buong div ng alert, wag mo na gawing modal -->
 
+         <!-- success -->
+        <div  class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50">
+          <div role="alert" class="w-full inline-flex items-center bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative">
+            <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24"> 
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            <span class="w-full"><span class="font-medium">Success:</span> Your appointment has been Booked!</span>
+          </div>
+        </div>
+
+        <!-- error -->
+        <div  class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50">
+          <div role="alert" class="w-full inline-flex items-center bg-red-300 border border-red-400 text-red-800 px-4 py-3 rounded relative">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24"> 
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+            <span class="w-full"><span class="font-medium">Error:</span> Task failed successfully.</span>
+          </div>
+        </div>
+
+        <!-- invalid/warning -->
+        <div  class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50">
+          <div role="alert" class="w-full inline-flex items-center bg-yellow-300 border border-yellow-400 text-black px-4 py-3 rounded relative">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+          </svg>
+            <span class="w-full"><span class="font-medium">Warning:</span>  Invalid email address!</span>
+          </div>
+        </div>
+
+        <!-- eto buong div ng alert, wag mo na gawing modal end-->
 
         <div class="flex flex-col sm:flex-row justify-between items-center bg-gray-200 dark:bg-gray-700 p-5 border-b border-b-black">
             <h3 class="text-2xl sm:text-3xl font-bold text-black dark:text-white mb-4 sm:mb-0 mr-0 sm:mr-10" id='patientName'>
@@ -141,8 +172,8 @@ if ($is_staff){ //userq_query from navbar
           </form>
 
           <div id="followUpDetails" class="mt-8">
-            <h2 class="text-2xl text-center font-semibold">Schedule the Patient for another Check-Up:</h2>
-
+            <h2 class="text-2xl text-center font-semibold">Schedule <span class="text-blue-500 font-semibold">(Patient Name)</span> for another Check-Up:</h2>
+            <!-- <p><span class="text-red-500">NOTE:</span> To Reschedule your Follow Up Date, kindly set another time and day in the form below and it will automatically set another schedule for you.</p> -->
             <div class="flex justify-center mt-5">
               <div class="w-1/2">
                 <form method="GET">
@@ -161,6 +192,29 @@ if ($is_staff){ //userq_query from navbar
                     <input type="submit" value="Submit" class="btn bg-[#0b6c95] hover:bg-[#11485f] text-white font-bold border-none">
                   </div>
                 </form>
+
+                <table class="table mt-10">
+                    <thead class="bg-neutral-300 dark:bg-gray-500">
+                      <tr class="font-bold text-black dark:text-white text-base sm:text-lg ">
+                        <th>Follow Up Date</th>
+                        <th>Follow Up Time</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr class="text-base hover:bg-gray-300 dark:hover:bg-gray-600 font-medium text-black dark:text-white">
+                        <td>August 11, 2024</td>
+                        <td>9:30AM to 10:00AM</td>
+                        <td>
+                          <!-- pag cancel dapat may SMS alert pa rin. ganon din sa reschedule -->
+                          <div>
+                            <button class="bg-red-500 p-2 rounded-md text-white font-medium">Cancel</button>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                </table>
+
               </div>
             </div>
           </div>
