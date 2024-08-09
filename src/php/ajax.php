@@ -1281,6 +1281,9 @@ if ($action == 'createPatientRecord') {
         $treatment_plan = $_POST['Treatment_Plan'];
 
         $Chart_ID = $_GET['chart_id'];
+
+        $responseMessage = '';
+        $response = '';
         $availed_Service =$_POST['serviceSelected'];
         if (!empty($_POST['record_id'])){ //if not empty means edit
             $record_id = $_POST['record_id'];
@@ -1312,13 +1315,15 @@ if ($action == 'createPatientRecord') {
                         $saturation, $chief_comp, $physical_exam,
                         $assesment, $availed_Service, $treatment_plan, $record_id);
                     $stmt->execute();
+                    $response = 1;
+                    $responseMessage = 'Patient consultation record updated';
                 }catch (mysqli_sql_exception $e){
-                    echo $e->getMessage();
-                    exit();
+                    $response = 2;
+                    $responseMessage =  $e->getMessage();
                 }
             }else{
-                echo $record_id. ' '. $staff_info['Staff_ID'] ;
-                exit();
+                $response = 2;
+                $responseMessage = 'Update Error';
             }
         }else { //otherwise insert new record
             $sql = "INSERT INTO tbl_records (Chart_ID,consultationDate, availedService,Temperature, HeartRate, Blood_Pressure, Saturation, Chief_complaint, Physical_Examination, Assessment, Treatment_Plan) 
@@ -1328,11 +1333,16 @@ if ($action == 'createPatientRecord') {
                 $stmt = $conn->prepare($sql);
                 $stmt->bind_param("issddssssss", $Chart_ID,  $consultation_date, $availed_Service,$temperature, $heart_rate, $blood_pressure, $saturation, $chief_comp, $physical_exam, $assesment, $treatment_plan);
                 $stmt->execute();
+                $record_id = $stmt->insert_id;
+
+                $responseMessage = 'New patient consultation record';
+                $response = 1;
+
             }catch (mysqli_sql_exception $e){
-                echo $e->getMessage();
-                exit();
+                $response = 2;
+                $responseMessage =  $e->getMessage();
+
             }
-           $record_id = $stmt->insert_id;
         }
     if (!empty($_FILES['resultImage']['name'][0])) {
         foreach ($_FILES['resultImage']['tmp_name'] as $key => $tmp_name) {
@@ -1349,14 +1359,15 @@ if ($action == 'createPatientRecord') {
                     $stmt->bind_param('is',$record_id, $file_name);
                     $stmt->execute();
                 }catch (mysqli_sql_exception $e){
-                    echo $e->getMessage();
-                    exit();
+                    $response = 2;
+                    $responseMessage =  $e->getMessage();
                 }
             }
         }
     }
     header('Content-Type: application/json');
-    echo json_encode(['response' => 1,
+    echo json_encode(['response' => $response,
+        'message' => $responseMessage ,
         'record_id' => $record_id]);
     exit();
 }

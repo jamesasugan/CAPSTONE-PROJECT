@@ -46,6 +46,7 @@ if (!user_has_roles(get_account_type(), [AccountType::ADMIN, AccountType::PATIEN
     />
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script src="../js/main.js" defer></script>
+  <script src='../js/SearchTables.js' ></script>
 </head>
 <body>
 <?php include 'navbar.php'; ?>
@@ -75,33 +76,13 @@ if (!user_has_roles(get_account_type(), [AccountType::ADMIN, AccountType::PATIEN
         <!-- eto buong div ng alert, wag mo na gawing modal -->
 
          <!-- success -->
-        <div  class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50">
-          <div role="alert" class="w-full inline-flex items-center bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative">
-            <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24"> 
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-            </svg>
-            <span class="w-full"><span class="font-medium">Success:</span> Your appointment has been Booked!</span>
-          </div>
-        </div>
+
 
         <!-- error -->
-        <div  class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50">
-          <div role="alert" class="w-full inline-flex items-center bg-red-300 border border-red-400 text-red-800 px-4 py-3 rounded relative">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24"> 
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-          </svg>
-            <span class="w-full"><span class="font-medium">Error:</span> Task failed successfully.</span>
-          </div>
-        </div>
+
 
         <!-- invalid/warning -->
-        <div  class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50">
-          <div role="alert" class="w-full inline-flex items-center bg-yellow-300 border border-yellow-400 text-black px-4 py-3 rounded relative">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
-          </svg>
-            <span class="w-full"><span class="font-medium">Warning:</span>  Invalid email address!</span>
-          </div>
-        </div>
+
 
         <!-- eto buong div ng alert, wag mo na gawing modal end-->
 
@@ -111,7 +92,7 @@ if (!user_has_roles(get_account_type(), [AccountType::ADMIN, AccountType::PATIEN
             </h3>
 
             <div class="flex w-full sm:w-auto">
-                <input type="text" name="text" id='searchConsultation' class="input input-bordered appearance-none w-full px-3 py-2 rounded-none bg-white dark:bg-gray-600 text-black dark:text-white border border-black border-r-0 dark:border-white" placeholder="Search"/>
+                <input onkeyup="handleSearch(this.id, 'TableList')" type="text" name="text" id='searchConsultation' class="input input-bordered appearance-none w-full px-3 py-2 rounded-none bg-white dark:bg-gray-600 text-black dark:text-white border border-black border-r-0 dark:border-white" placeholder="Search"/>
                 <button type="submit" class="btn btn-square bg-gray-400 hover:bg-gray-500  rounded-none dark:bg-gray-500 dark:hover:bg-gray-300 border border-black border-l-0 dark:border-white">
                 <i class="fa-solid fa-magnifying-glass text-black dark:text-white"></i>
                 </button>

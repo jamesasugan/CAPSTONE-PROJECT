@@ -313,36 +313,22 @@ include "ReuseFunction.php";
 
 
 
-        <dialog id='SuccessAlert'  class='modal' onclick='toggleDialog("SuccessAlert")' >
-          <div class="flex justify-center" >
-            <div role="alert" class="inline-flex items-center bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative">
-              <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              <span id='textInfo'>Patient Information Updated!</span>
-            </div>
-          </div>
-        </dialog>
-        <dialog id='errorAlert'  class='modal' onclick='toggleDialog("errorAlert");' >
-          <div class="flex justify-center" >
-            <div role="alert" class="inline-flex items-center bg-error border border-black  text-black px-4 py-3 rounded relative">
-              <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              <span id='error'>Somthing went wrong</span>
-            </div>
-          </div>
-        </dialog>
+        <div id='SuccessAlert' onclick='resetNotif(this.id)' >
+        </div>
+
+        <div id='errorAlert'  onclick='resetNotif(this.id)' >
+        </div>
       <script src='../js/tools.js'></script>
-
-
         <script>
+
           document.addEventListener('DOMContentLoaded', function(){
             $.ajax({
               url: 'ajax.php?action=getPatientChart_info&chart_id=' + encodeURIComponent('<?php echo $_GET["chart_id"]; ?>') + '&consultant_id=' + encodeURIComponent('<?php echo $staff_id; ?>'),
               type: 'GET',
               success: function(response) {
                 if (response.successResponse === 1) {
+
+
                   let data = response.data;
                   $('#vrecName').html(data.First_Name + ' ' + data.Middle_Name + ' ' + data.Last_Name);
                   let age = Math.floor((new Date() - new Date(data.DateofBirth)) / (365.25 * 24 * 60 * 60 * 1000));
@@ -363,47 +349,6 @@ include "ReuseFunction.php";
             });
           })
 
-
-          function isNumeric(value) {
-            return !isNaN(value) && (typeof value === 'number' || !isNaN(parseFloat(value)));
-          }
-
-
-          document.getElementById('patientRecordForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            let endpoint = 'createPatientRecord';
-            let form_data = new FormData(e.target);
-
-            if (form_data.get('serviceSelected') === '') {
-              document.getElementById('error').innerHTML = 'Please select a service type';
-              toggleDialog('errorAlert');
-              return;
-            }if ( !isNumeric(form_data.get('heart-rate')) || !isNumeric(form_data.get('temperature')) ){
-              document.getElementById('error').innerHTML = 'Please input correct data type';
-              toggleDialog('errorAlert');
-              return;
-
-            }
-
-            $.ajax({
-              url: 'ajax.php?action=' + endpoint + '&chart_id=' + encodeURIComponent('<?php echo $_GET['chart_id']; ?>'),
-              type: 'POST',
-              data: form_data,
-              processData: false,
-              contentType: false,
-              success: function(response) {
-                if (response.response === 1) {
-                  toggleDialog('SuccessAlert');
-                  window.location.href = 'patientOverallRecord.php?chart_id=<?=$_GET["chart_id"]?>&record_id='+response.record_id;
-                } else {
-                  document.getElementById('error').innerHTML = response;
-                  toggleDialog('errorAlert');
-
-                }
-              }
-            });
-          });
-
           document.addEventListener('DOMContentLoaded', () => {
             const checkboxes = document.querySelectorAll('#services input[type="checkbox"]');
             const hiddenInput = document.getElementById('serviceSelected');
@@ -420,6 +365,42 @@ include "ReuseFunction.php";
                 let mappedServices = services.map(x => "<li>" + x.trim() + "</li>");
                 $('#availedService').html('<strong class="text-xl">Service: </strong><br><span class="text-lg font-medium">'+ mappedServices +'</span>');
               });
+            });
+          });
+
+
+          document.getElementById('patientRecordForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            let endpoint = 'createPatientRecord';
+            let form_data = new FormData(e.target);
+            if (form_data.get('serviceSelected') === '') {
+              warningNotifcation('errorAlert', 'Please select a service type');
+              return;
+            }if ( !isNumeric(form_data.get('heart-rate')) || !isNumeric(form_data.get('temperature')) ){
+
+              warningNotifcation('errorAlert', 'Please input correct data type');
+              return;
+
+            }
+
+            $.ajax({
+              url: 'ajax.php?action=' + endpoint + '&chart_id=' + encodeURIComponent('<?php echo $_GET['chart_id']; ?>'),
+              type: 'POST',
+              data: form_data,
+              processData: false,
+              contentType: false,
+              success: function(response) {
+                if (response.response === 1) {
+                  console.log('asdasdsa');
+                  successNotifcation('SuccessAlert', response.message);
+                  setTimeout(function() {
+                    window.location.href = 'patientOverallRecord.php?chart_id=<?=$_GET["chart_id"]?>&record_id='+response.record_id;
+                  }, 2000);
+                } else {
+                  errorNotifcation('errorAlert' , response.message);
+                }
+              }
+
             });
           });
         </script>
