@@ -124,12 +124,16 @@ document.getElementById('update_appointment').addEventListener('submit', functio
     processData: false,
     contentType: false,
     success: function(response) {
-      if (parseInt(response) === 1) {
-        window.location.href='staff-appointments.php';
+      if (response.response === 1) {
+        let actionSuccessMessage = 'Appointment has been updated, patient will get notified through SMS notification';
+        successNotifcation('successNotif', actionSuccessMessage);
 
+
+        setTimeout(function() {
+          window.location.href='staff-appointments.php';
+        }, 3000);
       }else {
-        document.getElementById('error').innerHTML= response;
-        toggleDialog('errorAlert');
+        errorNotifcation('errorAlert', response.message);
 
       }
     }

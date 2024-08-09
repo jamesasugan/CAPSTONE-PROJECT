@@ -1053,11 +1053,15 @@ if ($action == 'updateAppointment'){
         $stmt = $conn->prepare($sql);
         $stmt->bind_param('ssi',  $appointment_status, $remark, $appointment_id);
     }
+    header('Content-Type: application/json');
+    $response = '';
     if ($stmt->execute()){
-        echo 1;
-        exit();
+        echo json_encode(['response' => 1,
+            'message' => 'Action success']);
     }else{
-        echo $stmt->error;
+        echo json_encode(['response' => 1,
+            'message' => $stmt->error]);
+
     }
 }
 if ($action == 'createPatientChart') {

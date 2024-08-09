@@ -282,35 +282,12 @@ ORDER BY
       </div>
     </div>
   <dialog id="viewAppointment" class="modal">
-    <dialog id='profileAlert'  class='modal ' onclick='toggleDialog("profileAlert")' >
-      <div class="flex justify-center" >
-        <div role="alert" class="inline-flex items-center bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="stroke-current shrink-0 h-6 w-6 mr-2"
-            fill="none"
-            viewBox="0 0 24 24">
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
-          </svg>
-          <span id='textInfo'>Appointment Updated!</span>
-        </div>
-      </div>
-    </dialog>
-    <dialog id='errorAlert'  class='modal' onclick='toggleDialog("errorAlert");' >
-      <div class="flex justify-center" >
-        <div role="alert" class="inline-flex items-center bg-error border border-black  text-black px-4 py-3 rounded relative">
-          <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-          <span id='error'>Somthing went wrong</span>
-        </div>
-      </div>
-    </dialog>
+    <div id='successNotif'   onclick='resetNotif(this.id)' >
+
+    </div>
+    <div id='errorAlert'   onclick='resetNotif(this.id);' >
+
+    </div>
     <div
       id="patient-content"
       class="modal-box h-auto w-11/12 max-w-7xl bg-gray-200 dark:bg-gray-700 p-0">
